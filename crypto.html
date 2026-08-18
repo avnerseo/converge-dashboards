@@ -1,1 +1,138 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converge — מנוע מעקב קריפטו | Crypto Intelligence</title>
+<style>
+  :root{color-scheme:light;--surface-1:#fcfcfb;--page:#f9f9f7;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;--gridline:#e1e0d9;--baseline:#c3c2b7;--border:rgba(11,11,11,.1);--card-border:rgba(11,11,11,.08);--series-1:#2a78d6;--highlight-bg:#e3edfb;--highlight-ink:#1c5cab;--good:#0ca30c;--good-bg:#e8f7e8;--warning:#fab219;--warning-bg:#fff6e0;--serious:#ec835a;--serious-bg:#fdeee7;--critical:#d03b3b;--critical-bg:#fbe7e7;--chip-bg:#f0efec;--tier1-bg:linear-gradient(135deg,#eef4fc,#f9f9f7);--shadow:0 1px 2px rgba(11,11,11,.04),0 8px 24px rgba(11,11,11,.05);}
+  @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  :root[data-theme="dark"]{color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}
+  *{box-sizing:border-box;}body{margin:0;background:var(--page);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;}
+  .ltr{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;}.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;}a{color:var(--series-1);}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .brand-lockup{display:flex;align-items:center;gap:10px;margin-bottom:16px;direction:ltr;}.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--series-1);}
+  .brand-text{display:flex;flex-direction:column;line-height:1.15;}.brand-word{font-size:16.5px;font-weight:700;}.brand-tm{font-size:9px;vertical-align:super;color:var(--text-muted);}.brand-tagline{font-size:9.5px;font-weight:600;letter-spacing:1.3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px;}
+  h1{font-size:25px;margin:0 0 6px;}.subtitle{color:var(--text-secondary);font-size:14.5px;max-width:760px;}.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12.5px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .theme-toggle{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);border-radius:20px;padding:7px 14px;font-size:13px;}
+  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}.disclaimer b{color:var(--text-primary);}
+  .quicknav{position:sticky;top:0;z-index:20;background:var(--page);padding:10px 0;border-bottom:1px solid var(--card-border);margin-bottom:8px;}
+  .qn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}.search-input{flex:1;min-width:180px;padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .qn-links{display:flex;gap:6px;flex-wrap:wrap;}.qn-links a{font-size:12px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:14px;background:var(--chip-bg);}
+  section{margin:38px 0;scroll-margin-top:118px;}h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:8px;}.section-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+  .icon-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--highlight-bg);color:var(--highlight-ink);font-size:14px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}.kpi-tile{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .kpi-value{font-size:30px;font-weight:600;}.kpi-label{font-size:12.5px;color:var(--text-muted);margin-top:4px;}
+  .tier1-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;}.stock-card{background:var(--tier1-bg);border:1px solid var(--card-border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);}
+  .stock-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;}.ticker{font-size:20px;font-weight:700;}.company-name{font-size:12.5px;color:var(--text-muted);}.price{font-size:15px;font-weight:600;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px;}.chip{font-size:11.5px;padding:3px 9px;border-radius:12px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .chip.score2{background:var(--highlight-bg);color:var(--highlight-ink);border-color:transparent;font-weight:600;}.rationale{font-size:13.3px;color:var(--text-secondary);margin:8px 0;}
+  .risk-note{display:flex;gap:6px;font-size:12.3px;background:var(--serious-bg);color:var(--text-primary);border-radius:8px;padding:8px 10px;margin-top:10px;}
+  .sources{font-size:11.5px;color:var(--text-muted);margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}.sources a{text-decoration:none;}
+  .highrisk-banner{margin:14px 0 22px;padding:14px 16px;border-radius:10px;background:var(--critical-bg);font-size:13px;}.icon-badge.risk{background:var(--critical-bg);color:var(--critical);}
+  .risk-card{background:linear-gradient(135deg,var(--serious-bg),var(--page));border:1px solid rgba(236,131,90,.35);}.risk-badge{display:inline-flex;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--critical-bg);color:var(--critical);white-space:nowrap;}
+  .chip.catalyst{background:var(--chip-bg);}.chip.inst-strong{background:var(--highlight-bg);color:var(--highlight-ink);font-weight:600;}.chip.inst-mixed{background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  .price-approx{font-size:10.5px;color:var(--text-muted);margin-top:2px;}.star{color:var(--highlight-ink);font-size:12px;}
+  table{width:100%;border-collapse:collapse;background:var(--surface-1);border:1px solid var(--card-border);border-radius:10px;overflow:hidden;font-size:13px;}
+  thead th{text-align:right;padding:10px 12px;background:var(--chip-bg);color:var(--text-secondary);font-weight:600;font-size:12px;border-bottom:1px solid var(--card-border);white-space:nowrap;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--gridline);vertical-align:top;}tbody tr:hover{background:var(--chip-bg);}.tbl-wrap{overflow-x:auto;border-radius:10px;}td.tk{font-weight:700;white-space:nowrap;}
+  .tabs-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}.tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 16px;border-radius:8px;font-size:13px;}.tab-btn.active{background:var(--series-1);color:#fff;}
+  .tab-panel{display:none;}.tab-panel.active{display:block;}.prose{font-size:13.8px;color:var(--text-secondary);}.prose p{margin:0 0 12px;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--card-border);color:var(--text-muted);font-size:12px;}
+
+  .fg-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:var(--surface-1);border:1px solid var(--card-border);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);}
+  .fg-dial{position:relative;width:120px;height:120px;border-radius:50%;background:conic-gradient(from 180deg,#d03b3b 0deg,#ec835a 72deg,#fab219 144deg,#a8c93c 216deg,#0ca30c 288deg,#0ca30c 360deg);display:flex;align-items:center;justify-content:center;}
+  .fg-dial::before{content:'';position:absolute;width:82px;height:82px;border-radius:50%;background:var(--surface-1);}
+  .fg-value{position:relative;font-size:26px;font-weight:700;}
+  .fg-meta{display:flex;flex-direction:column;gap:4px;}.fg-label{font-size:16px;font-weight:700;}.fg-sub{font-size:12.5px;color:var(--text-muted);}
+  .fg-hist{display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;}.fg-hist-item{font-size:12px;color:var(--text-secondary);background:var(--chip-bg);padding:4px 10px;border-radius:12px;}
+  .back-link{font-size:12.5px;text-decoration:none;color:var(--text-secondary);background:var(--chip-bg);padding:5px 12px;border-radius:14px;}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header class="top"><div><div class="brand-lockup"><span class="brand-mark"></span><span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Crypto Intelligence</span></span></div>
+  <h1>מנוע מעקב קריפטו — נכסים דיגיטליים אטרקטיביים</h1>
+  <div class="subtitle">10 מטבעות מובילים (Tier 1) · מדד פחד ותאווה · נתוני מחיר בזמן אמת מ-Alpha Vantage ו-CoinGecko · "רק להיסטוריה בעיין מקרוב לפני שמקבלים החלטת השקעה"</div>
+  <div class="meta-row"><span class="badge">🗕 עודכן: 18 אוגוסט 2026</span><span class="badge">🔁 פעמיים ביום 08:00+15:30</span><a class="back-link" href="index.html">📈 חזרה לדשבורד המניות</a></div></div>
+  <button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button></header>
+  <div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> מלוח בלבד, אינו המלצה אישית. שוק הקריפטו תנודתי ביותר.</div>
+  <nav class="quicknav" id="quicknav"><div class="qn-row"><input id="globalSearch" class="search-input" placeholder="🔍 חיפוש טיקר או ברוד" oninput="filterAll()"></div>
+  <div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#sentiment">📊 סנטימנט</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
+  <section><div class="kpi-row"><div class="kpi-tile"><div class="kpi-value ltr">10</div><div class="kpi-label">מטבעות במעקב שכבה 1</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">41</div><div class="kpi-label">מדד פחד ותאווה — Fear</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">2</div><div class="kpi-label">מקורות נתונים (Alpha Vantage, CoinGecko)</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">$64.2K</div><div class="kpi-label">מחיר BTC נוכחי</div></div></div></section>
+
+  <section id="tier1"><h2><span class="icon-badge">🏆</span> שכבה 1 — המטבעות המובילים</h2><div class="section-sub">10 הנכסים הדיגיטליים בעלי שווי השוק והנזילות הגבוהים ביותר במעקב.</div>
+  <div class="tier1-grid">
+    <div class="stock-card" data-q="btc bitcoin"><div class="stock-head"><div><span class="ticker ltr">BTC</span><div class="company-name">Bitcoin · אחסון ערך דיגיטלי</div></div><div><div class="price ltr">$64,184.60</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #1</span></div>
+    <div class="rationale">הנכס הדיגיטלי המבוזר הגדול ביותר; משמש כ"זהב דיגיטלי" ומצרך למחזור בין נכסי הסיכון.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="eth ethereum"><div class="stock-head"><div><span class="ticker ltr">ETH</span><div class="company-name">Ethereum · פלטפורמת חוזים חכמים</div></div><div><div class="price ltr">$1,898.29</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #2</span></div>
+    <div class="rationale">רשת החוזים החכמים המובילה; מארחת את רוב אקוסיסטם ה-DeFi וה-NFT ומבוססת Proof-of-Stake.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="sol solana"><div class="stock-head"><div><span class="ticker ltr">SOL</span><div class="company-name">Solana · שכבה-1 מהירה</div></div><div><div class="price ltr">$76.26</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">תפוקה גבוהה</span></div>
+    <div class="rationale">בלוקצ'יין בעל תפוקה גבוהה ועמלות נמוכות; פופולרי לאפליקציות DeFi, מסחר ו-NFT.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="xrp ripple"><div class="stock-head"><div><span class="ticker ltr">XRP</span><div class="company-name">XRP · תשלומים חוצי-גבולות</div></div><div><div class="price ltr">$0.9974</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Ripple</span></div>
+    <div class="rationale">מטבע ממוקד תשלומים בין-בנקאיים ומרת מטבעות מהירה; בשימוש רשת RippleNet.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="avax avalanche"><div class="stock-head"><div><span class="ticker ltr">AVAX</span><div class="company-name">Avalanche · שכבה-1 עם תת-רשתות</div></div><div><div class="price ltr">$6.32</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Subnets</span></div>
+    <div class="rationale">רשת בלוקצ'יין מודולרית המאפשרת תת-רשתות (subnets) מותאמות אישית לארגונים ואפליקציות.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="link chainlink"><div class="stock-head"><div><span class="ticker ltr">LINK</span><div class="company-name">Chainlink · רשת אורקל</div></div><div><div class="price ltr">$9.433</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">תשתית DeFi</span></div>
+    <div class="rationale">רשת האורקל המבוזרת המובילה; מספקת נתוני מחיר ופידים חיצוניים לחוזים חכמים ברוב רשתות ה-DeFi.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="aave"><div class="stock-head"><div><span class="ticker ltr">AAVE</span><div class="company-name">Aave · פרוטוקול הלוואות DeFi</div></div><div><div class="price ltr">$89.33</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">הלוואות</span></div>
+    <div class="rationale">אחד מפרוטוקולי ההלוואות/הפקדות הביזוריות (DeFi) הגדולים והוותיקים ביותר.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="sui"><div class="stock-head"><div><span class="ticker ltr">SUI</span><div class="company-name">Sui · שכבה-1 מבוססת Move</div></div><div><div class="price ltr">$0.6531</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שפת Move</span></div>
+    <div class="rationale">בלוקצ'יין חדש יחסית המבוסס על שפת התכנות Move, מתמקד במקביליות ומהירות עסקאות.</div>
+    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
+
+    <div class="stock-card" data-q="hype hyperliquid"><div class="stock-head"><div><span class="ticker ltr">HYPE</span><div class="company-name">Hyperliquid · בורסת נגזרים מבוזרת</div></div><div><div class="price ltr">$59.23</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Perps DEX</span></div>
+    <div class="rationale">טוקן הממשל של Hyperliquid — בורסת חוזי perpetuals מבוזרת שצברה נתח שוק משמעותי במסחר נגזרים.</div>
+    <div class="sources">מקורות: <a href="https://www.coingecko.com/en/coins/hyperliquid" target="_blank">CoinGecko</a></div></div>
+
+    <div class="stock-card" data-q="bnb binance"><div class="stock-head"><div><span class="ticker ltr">BNB</span><div class="company-name">BNB · אקוסיסטם Binance</div></div><div><div class="price ltr">$601.02</div></div></div>
+    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #4</span></div>
+    <div class="rationale">טוקן היסוד של אקוסיסטם Binance ו-BNB Chain; משמש להנחות עמלות ומגוון שירותים בפלטפורמה.</div>
+    <div class="sources">מקורות: <a href="https://www.coingecko.com/en/coins/bnb" target="_blank">CoinGecko</a></div></div>
+  </div></section>
+
+  <section id="sentiment"><h2><span class="icon-badge">📊</span> סנטימנט שוק — מדד פחד ותאווה</h2><div class="section-sub">Crypto Fear &amp; Greed Index — מודד את סנטימנט המשקיעים בשוק הקריפטו על סמך תנודתיות, מומנטום, סושיאל ועוד.</div>
+  <div class="fg-wrap"><div class="fg-dial"><div class="fg-value ltr">41</div></div>
+  <div class="fg-meta"><div class="fg-label">Fear (פחד)</div><div class="fg-sub">ציון 0-100 · 0=פחד קיצוני, 100=תאווה קיצונית</div>
+  <div class="fg-hist"><span class="fg-hist-item">אתמול: 31 (Fear)</span><span class="fg-hist-item">שבוע שעבר: 29 (Fear)</span><span class="fg-hist-item">חודש שעבר: 28 (Fear)</span></div></div></div>
+  <div class="sources" style="margin-top:10px">מקורות: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank">Alternative.me</a></div></section>
+
+  <section id="methodology"><h2><span class="icon-badge">🔬</span> מתודולוגיה</h2><div class="prose"><p>דירוג שכבה 1 מבוסס על שווי שוק, נזילות ובגרות הפרויקט. נתוני מחיר נשלפים בזמן אמת מ-Alpha Vantage (עם השלמה מ-CoinGecko למטבעות שאינם נתמכים ב-Alpha Vantage). מדד הפחד והתאווה מגיע מ-Alternative.me ומתעדכן מדי יום. הדשבורד מתעדכן אוטומטית פעמיים ביום דרך GitHub Actions/Cowork.</p></div></section>
+
+  <footer><p>דשבורד זה נבנה עבור מעקב אישי בלבד, אינו ייעוץ השקעות. מתעדכן אוטומטית פעמיים ביום דרך GitHub Pages.</p></footer>
+</div>
+<script>
+function toggleTheme(){var el=document.documentElement,c=el.getAttribute('data-theme');if(c==='dark'){el.setAttribute('data-theme','light');}else if(c==='light'){el.removeAttribute('data-theme');}else{el.setAttribute('data-theme','dark');}}
+function filterAll(){var q=document.getElementById('globalSearch').value.trim().toLowerCase();document.querySelectorAll('.stock-card[data-q]').forEach(function(c){c.style.display=(!q||c.dataset.q.indexOf(q)!==-1)?'':'none';});}
+</script>
+</body>
+</html>
