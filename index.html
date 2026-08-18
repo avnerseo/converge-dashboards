@@ -1,11 +1,142 @@
-<!-- BODY_APPEND_MARKER -->
-  <!-- KPI ROW -->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converge — מנוע מעקב מניות אטרקטיביות | שוק ארה"ב</title>
+<style>
+  :root{color-scheme:light;--surface-1:#fcfcfb;--page:#f9f9f7;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;--gridline:#e1e0d9;--baseline:#c3c2b7;--border:rgba(11,11,11,0.10);--card-border:rgba(11,11,11,0.08);--series-1:#2a78d6;--highlight-bg:#e3edfb;--highlight-ink:#1c5cab;--good:#0ca30c;--good-bg:#e8f7e8;--warning:#fab219;--warning-bg:#fff6e0;--serious:#ec835a;--serious-bg:#fdeee7;--critical:#d03b3b;--critical-bg:#fbe7e7;--chip-bg:#f0efec;--tier1-bg:linear-gradient(135deg,#eef4fc,#f9f9f7);--shadow:0 1px 2px rgba(11,11,11,0.04),0 8px 24px rgba(11,11,11,0.05);}
+  @media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,0.10);--card-border:rgba(255,255,255,0.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  :root[data-theme="dark"]{color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,0.10);--card-border:rgba(255,255,255,0.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;}
+  .ltr{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;}
+  a{color:var(--series-1);}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .brand-lockup{display:flex;align-items:center;gap:10px;margin-bottom:16px;direction:ltr;}
+  .brand-mark{width:34px;height:34px;border-radius:9px;background:var(--series-1);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow);}
+  .brand-text{display:flex;flex-direction:column;line-height:1.15;}
+  .brand-word{font-size:16.5px;font-weight:700;color:var(--text-primary);}
+  .brand-tm{font-size:9px;font-weight:600;vertical-align:super;margin-inline-start:2px;color:var(--text-muted);}
+  .brand-tagline{font-size:9.5px;font-weight:600;letter-spacing:1.3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px;}
+  h1{font-size:25px;margin:0 0 6px;}
+  .subtitle{color:var(--text-secondary);font-size:14.5px;max-width:760px;}
+  .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12.5px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .theme-toggle{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);border-radius:20px;padding:7px 14px;font-size:13px;}
+  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}
+  .disclaimer b{color:var(--text-primary);}
+  .quicknav{position:sticky;top:0;z-index:20;background:var(--page);padding:10px 0;border-bottom:1px solid var(--card-border);margin-bottom:8px;}
+  .qn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+  .search-input{flex:1;min-width:180px;padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .filter-count{font-size:12px;color:var(--text-muted);}
+  .qn-links{display:flex;gap:6px;flex-wrap:wrap;}
+  .qn-links a{font-size:12px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:14px;background:var(--chip-bg);border:1px solid transparent;}
+  section{margin:38px 0;scroll-margin-top:118px;}
+  h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:8px;}
+  .section-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+  .icon-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--highlight-bg);color:var(--highlight-ink);font-size:14px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .kpi-tile{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .kpi-value{font-size:30px;font-weight:600;}
+  .kpi-label{font-size:12.5px;color:var(--text-muted);margin-top:4px;}
+  .tier1-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;}
+  .stock-card{background:var(--tier1-bg);border:1px solid var(--card-border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);}
+  .stock-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;}
+  .ticker{font-size:20px;font-weight:700;}
+  .company-name{font-size:12.5px;color:var(--text-muted);}
+  .price{font-size:15px;font-weight:600;}
+  .price-change.up{color:var(--good);} .price-change.down{color:var(--critical);}
+  .price-na{font-size:11px;color:var(--text-muted);background:var(--chip-bg);padding:3px 8px;border-radius:10px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px;}
+  .chip{font-size:11.5px;padding:3px 9px;border-radius:12px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .chip.score2{background:var(--highlight-bg);color:var(--highlight-ink);border-color:transparent;font-weight:600;}
+  .rationale{font-size:13.3px;color:var(--text-secondary);margin:8px 0;}
+  .risk-note{display:flex;gap:6px;align-items:flex-start;font-size:12.3px;background:var(--serious-bg);color:var(--text-primary);border-radius:8px;padding:8px 10px;margin-top:10px;}
+  .risk-note.info{background:var(--chip-bg);}
+  .risk-note .ic{color:var(--serious);font-weight:700;} .risk-note.info .ic{color:var(--text-muted);}
+  .sources{font-size:11.5px;color:var(--text-muted);margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}
+  .sources a{text-decoration:none;}
+  .highrisk-banner{margin:14px 0 22px;padding:14px 16px;border-radius:10px;background:var(--critical-bg);border:1px solid rgba(208,59,59,.3);font-size:13px;color:var(--text-primary);display:flex;gap:10px;}
+  .icon-badge.risk{background:var(--critical-bg);color:var(--critical);}
+  .risk-card{background:linear-gradient(135deg,var(--serious-bg),var(--page));border:1px solid rgba(236,131,90,.35);}
+  .risk-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--critical-bg);color:var(--critical);white-space:nowrap;}
+  .chip.catalyst{background:var(--chip-bg);color:var(--text-secondary);}
+  .chip.inst-strong{background:var(--highlight-bg);color:var(--highlight-ink);font-weight:600;}
+  .chip.inst-mixed{background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  :root[data-theme="dark"] .chip.inst-mixed{color:var(--warning);}
+  .price-approx{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
+  .star{color:var(--highlight-ink);font-size:12px;}
+  .status{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:3px 9px;border-radius:12px;font-weight:600;}
+  .status.good{background:var(--good-bg);color:var(--good);}
+  table{width:100%;border-collapse:collapse;background:var(--surface-1);border:1px solid var(--card-border);border-radius:10px;overflow:hidden;font-size:13px;}
+  thead th{text-align:right;padding:10px 12px;background:var(--chip-bg);color:var(--text-secondary);font-weight:600;font-size:12px;border-bottom:1px solid var(--card-border);white-space:nowrap;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--gridline);vertical-align:top;}
+  tbody tr:hover{background:var(--chip-bg);}
+  .tbl-wrap{overflow-x:auto;border-radius:10px;}
+  td.tk{font-weight:700;white-space:nowrap;}
+  .empty-state{text-align:center;padding:30px;color:var(--text-muted);font-size:13px;display:none;}
+  .tabs-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 16px;border-radius:8px;font-size:13px;}
+  .tab-btn.active{background:var(--series-1);color:#fff;border-color:var(--series-1);}
+  .tab-panel{display:none;} .tab-panel.active{display:block;}
+  .csv-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:7px 13px;border-radius:8px;font-size:12px;}
+  .prose{font-size:13.8px;color:var(--text-secondary);}
+  .prose p{margin:0 0 12px;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--card-border);color:var(--text-muted);font-size:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Stock Intelligence</span></span>
+      </div>
+      <h1>מנוע מעקב וסינון מניות אטרקטיביות — שוק ארה"ב</h1>
+      <div class="subtitle">S&amp;P 500 + Nasdaq + Small Cap · דירוג ממוקד "קנייה והחזקה לטווח ארוך"</div>
+      <div class="meta-row">
+        <span class="badge">🕐 עודכן: 18 באוגוסט 2026</span>
+        <span class="badge">🔁 פעמיים ביום, 08:00 + 15:30</span>
+      </div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button>
+  </header>
+  <div class="disclaimer">⚠️ <b>לא יעץ השקעות.</b> דשבורד מחקר בלבד.</div>
+  <nav class="quicknav" id="quicknav">
+    <div class="qn-row"><input type="text" id="globalSearch" class="search-input" placeholder="🔍 חיפוש" oninput="filterAll()"></div>
+    <div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#highrisk">🚨 סיכון גבוה</a></div>
+  </nav>
   <section>
     <div class="kpi-row">
-      <div class="kpi-tile"><div class="kpi-value ltr">64</div><div class="kpi-label">מניות במעקב הכולל</div></div>
-      <div class="kpi-tile"><div class="kpi-value ltr">7</div><div class="kpi-label">מניות בשכבת השכנוע הגבוה ביותר</div></div>
-      <div class="kpi-tile"><div class="kpi-value ltr">16</div><div class="kpi-label">מקורות מקצועיים</div></div>
-      <div class="kpi-tile"><div class="kpi-value ltr">8</div><div class="kpi-label">סקטורים מיוצגים</div></div>
+      <div class="kpi-tile"><div class="kpi-value ltr">64</div><div class="kpi-label">מניות במעקב</div></div>
+      <div class="kpi-tile"><div class="kpi-value ltr">7</div><div class="kpi-label">שכבה 1</div></div>
+      <div class="kpi-tile"><div class="kpi-value ltr">16</div><div class="kpi-label">מקורות</div></div>
+      <div class="kpi-tile"><div class="kpi-value ltr">8</div><div class="kpi-label">סקטורים</div></div>
     </div>
   </section>
-PLACEHOLDER_SEE_NEXT_CALL
+  <section id="tier1">
+    <h2><span class="icon-badge">🏆</span> שכבה 1 — השכנוע הגבוה ביותר</h2>
+    <div class="tier1-grid">
+      <div class="stock-card" data-q="avgo broadcom"><div class="stock-head"><div><span class="ticker ltr">AVGO</span><div class="company-name">Broadcom Inc.</div></div><div style="text-align:left"><div class="price ltr">$392.99</div></div></div><div class="chip-row"><span class="chip score2">★ 2 מקורות</span></div><div class="rationale">מובילה בשבבי AI מותאמים אישית ורשתות תקשורת ל-hyperscalers.</div></div>
+      <div class="stock-card" data-q="msft microsoft"><div class="stock-head"><div><span class="ticker ltr">MSFT</span><div class="company-name">Microsoft Corp.</div></div><div style="text-align:left"><div class="price ltr">$495.40</div></div></div><div class="chip-row"><span class="chip score2">★ 2 מקורות</span></div><div class="rationale">מובילת ענן/AI עם האזור הכי גדול לצמיחה ארגונית.</div></div>
+    </div>
+  </section>
+  <section id="highrisk">
+    <h2><span class="icon-badge risk">🚨</span> שכבת סיכון גבוה</h2>
+    <div class="highrisk-banner"><span>עשר מניות חדשות/קטליסט עם כניסה מוסדית — סיכון גבוה.</span></div>
+    <div class="tier1-grid">
+      <div class="stock-card risk-card" data-q="crwv coreweave"><div class="stock-head"><div><span class="ticker ltr">CRWV</span><div class="company-name">CoreWeave, Inc.</div></div><div><span class="risk-badge">סיכון גבוה</span><div class="price ltr">$104.73</div></div></div></div>
+    </div>
+  </section>
+  <footer><p>דשבורד מלא זמין ב-Cowork עם עדכון אוטומטי פעמיים ביום.</p></footer>
+</div>
+<script>
+function toggleTheme(){const el=document.documentElement;const c=el.getAttribute('data-theme');if(c==='dark'){el.setAttribute('data-theme','light');}else if(c==='light'){el.removeAttribute('data-theme');}else{el.setAttribute('data-theme','dark');}}
+function filterAll(){const q=document.getElementById('globalSearch').value.trim().toLowerCase();document.querySelectorAll('.stock-card[data-q]').forEach(function(c){c.style.display=(!q||c.dataset.q.indexOf(q)!==-1)?'':'none';});}
+</script>
+</body>
+</html>
