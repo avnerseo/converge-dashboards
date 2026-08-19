@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Converge — מנוע מעקב קריפטו | Crypto Intelligence</title>
+<title>Converge — מנוע מעקב מטבעות קריפטו | Crypto Intelligence</title>
 <style>
   :root{color-scheme:light;--surface-1:#fcfcfb;--page:#f9f9f7;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;--gridline:#e1e0d9;--baseline:#c3c2b7;--border:rgba(11,11,11,.1);--card-border:rgba(11,11,11,.08);--series-1:#2a78d6;--highlight-bg:#e3edfb;--highlight-ink:#1c5cab;--good:#0ca30c;--good-bg:#e8f7e8;--warning:#fab219;--warning-bg:#fff6e0;--serious:#ec835a;--serious-bg:#fdeee7;--critical:#d03b3b;--critical-bg:#fbe7e7;--chip-bg:#f0efec;--tier1-bg:linear-gradient(135deg,#eef4fc,#f9f9f7);--shadow:0 1px 2px rgba(11,11,11,.04),0 8px 24px rgba(11,11,11,.05);}
   @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
@@ -50,6 +50,27 @@
   .fg-hist{display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;}.fg-hist-item{font-size:12px;color:var(--text-secondary);background:var(--chip-bg);padding:4px 10px;border-radius:12px;}
   .back-link{font-size:12.5px;text-decoration:none;color:var(--text-secondary);background:var(--chip-bg);padding:5px 12px;border-radius:14px;}
 </style>
+<style>
+  :root{--qn-height:118px}
+  section{scroll-margin-top:var(--qn-height,118px);}
+  .tier2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;}
+  .tier2-card{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .tier2-card .stock-head{margin-bottom:4px;}
+  .table-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .csv-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);border-radius:8px;padding:6px 14px;font-size:12.5px;}
+  .csv-btn:hover{background:var(--chip-bg);}
+  th.sortable{cursor:pointer;user-select:none;}
+  th.sortable:after{content:' ⇅';opacity:.45;font-size:10px;}
+  .cat-badge{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:8px;background:var(--chip-bg);color:var(--text-secondary);white-space:nowrap;}
+  .tier-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:var(--highlight-bg);color:var(--highlight-ink);font-weight:600;white-space:nowrap;}
+  .tier-tag.std{background:var(--chip-bg);color:var(--text-muted);font-weight:500;}
+  .converge-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:16px 0 22px;}
+  .converge-col{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .converge-col h3{font-size:14.5px;margin:0 0 8px;display:flex;align-items:center;gap:6px;}
+  .converge-col p{font-size:12.8px;color:var(--text-secondary);margin:0;}
+  .fg-divergence{font-size:11.5px;color:var(--text-muted);margin-top:8px;}
+</style>
+
 </head>
 
 <body>
@@ -57,82 +78,391 @@
   <header class="top"><div><div class="brand-lockup"><span class="brand-mark"></span><span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Crypto Intelligence</span></span></div>
   <h1>מנוע מעקב קריפטו — נכסים דיגיטליים אטרקטיביים</h1>
   <div class="subtitle">10 מטבעות מובילים (Tier 1) · מדד פחד ותאווה · נתוני מחיר בזמן אמת מ-Alpha Vantage ו-CoinGecko · "רק להיסטוריה בעיין מקרוב לפני שמקבלים החלטת השקעה"</div>
-  <div class="meta-row"><span class="badge">🗕 עודכן: 18 אוגוסט 2026</span><span class="badge">🔁 פעמיים ביום 08:00+15:30</span><a class="back-link" href="index.html">📈 חזרה לדשבורד המניות</a></div></div>
+  <div class="meta-row"><span class="badge">🗕 עודכן: 19 אוגוסט 2026</span><span class="badge">🔁 פעמיים ביום 08:00+15:30</span><a class="back-link" href="index.html">📈 חזרה לדשבורד המניות</a></div></div>
   <button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button></header>
-  <div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> מידע בלבד, אינו המלצה אישית. שוק הקריפטו תנודתי ביותר.</div>
+  <div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> מידע בלבד, אינו המץצה אישית. שוק הקריפטו תנודתי ביותר.</div>
   <nav class="quicknav" id="quicknav"><div class="qn-row"><input id="globalSearch" class="search-input" placeholder="🔍 חיפוש טיקר או ברוד" oninput="filterAll()"></div>
-  <div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#sentiment">📊 סנטימנט</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
-  <section><div class="kpi-row"><div class="kpi-tile"><div class="kpi-value ltr">10</div><div class="kpi-label">מטבעות במעקב שכבה 1</div></div>
-  <div class="kpi-tile"><div class="kpi-value ltr">41</div><div class="kpi-label">מדד פחד ותאווה — Fear</div></div>
-  <div class="kpi-tile"><div class="kpi-value ltr">2</div><div class="kpi-label">מקורות נתונים (Alpha Vantage, CoinGecko)</div></div>
-  <div class="kpi-tile"><div class="kpi-value ltr">$64.2K</div><div class="kpi-label">מחיר BTC נוכחי</div></div></div></section>
-
-  <section id="tier1"><h2><span class="icon-badge">🏆</span> שכבה 1 — המטבעות המובילים</h2><div class="section-sub">10 הנכסים הדיגיטליים בעלי שווי השוק והנזילות הגבוהים ביותר במעקב.</div>
+  <div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#tier2">⭐ שכבה משנית</a><a href="#tables">📋 טבלה מלאה</a><a href="#sentiment">📊 סנטימנט</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
+    <section><div class="kpi-row"><div class="kpi-tile"><div class="kpi-value ltr">48</div><div class="kpi-label">מטבעות במעקב · 7 קטגוריות (10 שכבה 1 + 4 משנית)</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">41</div><div class="kpi-label">מדד פחד ותאוותנות — Fear</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">4</div><div class="kpi-label">מקורות מחקר (מוסדי, און-צ׳יין, עיתונאי, שוק)</div></div>
+  <div class="kpi-tile"><div class="kpi-value ltr">$64.4K</div><div class="kpi-label">מחיר BTC נוכחי</div></div></div></section>
+  <section id="tier1"><h2><span class="icon-badge">🏆</span> שכבה 1 — המטבעות המובילים</h2><div class="section-sub">10 המטבעות ההדיגיטליים בעלי שווי שוק ונזילות הגבוהים ביותר, עם ניקוד קונברגנס המבוסס איחוד תובנות ממחקר מוסדי, נתוני און-צ׳יין ועיתונות קריפטו-נייטיבית.</div>
   <div class="tier1-grid">
-    <div class="stock-card" data-q="btc bitcoin"><div class="stock-head"><div><span class="ticker ltr">BTC</span><div class="company-name">Bitcoin · אחסון ערך דיגיטלי</div></div><div><div class="price ltr">$64,184.60</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #1</span></div>
-    <div class="rationale">הנכס הדיגיטלי המבוזר הגדול ביותר; משמש כ"זהב דיגיטלי" ומצרך למחזור בין נכסי הסיכון.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="eth ethereum"><div class="stock-head"><div><span class="ticker ltr">ETH</span><div class="company-name">Ethereum · פלטפורמת חוזים חכמים</div></div><div><div class="price ltr">$1,898.29</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #2</span></div>
-    <div class="rationale">רשת החוזים החכמים המובילה; מארחת את רוב אקוסיסטם ה-DeFi וה-NFT ומבוססת Proof-of-Stake.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="sol solana"><div class="stock-head"><div><span class="ticker ltr">SOL</span><div class="company-name">Solana · שכבה-1 מהירה</div></div><div><div class="price ltr">$76.26</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">תפוקה גבוהה</span></div>
-    <div class="rationale">בלוקצ'יין בעל תפוקה גבוהה ועמלות נמוכות; פופולרי לאפליקציות DeFi, מסחר ו-NFT.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="xrp ripple"><div class="stock-head"><div><span class="ticker ltr">XRP</span><div class="company-name">XRP · תשלומים חוצי-גבולות</div></div><div><div class="price ltr">$0.9974</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Ripple</span></div>
-    <div class="rationale">מטבע ממוקד תשלומים בין-בנקאיים ומרת מטבעות מהירה; בשימוש רשת RippleNet.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="avax avalanche"><div class="stock-head"><div><span class="ticker ltr">AVAX</span><div class="company-name">Avalanche · שכבה-1 עם תת-רשתות</div></div><div><div class="price ltr">$6.32</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Subnets</span></div>
-    <div class="rationale">רשת בלוקצ'יין מודולרית המאפשרת תת-רשתות (subnets) מותאמות אישית לארגונים ואפליקציות.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="link chainlink"><div class="stock-head"><div><span class="ticker ltr">LINK</span><div class="company-name">Chainlink · רשת אורקל</div></div><div><div class="price ltr">$9.433</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">תשתית DeFi</span></div>
-    <div class="rationale">רשת האורקל המבוזרת המובילה; מספקת נתוני מחיר ופידים חיצוניים לחוזים חכמים ברוב רשתות ה-DeFi.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="aave"><div class="stock-head"><div><span class="ticker ltr">AAVE</span><div class="company-name">Aave · פרוטוקול הלוואות DeFi</div></div><div><div class="price ltr">$89.33</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">הלוואות</span></div>
-    <div class="rationale">אחד מפרוטוקולי ההלוואות/הפקדות הביזוריות (DeFi) הגדולים והוותיקים ביותר.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="sui"><div class="stock-head"><div><span class="ticker ltr">SUI</span><div class="company-name">Sui · שכבה-1 מבוססת Move</div></div><div><div class="price ltr">$0.6531</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שפת Move</span></div>
-    <div class="rationale">בלוקצ'יין חדש יחסית המבוסס על שפת התכנות Move, מתמקד במקביליות ומהירות עסקאות.</div>
-    <div class="sources">מקורות: <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a></div></div>
-
-    <div class="stock-card" data-q="hype hyperliquid"><div class="stock-head"><div><span class="ticker ltr">HYPE</span><div class="company-name">Hyperliquid · בורסת נגזרים מבוזרת</div></div><div><div class="price ltr">$59.23</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">Perps DEX</span></div>
-    <div class="rationale">טוקן הממשל של Hyperliquid — בורסת חוזי perpetuals מבוזרת שצברה נתח שוק משמעותי במסחר נגזרים.</div>
-    <div class="sources">מקורות: <a href="https://www.coingecko.com/en/coins/hyperliquid" target="_blank">CoinGecko</a></div></div>
-
-    <div class="stock-card" data-q="bnb binance"><div class="stock-head"><div><span class="ticker ltr">BNB</span><div class="company-name">BNB · אקוסיסטם Binance</div></div><div><div class="price ltr">$601.02</div></div></div>
-    <div class="chip-row"><span class="chip score2">⭐ שכבה 1</span><span class="chip">שווי שוק #4</span></div>
-    <div class="rationale">טוקן היסוד של אקוסיסטם Binance ו-BNB Chain; משמש להנחות עמלות ומגוון שירותים בפלטפורמה.</div>
-    <div class="sources">מקורות: <a href="https://www.coingecko.com/en/coins/bnb" target="_blank">CoinGecko</a></div></div>
+    <div class="stock-card" data-q="btc bitcoin — ביטקוין"><div class="stock-head"><div><span class="ticker ltr">BTC</span><div class="company-name">Bitcoin · אחסון ערך דיגיטלי</div></div><div><div class="price ltr">$64,350.93</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">שווי שוק #1</span></div>
+    <div class="rationale">דעות המוסדות מפוצלות בחדות: סיטי הורידה יעד ל-12 חודשים ל-82,000$ (מ-112,000$) על רקע האטה בזרימות ה-ETF, בעוד ברנשטיין שומרת על יעד 150,000$ לסוף 2026. נתוני CryptoQuant מצביעים על צבירת "לווייתנים" מתמשכת מעל מחיר המימוש (כ-52,900$). זרימות ה-ETF תנודתיות: שבוע חיובי של 853.5M$ (7/8) התהפך לפדיון גדול (17/8).</div><div class="risk-note">⚠️ פריצת אבטחה: כ-116-130M$ נגנבו מארנקי חומרה Coldcard (30/7–4/8) עקב באג ב-RNG בקושחה; משפיע על אמון במשמורת עצמית. גם: הצעת SEC למסגרת "Regulation Crypto" (18/8) עדיין בתהליך.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up" target="_blank">CoinDesk — Citi מוריד יעד</a><a href="https://www.trmlabs.com/resources/blog/the-largest-hardware-wallet-exploit-of-2026-inside-the-usd-116-million-coldcard-hack" target="_blank">TRM Labs — פריצת Coldcard</a><a href="https://defillama.com/chains" target="_blank">DefiLlama — נתוני שרשרת</a></div></div>
+    <div class="stock-card" data-q="eth ethereum — את׳ריום"><div class="stock-head"><div><span class="ticker ltr">ETH</span><div class="company-name">Ethereum · חוזים חכמים</div></div><div><div class="price ltr">$1,920.86</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">TVL מוביל: 41.6B$</span></div>
+    <div class="rationale">את׳ריום מובילה את כל השרשראות ב-TVL (41.6B$, +0.32% ב-24 שעות) עם 562K כתובות פעילות ביום. סיטי הורידה יעד 12 חודשים ל-2,240$ (מ-3,175$), סטנדרד צ׳רטרד ל-4,000$. BlackRock השיקה שני קרנות אג"ח ממשלתיות מטוקנזות על הרשת, ודיון EIP סוער סביב שינוי מדיניות ההנפקה מטריד מפתחי DeFi.</div>
+    <div class="sources">מקורות: <a href="https://defillama.com/chain/ethereum" target="_blank">DefiLlama — Ethereum TVL</a><a href="https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up" target="_blank">CoinDesk — סיטי מוריד יעדים</a><a href="https://www.bankless.com/read/breaking-down-ethereums-new-issuance-debate" target="_blank">Bankless — דיון הנפקה חדש</a></div></div>
+    <div class="stock-card" data-q="sol solana — סולנה"><div class="stock-head"><div><span class="ticker ltr">SOL</span><div class="company-name">Solana · שכבה-1 מהירה</div></div><div><div class="price ltr">$77.3000</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">הכנסות אפליקציות גבוהות</span></div>
+    <div class="rationale">סולנה מובילה את ביטקוין ואת׳ריום מעלה נכון להיום (19/8) חרף חולשה במניות שבבים קוריאניות. הכנסות אפליקציות (8.52M$/יום) בין הגבוהות מכל השרשראות, עם עמלה ממוצעת נמוכה במיוחד (0.0041$). הצעת ממשל חדשה תעלה את שריפת ה-SOL היומית מ-47K$ ל-650K$ — מהלך דפלציוני משמעותי. סטנדרד צ׳רטרד הורידה יעד ל-135$.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/08/19/solana-leads-bitcoin-and-ether-higher-while-korean-chip-stocks-slide-7" target="_blank">CoinDesk — סולנה מובילה</a><a href="https://www.coindesk.com/tech/2026/08/04/a-new-solana-proposal-would-take-daily-sol-burns-from-usd47-000-to-usd650-000" target="_blank">CoinDesk — הצעת שריפה</a><a href="https://defillama.com/chain/solana" target="_blank">DefiLlama — Solana</a></div></div>
+    <div class="stock-card" data-q="xrp xrp — תשלומים חוצי-גבולות"><div class="stock-head"><div><span class="ticker ltr">XRP</span><div class="company-name">XRP · תשלומים חוצי-גבולות</div></div><div><div class="price ltr">$1.0100</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">פרץ מעל $1 (13/8)</span></div>
+    <div class="rationale">XRP חצה את רף ה-1$ לראשונה מאז 2024 (13/8). סטנדרד צ׳רטרד שומרת על יעד ארוך טווח 28$ עד 2030; מנהל ההשקעות הראשי של Bitwise צופה 6.53$ עד סוף 2026 בתרחיש שורי המבוסס על טוקניזציה. עסקאות לווייתנים מעל 1M$ זינקו 280% ב-24 שעות (18/8) — איתות לצבירה שקטה.</div>
+    <div class="sources">מקורות: <a href="https://247wallst.com/investing/cryptocurrency/2026/06/27/standard-chartered-says-xrp-hits-28-by-2030-but-ripples-own-stablecoin-may-have-other-plans/" target="_blank">24/7 Wall St. — יעד סטנדרד צ׳רטרד</a><a href="https://thecryptobasic.com/2026/08/18/xrp-whales-are-back-1m-transactions-surge-280-as-price-trades-at-73-discount/" target="_blank">TheCryptoBasic — זינוק לווייתנים</a><a href="https://defillama.com/chain/xrpl" target="_blank">DefiLlama — XRPL</a></div></div>
+    <div class="stock-card" data-q="avax avalanche — אבלאנץ׳"><div class="stock-head"><div><span class="ticker ltr">AVAX</span><div class="company-name">Avalanche · תת-רשתות</div></div><div><div class="price ltr">$6.3600</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">Subnets</span></div>
+    <div class="rationale">סטנדרד צ׳רטרד הורידה בחדות את יעד 2026 ל-18$ (מ-100$) בעדכון פברואר — אחת ההורדות החדות ביותר מבין הנכסים המכוסים. ה-TVL של אבלאנץ׳ (413-417M$) ירד כ-3.5% ב-30 יום, ופעילות הרשת (115.6K כתובות פעילות) נותרה מתונה יחסית לשכבות-1 מתחרות.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery" target="_blank">CoinDesk — הורדת יעדים סטנדרד צ׳רטרד</a><a href="https://defillama.com/chain/avalanche" target="_blank">DefiLlama — Avalanche</a></div></div>
+    <div class="stock-card" data-q="link chainlink — רשת אורקלים"><div class="stock-head"><div><span class="ticker ltr">LINK</span><div class="company-name">Chainlink · רשת אורקלים</div></div><div><div class="price ltr">$9.8000</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">תזה טוקניזציה $4T</span></div>
+    <div class="rationale">סטנדרד צ׳רטרד קבעה יעד חדש ל-2030: 200$ (עדכון 10/8), הנשען על תזה טוקניזציה של 4 טריליון דולר ולקוחות מוסדיים בשמם (SWIFT, DTCC, Euroclear, JPMorgan, Mastercard). ה-TVS (ערך מאובטח כולל) של הפרוטוקול הגיע ל-33.1B$ ב-505 פרוטוקולים; CCIP עיבד 18B$ ברבעון הראשון של 2026 (+319% שנה-על-שנה).</div>
+    <div class="sources">מקורות: <a href="https://decrypt.co/375189/standard-chartered-sees-4t-tokenization-driving-chainlink-to-200-by-2030" target="_blank">Decrypt — יעד 200$ לצ׳יינלינק</a><a href="https://coinlaw.io/chainlink-statistics/" target="_blank">CoinLaw — נתוני Chainlink 2026</a></div></div>
+    <div class="stock-card" data-q="aave aave — פרוטוקול הלוואות defi"><div class="stock-head"><div><span class="ticker ltr">AAVE</span><div class="company-name">Aave · הלוואות DeFi מובילות</div></div><div><div class="price ltr">$87.9500</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">TVL 15B$</span></div>
+    <div class="rationale">סטנדרד צ׳רטרד שבה ואישרה יעד 3,500$ עד 2030 (24/6) על רקע "התחדשות DeFi". ה-TVL של Aave (14.99B$, +5.6% ב-30 יום) עדיין מרוכז באת׳ריום (83.2%). הצבעת ממשל דרמטית באפריל (13/4) הכריעה מאבק ארוך על שליטה בהכנסות הפרוטוקול — סימן לבשלות ממשלית.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/06/24/aave-could-soar-to-usd3-500-by-2030-on-defi-revival-says-stanchart" target="_blank">CoinDesk — יעד 3,500$</a><a href="https://defillama.com/protocol/aave" target="_blank">DefiLlama — Aave</a></div></div>
+    <div class="stock-card" data-q="sui sui — סוואי"><div class="stock-head"><div><span class="ticker ltr">SUI</span><div class="company-name">Sui · מבוסס Move</div></div><div><div class="price ltr">$0.657800</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">USDsui Live</span></div>
+    <div class="rationale">סוואי השיקה סטייבלקוין ילידי USDsui (4/3) עם הבטחה להזרים תשואת אג"ח ממשלתיות חזרה לאקוסיסטם. ה-TVL (כ-400-403M$) נותר יציב יחסית אך ירד כ-2.7%-9.5% על פני 7-30 יום. לא נמצאו יעדי מחיר ספציפיים ממוסדות המכוסים בסקירה זו — פער מידע לתשומת לב.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/business/2026/03/04/sui-s-native-stablecoin-goes-live-with-promise-of-treasury-yield-going-back-to-the-network" target="_blank">CoinDesk — סטייבלקוין USDsui</a><a href="https://defillama.com/chain/sui" target="_blank">DefiLlama — Sui</a></div></div>
+    <div class="stock-card" data-q="hype hyperliquid — הייפרליקוויד"><div class="stock-head"><div><span class="ticker ltr">HYPE</span><div class="company-name">Hyperliquid · בורסת נגזרים</div></div><div><div class="price ltr">$58.3800</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">Perps DEX מוביל</span></div>
+    <div class="rationale">היפרליקוויד ממשיכה לשלוט בנפח מסחר נגזרים און-צ׳יין: 6.19B$ בנפח פרפ ב-24 שעות מול 155.35M$ בלבד בנפח ספוט — יחס המדגיש את מעמדה כזירת הנגזרים המבוזרת המובילה. TVL של 1.25-1.27B$ עם הכנסות אפליקציה גבוהות יחסית (1.12M$/יום).</div>
+    <div class="sources">מקורות: <a href="https://defillama.com/chain/hyperliquid-l1" target="_blank">DefiLlama — Hyperliquid L1</a></div></div>
+    <div class="stock-card" data-q="bnb bnb — אקוסיסטם binance"><div class="stock-head"><div><span class="ticker ltr">BNB</span><div class="company-name">BNB · אקוסיסטם Binance</div></div><div><div class="price ltr">$602.3300</div></div></div>
+    <div class="chip-row"><span class="chip score2">⇓ ניקוד קונברגנס 1</span><span class="chip">#2 בהכנסות שרשרת</span></div>
+    <div class="rationale">סטנדרד צ׳רטרד הורידה יעד 2026 ל-1,050$ (מ-1,755$) בעדכון פברואר. שרשרת BSC מדורגת שנייה בהכנסות און-צ׳יין (כ-755.5K$/יום) אחרי טרון, עם פעילות ענפה של 2.19M כתובות פעילות ו-18.72M עסקאות ב-24 שעות. שווי שוק סטייבלקוינים על השרשרת: 13.37B$.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery" target="_blank">CoinDesk — הורדת יעדים</a><a href="https://chainspect.app/dashboard/financials" target="_blank">Chainspect — פיננסים</a></div></div>
   </div></section>
-
-  <section id="sentiment"><h2><span class="icon-badge">📊</span> סנטימנט שוק — מדד פחד ותאווה</h2><div class="section-sub">Crypto Fear &amp; Greed Index — מודד את סנטימנט המשקיעים בשוק הקריפטו על סמך תנודתיות, מומנטום, סושיאל ועוד.</div>
+  <section id="tier2"><h2><span class="icon-badge">⭐</span> שכבה משנית — מועמדים בולטים</h2><div class="section-sub">4 מטבעות נוספים במעקב הדוק בשל מומנטום מוסדי, פעילות פרוטוקול או סיכוני ממשל בולטים.</div>
+  <div class="tier2-grid">
+    <div class="tier2-card stock-card" data-q="ton toncoin — טונקוין"><div class="stock-head"><div><span class="ticker ltr">TON</span><div class="company-name">Toncoin · אקוסיסטם Telegram</div></div><div><div class="price ltr">$1.3200</div></div></div>
+    <div class="chip-row"><span class="chip">TVL 54.8M$</span><span class="tier-tag">שכבה משנית</span></div>
+    <div class="rationale">TVL קטן יחסית (54.8M$, -2.07% ב-24 שעות) אך פעילות משתמשים גבוהה: 136K כתובות פעילות ו-3.36M עסקאות ביום. שווי שוק סטייבלקוינים 815.65M$ עם דומיננטיות USDT (83.4%).</div><div class="risk-note">⚠️ מקור נתונים אחד הציג שינוי מיתוג לא מאומת ל-"Gram" (GRAM) — לא אושר ממקור רשמי; יש להתייחס בזהירות עד לאימות.</div>
+    <div class="sources">מקורות: <a href="https://defillama.com/chain/ton" target="_blank">DefiLlama — TON</a></div></div>
+    <div class="tier2-card stock-card" data-q="ondo ondo — נכסים מוטוקנזים (rwa)"><div class="stock-head"><div><span class="ticker ltr">ONDO</span><div class="company-name">Ondo · נכסים מוטוקנזים (RWA)</div></div><div><div class="price ltr">$0.324800</div></div></div>
+    <div class="chip-row"><span class="chip">TVL 3.46B$</span><span class="tier-tag">שכבה משנית</span></div>
+    <div class="rationale">TVL של 3.46B$ (-1.4% ב-30 יום) פרוס על פני את׳ריום (54.1%), Stellar, BSC ו-Sei — אסטרטגיית RWA רב-שרשרתית סביב חשיפה לאג"ח ממשלתיות קצרות טווח.</div><div class="risk-note">⚠️ סיכון ממשל תאגידי גבוה: מאבק שליטה בהנהלה בעקבות פטירת המייסד (6/8); שוקלת רכישה בהיקף עד 500M$ (30/7); זנחה תוכנית בלוקצ׳יין ייעודי לטובת רשת מסחר פרטית (28/7).</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/policy/2026/08/06/power-struggle-erupts-at-ondo-finance-after-founder-s-death" target="_blank">CoinDesk — מאבק שליטה</a><a href="https://defillama.com/protocol/ondo-finance" target="_blank">DefiLlama — Ondo Finance</a></div></div>
+    <div class="tier2-card stock-card" data-q="uni uniswap — בורסה מבוזרת"><div class="stock-head"><div><span class="ticker ltr">UNI</span><div class="company-name">Uniswap · בורסה מבוזרת מובילה</div></div><div><div class="price ltr">$3.2900</div></div></div>
+    <div class="chip-row"><span class="chip">נפח DEX 43B$/30י</span><span class="tier-tag">שכבה משנית</span></div>
+    <div class="rationale">TVL של 2.93B$ (-7% ב-30 יום) עם נפח מסחר 43.25B$ ב-30 יום. סטנדרד צ׳רטרד קבעה יעד 100$ עד 2030. BlackRock רשמה את קרן ה-BUIDL על יוניסוואפ (11/2), צעד ה-DeFi הראשון שלה שהניע זינוק חד במחיר בזמנו.</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/02/11/blackrock-takes-first-defi-step-lists-buidl-on-uniswap-as-uni-jumps-25" target="_blank">CoinDesk — BlackRock ו-BUIDL</a><a href="https://defillama.com/protocol/uniswap" target="_blank">DefiLlama — Uniswap</a></div></div>
+    <div class="tier2-card stock-card" data-q="morpho morpho — תשתית הלוואות defi"><div class="stock-head"><div><span class="ticker ltr">MORPHO</span><div class="company-name">Morpho · תשתית הלוואות DeFi</div></div><div><div class="price ltr">$2.0200</div></div></div>
+    <div class="chip-row"><span class="chip">TVL +9.4%/30י</span><span class="tier-tag">שכבה משנית</span></div>
+    <div class="rationale">TVL של 8.18B$ (+9.4% ב-30 יום), מרוכז באת׳ריום ו-Base (כ-86% ביחד). סטנדרד צ׳רטרד פתחה כיסוי (1/7) עם יעד 60$ עד 2030. Apollo (ענקית וול סטריט) העמיקה את הכניסה שלה ל-DeFi בעסקת טוקן מורפו (15/2).</div>
+    <div class="sources">מקורות: <a href="https://www.coindesk.com/markets/2026/07/01/morpho-poised-to-scale-as-defi-infrastructure-play-standard-chartered-says" target="_blank">CoinDesk — יעד סטנדרד צ׳רטרד</a><a href="https://defillama.com/protocol/morpho" target="_blank">DefiLlama — Morpho</a></div></div>
+  </div></section>
+  <section id="tables"><h2><span class="icon-badge">📋</span> טבלה מלאה — אוניברסיטת 48 מטבעות</h2>
+  <div class="section-sub">כל 48 המטבעות הנעקבים, מסודרים ב-7 קטגוריות. לחיצה על כותרת עמודה ממיינת; תיבת החיפוש למעלה מסננת בזמן אמת; כל טאב ניתן לייצוא כ-CSV.</div>
+  <div class="tabs-row"><div class="tabs">
+<button class="tab-btn active" data-tab="all" onclick="showTab('all')">הכל (48)</button>
+<button class="tab-btn" data-tab="l1" onclick="showTab('l1')">שכבה 1 (L1) (13)</button>
+<button class="tab-btn" data-tab="defi" onclick="showTab('defi')">DeFi (7)</button>
+<button class="tab-btn" data-tab="exch" onclick="showTab('exch')">בורסות (5)</button>
+<button class="tab-btn" data-tab="meme" onclick="showTab('meme')">Meme (6)</button>
+<button class="tab-btn" data-tab="pay" onclick="showTab('pay')">תשלומים (4)</button>
+<button class="tab-btn" data-tab="infra" onclick="showTab('infra')">תשתית (9)</button>
+<button class="tab-btn" data-tab="priv" onclick="showTab('priv')">פרטיות (4)</button>
+  </div></div>
+<div class="tab-panel active" id="panel-all"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">כל המטבעות במעקב · 48 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-all')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-all">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-all',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-all',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-all',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-all',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-all',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="btc bitcoin — ביטקוין"><td class="tk">BTC</td><td>Bitcoin — ביטקוין</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="64350.93">$64,350.93</td><td class="ltr" data-sort="1291602558417">$1291.60B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="eth ethereum — את׳ריום"><td class="tk">ETH</td><td>Ethereum — את׳ריום</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1920.86">$1,920.86</td><td class="ltr" data-sort="231808577840">$231.81B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="sol solana — סולנה"><td class="tk">SOL</td><td>Solana — סולנה</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="77.3">$77.3000</td><td class="ltr" data-sort="45063481124">$45.06B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="avax avalanche — אבלאנץ׳"><td class="tk">AVAX</td><td>Avalanche — אבלאנץ׳</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="6.36">$6.3600</td><td class="ltr" data-sort="2745361210">$2.75B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="sui sui — סוואי"><td class="tk">SUI</td><td>Sui — סוואי</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.6578">$0.657800</td><td class="ltr" data-sort="2680070580">$2.68B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="hype hyperliquid — הייפרליקוויד"><td class="tk">HYPE</td><td>Hyperliquid — הייפרליקוויד</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="58.38">$58.3800</td><td class="ltr" data-sort="12987420045">$12.99B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="ton toncoin — טונקוין"><td class="tk">TON</td><td>Toncoin — טונקוין</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.32">$1.3200</td><td class="ltr" data-sort="3635881813">$3.64B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="near near protocol"><td class="tk">NEAR</td><td>NEAR Protocol</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.61">$1.6100</td><td class="ltr" data-sort="2093428138">$2.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="ada cardano — קרדנו"><td class="tk">ADA</td><td>Cardano — קרדנו</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.1742">$0.174200</td><td class="ltr" data-sort="6530584293">$6.53B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="dot polkadot — פולקדוט"><td class="tk">DOT</td><td>Polkadot — פולקדוט</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.7629">$0.762900</td><td class="ltr" data-sort="1295638249">$1.30B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="atom cosmos hub — קוסמוס"><td class="tk">ATOM</td><td>Cosmos Hub — קוסמוס</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.41">$1.4100</td><td class="ltr" data-sort="740454208">$740.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="bch bitcoin cash"><td class="tk">BCH</td><td>Bitcoin Cash</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="203.53">$203.5300</td><td class="ltr" data-sort="4086094744">$4.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="apt aptos — אפטוס"><td class="tk">APT</td><td>Aptos — אפטוס</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.5279">$0.527900</td><td class="ltr" data-sort="453475000">$453.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="aave aave — פרוטוקול הלוואות defi"><td class="tk">AAVE</td><td>Aave — פרוטוקול הלוואות DeFi</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="87.95">$87.9500</td><td class="ltr" data-sort="1356407951">$1.36B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="uni uniswap — בורסה מבוזרת"><td class="tk">UNI</td><td>Uniswap — בורסה מבוזרת</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="3.29">$3.2900</td><td class="ltr" data-sort="2054687002">$2.05B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="morpho morpho — תשתית הלוואות defi"><td class="tk">MORPHO</td><td>Morpho — תשתית הלוואות DeFi</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="2.02">$2.0200</td><td class="ltr" data-sort="1328112582">$1.33B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="sky sky (לשעבר makerdao)"><td class="tk">SKY</td><td>Sky (לשעבר MakerDAO)</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.05642">$0.056420</td><td class="ltr" data-sort="1321570456">$1.32B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="crv curve dao token"><td class="tk">CRV</td><td>Curve DAO Token</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.2411">$0.241100</td><td class="ltr" data-sort="373564000">$373.6M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="ldo lido dao — סטייקינג נזיל"><td class="tk">LDO</td><td>Lido DAO — סטייקינג נזיל</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.3017">$0.301700</td><td class="ltr" data-sort="252335000">$252.3M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="pendle pendle — נגזרי תשואה"><td class="tk">PENDLE</td><td>Pendle — נגזרי תשואה</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="1.34">$1.3400</td><td class="ltr" data-sort="230400000">$230.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="bnb bnb — אקוסיסטם binance"><td class="tk">BNB</td><td>BNB — אקוסיסטם Binance</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="602.33">$602.3300</td><td class="ltr" data-sort="80207961614">$80.21B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="okb okb — אקוסיסטם okx"><td class="tk">OKB</td><td>OKB — אקוסיסטם OKX</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="101.51">$101.5100</td><td class="ltr" data-sort="2131345982">$2.13B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="cro cronos — אקוסיסטם crypto.com"><td class="tk">CRO</td><td>Cronos — אקוסיסטם Crypto.com</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="0.04597">$0.045970</td><td class="ltr" data-sort="2230140545">$2.23B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="leo leo token — bitfinex"><td class="tk">LEO</td><td>LEO Token — Bitfinex</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="9.24">$9.2400</td><td class="ltr" data-sort="8500706915">$8.50B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="kcs kucoin token"><td class="tk">KCS</td><td>KuCoin Token</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="6.57">$6.5700</td><td class="ltr" data-sort="900452359">$900.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="doge dogecoin — דוג׳קוין"><td class="tk">DOGE</td><td>Dogecoin — דוג׳קוין</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.07008">$0.070080</td><td class="ltr" data-sort="10900802124">$10.90B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="shib shiba inu"><td class="tk">SHIB</td><td>Shiba Inu</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.054467">$0.054467</td><td class="ltr" data-sort="2631379328">$2.63B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="pepe pepe"><td class="tk">PEPE</td><td>Pepe</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.052586">$0.052586</td><td class="ltr" data-sort="1086730894">$1.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="wif dogwifhat"><td class="tk">WIF</td><td>dogwifhat</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.1362">$0.136200</td><td class="ltr" data-sort="135992866">$136.0M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="bonk bonk"><td class="tk">BONK</td><td>Bonk</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.052335">$0.052335</td><td class="ltr" data-sort="205426000">$205.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="floki floki"><td class="tk">FLOKI</td><td>Floki</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="2.001e-05">$0.00002001</td><td class="ltr" data-sort="192966000">$193.0M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="xrp xrp — תשלומים חוצי-גבולות"><td class="tk">XRP</td><td>XRP — תשלומים חוצי-גבולות</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="1.01">$1.0100</td><td class="ltr" data-sort="63037648382">$63.04B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="ondo ondo — נכסים מוטוקנזים (rwa)"><td class="tk">ONDO</td><td>Ondo — נכסים מוטוקנזים (RWA)</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="0.3248">$0.324800</td><td class="ltr" data-sort="1581338892">$1.58B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="ltc litecoin — לייטקוין"><td class="tk">LTC</td><td>Litecoin — לייטקוין</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="44.98">$44.9800</td><td class="ltr" data-sort="3486995872">$3.49B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="xlm stellar — סטלר"><td class="tk">XLM</td><td>Stellar — סטלר</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="0.1566">$0.156600</td><td class="ltr" data-sort="5410904359">$5.41B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="link chainlink — רשת אורקלים"><td class="tk">LINK</td><td>Chainlink — רשת אורקלים</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="9.8">$9.8000</td><td class="ltr" data-sort="7331750597">$7.33B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="grt the graph — אינדוקס נתוני בלוקצ׳יין"><td class="tk">GRT</td><td>The Graph — אינדוקס נתוני בלוקצ׳יין</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.01318">$0.013180</td><td class="ltr" data-sort="144226000">$144.2M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="fil filecoin — אחסון מבוזר"><td class="tk">FIL</td><td>Filecoin — אחסון מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.6375">$0.637500</td><td class="ltr" data-sort="522493693">$522.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="render render — כוח gpu מבוזר"><td class="tk">RENDER</td><td>Render — כוח GPU מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="1.27">$1.2700</td><td class="ltr" data-sort="657464102">$657.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="icp internet computer"><td class="tk">ICP</td><td>Internet Computer</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="2.2">$2.2000</td><td class="ltr" data-sort="1222998821">$1.22B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="arb arbitrum — פתרון שכבה-2"><td class="tk">ARB</td><td>Arbitrum — פתרון שכבה-2</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.07734">$0.077340</td><td class="ltr" data-sort="516396045">$516.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="op optimism — פתרון שכבה-2"><td class="tk">OP</td><td>Optimism — פתרון שכבה-2</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.08234">$0.082340</td><td class="ltr" data-sort="188402000">$188.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="qnt quant — אינטרופרביליות"><td class="tk">QNT</td><td>Quant — אינטרופרביליות</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="56.4">$56.4000</td><td class="ltr" data-sort="820286138">$820.3M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="tao bittensor — ai מבוזר"><td class="tk">TAO</td><td>Bittensor — AI מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="192.15">$192.1500</td><td class="ltr" data-sort="1844159135">$1.84B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="xmr monero — פרטיות מלאה"><td class="tk">XMR</td><td>Monero — פרטיות מלאה</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="412.58">$412.5800</td><td class="ltr" data-sort="7753686514">$7.75B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="zec zcash — פרטיות אופציונלית"><td class="tk">ZEC</td><td>Zcash — פרטיות אופציונלית</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="508.07">$508.0700</td><td class="ltr" data-sort="8576857361">$8.58B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="dash dash — תשלומים פרטיים"><td class="tk">DASH</td><td>Dash — תשלומים פרטיים</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="30.6">$30.6000</td><td class="ltr" data-sort="391244000">$391.2M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="scrt secret network — חוזים פרטיים"><td class="tk">SCRT</td><td>Secret Network — חוזים פרטיים</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="0.02786">$0.027860</td><td class="ltr" data-sort="10130988">$10.1M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-l1"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">שכבה 1 (L1) · 13 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-l1')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-l1">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-l1',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-l1',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-l1',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-l1',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-l1',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="btc bitcoin — ביטקוין"><td class="tk">BTC</td><td>Bitcoin — ביטקוין</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="64350.93">$64,350.93</td><td class="ltr" data-sort="1291602558417">$1291.60B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="eth ethereum — את׳ריום"><td class="tk">ETH</td><td>Ethereum — את׳ריום</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1920.86">$1,920.86</td><td class="ltr" data-sort="231808577840">$231.81B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="sol solana — סולנה"><td class="tk">SOL</td><td>Solana — סולנה</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="77.3">$77.3000</td><td class="ltr" data-sort="45063481124">$45.06B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="avax avalanche — אבלאנץ׳"><td class="tk">AVAX</td><td>Avalanche — אבלאנץ׳</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="6.36">$6.3600</td><td class="ltr" data-sort="2745361210">$2.75B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="sui sui — סוואי"><td class="tk">SUI</td><td>Sui — סוואי</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.6578">$0.657800</td><td class="ltr" data-sort="2680070580">$2.68B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="hype hyperliquid — הייפרליקוויד"><td class="tk">HYPE</td><td>Hyperliquid — הייפרליקוויד</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="58.38">$58.3800</td><td class="ltr" data-sort="12987420045">$12.99B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="ton toncoin — טונקוין"><td class="tk">TON</td><td>Toncoin — טונקוין</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.32">$1.3200</td><td class="ltr" data-sort="3635881813">$3.64B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="near near protocol"><td class="tk">NEAR</td><td>NEAR Protocol</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.61">$1.6100</td><td class="ltr" data-sort="2093428138">$2.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="ada cardano — קרדנו"><td class="tk">ADA</td><td>Cardano — קרדנו</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.1742">$0.174200</td><td class="ltr" data-sort="6530584293">$6.53B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="dot polkadot — פולקדוט"><td class="tk">DOT</td><td>Polkadot — פולקדוט</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.7629">$0.762900</td><td class="ltr" data-sort="1295638249">$1.30B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="atom cosmos hub — קוסמוס"><td class="tk">ATOM</td><td>Cosmos Hub — קוסמוס</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="1.41">$1.4100</td><td class="ltr" data-sort="740454208">$740.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="bch bitcoin cash"><td class="tk">BCH</td><td>Bitcoin Cash</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="203.53">$203.5300</td><td class="ltr" data-sort="4086094744">$4.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="apt aptos — אפטוס"><td class="tk">APT</td><td>Aptos — אפטוס</td><td><span class="cat-badge">שכבה 1 (L1)</span></td><td class="ltr" data-sort="0.5279">$0.527900</td><td class="ltr" data-sort="453475000">$453.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-defi"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">DeFi · 7 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-defi')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-defi">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-defi',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-defi',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-defi',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-defi',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-defi',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="aave aave — פרוטוקול הלוואות defi"><td class="tk">AAVE</td><td>Aave — פרוטוקול הלוואות DeFi</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="87.95">$87.9500</td><td class="ltr" data-sort="1356407951">$1.36B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="uni uniswap — בורסה מבוזרת"><td class="tk">UNI</td><td>Uniswap — בורסה מבוזרת</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="3.29">$3.2900</td><td class="ltr" data-sort="2054687002">$2.05B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="morpho morpho — תשתית הלוואות defi"><td class="tk">MORPHO</td><td>Morpho — תשתית הלוואות DeFi</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="2.02">$2.0200</td><td class="ltr" data-sort="1328112582">$1.33B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="sky sky (לשעבר makerdao)"><td class="tk">SKY</td><td>Sky (לשעבר MakerDAO)</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.05642">$0.056420</td><td class="ltr" data-sort="1321570456">$1.32B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="crv curve dao token"><td class="tk">CRV</td><td>Curve DAO Token</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.2411">$0.241100</td><td class="ltr" data-sort="373564000">$373.6M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="ldo lido dao — סטייקינג נזיל"><td class="tk">LDO</td><td>Lido DAO — סטייקינג נזיל</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="0.3017">$0.301700</td><td class="ltr" data-sort="252335000">$252.3M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="pendle pendle — נגזרי תשואה"><td class="tk">PENDLE</td><td>Pendle — נגזרי תשואה</td><td><span class="cat-badge">DeFi</span></td><td class="ltr" data-sort="1.34">$1.3400</td><td class="ltr" data-sort="230400000">$230.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-exch"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">בורסות · 5 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-exch')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-exch">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-exch',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-exch',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-exch',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-exch',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-exch',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="bnb bnb — אקוסיסטם binance"><td class="tk">BNB</td><td>BNB — אקוסיסטם Binance</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="602.33">$602.3300</td><td class="ltr" data-sort="80207961614">$80.21B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="okb okb — אקוסיסטם okx"><td class="tk">OKB</td><td>OKB — אקוסיסטם OKX</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="101.51">$101.5100</td><td class="ltr" data-sort="2131345982">$2.13B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="cro cronos — אקוסיסטם crypto.com"><td class="tk">CRO</td><td>Cronos — אקוסיסטם Crypto.com</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="0.04597">$0.045970</td><td class="ltr" data-sort="2230140545">$2.23B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="leo leo token — bitfinex"><td class="tk">LEO</td><td>LEO Token — Bitfinex</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="9.24">$9.2400</td><td class="ltr" data-sort="8500706915">$8.50B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="kcs kucoin token"><td class="tk">KCS</td><td>KuCoin Token</td><td><span class="cat-badge">בורסות</span></td><td class="ltr" data-sort="6.57">$6.5700</td><td class="ltr" data-sort="900452359">$900.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-meme"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">Meme · 6 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-meme')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-meme">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-meme',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-meme',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-meme',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-meme',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-meme',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="doge dogecoin — דוג׳קוין"><td class="tk">DOGE</td><td>Dogecoin — דוג׳קוין</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.07008">$0.070080</td><td class="ltr" data-sort="10900802124">$10.90B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="shib shiba inu"><td class="tk">SHIB</td><td>Shiba Inu</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.054467">$0.054467</td><td class="ltr" data-sort="2631379328">$2.63B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="pepe pepe"><td class="tk">PEPE</td><td>Pepe</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.052586">$0.052586</td><td class="ltr" data-sort="1086730894">$1.09B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="wif dogwifhat"><td class="tk">WIF</td><td>dogwifhat</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.1362">$0.136200</td><td class="ltr" data-sort="135992866">$136.0M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="bonk bonk"><td class="tk">BONK</td><td>Bonk</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="0.052335">$0.052335</td><td class="ltr" data-sort="205426000">$205.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="floki floki"><td class="tk">FLOKI</td><td>Floki</td><td><span class="cat-badge">Meme</span></td><td class="ltr" data-sort="2.001e-05">$0.00002001</td><td class="ltr" data-sort="192966000">$193.0M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-pay"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">תשלומים · 4 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-pay')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-pay">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-pay',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-pay',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-pay',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-pay',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-pay',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="xrp xrp — תשלומים חוצי-גבולות"><td class="tk">XRP</td><td>XRP — תשלומים חוצי-גבולות</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="1.01">$1.0100</td><td class="ltr" data-sort="63037648382">$63.04B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="ondo ondo — נכסים מוטוקנזים (rwa)"><td class="tk">ONDO</td><td>Ondo — נכסים מוטוקנזים (RWA)</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="0.3248">$0.324800</td><td class="ltr" data-sort="1581338892">$1.58B</td><td><span class="tier-tag">משנית</span></td></tr>
+<tr data-q="ltc litecoin — לייטקוין"><td class="tk">LTC</td><td>Litecoin — לייטקוין</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="44.98">$44.9800</td><td class="ltr" data-sort="3486995872">$3.49B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="xlm stellar — סטלר"><td class="tk">XLM</td><td>Stellar — סטלר</td><td><span class="cat-badge">תשלומים</span></td><td class="ltr" data-sort="0.1566">$0.156600</td><td class="ltr" data-sort="5410904359">$5.41B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-infra"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">תשתית · 9 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-infra')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-infra">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-infra',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-infra',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-infra',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-infra',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-infra',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="link chainlink — רשת אורקלים"><td class="tk">LINK</td><td>Chainlink — רשת אורקלים</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="9.8">$9.8000</td><td class="ltr" data-sort="7331750597">$7.33B</td><td><span class="tier-tag">שכבה 1</span></td></tr>
+<tr data-q="grt the graph — אינדוקס נתוני בלוקצ׳יין"><td class="tk">GRT</td><td>The Graph — אינדוקס נתוני בלוקצ׳יין</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.01318">$0.013180</td><td class="ltr" data-sort="144226000">$144.2M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="fil filecoin — אחסון מבוזר"><td class="tk">FIL</td><td>Filecoin — אחסון מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.6375">$0.637500</td><td class="ltr" data-sort="522493693">$522.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="render render — כוח gpu מבוזר"><td class="tk">RENDER</td><td>Render — כוח GPU מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="1.27">$1.2700</td><td class="ltr" data-sort="657464102">$657.5M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="icp internet computer"><td class="tk">ICP</td><td>Internet Computer</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="2.2">$2.2000</td><td class="ltr" data-sort="1222998821">$1.22B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="arb arbitrum — פתרון שכבה-2"><td class="tk">ARB</td><td>Arbitrum — פתרון שכבה-2</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.07734">$0.077340</td><td class="ltr" data-sort="516396045">$516.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="op optimism — פתרון שכבה-2"><td class="tk">OP</td><td>Optimism — פתרון שכבה-2</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="0.08234">$0.082340</td><td class="ltr" data-sort="188402000">$188.4M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="qnt quant — אינטרופרביליות"><td class="tk">QNT</td><td>Quant — אינטרופרביליות</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="56.4">$56.4000</td><td class="ltr" data-sort="820286138">$820.3M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="tao bittensor — ai מבוזר"><td class="tk">TAO</td><td>Bittensor — AI מבוזר</td><td><span class="cat-badge">תשתית</span></td><td class="ltr" data-sort="192.15">$192.1500</td><td class="ltr" data-sort="1844159135">$1.84B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="tab-panel" id="panel-priv"><div class="tblwrap-outer">
+<div class="table-controls"><span class="section-sub" style="margin:0">פרטיות · 4 מטבעות</span><button class="csv-btn" onclick="exportVisibleCSV('table-priv')">⬇ ייצוא CSV</button></div>
+<div class="tbl-wrap"><table id="table-priv">
+<thead><tr>
+<th class="sortable" onclick="sortTable('table-priv',0,false)">טיקר</th>
+<th class="sortable" onclick="sortTable('table-priv',1,false)">שם</th>
+<th class="sortable" onclick="sortTable('table-priv',2,false)">קטגוריה</th>
+<th class="sortable" onclick="sortTable('table-priv',3,true)">מחיר</th>
+<th class="sortable" onclick="sortTable('table-priv',4,true)">שווי שוק</th>
+<th>שכבה</th>
+</tr></thead>
+<tbody>
+<tr data-q="xmr monero — פרטיות מלאה"><td class="tk">XMR</td><td>Monero — פרטיות מלאה</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="412.58">$412.5800</td><td class="ltr" data-sort="7753686514">$7.75B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="zec zcash — פרטיות אופציונלית"><td class="tk">ZEC</td><td>Zcash — פרטיות אופציונלית</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="508.07">$508.0700</td><td class="ltr" data-sort="8576857361">$8.58B</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="dash dash — תשלומים פרטיים"><td class="tk">DASH</td><td>Dash — תשלומים פרטיים</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="30.6">$30.6000</td><td class="ltr" data-sort="391244000">$391.2M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+<tr data-q="scrt secret network — חוזים פרטיים"><td class="tk">SCRT</td><td>Secret Network — חוזים פרטיים</td><td><span class="cat-badge">פרטיות</span></td><td class="ltr" data-sort="0.02786">$0.027860</td><td class="ltr" data-sort="10130988">$10.1M</td><td><span class="tier-tag std">רגיל</span></td></tr>
+</tbody>
+</table></div></div>
+</div>
+  </section>
+  <section id="sentiment"><h2><span class="icon-badge">📊</span> סנטימנט שוק — מדד פחד ותאווה</h2><div class="section-sub">Crypto Fear &amp; Greed Index — מדד יומי אשר סינתזה רגשות וסנטימנטים ממקורות שונים, נעילות ומינוף בשוק החוזים העתידיים, כדי לגזור מספר יחיד בין 0-100, שם ערכים נמוכים משקפים פחד קיצוני וערכים גבוהים משקפים תאוותנות קיצונית.</div>
   <div class="fg-wrap"><div class="fg-dial"><div class="fg-value ltr">41</div></div>
-  <div class="fg-meta"><div class="fg-label">Fear (פחד)</div><div class="fg-sub">ציון 0-100 · 0=פחד קיצוני, 100=תאווה קיצונית</div>
-  <div class="fg-hist"><span class="fg-hist-item">אתמול: 31 (Fear)</span><span class="fg-hist-item">שבוע שעבר: 29 (Fear)</span><span class="fg-hist-item">חודש שעבר: 28 (Fear)</span></div></div></div>
-  <div class="sources" style="margin-top:10px">מקורות: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank">Alternative.me</a></div></section>
-
-  <section id="methodology"><h2><span class="icon-badge">🔬</span> מתודולוגיה</h2><div class="prose"><p>דירוג שכבה 1 מבוסס על שווי שוק, נזילות ובגרות הפרויקט. נתוני מחיר נשלפים בזמן אמת מ-Alpha Vantage (עם השלמה מ-CoinGecko למטבעות שאינם נתמכים ב-Alpha Vantage). מדד הפחד והתאווה מגיע מ-Alternative.me ומתעדכן מדי יום. הדשבורד מתעדכן אוטומטית פעמיים ביום דרך GitHub Actions/Cowork.</p></div></section>
-
+  <div class="fg-meta"><div class="fg-label">Fear (פחד)</div><div class="fg-sub">ציון 0-100 · 0=פחד קיצוני, 100=תאוותנות קיצונית</div>
+  <div class="fg-hist"><span class="fg-hist-item">אתמול: 31 (Fear)</span><span class="fg-hist-item">שבוע שעבר: 29 (Fear)</span><span class="fg-hist-item">חודש שעבר: 28 (Fear)</span></div>
+  <div class="fg-divergence">הערת שקיפות: מעקב חלופי (feargreedmeter.com) הציג באותו יום ערך שונה של 46 (Fear) — פערים בין ספקי מדד נובעים משיטות משקלול שונות; הדשבורד מציג את הערך של Alternative.me כמקור העיקרי בהתאם למתודולוגיה הקבועה.</div></div></div>
+  <div class="sources" style="margin-top:10px">מקורות: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank">Alternative.me</a> <a href="https://feargreedmeter.com/crypto-fear-and-greed-index" target="_blank">FearGreedMeter.com (השוואה)</a></div></section>
+  <section id="methodology"><h2><span class="icon-badge">🔬</span> מתודולוגיה</h2>
+  <div class="converge-cols">
+  <div class="converge-col"><h3>1️⃣ קונצנזוס מוסדי</h3><p>איסוף תחזיות מחיר, שינויי דירוג וזרימות ETF מדסקים מוסדיים (Standard Chartered, VanEck, Bernstein, Citi, Bitwise). כל נתון מצוטט למקור ותאריך פרסום מקוריים.</p></div>
+  <div class="converge-col"><h3>2️⃣ פונדמנטלס און-צ׳יין</h3><p>נתוני TVL, פעילות רשת והכנסות פרוטוקולים ממקורות כמו Chainspect, DefiLlama ו-KuCoin Research, המשמשים לאימות עצמאי של הנרטיב המוסדי מול מציאות השימוש בפועל.</p></div>
+  <div class="converge-col"><h3>3️⃣ עריכה קריפטו-נייטיבית</h3><p>סקירת כתבות ואנליזות מ-CoinDesk, Bankless, Money.com ו-Blockpit, מסווגות לפי איכות מקור (A/B), לזיהוי נרטיבים, סיכוני רגולציה ואירועי אבטחה בזמן אמת.</p></div>
+  </div>
+  <div class="prose"><p>דירוג "ניקוד קונברגנס" משקף עד כמה שלושת המתודולוגיות הללו מסכימות על כיוון/סיפור מסוים לגבי נכס נתון. ציון גבוה (⇓ ניקוד קונברגנס 1) מציין הסכמה רחבה בין המקורות; נכסים עם עדויות סותרות או חסרות מסומנים בהתאם בטקסט הרציונל של הכרטיס. נתוני מחיר ושווי שוק נשלפים מ-CoinGecko ומ-Alpha Vantage למטבעות הנתמכים. מדד הפחד והתאווה נשלף מ-Alternative.me. תהליך העדכון אוטומטי ורץ פעמיים ביום דרך GitHub Actions/Cowork.</p>
+  <p><b>מגבלות נתונים:</b> חלק מהמחירים ושווי השוק המפורטים בטבלה המלאה הם קירובים המבוססים על סריקת דפי CoinGecko בזמן איסוף הנתונים, ולא בהכרח משקפים Snapshot ברזולוציית שנייה. עבור SUI, HYPE, TON ו-ONDO לא אותרו יעדי מחיר ספציפיים מהמוסדות הנסקרים — פער זה מצוין באופן שקוף בכרטיסים הרלוונטיים. ערך TON חשוד בשינוי מיתוג לא מאומת ("Gram") ממקור נתונים בודד — יש להתייחס בזהירות.</p></div>
+  </section>
   <footer><p>דשבורד זה נבנה עבור מעקב אישי בלבד, אינו ייעוץ השקעות. מתעדכן אוטומטית פעמיים ביום דרך GitHub Pages.</p></footer>
 </div>
 <script>
 function toggleTheme(){var el=document.documentElement,c=el.getAttribute('data-theme');if(c==='dark'){el.setAttribute('data-theme','light');}else if(c==='light'){el.removeAttribute('data-theme');}else{el.setAttribute('data-theme','dark');}}
-function filterAll(){var q=document.getElementById('globalSearch').value.trim().toLowerCase();document.querySelectorAll('.stock-card[data-q]').forEach(function(c){c.style.display=(!q||c.dataset.q.indexOf(q)!==-1)?'':'none';});}
+
+function filterAll(){
+  var q=document.getElementById('globalSearch').value.trim().toLowerCase();
+  document.querySelectorAll('.stock-card[data-q]').forEach(function(c){c.style.display=(!q||c.dataset.q.indexOf(q)!==-1)?'':'none';});
+  document.querySelectorAll('.tab-panel.active tbody tr[data-q]').forEach(function(r){r.style.display=(!q||r.dataset.q.indexOf(q)!==-1)?'':'none';});
+}
+
+function showTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('panel-'+tabId).classList.add('active');
+  document.querySelector('.tab-btn[data-tab="'+tabId+'"]').classList.add('active');
+  filterAll();
+}
+
+function sortTable(tableId,colIndex,isNumeric){
+  var table=document.getElementById(tableId);
+  var tbody=table.tBodies[0];
+  var rows=Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+  var curCol=table.getAttribute('data-sort-col');
+  var curDir=table.getAttribute('data-sort-dir');
+  var dir=(curCol==String(colIndex)&&curDir==='asc')?'desc':'asc';
+  rows.sort(function(a,b){
+    var ca=a.cells[colIndex],cb=b.cells[colIndex];
+    var av=ca.getAttribute('data-sort');av=(av!==null)?parseFloat(av):ca.textContent.trim();
+    var bv=cb.getAttribute('data-sort');bv=(bv!==null)?parseFloat(bv):cb.textContent.trim();
+    if(isNumeric){av=parseFloat(av)||0;bv=parseFloat(bv)||0;return dir==='asc'?av-bv:bv-av;}
+    av=String(av);bv=String(bv);
+    return dir==='asc'?av.localeCompare(bv,'he'):bv.localeCompare(av,'he');
+  });
+  rows.forEach(function(r){tbody.appendChild(r);});
+  table.setAttribute('data-sort-dir',dir);
+  table.setAttribute('data-sort-col',colIndex);
+}
+
+function exportVisibleCSV(tableId){
+  var table=document.getElementById(tableId);
+  var rows=table.querySelectorAll('tr');
+  var csv=[];
+  rows.forEach(function(r){
+    if(r.style.display==='none')return;
+    var cells=Array.prototype.slice.call(r.querySelectorAll('th,td'));
+    var cols=cells.map(function(c){return '"'+c.textContent.trim().replace(/"/g,'""')+'"';});
+    csv.push(cols.join(','));
+  });
+  var blob=new Blob(["﻿"+csv.join('\n')],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download=tableId+'-converge.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function syncQuicknavHeight(){
+  var qn=document.getElementById('quicknav');
+  if(!qn)return;
+  document.documentElement.style.setProperty('--qn-height',(qn.offsetHeight+14)+'px');
+}
+window.addEventListener('load',syncQuicknavHeight);
+window.addEventListener('resize',syncQuicknavHeight);
+if(window.ResizeObserver){
+  var qnEl=document.getElementById('quicknav');
+  if(qnEl){new ResizeObserver(syncQuicknavHeight).observe(qnEl);}
+}
+syncQuicknavHeight();
 </script>
 </body>
 </html>
