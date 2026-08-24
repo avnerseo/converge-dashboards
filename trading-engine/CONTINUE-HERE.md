@@ -8,6 +8,7 @@
 | מה | איפה |
 |---|---|
 | הקוד החי | `C:\dev\trading-engine` על מחשב Windows (desktop-2mf0j9f) |
+| גיבוי הקוד | https://github.com/aifreemeditate-source/trading-engine (פרטי) |
 | מצב הפרויקט | `trading-engine/STATE.md` בריפו הזה |
 | האפיון המעוצב | https://claude.ai/code/artifact/bcc59036-6635-4732-b6e1-9cc550b59bc2 |
 | זיכרון ארוך-טווח | Mem0, project=trading-engine |
