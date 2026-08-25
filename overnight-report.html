@@ -1,0 +1,524 @@
+<title>יום מול לילה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EDF0F4;
+  --ink:#16191F; --ink-2:#4A5260; --muted:#7C8593; --rule:#DFE4EA;
+  --day:#B4740E; --night:#4C5BD4; --ref:#8A93A1;
+  --bad:#A93226; --bad-bg:#F7E9E7; --good:#1E7A5A;
+  --day-fill:rgba(180,116,14,.14); --night-fill:rgba(76,91,212,.12);
+  --shadow:0 1px 2px rgba(20,25,35,.05),0 8px 24px -12px rgba(20,25,35,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101318; --surface:#171B22; --surface-2:#1E232C;
+    --ink:#E8EBF0; --ink-2:#AEB7C4; --muted:#7B8493; --rule:#282E38;
+    --day:#BB8529; --night:#6E80EA; --ref:#767F8D;
+    --bad:#D9756A; --bad-bg:#2A1C1B; --good:#4FA383;
+    --day-fill:rgba(187,133,41,.16); --night-fill:rgba(110,128,234,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101318; --surface:#171B22; --surface-2:#1E232C;
+  --ink:#E8EBF0; --ink-2:#AEB7C4; --muted:#7B8493; --rule:#282E38;
+  --day:#BB8529; --night:#6E80EA; --ref:#767F8D;
+  --bad:#D9756A; --bad-bg:#2A1C1B; --good:#4FA383;
+  --day-fill:rgba(187,133,41,.16); --night-fill:rgba(110,128,234,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; direction:rtl; background:var(--bg); color:var(--ink);
+  font-family:"Assistant","Segoe UI",system-ui,sans-serif; font-weight:400;
+  font-size:17px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px; margin:0 auto; padding:0 24px 96px}
+h1,h2,h3{font-family:"Frank Ruhl Libre",Georgia,serif; text-wrap:balance; margin:0}
+h1{font-weight:900; font-size:clamp(2.1rem,5.6vw,3.4rem); line-height:1.14; letter-spacing:-.015em}
+h2{font-weight:700; font-size:clamp(1.35rem,3.2vw,1.75rem); line-height:1.3}
+h3{font-weight:700; font-size:1.06rem; line-height:1.4}
+p{margin:0}
+a{color:var(--night); text-decoration-thickness:1px; text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--night); outline-offset:3px; border-radius:2px}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; direction:ltr; unicode-bidi:isolate-override; white-space:nowrap}
+
+/* ---- masthead ---- */
+header{padding:72px 0 0}
+.eyebrow{
+  font-size:.72rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); display:flex; align-items:center; gap:10px; margin-bottom:20px;
+}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--rule)}
+.dek{margin-top:20px; font-size:1.15rem; line-height:1.66; color:var(--ink-2); max-width:62ch}
+.byline{
+  margin-top:24px; padding-top:16px; border-top:1px solid var(--rule);
+  font-size:.83rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 20px;
+}
+
+/* ---- verdict ---- */
+.verdict{
+  margin:44px 0 0; background:var(--surface); border:1px solid var(--rule);
+  border-radius:3px; box-shadow:var(--shadow); overflow:hidden;
+}
+.verdict-head{
+  padding:22px 26px 20px; border-bottom:1px solid var(--rule);
+  display:flex; gap:16px; align-items:flex-start;
+}
+.stamp{
+  flex:none; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--bad); background:var(--bad-bg); border:1px solid currentColor;
+  padding:5px 10px; border-radius:2px; margin-top:3px;
+}
+.verdict-head p{font-size:1.16rem; line-height:1.56; font-weight:600}
+.tiles{display:grid; grid-template-columns:repeat(3,1fr)}
+.tile{padding:22px 26px; border-inline-start:1px solid var(--rule)}
+.tile:first-child{border-inline-start:0}
+.tile-label{font-size:.78rem; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:7px}
+.swatch{width:10px; height:10px; border-radius:2px; flex:none}
+.tile-num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:2.15rem; font-weight:500; line-height:1.1; margin-top:10px; direction:ltr; text-align:right}
+.tile-sub{font-size:.8rem; color:var(--muted); margin-top:4px}
+@media(max-width:600px){
+  .tiles{grid-template-columns:1fr}
+  .tile{border-inline-start:0; border-top:1px solid var(--rule)}
+  .tile-num{font-size:1.8rem}
+}
+
+/* ---- sections ---- */
+section{margin-top:64px}
+.sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:8px}
+.sec-n{
+  font-family:"IBM Plex Mono",monospace; font-size:.75rem; font-weight:500;
+  color:var(--muted); flex:none; padding-top:4px;
+}
+section > p + p{margin-top:16px}
+section > h2 + p{margin-top:14px}
+.lede{font-size:1.05rem}
+
+/* ---- figures ---- */
+figure{margin:32px 0 0; background:var(--surface); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow)}
+.fig-head{padding:20px 22px 0}
+.fig-title{font-family:"Frank Ruhl Libre",serif; font-weight:700; font-size:1.05rem}
+.fig-sub{font-size:.84rem; color:var(--muted); margin-top:3px}
+.legend{display:flex; flex-wrap:wrap; gap:8px 18px; padding:14px 22px 0; font-size:.83rem; color:var(--ink-2)}
+.legend span{display:flex; align-items:center; gap:7px}
+.chart-scroll{overflow-x:auto; padding:6px 12px 16px}
+figcaption{padding:0 22px 18px; font-size:.82rem; color:var(--muted); line-height:1.6}
+svg{display:block; width:100%; height:auto; min-width:480px}
+.gridline{stroke:var(--rule); stroke-width:1}
+.axis-txt{direction:ltr;unicode-bidi:isolate-override;font-family:"IBM Plex Mono",monospace; font-size:10.5px; fill:var(--muted)}
+.series{fill:none; stroke-width:2; stroke-linejoin:round; stroke-linecap:round}
+.dlabel{direction:ltr;unicode-bidi:isolate-override;font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:500}
+
+/* tooltip */
+.tt{
+  position:absolute; pointer-events:none; opacity:0; transition:opacity .12s;
+  background:var(--surface); border:1px solid var(--rule); box-shadow:var(--shadow);
+  border-radius:3px; padding:9px 12px; font-size:.8rem; line-height:1.55; z-index:5; min-width:140px;
+}
+.tt b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-weight:500}
+.tt-row{display:flex; justify-content:space-between; gap:16px; align-items:center}
+.tt-date{font-weight:700; margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid var(--rule)}
+.fig-rel{position:relative}
+
+/* ---- tables ---- */
+.tbl-scroll{overflow-x:auto; padding:0 22px 20px}
+table{border-collapse:collapse; width:100%; font-size:.87rem; min-width:420px}
+caption{text-align:right; padding:20px 22px 12px; font-family:"Frank Ruhl Libre",serif; font-weight:700; font-size:1.05rem}
+th,td{padding:9px 10px; text-align:left; border-bottom:1px solid var(--rule); white-space:nowrap}
+th:first-child,td:first-child{text-align:right; padding-inline-start:0}
+td:last-child,th:last-child{padding-inline-end:0}
+thead th{
+  font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--muted); border-bottom:1px solid var(--ink-2);
+}
+tbody td:not(:first-child){font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; direction:ltr}
+tbody tr:last-child td{border-bottom:0}
+.neg{color:var(--bad)}
+.pos{color:var(--good)}
+.row-hl td{background:var(--surface-2); font-weight:700}
+
+/* ---- callout ---- */
+.callout{
+  margin-top:28px; padding:20px 22px; background:var(--surface-2);
+  border-inline-start:3px solid var(--night); border-radius:2px;
+}
+.callout h3{margin-bottom:8px}
+.callout p{font-size:.95rem; color:var(--ink-2)}
+
+/* ---- checklist ---- */
+ul.reasons{list-style:none; padding:0; margin:24px 0 0; display:flex; flex-direction:column; gap:2px}
+ul.reasons li{
+  display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start;
+  padding:16px 0; border-bottom:1px solid var(--rule);
+}
+ul.reasons li:last-child{border-bottom:0}
+.mark{
+  font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:500;
+  color:var(--muted); padding-top:5px;
+}
+ul.reasons strong{display:block; font-weight:700; font-size:.98rem}
+ul.reasons p{font-size:.93rem; color:var(--ink-2); margin-top:3px}
+
+/* ---- close ---- */
+.close{
+  margin-top:64px; padding:32px 0 0; border-top:2px solid var(--ink);
+}
+.close ol{margin:20px 0 0; padding-inline-start:22px; display:flex; flex-direction:column; gap:14px}
+.close li{padding-inline-start:6px}
+.close li strong{font-weight:700}
+.sources{margin-top:56px; padding-top:20px; border-top:1px solid var(--rule); font-size:.83rem; color:var(--muted); line-height:1.85}
+.sources h3{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-family:"Assistant",sans-serif; margin-bottom:10px}
+.disclaimer{margin-top:28px; font-size:.8rem; color:var(--muted); line-height:1.7; font-style:italic}
+@media(prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">בדיקה אמפירית · Converge</div>
+  <h1>לקנות בפתיחה, למכור בסגירה</h1>
+  <p class="dek">
+    התיאוריה אומרת שקנייה בפתיחת המסחר ומכירה רגע לפני הסגירה מייצרת רווח משמעותי.
+    בדקתי אותה על 8,448 ימי מסחר של <span class="num">SPY</span> מ־1993 ועל 11 ניירות נוספים.
+    התוצאה: לא רק שהתיאוריה לא מוכחת — היא הפוכה בדיוק למה שהנתונים מראים.
+  </p>
+  <div class="byline">
+    <span>מקור נתונים: Yahoo Finance, נרות יומיים מתואמי ספליט</span>
+    <span>מדגם: <span class="num">1993-02-01 &#8594; 2026-08-24</span></span>
+  </div>
+</header>
+
+<div class="verdict">
+  <div class="verdict-head">
+    <span class="stamp">הפוך</span>
+    <p>
+      כל התשואה ההיסטורית של השוק נוצרה <em>בין</em> ימי המסחר — מהסגירה עד הפתיחה הבאה.
+      שעות המסחר עצמן, שבהן התיאוריה מציעה להחזיק, תרמו כמעט אפס במשך 33 שנה.
+    </p>
+  </div>
+  <div class="tiles">
+    <div class="tile">
+      <div class="tile-label"><span class="swatch" style="background:var(--ref)"></span>קנה־והחזק</div>
+      <div class="tile-num">×31.6</div>
+      <div class="tile-sub">10.9% שנתי</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label"><span class="swatch" style="background:var(--night)"></span>לילה בלבד</div>
+      <div class="tile-num">×24.8</div>
+      <div class="tile-sub">10.1% שנתי · סגירה→פתיחה</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label"><span class="swatch" style="background:var(--day)"></span>יום בלבד</div>
+      <div class="tile-num" style="color:var(--bad)">×1.27</div>
+      <div class="tile-sub">0.7% שנתי · פתיחה→סגירה</div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-n">01</span><h2>33 שנה, שלושה מסלולים</h2></div>
+  <p class="lede">
+    לכל יום מסחר יש שני חלקים: הפער מהסגירה של אתמול לפתיחה של היום (״לילה״), ותנועת המחיר מהפתיחה עד הסגירה (״יום״).
+    מכפלת שניהם היא בדיוק תשואת קנה־והחזק. פירקתי את SPY לשני החלקים והרכבתי כל אחד בנפרד.
+  </p>
+  <figure class="fig-rel">
+    <div class="fig-head">
+      <div class="fig-title">צמיחת דולר אחד ב־SPY, לפי פירוק יום/לילה</div>
+      <div class="fig-sub">סקאלה לוגריתמית · דיבידנדים משויכים לרגל הלילה (יום האקס־דיבידנד) · פברואר 1993 – אוגוסט 2026</div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--ref)"></span>קנה־והחזק</span>
+      <span><span class="swatch" style="background:var(--night)"></span>לילה בלבד (סגירה→פתיחה)</span>
+      <span><span class="swatch" style="background:var(--day)"></span>יום בלבד (פתיחה→סגירה)</span>
+    </div>
+    <div class="chart-scroll"><svg id="hero" direction="ltr" viewBox="0 0 760 380" role="img" aria-label="גרף לוגריתמי המשווה צמיחת דולר בשלוש אסטרטגיות"></svg></div>
+    <div class="tt" id="tt-hero"></div>
+    <figcaption>
+      דולר שהוחזק רק בשעות המסחר הפך ל־<span class="num">1.27$</span> אחרי 33 שנה. אותו דולר שהוחזק רק בלילות הפך ל־<span class="num">24.84$</span>.
+      גם קרן כספית הייתה מכפילה את הכסף בתקופה הזו — כלומר רגל היום הפסידה לריבית חסרת הסיכון, תוך נשיאת מלוא סיכון המניות.
+    </figcaption>
+  </figure>
+
+  <div class="callout">
+    <h3>המבחן הסטטיסטי</h3>
+    <p>
+      התשואה היומית הממוצעת של רגל היום היא <span class="num">+0.74</span> נקודות בסיס עם <span class="num">t = 0.71</span> —
+      כלומר לא ניתן להבחין בינה לבין אפס. רגל הלילה נותנת <span class="num">+4.03</span> נקודות בסיס עם <span class="num">t = 5.55</span>, מובהק מאוד.
+      במילים אחרות: ל״קנה בפתיחה, מכור בסגירה״ אין אפילו קצה חוט סטטיסטי ב־33 שנות נתונים.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-n">02</span><h2>לא רק במדד</h2></div>
+  <p>
+    בדקתי את אותו פירוק על מדדים נוספים ועל מניות בודדות, כולל כאלה שכבר נמצאות בדשבורדים שלנו.
+    בכל אחד מארבעת המדדים הגדולים ובכל מניות הצמיחה — הלילה מנצח, ורגל היום שלילית או אפסית.
+  </p>
+  <figure class="fig-rel">
+    <div class="fig-head">
+      <div class="fig-title">תשואה שנתית ממוצעת: יום מול לילה</div>
+      <div class="fig-sub">כל שורה = נייר אחד. המרחק בין הנקודות הוא גודל האנומליה.</div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--day);border-radius:50%"></span>יום (פתיחה→סגירה)</span>
+      <span><span class="swatch" style="background:var(--night);border-radius:50%"></span>לילה (סגירה→פתיחה)</span>
+    </div>
+    <div class="chart-scroll"><svg id="dumb" direction="ltr" viewBox="0 0 760 430" role="img" aria-label="גרף השוואת תשואה שנתית יום מול לילה לפי נייר ערך"></svg></div>
+    <div class="tt" id="tt-dumb"></div>
+    <figcaption>
+      שלושת החריגים — MSFT, AMZN ו־KO — הם בדיוק מה שהופך את זה לאנומליה סטטיסטית ולא לחוק טבע.
+      ב־KO רגל היום אפילו גדולה מרגל הלילה. אין כאן כלל שאפשר להחיל עיוור על כל מניה.
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-n">03</span><h2>ההגינות: זה השתנה</h2></div>
+  <p>
+    אם הייתי עוצר כאן זו הייתה הצגה חלקית. האנומליה לא יציבה לאורך זמן — היא הייתה קטלנית בשנות ה־2000
+    והתמתנה מאוד מאז. בעשור האחרון רגל היום כן חיובית, אם כי עדיין נמוכה מרגל הלילה.
+  </p>
+  <figure>
+    <div class="tbl-scroll">
+    <table>
+      <caption>SPY — תשואה שנתית מתואמת לפי תקופה</caption>
+      <thead><tr><th>תקופה</th><th>ימי מסחר</th><th>קנה־והחזק</th><th>יום</th><th>לילה</th></tr></thead>
+      <tbody>
+        <tr><td><span class="num">1993–1999</span></td><td>1,748</td><td>21.30%</td><td class="neg">−0.54%</td><td>21.96%</td></tr>
+        <tr><td><span class="num">2000–2009</span></td><td>2,515</td><td class="neg">−1.02%</td><td class="neg">−5.16%</td><td>4.37%</td></tr>
+        <tr><td><span class="num">2010–2019</span></td><td>2,516</td><td>13.45%</td><td class="pos">4.47%</td><td>8.60%</td></tr>
+        <tr><td><span class="num">2020–2026</span></td><td>1,669</td><td>15.54%</td><td class="pos">5.77%</td><td>9.24%</td></tr>
+        <tr class="row-hl"><td>3 שנים אחרונות</td><td>913</td><td>22.53%</td><td class="pos">8.79%</td><td>12.64%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <figcaption>
+      גם בשנים בודדות התמונה מתהפכת: ב־2016 רגל היום נתנה <span class="num">+15.8%</span> מול <span class="num">−3.2%</span> ללילה,
+      וב־2023 <span class="num">+19.2%</span> מול <span class="num">+5.9%</span>. מי שהיה מהמר על כיוון אחד בלבד היה סופג שנים ארוכות נגדו.
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-n">04</span><h2>ואז מגיעות העמלות</h2></div>
+  <p>
+    שתי האסטרטגיות דורשות <strong>252 סבבי קנייה־מכירה בשנה</strong>. זה המקום שבו כל הדיון נגמר.
+    הטבלה מראה את התשואה השנתית אחרי הורדת עלות קבועה לכל סבב — מרווח ציטוט, עמלה והשפעת שוק ביחד.
+  </p>
+  <figure>
+    <div class="tbl-scroll">
+    <table>
+      <caption>תשואה שנתית נטו לפי עלות סבב מסחר</caption>
+      <thead><tr><th>אסטרטגיה</th><th>ברוטו</th><th>1bp</th><th>2bp</th><th>5bp</th><th>10bp</th></tr></thead>
+      <tbody>
+        <tr><td>SPY יום — כל המדגם</td><td>0.72%</td><td class="neg">−1.78%</td><td class="neg">−4.23%</td><td class="neg">−11.20%</td><td class="neg">−21.72%</td></tr>
+        <tr><td>SPY יום — מ־2010</td><td>4.99%</td><td class="pos">2.37%</td><td class="neg">−0.17%</td><td class="neg">−7.44%</td><td class="neg">−18.41%</td></tr>
+        <tr><td>SPY לילה — כל המדגם</td><td>10.06%</td><td class="pos">7.32%</td><td class="pos">4.65%</td><td class="neg">−2.97%</td><td class="neg">−14.46%</td></tr>
+        <tr class="row-hl"><td>קנה־והחזק (2 עסקאות בסך הכל)</td><td>10.85%</td><td>10.85%</td><td>10.85%</td><td>10.85%</td><td>10.85%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <figcaption>
+      נקודת בסיס אחת היא <span class="num">0.01%</span>. מרווח ציטוט טיפוסי ב־SPY הוא כבר בסביבות <span class="num">1</span> נקודת בסיס,
+      ולכך מתווספים עמלה והחלקה. גם רגל הלילה — האסטרטגיה ה״נכונה״ — קורסת מתחת לקנה־והחזק בעלות ריאלית.
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-n">05</span><h2>חמש סיבות שזה לא יעבוד בפועל</h2></div>
+  <ul class="reasons">
+    <li>
+      <span class="mark">I</span>
+      <div>
+        <strong>הסיכון גדול יותר, לא קטן יותר</strong>
+        <p>הירידה המקסימלית של רגל היום ב־SPY היא <span class="num">−68.5%</span>, לעומת <span class="num">−55.2%</span> בקנה־והחזק.
+        משלמים תנודתיות שנתית של <span class="num">15.2%</span> ומקבלים בתמורה <span class="num">0.7%</span> בשנה.</p>
+      </div>
+    </li>
+    <li>
+      <span class="mark">II</span>
+      <div>
+        <strong>אי אפשר באמת לסחור במחיר הפתיחה</strong>
+        <p>מחיר הפתיחה הוא הדפסת מכרז יחידה. הדקות הראשונות הן הרגע התנודתי ביותר ביום עם המרווחים הרחבים ביותר.
+        הבדיקה מניחה ביצוע מושלם במחיר הזה — הנחה שלא מתקיימת.</p>
+      </div>
+    </li>
+    <li>
+      <span class="mark">III</span>
+      <div>
+        <strong>מי שניסה למכור את זה כמוצר — נסגר</strong>
+        <p>קרנות NightShares (NSPY, NIWM) הושקו ב־2022 בדיוק על האנומליה הזו ונסגרו באוגוסט 2023.
+        NSPY ירדה <span class="num">6.9%</span> מההשקה בזמן ש־S&amp;P 500 עלה <span class="num">22%</span>.</p>
+      </div>
+    </li>
+    <li>
+      <span class="mark">IV</span>
+      <div>
+        <strong>מס על כל סבב</strong>
+        <p>252 סבבים בשנה ממסים כל רווח מיידית ומונעים דחיית מס. בישראל מסחר בתדירות כזו עלול גם להיות מסווג
+        כעסק ולהתחייב במס שולי במקום <span class="num">25%</span> — נקודה שדורשת בדיקה עם רו״ח לפני שנוגעים בזה.</p>
+      </div>
+    </li>
+    <li>
+      <span class="mark">V</span>
+      <div>
+        <strong>ההסבר עצמו לא בר־ניצול</strong>
+        <p>ההסבר המקובל הוא שדיווחי רווחים וחדשות מתפרסמים מחוץ לשעות המסחר, ושפרמיית סיכון נדרשת על החזקה
+        כשאי אפשר לצאת. זו פרמיה על סיכון אמיתי — לא ארוחת חינם.</p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<div class="close">
+  <h2>מה זה אומר למנוע שלנו</h2>
+  <ol>
+    <li><strong>לא לבנות אסטרטגיית פתיחה־עד־סגירה.</strong> אין לה בסיס בנתונים; זו רגל הביצועים החלשה ביותר בשוק, והיא לא מובהקת סטטיסטית.</li>
+    <li><strong>גם לא את ההיפוך.</strong> אסטרטגיית הלילה אמיתית אקדמית, אך נמחקת בעלויות ריאליות ונסגרה כמוצר מסחרי.</li>
+    <li><strong>כן להשתמש בפירוק כפיצ׳ר.</strong> יחס יום/לילה למניה בודדת הוא מדד שימושי לזיהוי היכן מרוכזת הפעילות — נתון תיאורי לדשבורד, לא סיגנל מסחר.</li>
+    <li><strong>הכלל שחוזר בכל בדיקה.</strong> כל תוצאה שנראית כמו ארוחת חינם חייבת לעבור שלושה מסננים לפני שהיא נכנסת למנוע: מובהקות סטטיסטית, עמידות אחרי עלויות, ויציבות לאורך תקופות משנה.</li>
+  </ol>
+</div>
+
+<div class="sources">
+  <h3>מקורות ומתודולוגיה</h3>
+  <p>
+    החישוב בוצע על נרות יומיים מ־Yahoo Finance, מתואמי ספליט. רגל היום = <span class="num">close/open − 1</span>;
+    רגל הלילה = <span class="num">(open + div)/prev_close − 1</span>, כאשר הדיבידנד מוחזר לרגל הלילה כדי לא להעניש אותה על פער האקס־דיבידנד.
+    בלי התיקון הזה רגל הלילה נותנת <span class="num">8.11%</span> במקום <span class="num">10.06%</span> — כלומר המסקנה לא תלויה בטיפול בדיבידנדים.
+    ימים עם פער לילה מעל <span class="num">25%</span> סוננו כהגנה מפני שאריות ספליט.
+  </p>
+  <p style="margin-top:12px">
+    ספרות: Cliff, Cooper &amp; Gulen (2008) · Lou, Polk &amp; Skouras, <a href="https://personal.lse.ac.uk/polk/research/TugOfWar.pdf">A Tug of War: Overnight Versus Intraday Expected Returns</a> ·
+    Knuteson, <a href="https://arxiv.org/pdf/2010.01727">Strikingly Suspicious Overnight and Intraday Returns</a> ·
+    <a href="https://alphaarchitect.com/trading-costs-wipe-out-the-overnight-return-anomaly/">Alpha Architect — Trading Costs Wipe Out the Overnight Return Anomaly</a> ·
+    <a href="https://www.etf.com/sections/news/2-nightshares-etfs-close-after-struggling-gain-traction">etf.com — סגירת קרנות NightShares</a> ·
+    <a href="https://elmwealth.com/night-moves-overnight-drift/">Elm Wealth — Night Moves</a>
+  </p>
+  <p class="disclaimer">
+    ניתוח מחקרי בלבד, לא ייעוץ השקעות. ביצועי עבר אינם מנבאים ביצועי עתיד. הבדיקה מניחה ביצוע מושלם במחירי פתיחה וסגירה ואינה כוללת מימון, מס או החלקה בפועל.
+  </p>
+</div>
+</div>
+
+<script>
+const Q = [["1993-03-31",1.033,1.0122,1.021],["1993-06-30",1.038,0.9738,1.066],["1993-09-30",1.064,0.9877,1.078],["1993-12-31",1.087,0.9557,1.137],["1994-03-31",1.046,0.9041,1.157],["1994-06-30",1.05,0.9132,1.15],["1994-09-30",1.097,0.9374,1.171],["1994-12-31",1.091,0.8818,1.238],["1995-03-31",1.207,0.9786,1.233],["1995-06-30",1.318,1.0508,1.254],["1995-09-30",1.424,1.0992,1.296],["1995-12-31",1.507,1.1337,1.329],["1996-03-31",1.592,1.1655,1.366],["1996-06-30",1.661,1.1526,1.441],["1996-09-30",1.707,1.1424,1.494],["1996-12-31",1.846,1.1604,1.59],["1997-03-31",1.891,1.0907,1.734],["1997-06-30",2.224,1.2424,1.79],["1997-09-30",2.386,1.2027,1.984],["1997-12-31",2.463,1.1584,2.127],["1998-03-31",2.798,1.2271,2.28],["1998-06-30",2.893,1.1661,2.481],["1998-09-30",2.607,1.0304,2.53],["1998-12-31",3.17,1.1631,2.726],["1999-03-31",3.308,1.0802,3.063],["1999-06-30",3.541,1.0741,3.297],["1999-09-30",3.337,0.9355,3.567],["1999-12-31",3.816,0.9628,3.964],["2000-03-31",3.917,0.9199,4.258],["2000-06-30",3.793,0.8517,4.454],["2000-09-30",3.76,0.8078,4.654],["2000-12-31",3.445,0.6862,5.02],["2001-03-31",3.072,0.612,5.02],["2001-06-30",3.237,0.6443,5.024],["2001-09-30",2.768,0.6218,4.452],["2001-12-31",3.04,0.7031,4.324],["2002-03-31",3.055,0.6826,4.475],["2002-06-30",2.649,0.6126,4.324],["2002-09-30",2.199,0.5506,3.994],["2002-12-31",2.384,0.6109,3.902],["2003-03-31",2.299,0.645,3.564],["2003-06-30",2.658,0.6817,3.899],["2003-09-30",2.731,0.6723,4.063],["2003-12-31",3.055,0.7308,4.181],["2004-03-31",3.116,0.7149,4.359],["2004-06-30",3.167,0.7102,4.46],["2004-09-30",3.103,0.7175,4.325],["2004-12-31",3.382,0.7599,4.451],["2005-03-31",3.314,0.7098,4.668],["2005-06-30",3.362,0.6931,4.85],["2005-09-30",3.485,0.7149,4.875],["2005-12-31",3.545,0.6866,5.164],["2006-03-31",3.711,0.7091,5.234],["2006-06-30",3.655,0.6611,5.528],["2006-09-30",3.852,0.6777,5.685],["2006-12-31",4.107,0.7221,5.688],["2007-03-31",4.134,0.7206,5.737],["2007-06-30",4.398,0.7429,5.921],["2007-09-30",4.482,0.7261,6.173],["2007-12-31",4.318,0.6585,6.557],["2008-03-31",3.917,0.6456,6.067],["2008-06-30",3.817,0.6167,6.189],["2008-09-30",3.478,0.5631,6.177],["2008-12-31",2.728,0.4829,5.649],["2009-03-31",2.421,0.4454,5.435],["2009-06-30",2.815,0.5031,5.596],["2009-09-30",3.248,0.5576,5.826],["2009-12-31",3.447,0.5677,6.071],["2010-03-31",3.633,0.5892,6.167],["2010-06-30",3.221,0.5345,6.026],["2010-09-30",3.58,0.5755,6.221],["2010-12-31",3.965,0.6071,6.532],["2011-03-31",4.199,0.6324,6.64],["2011-06-30",4.2,0.6239,6.732],["2011-09-30",3.62,0.5847,6.191],["2011-12-31",4.04,0.5893,6.855],["2012-03-31",4.553,0.6446,7.063],["2012-06-30",4.423,0.6348,6.968],["2012-09-30",4.704,0.6684,7.037],["2012-12-31",4.686,0.6453,7.261],["2013-03-31",5.178,0.687,7.537],["2013-06-30",5.33,0.6915,7.708],["2013-09-30",5.609,0.6954,8.066],["2013-12-31",6.2,0.747,8.3],["2014-03-31",6.305,0.7342,8.588],["2014-06-30",6.63,0.753,8.805],["2014-09-30",6.705,0.7502,8.938],["2014-12-31",7.034,0.7638,9.209],["2015-03-31",7.096,0.7722,9.189],["2015-06-30",7.11,0.7597,9.359],["2015-09-30",6.654,0.7103,9.368],["2015-12-31",7.121,0.7558,9.422],["2016-03-31",7.216,0.8002,9.018],["2016-06-30",7.393,0.8509,8.688],["2016-09-30",7.673,0.8732,8.787],["2016-12-31",7.976,0.8748,9.117],["2017-03-31",8.448,0.9206,9.177],["2017-06-30",8.707,0.9023,9.65],["2017-09-30",9.092,0.9129,9.959],["2017-12-31",9.707,0.9248,10.495],["2018-03-31",9.61,0.8752,10.98],["2018-06-30",9.951,0.8707,11.429],["2018-09-30",10.713,0.9214,11.627],["2018-12-31",9.263,0.7697,12.034],["2019-03-31",10.516,0.8567,12.275],["2019-06-30",10.96,0.8788,12.472],["2019-09-30",11.153,0.8561,13.027],["2019-12-31",12.155,0.8785,13.835],["2020-03-31",9.79,0.935,10.47],["2020-06-30",11.763,0.9221,12.757],["2020-09-30",12.826,0.9251,13.865],["2020-12-31",14.381,0.908,15.838],["2021-03-31",15.294,0.9175,16.669],["2021-06-30",16.573,0.9492,17.46],["2021-09-30",16.668,0.9541,17.47],["2021-12-31",18.513,0.9942,18.622],["2022-03-31",17.659,0.9783,18.05],["2022-06-30",14.814,0.8843,16.753],["2022-09-30",14.084,0.9117,15.448],["2022-12-31",15.15,0.9387,16.139],["2023-03-31",16.28,1.0347,15.734],["2023-06-30",17.693,1.1073,15.979],["2023-09-30",17.122,1.0528,16.263],["2023-12-31",19.115,1.1187,17.087],["2024-03-31",21.102,1.1878,17.766],["2024-06-30",22.026,1.1724,18.788],["2024-09-30",23.293,1.1534,20.195],["2024-12-31",23.874,1.1282,21.16],["2025-03-31",22.856,1.0959,20.856],["2025-06-30",25.318,1.2409,20.404],["2025-09-30",27.374,1.2738,21.491],["2025-12-31",28.104,1.2261,22.922],["2026-03-31",26.875,1.2027,22.345],["2026-06-30",30.939,1.2855,24.067],["2026-09-30",31.631,1.2735,24.837]];
+
+const SYMS=[["NVDA",-2.16,42.96,1999],["TSLA",-4.17,43.83,2010],["AAPL",-5.13,26.38,1980],["IWM",-4.09,13.45,2000],["QQQ",-2.80,13.94,1999],["SPY",0.72,10.06,1993],["DIA",1.68,7.38,1998],["JPM",2.51,10.64,1980],["KO",8.76,2.69,1970],["V",9.92,9.62,2008],["MSFT",12.31,11.28,1986],["AMZN",14.46,12.51,1997]];
+
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={})=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- hero: log-scale multi-line ---------- */
+function hero(){
+  const svg=document.getElementById("hero"); svg.textContent="";
+  const W=760,H=380,mL=52,mR=68,mT=14,mB=30;
+  const iw=W-mL-mR, ih=H-mT-mB;
+  const t0=new Date(Q[0][0]).getTime(), t1=new Date(Q[Q.length-1][0]).getTime();
+  const lo=Math.log10(0.4), hi=Math.log10(36);
+  const X=d=>mL+((new Date(d).getTime()-t0)/(t1-t0))*iw;
+  const Y=v=>mT+ih-((Math.log10(v)-lo)/(hi-lo))*ih;
+
+  [0.5,1,2,5,10,20,30].forEach(v=>{
+    svg.appendChild(el("line",{x1:mL,x2:mL+iw,y1:Y(v),y2:Y(v),class:"gridline"}));
+    const tx=el("text",{x:mL-8,y:Y(v)+3.5,class:"axis-txt","text-anchor":"end"});
+    tx.textContent="$"+v; svg.appendChild(tx);
+  });
+  [1995,2000,2005,2010,2015,2020,2025].forEach(y=>{
+    const x=X(y+"-01-01");
+    const tx=el("text",{x,y:H-10,class:"axis-txt","text-anchor":"middle"});
+    tx.textContent=y; svg.appendChild(tx);
+  });
+  svg.appendChild(el("line",{x1:mL,x2:mL+iw,y1:Y(1),y2:Y(1),stroke:cssv("--muted"),"stroke-width":1,"stroke-dasharray":"1 3"}));
+
+  const series=[
+    {i:2,c:cssv("--day"),n:"יום",dash:null},
+    {i:3,c:cssv("--night"),n:"לילה",dash:null},
+    {i:1,c:cssv("--ref"),n:"קנה־והחזק",dash:"5 4"}
+  ];
+  series.forEach(s=>{
+    const d=Q.map((r,k)=>(k?"L":"M")+X(r[0]).toFixed(1)+" "+Y(r[s.i]).toFixed(1)).join(" ");
+    const p=el("path",{d,class:"series",stroke:s.c});
+    if(s.dash){p.setAttribute("stroke-dasharray",s.dash);p.setAttribute("stroke-width",1.6);}
+    svg.appendChild(p);
+    const last=Q[Q.length-1];
+    svg.appendChild(el("circle",{cx:X(last[0]),cy:Y(last[s.i]),r:3.5,fill:s.c,stroke:cssv("--surface"),"stroke-width":2}));
+    const lb=el("text",{x:X(last[0])+10,y:Y(last[s.i])+4,class:"dlabel",fill:s.c,"text-anchor":"start"});
+    lb.textContent="$"+last[s.i].toFixed(last[s.i]<3?2:1); svg.appendChild(lb);
+  });
+
+  const cross=el("line",{y1:mT,y2:mT+ih,stroke:cssv("--ink-2"),"stroke-width":1,opacity:0});
+  svg.appendChild(cross);
+  const dots=series.map(s=>{const c=el("circle",{r:4,fill:s.c,stroke:cssv("--surface"),"stroke-width":2,opacity:0});svg.appendChild(c);return c;});
+  const tt=document.getElementById("tt-hero"), fig=svg.closest("figure");
+  const hit=el("rect",{x:mL,y:mT,width:iw,height:ih,fill:"transparent"});
+  svg.appendChild(hit);
+  function move(ev){
+    const r=svg.getBoundingClientRect(), sx=(ev.clientX-r.left)*(W/r.width);
+    let best=0,bd=1e9;
+    Q.forEach((q,k)=>{const d=Math.abs(X(q[0])-sx); if(d<bd){bd=d;best=k;}});
+    const q=Q[best], px=X(q[0]);
+    cross.setAttribute("x1",px); cross.setAttribute("x2",px); cross.setAttribute("opacity",.35);
+    series.forEach((s,k)=>{dots[k].setAttribute("cx",px);dots[k].setAttribute("cy",Y(q[s.i]));dots[k].setAttribute("opacity",1);});
+    tt.innerHTML='<div class="tt-date">'+q[0].slice(0,7)+'</div>'+series.map(s=>
+      '<div class="tt-row"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:'+s.c+'"></span>'+s.n+'</span><b>$'+q[s.i].toFixed(2)+'</b></div>').join("");
+    const fr=fig.getBoundingClientRect();
+    tt.style.opacity=1;
+    tt.style.top=(ev.clientY-fr.top+16)+"px";
+    const lx=ev.clientX-fr.left;
+    tt.style.left=Math.min(Math.max(lx-80,8),fr.width-168)+"px";
+  }
+  hit.addEventListener("pointermove",move);
+  hit.addEventListener("pointerleave",()=>{tt.style.opacity=0;cross.setAttribute("opacity",0);dots.forEach(d=>d.setAttribute("opacity",0));});
+}
+
+/* ---------- dumbbell ---------- */
+function dumb(){
+  const svg=document.getElementById("dumb"); svg.textContent="";
+  const W=760,H=430,mL=92,mR=58,mT=16,mB=30;
+  const iw=W-mL-mR, ih=H-mT-mB, n=SYMS.length, step=ih/n;
+  const lo=-8, hi=46;
+  const X=v=>mL+((v-lo)/(hi-lo))*iw;
+  [0,10,20,30,40].forEach(v=>{
+    svg.appendChild(el("line",{x1:X(v),x2:X(v),y1:mT-6,y2:mT+ih,class:"gridline",
+      ...(v===0?{stroke:cssv("--ink-2"),"stroke-width":1}:{})}));
+    const t=el("text",{x:X(v),y:H-10,class:"axis-txt","text-anchor":"middle"}); t.textContent=v+"%"; svg.appendChild(t);
+  });
+  const tt=document.getElementById("tt-dumb"), fig=svg.closest("figure");
+  SYMS.forEach((s,k)=>{
+    const [sym,day,night,yr]=s, y=mT+step*k+step/2;
+    const lbl=el("text",{x:mL-56,y:y+4,class:"dlabel",fill:cssv("--ink"),"text-anchor":"end"});
+    lbl.textContent=sym; svg.appendChild(lbl);
+    svg.appendChild(el("line",{x1:X(day),x2:X(night),y1:y,y2:y,stroke:cssv("--rule"),"stroke-width":3,"stroke-linecap":"round"}));
+    svg.appendChild(el("circle",{cx:X(night),cy:y,r:5,fill:cssv("--night"),stroke:cssv("--surface"),"stroke-width":2}));
+    svg.appendChild(el("circle",{cx:X(day),cy:y,r:5,fill:cssv("--day"),stroke:cssv("--surface"),"stroke-width":2}));
+    // label each value on its own outer side so dots never collide with text
+    const lo=day<night?{v:day,c:cssv("--day")}:{v:night,c:cssv("--night")};
+    const hi=day<night?{v:night,c:cssv("--night")}:{v:day,c:cssv("--day")};
+    const lt=el("text",{x:X(lo.v)-10,y:y+4,class:"dlabel",fill:lo.c,"text-anchor":"end"});
+    lt.textContent=lo.v.toFixed(1); svg.appendChild(lt);
+    const ht=el("text",{x:X(hi.v)+10,y:y+4,class:"dlabel",fill:hi.c,"text-anchor":"start"});
+    ht.textContent=hi.v.toFixed(1); svg.appendChild(ht);
+    const hit=el("rect",{x:6,y:y-step/2,width:W-12,height:step,fill:"transparent"});
+    hit.addEventListener("pointerenter",ev=>{
+      const fr=fig.getBoundingClientRect();
+      tt.innerHTML='<div class="tt-date">'+sym+' · מ־'+yr+'</div>'+
+        '<div class="tt-row"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:'+cssv("--day")+'"></span>יום</span><b>'+day.toFixed(2)+'%</b></div>'+
+        '<div class="tt-row"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:'+cssv("--night")+'"></span>לילה</span><b>'+night.toFixed(2)+'%</b></div>';
+      tt.style.opacity=1;
+      tt.style.top=(ev.clientY-fr.top+14)+"px";
+      tt.style.left=Math.min(Math.max(ev.clientX-fr.left-80,8),fr.width-168)+"px";
+    });
+    hit.addEventListener("pointerleave",()=>tt.style.opacity=0);
+    svg.appendChild(hit);
+  });
+}
+function draw(){hero();dumb();}
+draw();
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",draw);
+</script>
