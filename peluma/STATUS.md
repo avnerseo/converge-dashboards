@@ -176,3 +176,32 @@ store. Add real profile URLs in the editor when the accounts exist.
   "Porcelain White Set", "Milk Brown Set", "Porcelain White Brush",
   "Purple Brush", "Set". Restructuring needs Zendrop's answer on what "Set"
   contains.
+
+## Shipping / Returns / Cancellations accordion (27 Aug, approved copy)
+
+Added to `templates/product.json` on the working theme, directly below the buy
+buttons and above the product description. Three `_accordion-row` blocks inside
+one `accordion` block:
+
+- **Shipping** — open by default
+- **Returns** — collapsed
+- **Cancellations** — collapsed
+
+Copy is the merchant-approved wording, every line traceable to the existing
+shipping or refund policy. No guarantee language beyond what those policies
+already commit to.
+
+Correction to the earlier note in this file: the `disclosures` block that was
+removed was **not** rendering a visible empty heading. `blocks/disclosures.liquid`
+reads `closest.product.metafields.shopify.disclosure.value` and emits
+`<div hidden shopify-block-empty>` when that metafield is empty, which the
+block's own stylesheet then hides with `display: none`. It was dead weight, not
+a visible defect — and it was the wrong component for this content, since it
+takes no child blocks. `accordion` is the right one.
+
+Verified by reading the file back: all three rows, their text and their position
+in `block_order` are intact.
+
+**Dependency:** the "7–15 business days" line is the same claim that appears on
+the About page and in the shipping policy. If Zendrop's answer on fulfilment
+origin changes it, it changes in three places.
