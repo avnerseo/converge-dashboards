@@ -2,7 +2,187 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Converge — מנוע מעקב מניות אטרקטיביות | שוק ארה"ב</title>
-<style>PLACEHOLDER_STYLE_WILL_BE_REPLACED</style>
+<style>
+
+
+  :root{color-scheme:light;--surface-1:#fcfcfb;--page:#f9f9f7;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;--gridline:#e1e0d9;--baseline:#c3c2b7;--border:rgba(11,11,11,.1);--card-border:rgba(11,11,11,.08);--series-1:#2a78d6;--highlight-bg:#e3edfb;--highlight-ink:#1c5cab;--good:#0ca30c;--good-bg:#e8f7e8;--warning:#fab219;--warning-bg:#fff6e0;--serious:#ec835a;--serious-bg:#fdeee7;--critical:#d03b3b;--critical-bg:#fbe7e7;--chip-bg:#f0efec;--tier1-bg:linear-gradient(135deg,#eef4fc,#f9f9f7);--shadow:0 1px 2px rgba(11,11,11,.04),0 8px 24px rgba(11,11,11,.05);}
+  @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  :root[data-theme="dark"]{color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  *{box-sizing:border-box;}body{margin:0;background:var(--page);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;}
+  .ltr{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;}.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;}a{color:var(--series-1);}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .brand-lockup{display:flex;align-items:center;gap:10px;margin-bottom:16px;direction:ltr;}.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--series-1);}
+  .brand-text{display:flex;flex-direction:column;line-height:1.15;}.brand-word{font-size:16.5px;font-weight:700;}.brand-tm{font-size:9px;vertical-align:super;color:var(--text-muted);}.brand-tagline{font-size:9.5px;font-weight:600;letter-spacing:1.3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px;}
+  h1{font-size:25px;margin:0 0 6px;}.subtitle{color:var(--text-secondary);font-size:14.5px;max-width:760px;}.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12.5px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .theme-toggle{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);border-radius:20px;padding:7px 14px;font-size:13px;}
+  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}.disclaimer b{color:var(--text-primary);}
+  .quicknav{position:sticky;top:0;z-index:20;background:var(--page);padding:10px 0;border-bottom:1px solid var(--card-border);margin-bottom:8px;}
+  .qn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}.search-input{flex:1;min-width:180px;padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .sector-select{padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .qn-links{display:flex;gap:6px;flex-wrap:wrap;}.qn-links a{font-size:12px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:14px;background:var(--chip-bg);}
+  section{margin:38px 0;scroll-margin-top:118px;}h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:8px;}.section-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+  .icon-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--highlight-bg);color:var(--highlight-ink);font-size:14px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}.kpi-tile{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .kpi-value{font-size:30px;font-weight:600;}.kpi-label{font-size:12.5px;color:var(--text-muted);margin-top:4px;}
+  .tier1-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;}.stock-card{background:var(--tier1-bg);border:1px solid var(--card-border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);}
+  .stock-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;}.ticker{font-size:20px;font-weight:700;}.company-name{font-size:12.5px;color:var(--text-muted);}.price{font-size:15px;font-weight:600;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px;}.chip{font-size:11.5px;padding:3px 9px;border-radius:12px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .chip.score2{background:var(--highlight-bg);color:var(--highlight-ink);border-color:transparent;font-weight:600;}.chip.score1{background:var(--good-bg);color:var(--good);border-color:transparent;font-weight:600;}.rationale{font-size:13.3px;color:var(--text-secondary);margin:8px 0;}
+  .risk-note{display:flex;gap:6px;font-size:12.3px;background:var(--serious-bg);color:var(--text-primary);border-radius:8px;padding:8px 10px;margin-top:10px;}
+  .sources{font-size:11.5px;color:var(--text-muted);margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}.sources a{text-decoration:none;}
+  .highrisk-banner{margin:14px 0 22px;padding:14px 16px;border-radius:10px;background:var(--critical-bg);font-size:13px;}.icon-badge.risk{background:var(--critical-bg);color:var(--critical);}
+  .risk-card{background:linear-gradient(135deg,var(--serious-bg),var(--page));border:1px solid rgba(236,131,90,.35);}.risk-badge{display:inline-flex;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--critical-bg);color:var(--critical);white-space:nowrap;}
+  .chip.catalyst{background:var(--chip-bg);}.chip.inst-strong{background:var(--highlight-bg);color:var(--highlight-ink);font-weight:600;}.chip.inst-mixed{background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  .price-approx{font-size:10.5px;color:var(--text-muted);margin-top:2px;}.star{color:var(--highlight-ink);font-size:12px;}
+  table{width:100%;border-collapse:collapse;background:var(--surface-1);border:1px solid var(--card-border);border-radius:10px;overflow:hidden;font-size:13px;}
+  thead th{text-align:right;padding:10px 12px;background:var(--chip-bg);color:var(--text-secondary);font-weight:600;font-size:12px;border-bottom:1px solid var(--card-border);white-space:nowrap;position:sticky;top:var(--quicknav-h, 106px);z-index:15;cursor:pointer;user-select:none;}
+  thead th:hover{color:var(--text-primary);}thead th .arrow{font-size:10px;opacity:.55;margin-inline-start:4px;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--gridline);vertical-align:top;}tbody tr:hover{background:var(--chip-bg);}.tbl-wrap{overflow-x:auto;border-radius:10px;}td.tk{font-weight:700;white-space:nowrap;}
+  .tabs-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}.tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 16px;border-radius:8px;font-size:13px;}.tab-btn.active{background:var(--series-1);color:#fff;}
+  .tab-panel{display:none;}.tab-panel.active{display:block;}.prose{font-size:13.8px;color:var(--text-secondary);}.prose p{margin:0 0 12px;}
+  .csv-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 14px;border-radius:8px;font-size:12.5px;}
+  .flag-note{font-size:11.5px;color:var(--critical);}
+  .excluded-box{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip-bg);font-size:12.3px;color:var(--text-muted);}.excluded-box b{color:var(--text-secondary);}
+  .sent-table td.dir-pos{color:var(--good);font-weight:600;}.sent-table td.dir-neg{color:var(--critical);font-weight:600;}.sent-table td.dir-mix{color:var(--warning);font-weight:600;}
+  .meter{width:70px;height:8px;border-radius:6px;background:var(--gridline);overflow:hidden;display:inline-block;vertical-align:middle;margin-inline-end:6px;}.meter>span{display:block;height:100%;background:var(--series-1);}
+  .speculative-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--critical-bg);color:var(--critical);font-weight:600;}
+  .longterm-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--good-bg);color:var(--good);font-weight:600;}
+  .mixed-flag-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  .chart-wrap{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:20px;box-shadow:var(--shadow);}
+  .bar-chart{width:100%;height:auto;overflow:visible;}
+  .bar-chart rect{fill:var(--series-1);cursor:pointer;transition:opacity .15s;}.bar-chart rect:hover,.bar-chart rect:focus{opacity:.75;outline:none;}
+  .bar-chart text{fill:var(--text-secondary);font-size:11px;}
+  .chart-tooltip{position:absolute;background:var(--text-primary);color:var(--page);padding:6px 10px;border-radius:6px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .1s;white-space:nowrap;z-index:30;}
+  .chart-tooltip.show{opacity:1;}
+  .chart-legend{font-size:11.5px;color:var(--text-muted);margin-top:10px;}
+  .compare-table td,.compare-table th{text-align:center;}.compare-table td:first-child,.compare-table th:first-child{text-align:right;}
+  .check-y{color:var(--good);}.check-n{color:var(--text-muted);}
+  .transparency-list{font-size:13px;color:var(--text-secondary);}
+  .transparency-list li{margin-bottom:8px;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--card-border);color:var(--text-muted);font-size:12px;}
+  @media(max-width:720px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+
+</style>
 </head>
-<body><div class="wrap">BUILD_IN_PROGRESS — נבנה מחדש, יושלם בקריאה הבאה</div></body></html>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="brand-lockup"><span class="brand-mark"></span><span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Stock Intelligence</span></span></div>
+<h1>מנוע מעקב וסינון מניות אטרקטיביות — שוק ארה"ב</h1>
+<div class="subtitle">S&amp;P 500 + Nasdaq + Small Cap · דירוג ממוקד "קנייה והחזקה לטווח ארוך" לפי התכנסות בין מקורות מקצועיים בלתי-תלויים</div>
+<div class="meta-row"><span class="badge">🕐 עודכן: 27 באוגוסט 2026 · 05:16 UTC</span><span class="badge">🔁 עדכון יומי אוטומטי</span></div></div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button></header>
+<div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> למחקר בלבד, אינו המלצה אישית. יש להתייעץ עם בעל רישיון לפני קבלת החלטות השקעה.</div>
+<nav class="quicknav" id="quicknav"><div class="qn-row"><input id="globalSearch" class="search-input" placeholder="🔍 חיפוש טיקר או חברה" oninput="filterAll()"><select id="sectorFilter" class="sector-select" onchange="filterAll()"><option value="">כל הסקטורים</option><option value="אנרגיה">אנרגיה</option><option value="בריאות">בריאות</option><option value="חומרים">חומרים</option><option value="טכנולוגיה">טכנולוגיה</option><option value="נדל&quot;ן">נדל"ן</option><option value="פיננסים">פיננסים</option><option value="צריכה בסיסית">צריכה בסיסית</option><option value="צריכה מחזורית">צריכה מחזורית</option><option value="תעשייה">תעשייה</option><option value="תקשורת ומדיה">תקשורת ומדיה</option><option value="תשתיות ציבוריות">תשתיות ציבוריות</option></select></div>
+<div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#tier2">🥈 שכבה משנית</a><a href="#tables">📋 טבלאות מתודולוגיה</a><a href="#highrisk">🚨 סיכון גבוה</a><a href="#sentiment">💬 סנטימנט</a><a href="#sectorchart">📊 פילוח סקטוריאלי</a><a href="#compare">⚖️ השוואה</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
+<section><div class="kpi-row"><div class="kpi-tile"><div class="kpi-value ltr">47</div><div class="kpi-label">מניות במעקב הכולל</div></div><div class="kpi-tile"><div class="kpi-value ltr">3</div><div class="kpi-label">שכבה 1 — שכנוע גבוה</div></div><div class="kpi-tile"><div class="kpi-value ltr">10</div><div class="kpi-label">שכבת סיכון גבוה</div></div><div class="kpi-tile"><div class="kpi-value ltr">30</div><div class="kpi-label">מקורות מקצועיים</div></div></div></section>
+<section id="tier1"><h2><span class="icon-badge">🏆</span>שכבה 1 — שכנוע גבוה</h2><div class="tier1-grid"><div class="stock-card" data-ticker="MSFT" data-name="Microsoft" data-sector="טכנולוגיה"><div class="stock-head"><span class="ticker ltr">MSFT</span><span class="price ltr">$496.37 +0.95%</span></div><div class="chip-row"><span class="chip score2">3/3 מקורות</span></div><div class="rationale">TipRanks Perfect 10; GuruFocus ROE 31.57%; Motley Fool #1 Mag7 pick.</div><div class="sources">Alpha Vantage · Bigdata.com</div></div><div class="stock-card" data-ticker="CMCSA" data-name="Comcast" data-sector="תקשורת ומדיה"><div class="stock-head"><span class="ticker ltr">CMCSA</span><span class="price ltr">$27.20 +0.37%</span></div><div class="chip-row"><span class="chip score2">2/3 מקורות</span></div><div class="rationale">GuruFocus ROE 13.75%; Barron's Top 10.</div><div class="sources">Alpha Vantage · Bigdata.com</div></div><div class="stock-card" data-ticker="BMY" data-name="Bristol-Myers Squibb" data-sector="בריאות"><div class="stock-head"><span class="ticker ltr">BMY</span><span class="price ltr">$67.57 -0.52%</span></div><div class="chip-row"><span class="chip score2">2/3 מקורות</span></div><div class="rationale">GF Score 71 overvalued vs Simply Wall St reasonable — דגל סתירה.</div><div class="sources">Alpha Vantage · Bigdata.com</div></div></div></section>
+<section id="tier2"><h2><span class="icon-badge">🥈</span>שכבה משנית</h2><div class="tier1-grid"><div class="stock-card" data-ticker="NVDA" data-name="Nvidia" data-sector="טכנולוגיה"><div class="stock-head"><span class="ticker ltr">NVDA</span><span class="price ltr">$209.66 -1.59%</span></div><div class="chip-row"><span class="chip score1">1/3 + סנטימנט</span></div><div class="rationale">TipRanks Perfect 10; Q2 FY27 revenue $96.2B +106%; media attention +41.7%.</div><div class="sources">Alpha Vantage · Bigdata.com</div></div></div></section>
+<section id="tables"><h2><span class="icon-badge">📋</span>טבלאות מלאות לפי מתודולוגיה</h2><div class="tabs-row"><div class="tabs"><button class="tab-btn active" onclick="switchTab('tabA')">א׳ קונצנזוס</button><button class="tab-btn" onclick="switchTab('tabB')">ב׳ איכות</button><button class="tab-btn" onclick="switchTab('tabC')">ג׳ עריכתי</button></div><button class="csv-btn" onclick="exportCSV()">⬇ CSV</button></div><div id="tabA" class="tab-panel active"><div class="tbl-wrap"><table id="tableA"><thead><tr><th onclick="sortTable('tableA',0)">טיקר</th><th onclick="sortTable('tableA',1)">שם</th><th onclick="sortTable('tableA',2)">סקטור</th><th onclick="sortTable('tableA',3)">ציון</th><th>מקור</th></tr></thead><tbody>
+<tr data-ticker="NVDA" data-sector="טכנולוגיה"><td class="tk">NVDA</td><td>Nvidia</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now">TipRanks</a></td></tr>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now">TipRanks</a></td></tr>
+<tr data-ticker="META" data-sector="טכנולוגיה"><td class="tk">META</td><td>Meta</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now">TipRanks</a></td></tr>
+<tr data-ticker="AVGO" data-sector="טכנולוגיה"><td class="tk">AVGO</td><td>Broadcom</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now">TipRanks</a></td></tr>
+<tr data-ticker="KO" data-sector="צריכה בסיסית"><td class="tk">KO</td><td>Coca-Cola</td><td>צריכה בסיסית</td><td>TipRanks Perfect 10</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now">TipRanks</a></td></tr>
+<tr data-ticker="TTMI" data-sector="טכנולוגיה"><td class="tk">TTMI</td><td>TTM Technologies</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td>Globe and Mail</td></tr>
+<tr data-ticker="DY" data-sector="תעשייה"><td class="tk">DY</td><td>Dycom</td><td>תעשייה</td><td>TipRanks Perfect 10</td><td>Globe and Mail</td></tr>
+<tr data-ticker="TPR" data-sector="צריכה מחזורית"><td class="tk">TPR</td><td>Tapestry</td><td>צריכה מחזורית</td><td>TipRanks Perfect 10</td><td>Globe and Mail</td></tr>
+<tr data-ticker="RL" data-sector="צריכה מחזורית"><td class="tk">RL</td><td>Ralph Lauren</td><td>צריכה מחזורית</td><td>TipRanks Perfect 10</td><td>Globe and Mail</td></tr>
+<tr data-ticker="OUST" data-sector="טכנולוגיה"><td class="tk">OUST</td><td>Ouster</td><td>טכנולוגיה</td><td>TipRanks Perfect 10</td><td>Globe and Mail</td></tr>
+<tr data-ticker="HRTG" data-sector="פיננסים"><td class="tk">HRTG</td><td>Heritage Insurance</td><td>פיננסים</td><td>Zacks Rank #1</td><td>Globe and Mail</td></tr>
+<tr data-ticker="NXRT" data-sector="נדל&quot;ן"><td class="tk">NXRT</td><td>NexPoint Residential</td><td>נדל"ן</td><td>Zacks Rank #1</td><td>Globe and Mail</td></tr>
+<tr data-ticker="CMCO" data-sector="תעשייה"><td class="tk">CMCO</td><td>Columbus McKinnon</td><td>תעשייה</td><td>Zacks Momentum</td><td>Globe and Mail</td></tr>
+</tbody></table></div></div>
+<div id="tabB" class="tab-panel"><div class="tbl-wrap"><table id="tableB"><thead><tr><th onclick="sortTable('tableB',0)">טיקר</th><th onclick="sortTable('tableB',1)">שם</th><th onclick="sortTable('tableB',2)">סקטור</th><th onclick="sortTable('tableB',3)">ROE</th><th>מקור</th></tr></thead><tbody>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft</td><td>טכנולוגיה</td><td>31.57%</td><td>GuruFocus</td></tr>
+<tr data-ticker="CSCO" data-sector="טכנולוגיה"><td class="tk">CSCO</td><td>Cisco</td><td>טכנולוגיה</td><td>27.94%</td><td>GuruFocus</td></tr>
+<tr data-ticker="JNJ" data-sector="בריאות"><td class="tk">JNJ</td><td>J&amp;J</td><td>בריאות</td><td>25.45%</td><td>GuruFocus</td></tr>
+<tr data-ticker="PFE" data-sector="בריאות"><td class="tk">PFE</td><td>Pfizer</td><td>בריאות</td><td>-7.35% (סתירה)</td><td>GuruFocus</td></tr>
+<tr data-ticker="BMY" data-sector="בריאות"><td class="tk">BMY</td><td>BMS</td><td>בריאות</td><td>GF 71 overvalued</td><td>GuruFocus</td></tr>
+<tr data-ticker="CMCSA" data-sector="תקשורת ומדיה"><td class="tk">CMCSA</td><td>Comcast</td><td>תקשורת ומדיה</td><td>13.75%</td><td>GuruFocus</td></tr>
+<tr data-ticker="UPS" data-sector="תעשייה"><td class="tk">UPS</td><td>UPS</td><td>תעשייה</td><td>21.61%</td><td>GuruFocus</td></tr>
+<tr data-ticker="JPM" data-sector="פיננסים"><td class="tk">JPM</td><td>JPMorgan</td><td>פיננסים</td><td>Moat 8/10</td><td>GuruFocus</td></tr>
+<tr data-ticker="TXN" data-sector="טכנולוגיה"><td class="tk">TXN</td><td>Texas Instruments</td><td>טכנולוגיה</td><td>GF 86 overvalued</td><td>GuruFocus</td></tr>
+<tr data-ticker="HON" data-sector="תעשייה"><td class="tk">HON</td><td>Honeywell</td><td>תעשייה</td><td>GF 83</td><td>GuruFocus</td></tr>
+<tr data-ticker="CVX" data-sector="אנרגיה"><td class="tk">CVX</td><td>Chevron</td><td>אנרגיה</td><td>Fwd P/E 13.01</td><td>GuruFocus</td></tr>
+<tr data-ticker="MO" data-sector="צריכה בסיסית"><td class="tk">MO</td><td>Altria</td><td>צריכה בסיסית</td><td>GF 74 overvalued</td><td>GuruFocus</td></tr>
+<tr data-ticker="C" data-sector="פיננסים"><td class="tk">C</td><td>Citigroup</td><td>פיננסים</td><td>GF 74 overvalued</td><td>GuruFocus</td></tr>
+<tr data-ticker="KHC" data-sector="צריכה בסיסית"><td class="tk">KHC</td><td>Kraft Heinz</td><td>צריכה בסיסית</td><td>7.64%</td><td>GuruFocus</td></tr>
+<tr data-ticker="MRK" data-sector="בריאות"><td class="tk">MRK</td><td>Merck</td><td>בריאות</td><td>GF 72 overvalued</td><td>GuruFocus</td></tr>
+</tbody></table></div></div>
+<div id="tabC" class="tab-panel"><div class="tbl-wrap"><table id="tableC"><thead><tr><th onclick="sortTable('tableC',0)">טיקר</th><th onclick="sortTable('tableC',1)">שם</th><th onclick="sortTable('tableC',2)">סקטור</th><th onclick="sortTable('tableC',3)">פרסומים</th><th>מקור</th></tr></thead><tbody>
+<tr data-ticker="AMZN" data-sector="צריכה מחזורית"><td class="tk">AMZN</td><td>Amazon</td><td>צריכה מחזורית</td><td>Barron's+Fool</td><td>Motley Fool</td></tr>
+<tr data-ticker="V" data-sector="פיננסים"><td class="tk">V</td><td>Visa</td><td>פיננסים</td><td>Barron's+Fool</td><td>Motley Fool</td></tr>
+<tr data-ticker="DIS" data-sector="תקשורת ומדיה"><td class="tk">DIS</td><td>Disney</td><td>תקשורת ומדיה</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="XOM" data-sector="אנרגיה"><td class="tk">XOM</td><td>Exxon</td><td>אנרגיה</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="CMCSA" data-sector="תקשורת ומדיה"><td class="tk">CMCSA</td><td>Comcast</td><td>תקשורת ומדיה</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="BMY" data-sector="בריאות"><td class="tk">BMY</td><td>BMS</td><td>בריאות</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="FLUT" data-sector="צריכה מחזורית"><td class="tk">FLUT</td><td>Flutter</td><td>צריכה מחזורית</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="MSGS" data-sector="תקשורת ומדיה"><td class="tk">MSGS</td><td>MSG Sports</td><td>תקשורת ומדיה</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="SLG" data-sector="נדל&quot;ן"><td class="tk">SLG</td><td>SL Green</td><td>נדל"ן</td><td>Barron's</td><td>Barron's</td></tr>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft</td><td>טכנולוגיה</td><td>Fool #1</td><td>Motley Fool</td></tr>
+<tr data-ticker="GOOGL" data-sector="תקשורת ומדיה"><td class="tk">GOOGL</td><td>Alphabet</td><td>תקשורת ומדיה</td><td>Fool</td><td>Motley Fool</td></tr>
+<tr data-ticker="COST" data-sector="צריכה בסיסית"><td class="tk">COST</td><td>Costco</td><td>צריכה בסיסית</td><td>Fool</td><td>Motley Fool</td></tr>
+<tr data-ticker="TTD" data-sector="טכנולוגיה"><td class="tk">TTD</td><td>Trade Desk</td><td>טכנולוגיה</td><td>Fool</td><td>Motley Fool</td></tr>
+</tbody></table></div></div>
+</section>
+<section id="highrisk"><h2><span class="icon-badge risk">🚨</span>שכבת סיכון גבוה</h2><div class="tier1-grid">
+<div class="stock-card risk-card" data-ticker="CRWV"><div class="stock-head"><span class="ticker ltr">CRWV</span><span class="price ltr">$88.01 -0.03%</span></div><div class="chip-row"><span class="chip inst-strong">BNY Mellon חדש</span></div><div class="rationale">BNY Mellon+Two Seas Capital נכנסו (24-23.8); Q2 הכפלת הכנסות.</div></div>
+<div class="stock-card risk-card" data-ticker="CRCL"><div class="stock-head"><span class="ticker ltr">CRCL</span><span class="price ltr">$89.91 -2.29%</span></div><div class="rationale">אין עדות מוסדית חדשה; +41% ב-30 יום על רקע IBM patents + BTC.</div></div>
+<div class="stock-card risk-card" data-ticker="ALAB"><div class="stock-head"><span class="ticker ltr">ALAB</span><span class="price ltr">$290.30 +2.71%</span></div><div class="chip-row"><span class="chip inst-strong">Legal &amp; General $311.5M חדש</span></div><div class="rationale">L&amp;G invested 26.8; AI connectivity demand.</div></div>
+<div class="stock-card risk-card" data-ticker="IOT"><div class="stock-head"><span class="ticker ltr">IOT</span><span class="price ltr">$39.84 +1.79%</span></div><div class="chip-row"><span class="chip inst-strong">Arrowstreet Capital חדש</span></div><div class="rationale">Arrowstreet bought 546,082 shares 29.7; Fuel Command Center launch.</div></div>
+<div class="stock-card risk-card" data-ticker="LOAR"><div class="stock-head"><span class="ticker ltr">LOAR</span><span class="price ltr">$73.47 +0.49%</span></div><div class="chip-row"><span class="chip inst-mixed">מעורב: מכירה+קנייה</span></div><div class="rationale">Glenmede sold; Empowered Funds+Janus Henderson bought (4-9.8).</div></div>
+<div class="stock-card risk-card" data-ticker="KTOS"><div class="stock-head"><span class="ticker ltr">KTOS</span><span class="price ltr">$52.93 +0.55%</span></div><div class="chip-row"><span class="chip inst-mixed">Sapient Capital מכרה</span></div><div class="rationale">Sapient sold 262,550 shares 11.8; $156M DOE Counter-UAS contract, ~$500M cumulative.</div></div>
+<div class="stock-card risk-card" data-ticker="MP"><div class="stock-head"><span class="ticker ltr">MP</span><span class="price ltr">$59.31 -1.43%</span></div><div class="rationale">אין עדות מוסדית חדשה; Q2 record; rare earth rally; $724.2M offering completed.</div></div>
+<div class="stock-card risk-card" data-ticker="OKLO"><div class="stock-head"><span class="ticker ltr">OKLO</span><span class="price ltr">$41.60 -6.03%</span></div><div class="chip-row"><span class="chip inst-mixed">Insider selling</span></div><div class="rationale">Insider sale -6.3% 26.8; Meta 1.2GW nuclear deal, Switch 12GW agreement.</div></div>
+<div class="stock-card risk-card" data-ticker="LEU"><div class="stock-head"><span class="ticker ltr">LEU</span><span class="price ltr">$187.63 -2.98%</span></div><div class="rationale">אין עדות מוסדית חדשה; $900M DOE HALEU contract, X-energy supply deal, +8.9% 25.8.</div></div>
+<div class="stock-card risk-card" data-ticker="APLD"><div class="stock-head"><span class="ticker ltr">APLD</span><span class="price ltr">$26.87 -6.86%</span></div><div class="chip-row"><span class="chip inst-mixed">Tiger Global — לא ברור</span></div><div class="rationale">Tiger Global backs $36B AI data center lease, stock -6.4%; $112.5M AI partnership funding.</div></div>
+</div><div class="flag-note">⚠️ שווי שוק לא נכלל בהרצה זו — Alpha Vantage GLOBAL_QUOTE מספק מחיר ונפח בלבד.</div>
+</section>
+<section id="sentiment"><h2><span class="icon-badge">💬</span>שכבת סנטימנט משנית</h2><div class="section-sub">אינה נכללת בציון הראשי.</div><div class="tbl-wrap"><table class="sent-table"><thead><tr><th>טיקר</th><th>מהות</th><th>סיווג</th></tr></thead><tbody>
+<tr><td class="tk">SPCX</td><td>Short squeeze; אחזקות Google/Nvidia/AMD/Harvard</td><td class="dir-neg"><span class="speculative-tag">ספקולטיבי</span></td></tr>
+<tr><td class="tk">AMIX</td><td>דילול/ווורנטים volatility</td><td class="dir-neg"><span class="speculative-tag">ספקולטיבי</span></td></tr>
+<tr><td class="tk">BMNR</td><td>ETH treasury proxy, buybacks</td><td class="dir-neg"><span class="speculative-tag">ספקולטיבי</span></td></tr>
+<tr><td class="tk">MSTR</td><td>BTC proxy</td><td class="dir-neg"><span class="speculative-tag">ספקולטיבי</span></td></tr>
+<tr><td class="tk">OPEN</td><td>Meme stock, $650M convert</td><td class="dir-neg"><span class="speculative-tag">ספקולטיבי</span></td></tr>
+<tr><td class="tk">KSS</td><td>Was meme, now battleground stock</td><td class="dir-mix"><span class="mixed-flag-tag">מעבר</span></td></tr>
+<tr><td class="tk">NVDA</td><td>AI capex thesis, daily Trending</td><td class="dir-pos"><span class="longterm-tag">סביר</span></td></tr>
+<tr><td class="tk">AMD</td><td>AI/datacenter deals buzz</td><td class="dir-pos"><span class="longterm-tag">סביר</span></td></tr>
+<tr><td class="tk">BULL</td><td>AI trading tools launch</td><td class="dir-pos"><span class="longterm-tag">סביר</span></td></tr>
+<tr><td class="tk">MRNA</td><td>+177% ביום אחד — cancer vaccine trial</td><td class="dir-pos"><span class="longterm-tag">סביר</span></td></tr>
+</tbody></table></div></section>
+<section id="sectorchart"><h2><span class="icon-badge">📊</span>פילוח סקטוריאלי</h2><div class="chart-wrap"><svg class="bar-chart" id="sectorSvg" viewBox="0 0 900 320"></svg><div class="chart-legend">טכנולוגיה 13/47 · 28%.</div></div></section>
+<section id="compare"><h2><span class="icon-badge">⚖️</span>השוואה כנה</h2><div class="tbl-wrap"><table class="compare-table"><thead><tr><th>יכולת</th><th>Converge</th><th>Finviz</th><th>TipRanks</th><th>Bloomberg</th></tr></thead><tbody>
+<tr><td>עברית</td><td class="check-y">✓</td><td class="check-n">✗</td><td class="check-n">✗</td><td class="check-n">✗</td></tr>
+<tr><td>הצלבה מקורות</td><td class="check-y">✓</td><td class="check-n">✗</td><td class="check-n">חלקי</td><td class="check-n">חלקי</td></tr>
+<tr><td>מחירים בזמן אמת</td><td class="check-n">מושהה</td><td class="check-y">✓</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+<tr><td>סינון פונדמנטלי</td><td class="check-n">✗</td><td class="check-y">✓</td><td class="check-n">חלקי</td><td class="check-y">✓</td></tr>
+<tr><td>סנטימנט AI מצוטט</td><td class="check-y">✓ Bigdata.com</td><td class="check-n">✗</td><td class="check-n">חלקי</td><td class="check-y">✓</td></tr>
+<tr><td>13F/13G</td><td class="check-y">✓</td><td class="check-n">✗</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+<tr><td>עלות</td><td class="check-y">חינם</td><td>$0-40</td><td>$35-40</td><td>~$2000+</td></tr>
+</tbody></table></div></section>
+<section id="methodology"><h2><span class="icon-badge">🔬</span>מתודולוגיה ומקורות</h2><div class="prose"><p>שלוש מתודולוגיות: (א) TipRanks/Zacks/MarketBeat. (ב) GuruFocus/Simply Wall St/Finviz/Seeking Alpha. (ג) Motley Fool/Barron's/Morningstar/Kiplinger/Forbes. 2/3 = שכבה 1. נתונים חיים: <a href="https://www.alphavantage.co">Alpha Vantage</a> GLOBAL_QUOTE (14 קריאות). סנטימנט: <a href="https://bigdata.com">Bigdata.com</a> bigdata_sentiment_tearsheet. תודה ל-Bigdata.com.</p></div></section>
+<section id="transparency"><h2><span class="icon-badge">🔍</span>שקיפות ומגבלות</h2><ul class="transparency-list">
+<li>מחקר מבוסס על WebSearch בלבד, לא WebFetch — נתונים שלא נמצאו סומנו "לא נמצא נתון".</li>
+<li>מכסת חיפושים אזלה בכל סוכן — רק 3 מניות שכבה 1.</li>
+<li>שווי שוק למניות סיכון גבוה לא נכלל לשמירת מכסת Alpha Vantage.</li>
+<li>קובץ קודם בריפו חסר/קטוע — נבנה מחדש תוך שמירה על ה-CSS ומנגנון syncQuicknavHeight.</li>
+<li>אינו ייעוץ השקעות.</li>
+</ul></section>
+<footer>Converge™ Stock Intelligence · נבנה עם Claude (Cowork) · לא ייעוץ השקעות</footer>
+</div>
+<script>
+function toggleTheme(){const root=document.documentElement;const cur=root.getAttribute('data-theme');if(cur==='dark'){root.setAttribute('data-theme','light');}else if(cur==='light'){root.removeAttribute('data-theme');}else{const p=window.matchMedia('(prefers-color-scheme: dark)').matches;root.setAttribute('data-theme',p?'light':'dark');}}
+function filterAll(){const q=(document.getElementById('globalSearch').value||'').trim().toLowerCase();const sector=document.getElementById('sectorFilter').value;document.querySelectorAll('.stock-card').forEach(function(card){const ticker=(card.getAttribute('data-ticker')||'').toLowerCase();const csec=card.getAttribute('data-sector')||'';const matchQ=!q||ticker.indexOf(q)>-1;const matchSec=!sector||csec===sector;card.style.display=(matchQ&&matchSec)?'':'none';});document.querySelectorAll('table tbody tr[data-ticker]').forEach(function(row){const ticker=(row.getAttribute('data-ticker')||'').toLowerCase();const csec=row.getAttribute('data-sector')||'';const text=row.textContent.toLowerCase();const matchQ=!q||ticker.indexOf(q)>-1||text.indexOf(q)>-1;const matchSec=!sector||csec===sector;row.style.display=(matchQ&&matchSec)?'':'none';});}
+function switchTab(id){document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});document.getElementById(id).classList.add('active');event.currentTarget.classList.add('active');}
+function sortTable(tableId,colIndex){const table=document.getElementById(tableId);const tbody=table.querySelector('tbody');const rows=Array.from(tbody.querySelectorAll('tr'));const th=table.querySelectorAll('thead th')[colIndex];const asc=th.getAttribute('data-dir')!=='asc';table.querySelectorAll('thead th').forEach(function(h){h.removeAttribute('data-dir');});th.setAttribute('data-dir',asc?'asc':'desc');rows.sort(function(a,b){const av=a.children[colIndex].textContent.trim();const bv=b.children[colIndex].textContent.trim();const an=parseFloat(av.replace(/[^0-9.\-]/g,''));const bn=parseFloat(bv.replace(/[^0-9.\-]/g,''));let cmp;if(!isNaN(an)&&!isNaN(bn)&&/[0-9]/.test(av)&&/[0-9]/.test(bv)){cmp=an-bn;}else{cmp=av.localeCompare(bv,'he');}return asc?cmp:-cmp;});rows.forEach(function(r){tbody.appendChild(r);});}
+function exportCSV(){const active=document.querySelector('.tab-panel.active table');if(!active)return;const rows=[];active.querySelectorAll('tr').forEach(function(tr){const cells=Array.from(tr.querySelectorAll('th,td')).map(function(td){let t=td.textContent.trim().replace(/\s+/g,' ').replace(/"/g,'""');return '"'+t+'"';});rows.push(cells.join(','));});const csv=rows.join('\n');const blob=new Blob(["﻿"+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='converge_'+(active.id||'table')+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function syncQuicknavHeight(){const nav=document.getElementById('quicknav');if(!nav)return;const setH=function(){document.documentElement.style.setProperty('--quicknav-h',nav.offsetHeight+'px');};setH();if(window.ResizeObserver){const ro=new ResizeObserver(setH);ro.observe(nav);}else{window.addEventListener('resize',setH);}}
+syncQuicknavHeight();
+(function drawSectorChart(){const data=[{label:'טכנולוגיה',value:13},{label:'תעשייה',value:6},{label:'פיננסים',value:5},{label:'צריכה מחזורית',value:4},{label:'צריכה בסיסית',value:4},{label:'בריאות',value:4},{label:'תקשורת ומדיה',value:4},{label:'נדל"ן',value:2},{label:'אנרגיה',value:2},{label:'תשתיות ציבוריות',value:2},{label:'חומרים',value:1}];const svg=document.getElementById('sectorSvg');if(!svg)return;const W=900,H=320,padL=110,padR=20,padT=10,padB=30;const max=Math.max.apply(null,data.map(function(d){return d.value;}));const barH=(H-padT-padB)/data.length-8;const scale=(W-padL-padR)/max;let svgNS='http://www.w3.org/2000/svg';data.forEach(function(d,i){const y=padT+i*((H-padT-padB)/data.length);const w=d.value*scale;const rect=document.createElementNS(svgNS,'rect');rect.setAttribute('x',padL);rect.setAttribute('y',y);rect.setAttribute('width',Math.max(w,2));rect.setAttribute('height',barH);rect.setAttribute('rx',4);svg.appendChild(rect);const label=document.createElementNS(svgNS,'text');label.setAttribute('x',padL-8);label.setAttribute('y',y+barH/2+4);label.setAttribute('text-anchor','end');label.textContent=d.label;svg.appendChild(label);const val=document.createElementNS(svgNS,'text');val.setAttribute('x',padL+w+8);val.setAttribute('y',y+barH/2+4);val.textContent=d.value;svg.appendChild(val);});})();
+</script>
+</body>
+</html>
