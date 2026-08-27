@@ -132,3 +132,105 @@
 
 </div>
 </section>
+
+<section id="tables">
+<h2><span class="icon-badge">📋</span>טבלאות מלאות לפי מתודולוגיה</h2>
+<div class="section-sub">כל הממצאים הגולמיים מכל אחת משלוש מתודולוגיות המחקר, כולל מניות שלא עברו את סף שכבה 1. לחיצה על כותרת עמודה ממיינת; ניתן לייצא כל טבלה כ-CSV.</div>
+<div class="tabs-row"><div class="tabs">
+<button class="tab-btn active" onclick="switchTab('tabA')">א׳ קונצנזוס אנליסטים כמותי</button>
+<button class="tab-btn" onclick="switchTab('tabB')">ב׳ איכות ופונדמנטל</button>
+<button class="tab-btn" onclick="switchTab('tabC')">ג׳ עריכתי — לטווח ארוך</button>
+</div><button class="csv-btn" onclick="exportCSV()">⬇ ייצוא CSV לטבלה הפעילה</button></div>
+
+<div id="tabA" class="tab-panel active">
+<div class="tbl-wrap"><table id="tableA" data-allrows="true">
+<thead><tr>
+<th onclick="sortTable('tableA',0)">טיקר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',1)">שם<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',2)">סקטור<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',3)">ציון/דירוג<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',4)">יעד מחיר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',5)">מס' אנליסטים<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',6)">מקור</th>
+</tr></thead>
+<tbody>
+<tr data-ticker="NVDA" data-sector="טכנולוגיה"><td class="tk">NVDA</td><td>Nvidia Corp</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft Corp</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>$557.32 (WallStreetZen, לא TipRanks)</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="META" data-sector="טכנולוגיה"><td class="tk">META</td><td>Meta Platforms</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10) — 2 כתבות</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="AVGO" data-sector="טכנולוגיה"><td class="tk">AVGO</td><td>Broadcom Inc</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10) — 2 כתבות</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="KO" data-sector="צריכה בסיסית"><td class="tk">KO</td><td>Coca-Cola Co</td><td>צריכה בסיסית</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="TTMI" data-sector="טכנולוגיה"><td class="tk">TTMI</td><td>TTM Technologies</td><td>טכנולוגיה (ייצור PCB)</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/TTMI-Q/pressreleases/3545708/" target="_blank">Globe and Mail / TipRanks</a></td></tr>
+<tr data-ticker="DY" data-sector="תעשייה"><td class="tk">DY</td><td>Dycom Industries</td><td>תעשייה — תשתית טלקום</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/DY-N/pressreleases/3545708/" target="_blank">Globe and Mail / TipRanks</a></td></tr>
+<tr data-ticker="TPR" data-sector="צריכה מחזורית"><td class="tk">TPR</td><td>Tapestry Inc</td><td>צריכה מחזורית — יוקרה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/TPR/pressreleases/3268741/" target="_blank">Globe and Mail / TipRanks</a></td></tr>
+<tr data-ticker="RL" data-sector="צריכה מחזורית"><td class="tk">RL</td><td>Ralph Lauren Corp</td><td>צריכה מחזורית — יוקרה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/RL/pressreleases/233540/" target="_blank">Globe and Mail / TipRanks</a></td></tr>
+<tr data-ticker="OUST" data-sector="טכנולוגיה"><td class="tk">OUST</td><td>Ouster Inc (Small Cap)</td><td>טכנולוגיה — LiDAR</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/OUST/pressreleases/36822521/" target="_blank">Globe and Mail / TipRanks</a></td></tr>
+<tr data-ticker="HRTG" data-sector="פיננסים"><td class="tk">HRTG</td><td>Heritage Insurance (Small Cap)</td><td>פיננסים — ביטוח</td><td>Zacks Rank #1 (Strong Buy), 13.8.2026</td><td>לא רלוונטי</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/HRTG/pressreleases/3826621/" target="_blank">Globe and Mail / Zacks</a></td></tr>
+<tr data-ticker="NXRT" data-sector="נדל&quot;ן"><td class="tk">NXRT</td><td>NexPoint Residential Trust</td><td>נדל"ן — REIT מגורים</td><td>Zacks Rank #1 (Strong Buy), 7.8.2026</td><td>לא רלוונטי</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/NXRT-N/pressreleases/3714301/" target="_blank">Globe and Mail / Zacks</a></td></tr>
+<tr data-ticker="CMCO" data-sector="תעשייה"><td class="tk">CMCO</td><td>Columbus McKinnon (Small Cap)</td><td>תעשייה — ציוד תפעולי</td><td>Zacks "Best Momentum Stocks", 7.8.2026 (לא אושר Rank #1 במפורש)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.theglobeandmail.com/investing/markets/stocks/CMCO-Q/pressreleases/3722651/" target="_blank">Globe and Mail / Zacks</a></td></tr>
+</tbody></table></div>
+<div class="excluded-box"><b>הוצאו — איתותים סותרים או לא-מאומתים:</b> HD (Home Depot) — MarketBeat מדווח "Moderate Buy" בלבד, לא Strong Buy (12.8.2026). ATZ (Aritzia) — MarketBeat "Moderate Buy" (15.8.2026), ורשומה בעיקר ב-TSX ולא בשוק האמריקאי. CLS (Celestica) — דירוג "Strong Buy" של MarketBeat מתאריך 6.1.2026 בלבד, לא אומת לתאריך הנוכחי.</div>
+<div class="flag-note">⚠️ סוכן המחקר דיווח שמכסת החיפושים בסשן אזלה לפני השלמת כיסוי לסקטורי בריאות ואנרגיה בטבלה זו.</div>
+</div>
+
+<div id="tabB" class="tab-panel">
+<div class="tbl-wrap"><table id="tableB" data-allrows="true">
+<thead><tr>
+<th onclick="sortTable('tableB',0)">טיקר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',1)">שם<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',2)">סקטור<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',3)">ROE<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',4)">FCF Yield<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',5)">P/E<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',6)">חוב/הון<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableB',7)">מקור</th>
+</tr></thead>
+<tbody>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft</td><td>טכנולוגיה</td><td>31.57%</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>0.13</td><td><a href="https://www.gurufocus.com/term/roe/MSFT" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="CSCO" data-sector="טכנולוגיה"><td class="tk">CSCO</td><td>Cisco Systems</td><td>טכנולוגיה</td><td>27.94%</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>0.64</td><td><a href="https://www.gurufocus.com/term/ROE/NAS:CSCO/ROE-/Cisco-Systems" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="JNJ" data-sector="בריאות"><td class="tk">JNJ</td><td>Johnson &amp; Johnson</td><td>בריאות</td><td>25.45%</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>0.68</td><td><a href="https://www.gurufocus.com/term/roe/JNJ" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="PFE" data-sector="בריאות"><td class="tk">PFE</td><td>Pfizer</td><td>בריאות</td><td>-7.35% (סתירה: רישום פרנקפורט 12.25%)</td><td>לא נמצא נתון</td><td>Forward P/E 8.45 (סתירה מול TTM 37.38)</td><td>לא נמצא נתון</td><td><a href="https://www.gurufocus.com/term/ROE/NYSE:PFE/ROE-/Pfizer" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="BMY" data-sector="בריאות"><td class="tk">BMY</td><td>Bristol-Myers Squibb</td><td>בריאות</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF Score 71/100 (overvalued) — <a href="https://www.gurufocus.com/news/9008264/" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="CMCSA" data-sector="תקשורת ומדיה"><td class="tk">CMCSA</td><td>Comcast</td><td>תקשורת ומדיה</td><td>13.75%</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.gurufocus.com/term/roe/CMCSA" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="UPS" data-sector="תעשייה"><td class="tk">UPS</td><td>United Parcel Service</td><td>תעשייה — לוגיסטיקה</td><td>21.61% (סתירה פנימית: דף אחר 44.71%)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>1.90</td><td><a href="https://www.gurufocus.com/term/roe/UPS" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="JPM" data-sector="פיננסים"><td class="tk">JPM</td><td>JPMorgan Chase</td><td>פיננסים</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא רלוונטי (בנק)</td><td>Moat Score 8/10, GF 84/100 — <a href="https://www.gurufocus.com/term/moat-score/JPM" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="TXN" data-sector="טכנולוגיה"><td class="tk">TXN</td><td>Texas Instruments</td><td>טכנולוגיה</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF 86-87/100 (overvalued) — <a href="https://www.gurufocus.com/news/8810255/" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="HON" data-sector="תעשייה"><td class="tk">HON</td><td>Honeywell</td><td>תעשייה</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF 83-84/100 — <a href="https://www.gurufocus.com/news/8811777/" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="CVX" data-sector="אנרגיה"><td class="tk">CVX</td><td>Chevron</td><td>אנרגיה</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>Forward P/E 13.01</td><td>לא נמצא נתון</td><td>GF 63-67/100 (overvalued) — <a href="https://www.gurufocus.com/term/forward-pe-ratio/CVX" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="MO" data-sector="צריכה בסיסית"><td class="tk">MO</td><td>Altria Group</td><td>צריכה בסיסית</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF 74-79/100 (overvalued ~37%) — <a href="https://www.gurufocus.com/term/gf-value/MO" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="C" data-sector="פיננסים"><td class="tk">C</td><td>Citigroup</td><td>פיננסים</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא רלוונטי (בנק)</td><td>GF 74-79/100 (overvalued ~54-78%) — <a href="https://www.gurufocus.com/term/gf-value/C" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="KHC" data-sector="צריכה בסיסית"><td class="tk">KHC</td><td>Kraft Heinz</td><td>צריכה בסיסית</td><td>7.64% (נמוך)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF 56-63/100, undervalued ~14% — <a href="https://www.gurufocus.com/term/ROE/KHC/ROE-Percentage/KHC" target="_blank">GuruFocus</a></td></tr>
+<tr data-ticker="MRK" data-sector="בריאות"><td class="tk">MRK</td><td>Merck &amp; Co</td><td>בריאות</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td>GF 72/100 (overvalued) — <a href="https://www.gurufocus.com/news/9048860/" target="_blank">GuruFocus</a></td></tr>
+</tbody></table></div>
+<div class="excluded-box"><b>איתותים סותרים שיש לשים לב אליהם:</b> BMY — GuruFocus "overvalued" מול Simply Wall St "reasonable/undervalued". CSCO — איכות גבוהה אך GF Value מציג "Overvalued" עקבי (~52-56%), כך שלא עומדת בקריטריון הערך. PFE — סתירות פנימיות במקור עצמו בין דפי רישום שונים (ROE ו-P/E). KHC — "Undervalued" עקבי אך GF Score נמוך-בינוני ו-ROE חלש, ייתכן value trap.</div>
+<div class="flag-note">⚠️ לא אותרו נתוני Finviz screener או Seeking Alpha Quant Rating ספציפיים-לטיקר בתוצאות החיפוש; לא נמצאו נתוני FCF Yield מהימנים לאף מניה. הרשימה מוטה ל-large cap; small caps כמעט לא מיוצגים.</div>
+</div>
+
+<div id="tabC" class="tab-panel">
+<div class="tbl-wrap"><table id="tableC" data-allrows="true">
+<thead><tr>
+<th onclick="sortTable('tableC',0)">טיקר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableC',1)">שם<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableC',2)">סקטור<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableC',3)">פרסומים ממליצים<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableC',4)">רציונל קצר</th>
+<th onclick="sortTable('tableC',5)">מקור</th>
+</tr></thead>
+<tbody>
+<tr data-ticker="AMZN" data-sector="צריכה מחזורית"><td class="tk">AMZN</td><td>Amazon</td><td>צריכה מחזורית</td><td>🟢 Barron's + Motley Fool</td><td>AWS מאיץ צמיחה, פרסום ~75 מיליארד $</td><td><a href="https://www.fool.com/investing/2025/12/22/is-amazon-one-of-the-best-stocks-to-buy-for-2026/" target="_blank">Motley Fool</a></td></tr>
+<tr data-ticker="V" data-sector="פיננסים"><td class="tk">V</td><td>Visa</td><td>פיננסים</td><td>🟢 Barron's + Motley Fool</td><td>מודל תשלומים רחב-חפיר, תזרים יציב</td><td><a href="https://www.fool.com/investing/2026/02/21/buy-visa-american-express-stock-right-now/" target="_blank">Motley Fool</a></td></tr>
+<tr data-ticker="DIS" data-sector="תקשורת ומדיה"><td class="tk">DIS</td><td>Walt Disney</td><td>תקשורת ומדיה</td><td>Barron's</td><td>סטרימינג מתייצב, פארקים כמכונת מזומנים</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="XOM" data-sector="אנרגיה"><td class="tk">XOM</td><td>Exxon Mobil</td><td>אנרגיה</td><td>Barron's</td><td>best-in-class energy compounding</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="CMCSA" data-sector="תקשורת ומדיה"><td class="tk">CMCSA</td><td>Comcast</td><td>תקשורת ומדיה</td><td>Barron's</td><td>חלק מרשימת ה-Top 10 השנתית</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="BMY" data-sector="בריאות"><td class="tk">BMY</td><td>Bristol Myers Squibb</td><td>בריאות</td><td>Barron's</td><td>חלק מרשימת ה-Top 10 השנתית</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="FLUT" data-sector="צריכה מחזורית"><td class="tk">FLUT</td><td>Flutter Entertainment</td><td>צריכה מחזורית — הימורים</td><td>Barron's</td><td>חברת הימורי ספורט, חברה ב-S&amp;P 500</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="MSGS" data-sector="תקשורת ומדיה"><td class="tk">MSGS</td><td>Madison Square Garden Sports (Small Cap)</td><td>תקשורת ומדיה</td><td>Barron's</td><td>חלק מרשימת ה-Top 10 השנתית</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="SLG" data-sector="נדל&quot;ן"><td class="tk">SLG</td><td>SL Green Realty (REIT, Small/Mid Cap)</td><td>נדל"ן</td><td>Barron's</td><td>חלק מרשימת ה-Top 10 השנתית</td><td>Barron's Top 10 for 2026</td></tr>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft</td><td>טכנולוגיה</td><td>Motley Fool</td><td>בחירה #1 ברשימת "Magnificent Seven" ל-2026</td><td><a href="https://www.fool.com/investing/2025/12/08/best-magnificent-seven-stocks-buy-2026-microsoft/" target="_blank">Motley Fool</a></td></tr>
+<tr data-ticker="GOOGL" data-sector="תקשורת ומדיה"><td class="tk">GOOGL</td><td>Alphabet</td><td>תקשורת ומדיה</td><td>Motley Fool</td><td>הזדמנות קנייה ב-AI ובחיפוש</td><td><a href="https://www.fool.com/investing/2025/12/09/is-alphabet-stock-a-buying-opportunity-for-2026" target="_blank">Motley Fool</a></td></tr>
+<tr data-ticker="COST" data-sector="צריכה בסיסית"><td class="tk">COST</td><td>Costco</td><td>צריכה בסיסית</td><td>Motley Fool — 2 כתבות "Buy and Hold Forever"</td><td>מודל חברות/מרג'ין יציב</td><td><a href="https://www.fool.com/investing/2026/03/16/best-stock-buy-and-hold-forever-costco-coca-cola/" target="_blank">Motley Fool</a></td></tr>
+<tr data-ticker="TTD" data-sector="טכנולוגיה"><td class="tk">TTD</td><td>The Trade Desk (Mid/Small Cap)</td><td>טכנולוגיה — Ad-Tech</td><td>Motley Fool</td><td>מ-12 המניות המובילות באוגוסט 2026</td><td><a href="https://www.fool.com/investing/2026/08/06/my-12-top-ranked-stocks-to-buy-now-in-august-2026/" target="_blank">Motley Fool</a></td></tr>
+</tbody></table></div>
+<div class="excluded-box"><b>כתבות שאומתו כקיימות אך לא ניתן היה לחלץ מהן טיקרים ספציפיים ללא WebFetch:</b> Forbes "9 Best Stocks To Buy Now For August 2026", Kiplinger "Best Stocks to Buy Now", Morningstar "The 10 Best Companies to Invest in Now". קישורים אמיתיים קיימים במחקר הגולמי אך לא נכללו כאן כי לא אומת תוכנם.</div>
+<div class="flag-note">⚠️ טבלה זו קצרה מהיעד (15-25) מכיוון שלא הוספו טיקרים מנוחשים — רק כאלה שאומתו בפועל מתוך תוצאות החיפוש.</div>
+</div>
+</section>
