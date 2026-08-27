@@ -92,3 +92,38 @@ The Admin API over MCP is unaffected and authenticated against Peluma.
 
 Homepage SEO title/meta, sender email, and domain email forwarding have no Admin
 API mutation for any app. They remain as the brief describes them.
+
+## Brand sweep (27 Aug)
+
+Checked every customer-facing surface reachable from the Admin API for
+"VelvetPaw" leftovers: shop name, both pages, product title / description /
+SEO title / meta description, product metafields, collections.
+
+**Clean.** The only remaining occurrences store-wide are in the Privacy Policy
+and Terms of Service, which are the two files in this directory.
+
+Also verified the return-shipping promise agrees across all three places it
+appears, since the brief notes that promise was one of the four defects
+hand-fixed in the refund policy:
+
+- Refund policy — store pays for damaged / defective / wrong; customer pays for
+  change of mind.
+- About page — "if something arrives damaged, defective, or simply is not what
+  you ordered, we cover return shipping".
+- Contact page — "we cover the return shipping" for damaged or wrong.
+
+All three agree. No contradiction to fix.
+
+Shipping times also agree: About says 1–3 days processing, 7–15 business days
+delivery; the shipping policy says the same. Whether that claim survives depends
+on Zendrop's answer about fulfilment origin.
+
+### Open, needs your decision
+
+- **Contact page says "Sunday to Thursday"** for reply times. That is accurate
+  for an Israel-based operation and confusing for the US audience the store is
+  written for. Not changed — it is a positioning call, not an error.
+- **`avnerseo@gmail.com` appears in more places than §7 implies:** shop
+  `contactEmail`, the Contact page (once), the refund policy (twice), the
+  privacy policy (once) and the terms (twice). The two refund-policy
+  occurrences have to be hand-edited — that policy must not be regenerated.
