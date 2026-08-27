@@ -205,3 +205,49 @@ in `block_order` are intact.
 **Dependency:** the "7–15 business days" line is the same claim that appears on
 the About page and in the shipping policy. If Zendrop's answer on fulfilment
 origin changes it, it changes in three places.
+
+## Full verification (27 Aug, after merchant's logo + hero work)
+
+Diffed live `189442031929` against working `189462839609`, file by file, with
+JSON normalised and key-sorted so every changed key shows.
+
+### Working theme — all correct
+
+| | |
+|---|---|
+| `logo` | `shopify://shop_images/Peluma-Logo.png` |
+| `logo_height` / `logo_height_mobile` | 36 / 28 |
+| hero `image_1` | `shopify://shop_images/Peluma-Hero.png` |
+| `VELVETPAW` references | none anywhere in the theme |
+| accordion rows | Shipping, Returns, Cancellations — all present |
+
+`config/settings_data.json` differs from live in **exactly three keys** — `logo`,
+`logo_height`, `logo_height_mobile`. Nothing else drifted.
+
+Every earlier fix survived: empty hero text block gone, `<h1>` heading at `h1`
+preset, white subheading, 60% overlay, solid black CTA at `fit-content`,
+centred hero content, `Shop Peluma` product-list heading, footer social block
+removed, product-recommendations section removed, accordion in place below the
+buy buttons.
+
+New assets are well-formed for their jobs: `Peluma-Logo.png` 2172×724 (3:1
+wordmark), `Peluma-Hero.png` 1672×941 (~16:9).
+
+### The live theme was modified
+
+Live `updatedAt` is 2026-08-27T12:46:38Z, after the fork. Its hero `image_1` is
+also `Peluma-Hero.png`. That one setting is the **only** drift — live still
+carries the old empty text block, `<p>`/h2 heading, grey clipped CTA, 40%
+overlay, `flex-end` alignment, the collection-title binding, the social-links
+block, the recommendations section, and the VELVETPAW logo at 100/100.
+
+Nothing was lost and no merge is needed. The consequence is only that the
+rollback point is no longer a pristine pre-work snapshot — it now includes the
+new hero image, which is a change that was wanted anyway.
+
+### One judgement call to review in preview
+
+The hero overlay was raised from 40% to 60% black **because the background was
+then a busy light cartoon** and the subheading was unreadable over it. The
+background is now a purpose-made hero image, so 60% may be heavier than it
+needs to be. Worth looking at in preview; dialling it back is one write.
