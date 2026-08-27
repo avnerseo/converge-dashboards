@@ -1,1 +1,167 @@
-APPEND_MARKER_C
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converge — מנוע מעקב מניות אטרקטיביות | שוק ארה"ב</title>
+<style>
+
+
+  :root{color-scheme:light;--surface-1:#fcfcfb;--page:#f9f9f7;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;--gridline:#e1e0d9;--baseline:#c3c2b7;--border:rgba(11,11,11,.1);--card-border:rgba(11,11,11,.08);--series-1:#2a78d6;--highlight-bg:#e3edfb;--highlight-ink:#1c5cab;--good:#0ca30c;--good-bg:#e8f7e8;--warning:#fab219;--warning-bg:#fff6e0;--serious:#ec835a;--serious-bg:#fdeee7;--critical:#d03b3b;--critical-bg:#fbe7e7;--chip-bg:#f0efec;--tier1-bg:linear-gradient(135deg,#eef4fc,#f9f9f7);--shadow:0 1px 2px rgba(11,11,11,.04),0 8px 24px rgba(11,11,11,.05);}
+  @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  :root[data-theme="dark"]{color-scheme:dark;--surface-1:#1a1a19;--page:#0d0d0d;--text-primary:#fff;--text-secondary:#c3c2b7;--text-muted:#898781;--gridline:#2c2c2a;--baseline:#383835;--border:rgba(255,255,255,.1);--card-border:rgba(255,255,255,.12);--series-1:#3987e5;--highlight-bg:#152a42;--highlight-ink:#86b6ef;--good:#0ca30c;--good-bg:#123312;--warning:#fab219;--warning-bg:#3a2c05;--serious:#ec835a;--serious-bg:#3a1f12;--critical:#e66767;--critical-bg:#3a1414;--chip-bg:#262624;--tier1-bg:linear-gradient(135deg,#141c26,#1a1a19);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}}
+  *{box-sizing:border-box;}body{margin:0;background:var(--page);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;}
+  .ltr{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;}.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;}a{color:var(--series-1);}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .brand-lockup{display:flex;align-items:center;gap:10px;margin-bottom:16px;direction:ltr;}.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--series-1);}
+  .brand-text{display:flex;flex-direction:column;line-height:1.15;}.brand-word{font-size:16.5px;font-weight:700;}.brand-tm{font-size:9px;vertical-align:super;color:var(--text-muted);}.brand-tagline{font-size:9.5px;font-weight:600;letter-spacing:1.3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px;}
+  h1{font-size:25px;margin:0 0 6px;}.subtitle{color:var(--text-secondary);font-size:14.5px;max-width:760px;}.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12.5px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .theme-toggle{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);border-radius:20px;padding:7px 14px;font-size:13px;}
+  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}.disclaimer b{color:var(--text-primary);}
+  .quicknav{position:sticky;top:0;z-index:20;background:var(--page);padding:10px 0;border-bottom:1px solid var(--card-border);margin-bottom:8px;}
+  .qn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}.search-input{flex:1;min-width:180px;padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .sector-select{padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
+  .qn-links{display:flex;gap:6px;flex-wrap:wrap;}.qn-links a{font-size:12px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:14px;background:var(--chip-bg);}
+  section{margin:38px 0;scroll-margin-top:118px;}h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:8px;}.section-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+  .icon-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--highlight-bg);color:var(--highlight-ink);font-size:14px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}.kpi-tile{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .kpi-value{font-size:30px;font-weight:600;}.kpi-label{font-size:12.5px;color:var(--text-muted);margin-top:4px;}
+  .tier1-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;}.stock-card{background:var(--tier1-bg);border:1px solid var(--card-border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);}
+  .stock-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;}.ticker{font-size:20px;font-weight:700;}.company-name{font-size:12.5px;color:var(--text-muted);}.price{font-size:15px;font-weight:600;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px;}.chip{font-size:11.5px;padding:3px 9px;border-radius:12px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
+  .chip.score2{background:var(--highlight-bg);color:var(--highlight-ink);border-color:transparent;font-weight:600;}.chip.score1{background:var(--good-bg);color:var(--good);border-color:transparent;font-weight:600;}.rationale{font-size:13.3px;color:var(--text-secondary);margin:8px 0;}
+  .risk-note{display:flex;gap:6px;font-size:12.3px;background:var(--serious-bg);color:var(--text-primary);border-radius:8px;padding:8px 10px;margin-top:10px;}
+  .sources{font-size:11.5px;color:var(--text-muted);margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}.sources a{text-decoration:none;}
+  .highrisk-banner{margin:14px 0 22px;padding:14px 16px;border-radius:10px;background:var(--critical-bg);font-size:13px;}.icon-badge.risk{background:var(--critical-bg);color:var(--critical);}
+  .risk-card{background:linear-gradient(135deg,var(--serious-bg),var(--page));border:1px solid rgba(236,131,90,.35);}.risk-badge{display:inline-flex;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--critical-bg);color:var(--critical);white-space:nowrap;}
+  .chip.catalyst{background:var(--chip-bg);}.chip.inst-strong{background:var(--highlight-bg);color:var(--highlight-ink);font-weight:600;}.chip.inst-mixed{background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  .price-approx{font-size:10.5px;color:var(--text-muted);margin-top:2px;}.star{color:var(--highlight-ink);font-size:12px;}
+  table{width:100%;border-collapse:collapse;background:var(--surface-1);border:1px solid var(--card-border);border-radius:10px;overflow:hidden;font-size:13px;}
+  thead th{text-align:right;padding:10px 12px;background:var(--chip-bg);color:var(--text-secondary);font-weight:600;font-size:12px;border-bottom:1px solid var(--card-border);white-space:nowrap;position:sticky;top:var(--quicknav-h, 106px);z-index:15;cursor:pointer;user-select:none;}
+  thead th:hover{color:var(--text-primary);}thead th .arrow{font-size:10px;opacity:.55;margin-inline-start:4px;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--gridline);vertical-align:top;}tbody tr:hover{background:var(--chip-bg);}.tbl-wrap{overflow-x:auto;border-radius:10px;}td.tk{font-weight:700;white-space:nowrap;}
+  .tabs-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}.tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 16px;border-radius:8px;font-size:13px;}.tab-btn.active{background:var(--series-1);color:#fff;}
+  .tab-panel{display:none;}.tab-panel.active{display:block;}.prose{font-size:13.8px;color:var(--text-secondary);}.prose p{margin:0 0 12px;}
+  .csv-btn{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-secondary);padding:8px 14px;border-radius:8px;font-size:12.5px;}
+  .flag-note{font-size:11.5px;color:var(--critical);}
+  .excluded-box{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip-bg);font-size:12.3px;color:var(--text-muted);}.excluded-box b{color:var(--text-secondary);}
+  .sent-table td.dir-pos{color:var(--good);font-weight:600;}.sent-table td.dir-neg{color:var(--critical);font-weight:600;}.sent-table td.dir-mix{color:var(--warning);font-weight:600;}
+  .meter{width:70px;height:8px;border-radius:6px;background:var(--gridline);overflow:hidden;display:inline-block;vertical-align:middle;margin-inline-end:6px;}.meter>span{display:block;height:100%;background:var(--series-1);}
+  .speculative-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--critical-bg);color:var(--critical);font-weight:600;}
+  .longterm-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--good-bg);color:var(--good);font-weight:600;}
+  .mixed-flag-tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:8px;background:var(--warning-bg);color:#8a6100;font-weight:600;}
+  .chart-wrap{background:var(--surface-1);border:1px solid var(--card-border);border-radius:12px;padding:20px;box-shadow:var(--shadow);}
+  .bar-chart{width:100%;height:auto;overflow:visible;}
+  .bar-chart rect{fill:var(--series-1);cursor:pointer;transition:opacity .15s;}.bar-chart rect:hover,.bar-chart rect:focus{opacity:.75;outline:none;}
+  .bar-chart text{fill:var(--text-secondary);font-size:11px;}
+  .chart-tooltip{position:absolute;background:var(--text-primary);color:var(--page);padding:6px 10px;border-radius:6px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .1s;white-space:nowrap;z-index:30;}
+  .chart-tooltip.show{opacity:1;}
+  .chart-legend{font-size:11.5px;color:var(--text-muted);margin-top:10px;}
+  .compare-table td,.compare-table th{text-align:center;}.compare-table td:first-child,.compare-table th:first-child{text-align:right;}
+  .check-y{color:var(--good);}.check-n{color:var(--text-muted);}
+  .transparency-list{font-size:13px;color:var(--text-secondary);}
+  .transparency-list li{margin-bottom:8px;}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--card-border);color:var(--text-muted);font-size:12px;}
+  @media(max-width:720px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="brand-lockup"><span class="brand-mark"></span><span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Stock Intelligence</span></span></div>
+<h1>מנוע מעקב וסינון מניות אטרקטיביות — שוק ארה"ב</h1>
+<div class="subtitle">S&amp;P 500 + Nasdaq + Small Cap · דירוג ממוקד "קנייה והחזקה לטווח ארוך" לפי התכנסות בין מקורות מקצועיים בלתי-תלויים</div>
+<div class="meta-row"><span class="badge">🕐 עודכן: 27 באוגוסט 2026 · 05:16 UTC</span><span class="badge">🔁 עדכון יומי אוטומטי</span></div></div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button></header>
+<div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> למחקר בלבד, אינו המלצה אישית. יש להתייעץ עם בעל רישיון לפני קבלת החלטות השקעה.</div>
+<nav class="quicknav" id="quicknav"><div class="qn-row"><input id="globalSearch" class="search-input" placeholder="🔍 חיפוש טיקר או חברה" oninput="filterAll()"><select id="sectorFilter" class="sector-select" onchange="filterAll()"><option value="">כל הסקטורים</option><option value="אנרגיה">אנרגיה</option><option value="בריאות">בריאות</option><option value="חומרים">חומרים</option><option value="טכנולוגיה">טכנולוגיה</option><option value="נדל&quot;ן">נדל"ן</option><option value="פיננסים">פיננסים</option><option value="צריכה בסיסית">צריכה בסיסית</option><option value="צריכה מחזורית">צריכה מחזורית</option><option value="תעשייה">תעשייה</option><option value="תקשורת ומדיה">תקשורת ומדיה</option><option value="תשתיות ציבוריות">תשתיות ציבוריות</option></select></div>
+<div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#tier2">🥈 שכבה משנית</a><a href="#tables">📋 טבלאות מתודולוגיה</a><a href="#highrisk">🚨 סיכון גבוה</a><a href="#sentiment">💬 סנטימנט</a><a href="#sectorchart">📊 פילוח סקטוריאלי</a><a href="#compare">⚖️ השוואה</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
+<section><div class="kpi-row"><div class="kpi-tile"><div class="kpi-value ltr">47</div><div class="kpi-label">מניות במעקב הכולל</div></div><div class="kpi-tile"><div class="kpi-value ltr">3</div><div class="kpi-label">שכבה 1 — שכנוע גבוה</div></div><div class="kpi-tile"><div class="kpi-value ltr">10</div><div class="kpi-label">שכבת סיכון גבוה</div></div><div class="kpi-tile"><div class="kpi-value ltr">30</div><div class="kpi-label">מקורות מקצועיים</div></div></div></section>
+
+<section id="tier1">
+<h2><span class="icon-badge">🏆</span>שכבה 1 — שכנוע גבוה</h2>
+<div class="section-sub">מניות שהופיעו בשתיים או שלוש מתוך שלוש רשימות המתודולוגיה הראשיות (קונצנזוס אנליסטים כמותי · איכות ופונדמנטל · המלצות עריכתיות). הרצה זו החזירה רק 3 מניות שעומדות בקריטריון המחמיר הזה — פחות מהרגיל, בעיקר בגלל מגבלת חיפוש (ר' שקיפות ומגבלות בהמשך). לא הומצאה אף מניה כדי "למלא" את השכבה.</div>
+<div class="tier1-grid">
+
+<div class="stock-card" data-ticker="MSFT" data-name="Microsoft" data-sector="טכנולוגיה">
+<div class="stock-head"><span><span class="ticker ltr">MSFT</span> <span class="company-name">Microsoft Corp.</span></span><span class="price ltr">$496.37 <span style="color:var(--good);font-size:12px;">+0.95%</span></span></div>
+<div class="price-approx">מקור מחיר: Alpha Vantage GLOBAL_QUOTE · סגירה 26.8.2026</div>
+<div class="chip-row"><span class="chip score2">3/3 מקורות מתודולוגיה</span><span class="chip">טכנולוגיה — תוכנה/ענן</span><span class="chip">TipRanks Smart Score 10</span><span class="chip">ROE 31.6%</span><span class="chip">חוב/הון 0.13</span></div>
+<div class="rationale">המניה היחידה שהופיעה בשלושת המקורות הראשיים: TipRanks מדרגת אותה "Perfect 10" Smart Score; GuruFocus מציג ROE של 31.57% וחוב/הון נמוך של 0.13 עם Moat Score 9/10; Motley Fool בחרה בה כפיק הראשון ברשימת "Magnificent Seven" ל-2026. בשבועות האחרונים שלושה בתי השקעות העלו יעד מחיר: JPMorgan ל-$625, Wells Fargo ל-$700, Tigress Financial ל-$690.</div>
+<div class="rationale">📊 סנטימנט Bigdata.com: ציון נוכחי 0.002 (ניטרלי), מומנטום קל שלילי (-0.005). תשומת לב תקשורתית עלתה 14.8%. הסיפור השלילי הבולט היחיד: חסימת חשבונות רוסיים ב-OpenAI (המגובה ע"י מיקרוסופט) על רקע קמפיין השפעה.</div>
+<div class="sources">מקורות: <a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a> · <a href="https://www.gurufocus.com/term/roe/MSFT" target="_blank">GuruFocus</a> · <a href="https://www.fool.com/investing/2025/12/08/best-magnificent-seven-stocks-buy-2026-microsoft/" target="_blank">Motley Fool</a> · Alpha Vantage · Bigdata.com</div>
+</div>
+
+<div class="stock-card" data-ticker="CMCSA" data-name="Comcast" data-sector="תקשורת ומדיה">
+<div class="stock-head"><span><span class="ticker ltr">CMCSA</span> <span class="company-name">Comcast Corp.</span></span><span class="price ltr">$27.20 <span style="color:var(--good);font-size:12px;">+0.37%</span></span></div>
+<div class="price-approx">מקור מחיר: Alpha Vantage GLOBAL_QUOTE · סגירה 26.8.2026</div>
+<div class="chip-row"><span class="chip score2">2/3 מקורות מתודולוגיה</span><span class="chip">תקשורת ומדיה</span><span class="chip">ROE 13.75%</span><span class="chip">Simply Wall St: 26% Undervalued</span><span class="chip">Barron's Top 10 ל-2026</span></div>
+<div class="rationale">מופיעה גם ברשימת האיכות/ערך (GuruFocus: ROE 13.75%, Moat Score 7/10; Simply Wall St מעריכה שהמניה "26% Undervalued") וגם ברשימת ה-Top 10 השנתית של Barron's ל-2026. דוח Q2 הראה 2 מיליון מנויים חדשים ברבעון, אך הרווח הנקי ירד משמעותית שנה-על-שנה (3.42 מיליארד דולר לעומת 11.04 מיליארד דולר).</div>
+<div class="rationale">📊 סנטימנט Bigdata.com: ציון נוכחי -0.044 (ניטרלי-שלילי קלות), מומנטום -0.032. BNP Paribas ו-Wells Fargo הורידו יעד מחיר לאחרונה (Underperform/הפחתת יעד), לצד חדשות מוצר חיוביות (השקת Xfinity Shield).</div>
+<div class="sources">מקורות: <a href="https://www.gurufocus.com/term/roe/CMCSA" target="_blank">GuruFocus</a> · <a href="https://simplywall.st/stocks/us/telecom/nasdaq-cmcsa/comcast/news/comcast-cmcsa-could-be-26-undervalued-as-earnings-put-valuat" target="_blank">Simply Wall St</a> · Barron's Top 10 for 2026 · Alpha Vantage · Bigdata.com</div>
+</div>
+
+<div class="stock-card" data-ticker="BMY" data-name="Bristol-Myers Squibb" data-sector="בריאות">
+<div class="stock-head"><span><span class="ticker ltr">BMY</span> <span class="company-name">Bristol-Myers Squibb Co.</span></span><span class="price ltr">$67.57 <span style="color:var(--critical);font-size:12px;">-0.52%</span></span></div>
+<div class="price-approx">מקור מחיר: Alpha Vantage GLOBAL_QUOTE · סגירה 26.8.2026</div>
+<div class="chip-row"><span class="chip score2">2/3 מקורות מתודולוגיה</span><span class="chip">בריאות — תרופות</span><span class="chip">GF Score 71/100</span><span class="chip">Barron's Top 10 ל-2026</span></div>
+<div class="rationale">מופיעה ברשימת האיכות/ערך וברשימת Barron's, אך <b>עם דגל סתירה מפורש</b>: GuruFocus מסמן אותה "still overvalued" (GF Score 71/100) בעוד Simply Wall St מעריך אותה כ"reasonable below fair value" ועד 48% מתחת לשווי הוגן — סתירת הערכת שווי ממשית בין שני מקורות פונדמנטליים. אישור FDA מזורז לתרופת ZENBEXUS לטיפול במיאלומה נפוצה הוא חיובי; סיום שיתוף הפעולה עם Cellares בייצור Breyanzi הוא שלילי.</div>
+<div class="rationale">📊 סנטימנט Bigdata.com: ציון נוכחי 0.129 (חיובי קלות). Argus שדרגה ל-Buy. השקעה של 2.3 מיליארד דולר במפעל חדש בהיוסטון.</div>
+<div class="risk-note">⚠️ סתירת הערכת שווי בין GuruFocus (overvalued) ל-Simply Wall St (undervalued/reasonable) — מומלץ בדיקה נוספת לפני החלטה.</div>
+<div class="sources">מקורות: <a href="https://www.gurufocus.com/news/9008264/bristolmyers-squibb-co-bmy-stock-down-34-but-still-overvalued-gf-score-71100" target="_blank">GuruFocus</a> · <a href="https://simplywall.st/stocks/us/pharmaceuticals-biotech/nyse-bmy/bristol-myers-squibb/news/bristol-myers-squibb-bmy-stock-looks-reasonable-below-fair-v" target="_blank">Simply Wall St</a> · Barron's Top 10 for 2026 · Alpha Vantage · Bigdata.com</div>
+</div>
+
+</div>
+</section>
+
+<section id="tier2">
+<h2><span class="icon-badge">🥈</span>שכבה משנית — שכנוע בודד עם גיבוי סנטימנט</h2>
+<div class="section-sub">מניה שהופיעה במקור מתודולוגי אחד בלבד, אך זכתה לגיבוי סנטימנט ציבורי אמין (לא ספקולטיבי) בשכבת הבאזז המשנית.</div>
+<div class="tier1-grid">
+
+<div class="stock-card" data-ticker="NVDA" data-name="Nvidia" data-sector="טכנולוגיה">
+<div class="stock-head"><span><span class="ticker ltr">NVDA</span> <span class="company-name">NVIDIA Corp.</span></span><span class="price ltr">$209.66 <span style="color:var(--critical);font-size:12px;">-1.59%</span></span></div>
+<div class="price-approx">מקור מחיר: Alpha Vantage GLOBAL_QUOTE · סגירה 26.8.2026 (לאחר דוח Q2 FY27)</div>
+<div class="chip-row"><span class="chip score1">1/3 מקורות + גיבוי סנטימנט</span><span class="chip">טכנולוגיה — מוליכים למחצה</span><span class="chip">TipRanks Smart Score 10</span><span class="longterm-tag">עניין ציבורי סביר — לא ספקולטיבי</span></div>
+<div class="rationale">הופיעה רק ברשימת הקונצנזוס הכמותי (TipRanks "Perfect 10"), אך שכבת הסנטימנט המשנית סיווגה אותה במפורש כ"עניין ציבורי סביר סביב תזה ארוכת טווח אמינה" ולא כמומנטום ספקולטיבי — ולכן זכתה למעמד שכבה משנית. דוח Q2 FY2027 (26.8.2026): הכנסות $96.2 מיליארד (+106% שנה-על-שנה), שולי רווח גולמי 75%, תחזית Q3 מעל הקונצנזוס. גולדמן זאקס העלתה יעד מחיר ל-$300.</div>
+<div class="rationale">📊 סנטימנט Bigdata.com: ציון 0.104 (חיובי קלות), אך תשומת לב תקשורתית קפצה 41.7% (z-score חריג של 2.0–3.3). לצד ההתלהבות — חקירת רשויות ארה"ב על חשד להברחת שבבים לסין, ולשון סיכון ייצוא ב-10-Q.</div>
+<div class="sources">מקורות: <a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a> · <a href="https://www.benzinga.com/markets/equities/26/08/61452319/nvidia-salesforce-crowdstrike-okta-and-abercrombie-fitch-why-these-5-stocks-are-on-investors-radars-today" target="_blank">Benzinga (סנטימנט)</a> · Alpha Vantage · Bigdata.com</div>
+</div>
+
+</div>
+</section>
+
+<section id="tables">
+<h2><span class="icon-badge">📋</span>טבלאות מלאות לפי מתודולוגיה</h2>
+<div class="section-sub">כל הממצאים הגולמיים מכל אחת משלוש מתודולוגיות המחקר, כולל מניות שלא עברו את סף שכבה 1. לחיצה על כותרת עמודה ממיינת; ניתן לייצא כל טבלה כ-CSV.</div>
+<div class="tabs-row"><div class="tabs">
+<button class="tab-btn active" onclick="switchTab('tabA')">א׳ קונצנזוס אנליסטים כמותי</button>
+<button class="tab-btn" onclick="switchTab('tabB')">ב׳ איכות ופונדמנטל</button>
+<button class="tab-btn" onclick="switchTab('tabC')">ג׳ עריכתי — לטווח ארוך</button>
+</div><button class="csv-btn" onclick="exportCSV()">⬇ ייצוא CSV לטבלה הפעילה</button></div>
+
+<div id="tabA" class="tab-panel active">
+<div class="tbl-wrap"><table id="tableA" data-allrows="true">
+<thead><tr>
+<th onclick="sortTable('tableA',0)">טיקר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',1)">שם<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',2)">סקטור<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',3)">ציון/דירוג<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',4)">יעד מחיר<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',5)">מס' אנליסטים<span class="arrow">↕</span></th>
+<th onclick="sortTable('tableA',6)">מקור</th>
+</tr></thead>
+<tbody>
+<tr data-ticker="NVDA" data-sector="טכנולוגיה"><td class="tk">NVDA</td><td>Nvidia Corp</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>לא נמצא נתון</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a></td></tr>
+<tr data-ticker="MSFT" data-sector="טכנולוגיה"><td class="tk">MSFT</td><td>Microsoft Corp</td><td>טכנולוגיה</td><td>TipRanks Smart Score 10 (Perfect 10)</td><td>$557.32 (WallStreetZen, לא TipRanks)</td><td>לא נמצא נתון</td><td><a href="https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now" target="_blank">TipRanks</a></td></tr>
+</tbody></table></div>
+<div class="flag-note">⚠️ טבלאות מקוצרות בעדכון זה — הרשימה המלאה תעודכן בשלב הבא.</div>
+</div>
+</section>
+
+<section id="highrisk">
+<h2><span class="icon-badge risk">🚨</span>שכבת סיכון גבוה — קטליסט מוסדי</h2>
+<div class="tier1-grid"><div class="stock-card risk-card" data-ticker="CRWV"><div class="stock-head"><span class="ticker ltr">CRWV</span></div></div></div>
+</section>
