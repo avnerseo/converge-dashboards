@@ -127,3 +127,52 @@ on Zendrop's answer about fulfilment origin.
   `contactEmail`, the Contact page (once), the refund policy (twice), the
   privacy policy (once) and the terms (twice). The two refund-policy
   occurrences have to be hand-edited — that policy must not be regenerated.
+
+## Second pass — conversion surfaces (27 Aug)
+
+### Fixed live (not theme-scoped)
+
+**Redirect chain collapsed.** There were two hops:
+`/products/cat-pet-steam-brush` → `/products/velvetpaw-3-in-1-mist-grooming-brush`
+→ `/products/peluma-3-in-1-mist-grooming-brush`. The first now points straight at
+the final URL. The middle redirect was kept, since links to the velvetpaw handle
+may exist.
+
+### Fixed on the working theme
+
+**`sections/footer-group.json` — removed the social links block.** It carried
+Horizon's placeholder defaults: `https://www.facebook.com/`,
+`https://www.instagram.com/`, `https://www.youtube.com/`,
+`https://www.tiktok.com/`, `https://x.com/`. Five icons in the footer of every
+page, each sending a visitor to a social network's *homepage* and out of the
+store. Add real profile URLs in the editor when the accounts exist.
+
+**`templates/product.json` — removed two empty elements:**
+- the `product-recommendations` section ("You may also like", `related`, up to 4
+  products) — the store has one product, so it had nothing to show;
+- the `disclosures` block — heading "Disclosures" with zero child blocks.
+
+### Verified sound, no change made
+
+- Product title renders as a real `<h1>`.
+- Sticky add-to-cart on, pickup availability off, accelerated checkout present.
+- Product is ACTIVE and published to both Online Store and Google & YouTube.
+
+### Open
+
+- **The `disclosures` slot was the right place for shipping and returns next to
+  the buy button.** Removed rather than filled, because filling it means writing
+  customer-facing copy. Proposed wording is drawn only from the existing shipping
+  and refund policies — no new claims — and needs approval before it goes in.
+- **Google & YouTube channel is live with all 5 variants at `barcode: null`**
+  and no `identifier_exists` handling. Either real GTINs from Zendrop, or the
+  "no manufacturer identifier" setting in the Google & YouTube app. Not an Admin
+  API field — has to be done in the app.
+- **All 5 variants have weight `0 KILOGRAMS`.** Fine while shipping is free and
+  flat, a problem for feed quality and for any future carrier-calculated rate.
+- **Footer newsletter copy** promises "exclusive deals and early access to new
+  products" — a one-product store with neither. Horizon default text.
+- **The `Style` option mixes two dimensions** — colour and set-vs-brush — across
+  "Porcelain White Set", "Milk Brown Set", "Porcelain White Brush",
+  "Purple Brush", "Set". Restructuring needs Zendrop's answer on what "Set"
+  contains.
