@@ -817,3 +817,67 @@ real Zendrop figure rather than a Printful benchmark. Numbered steps written int
 `PRODUCT-SCREENING.md`.
 
 No storefront or theme changes in this pass — research and documentation only.
+
+## 2026-08-28 (later) — Pre-traffic audit, and order #1001 confirmed in Zendrop
+
+Zendrop's MCP reconnected mid-session, so the two things that had been blocked on it are now done.
+
+### Order #1001 — confirmed, and it is sitting unfulfilled
+
+`get_order` on store `3546333`, order `#1001` (internal `45089149`):
+
+- **Status: Unfulfilled.** Placed 2026-08-28 13:18 UTC, no issues, no tracking number yet.
+- Porcelain White Set × 1, routed as `zendrop_fulfillment`.
+- Ships to Hadera, IL, 3831014.
+
+Routing is therefore fully confirmed end to end: Shopify → Zendrop, correct variant, correct
+address. **But the order will not ship until it is paid for inside Zendrop.** Credit balance is
+`0`, so fulfilling charges the payment method directly.
+
+### The real cost, verified rather than estimated
+
+`get_order_fulfillment_cost` on that order returns the actual figures Zendrop will charge:
+
+| | |
+|---|---|
+| Products Cost | **$7.50** |
+| Shipping Cost (to Israel) | **$14.20** |
+| **Total** | **$21.70** |
+
+This **confirms the $7.50 product cost already in `DECISIONS.md`** — it was correct. The $14.20 is
+Israel-specific; the US figure on record is $9.92, so the US landed cost stays **$17.42**, and
+every margin conclusion built on it stands. First time this week a cost has been read from a
+real transaction rather than a catalog listing.
+
+### Mobile product page — the buy button is below the fold
+
+Pinterest traffic is overwhelmingly mobile, and these pins land on the product page, so it was
+checked at iPhone 13 size (390×664 CSS px) before sending anyone there:
+
+- Page height 2131px. **"Add to cart" starts at y=724 — past the bottom of a 664px screen.**
+- The first screen is almost entirely the product image. The title only begins to appear at the
+  very bottom edge; price, variant picker and buy button are all below it.
+- `domReady` 1955ms — speed is fine, this is a layout issue, not a performance one.
+- No review content on the page (expected — nothing may be fabricated).
+- Shipping copy renders honestly: processed in 2–3 days, US delivery 10–15 days, 12–18 total.
+
+Not fixed here: the product template belongs to the live theme, and writing to the live theme is
+prohibited in this project. It is a theme-editor change, written up for the merchant.
+
+### No analytics of any kind on the storefront
+
+Grepped the live homepage: no `gtag`, no Google Analytics, no Meta pixel, no `pintrk`, no
+Klaviyo — nothing. Shopify's own admin analytics still records sessions and orders, so the first
+traffic is not invisible, but there is no channel-level attribution. The Pinterest app in
+`PINTEREST.md` step 2 installs the Pinterest tag and Conversions API, which closes this for the
+one channel about to be used.
+
+A newsletter capture **does** exist in the footer (`contact[email]`), so non-buyers are not
+entirely lost.
+
+### Pinterest cannot be done from here — checked, not assumed
+
+`pinterest.com` returns `000`; the proxy logs a 403 policy denial on CONNECT. Searched the
+connector registry for a Pinterest MCP and there is none — the closest results are analytics
+aggregators (Supermetrics, Funnel) and Klaviyo, none of which publish pins. Account creation and
+pin upload stay with the merchant.
