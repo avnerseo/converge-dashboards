@@ -328,3 +328,42 @@ The live theme is untouched and still carries its original product template.
 access to new products"* with *"Occasional emails when we add something new. No spam, and
 you can unsubscribe at any time."* Same defect class as the Manufacturing boilerplate: a
 theme default promising something the store does not have.
+
+## Sweep of the remaining templates (28 Aug)
+
+Reviewed `collection.json`, `cart.json`, `404.json`, `search.json`, `page.json` and
+`header-group.json` — the files not touched until now. Two real defects.
+
+**The announcement bar was bright magenta at heading size.** `header-group.json` carried
+`"text_color": "#af14bd"` at `font_size: 1.5rem`, running across the top of every page. The
+store's entire palette is `#ffffff` / `#000000` / `#333333` / `#DFDFDF` — that purple appears
+nowhere else in the theme. Changed to `color_palette.foreground` at `0.875rem`, which is
+supporting-text size for an announcement bar. The wording was left alone; it is on-brand and
+makes no claim. **If the purple was deliberate, it is one field to put back.**
+
+Also set `show_language: false` there. The store publishes exactly one locale, so the
+language selector had nothing to switch between.
+
+**The cart page recommended the product already in the cart.** `cart.json` carried a
+`product-list` section headed "You may also like", pulling from collection `all`, max 4. With
+one product in the store, that renders the item the shopper has just added, directly under
+their own cart. Section removed. This is different from the product-page section removed
+earlier — that one used `related` and rendered nothing; this one renders the wrong thing.
+
+`404.json` also carries a product list ("Discover something new"). Left in place: on a 404,
+showing the shop's one product is a reasonable destination rather than a dead end.
+
+`collection.json`, `search.json` and `page.json` are sound — real `<h1>`s bound to the
+collection or page title, no placeholder copy.
+
+## Composio is not the Shopify connection
+
+Checked, because it was assumed to be. Two separate things: Shopify runs over its own MCP
+server here; Composio is a different connector and has **no active Shopify connection**.
+
+Connecting it would not solve the policy problem. Its Shopify toolkit has no
+policy-update action — a search for one returns `SHOPIFY_CREATE_PAGE` / `SHOPIFY_UPDATE_PAGE`
+(ordinary pages, already available here) and Box's own enterprise terms-of-service, which is
+unrelated. What it does add is `SHOPIFY_UPDATE_THEME` with `role: "main"` (publish) and
+`SHOPIFY_DELETE_THEME`. Publishing is one click in admin and should be deliberate; theme
+deletion is not power worth holding. Recommendation: do not connect it.
