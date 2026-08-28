@@ -307,3 +307,63 @@ Nina answered days, weights and contents, but **not cost price** — the one num
 whether any of this is profitable. It no longer needs a support reply: **order #1001 has gone to
 Zendrop, and their fulfilment charge for it is the cost price of `PE17TFL2V`.** It will land in
 the Zendrop dashboard or on the card within days.
+
+## Cost prices arrived, and they changed the business (28 Aug)
+
+Zendrop's product page gives per-SKU costs. **Shipping is charged separately and it is the
+dominant cost**, which an earlier margin estimate in this session got wrong by assuming it was
+included.
+
+| SKU | Variant | Product | Shipping | **Total to Zendrop** |
+|---|---|---|---|---|
+| PE17TFL2V | Porcelain White Set | $7.50 | $9.92 | **$17.42** |
+| 1O3NPE8 | Milk Brown Set | $7.50 | $9.92 | **$17.42** |
+| FORC9Q8LH | Brown Brush | $1.27 | $7.55 | **$8.82** |
+
+Zendrop also shows **8 days average shipping to the United States** on this product — better
+than the 10–15 the storefront states. The storefront under-promises, which is the right
+direction, so it stays.
+
+### The pricing was steering customers to the worst variant
+
+At the old prices, with fees of roughly $2.60:
+
+| | Old price | Cost | Old net |
+|---|---|---|---|
+| Porcelain White Set | $29.90 | $17.42 | **$9.88** |
+| Milk Brown Set | $39.90 | $17.42 | $19.88 |
+
+Identical cost, identical contents, identical weight — a $10 gap in profit decided by colour.
+And because Porcelain White Set carried a brush *plus* a rolling ball for the same $29.90 as a
+bare brush, every rational shopper picked it. **The default variant was the least profitable
+one, and the pricing actively pushed people toward it.**
+
+### Repriced, with the merchant's approval
+
+All three Set variants → **$39.90**. The two single brushes stay at **$29.90**. Verified live.
+
+Compare-at was aligned to $49.90 across all five. Milk Brown had been showing "was $69.90"
+against identical products showing "$49.90"; levelling it removes the inconsistency and
+*reduces* an unsubstantiated discount claim rather than inflating one. The underlying
+compare-at question — whether $49.90 was ever a real price — is unchanged and still open.
+
+Net result: roughly **$19 profit on every variant**, versus $9.88 on the one most customers
+were choosing.
+
+Note on rigour: `Z75Y6C7M0` ("Set") did not appear in the SKU cost table. Its cost is **inferred
+from its weight** being identical to the two confirmed Sets. If it turns out to differ, reprice.
+
+### What this does to the traffic plan
+
+An earlier note in this session said the margin allowed paid traffic. **That was based on the
+wrong margin and is withdrawn.** At $9.88 it was clearly loss-making against typical acquisition
+costs of $15–30 for a product at this price. At ~$19 it is borderline, not comfortable.
+
+Organic stays the affordable channel, not the slow alternative to a better one.
+
+### The real economics problem, stated plainly
+
+**Shipping from China costs $9.92 on a $29.90 product — a third of revenue.** No campaign fixes
+that. Domestic US shipping typically runs $3–6, so moving to US-sourced products would add
+roughly $4–7 per order *and* cut delivery from 12–18 days to 3–11. One move, both problems.
+That remains the highest-value action available, and it costs nothing to make.
