@@ -539,3 +539,48 @@ Zendrop POD was already ruled out for the personalised products that were the on
 the margin screen.
 
 Filed under: true, useful later, not actionable today.
+
+## Zendrop's first-order notice — two corrections it forces
+
+Zendrop showed a first-order notice in the dashboard. Two things in it matter.
+
+### 1. Our shipping copy promised more than the supplier commits to
+
+Zendrop's own words:
+
+> "Processing times (how long it takes for your orders to ship) will vary. Most of your orders
+> will ship in 3 days or less, **but sometimes it can take much longer than that.** This is
+> because dropshipping suppliers (including Zendrop) **don't carry stock in their warehouse for
+> any of the products in their catalog.**"
+
+The live product page said: *"Orders are processed within 2–3 days."* That is a firm commitment
+the supplier explicitly does not make. If an order takes ten days to process, the customer was
+given a number we could not keep — which is exactly the kind of unsupported claim this project
+forbids, and in practice it produces late-delivery complaints and PayPal disputes.
+
+Corrected on the unpublished theme copy `189492035897`:
+
+> "Free worldwide shipping on every order. **Most orders are processed within 3 days, though
+> occasionally longer**, and delivery to the United States typically takes a further 10–15 days.
+> You'll receive a tracking number by email as soon as your order ships."
+
+This mirrors Zendrop's own language, keeps the 10–15 day delivery figure that was already
+verified, and drops only the part we cannot stand behind. The "12–18 days in total" line goes
+with it, since a total built on a processing time that "will vary" is not a real total.
+
+### 2. "In stock" in the catalog does not mean stock exists
+
+Zendrop states plainly that they hold **no** warehouse stock for **any** catalog product. So the
+`availability: { in_stock: true, inventory_level: "In stock" }` field returned by
+`get_catalog_product` means the supplier can source the item, **not that it is sitting on a
+shelf ready to ship.**
+
+This reframes every availability reading taken during the product screening. It does not change
+any of the five rejections — those failed on price, not stock — but it means **no future product
+decision should treat "In stock" as a shipping-speed guarantee.** The only real speed signal is
+a supplier's stated delivery estimate, and the only proof is a fulfilled order.
+
+Relatedly, Zendrop offers **"Safety Stock"**: once a product is selling at volume they will hold
+inventory so orders ship within 24 hours, and they say they reach out when that point comes. Like
+Private Agent, it is a consequence of traction, not a route to it — worth knowing, not actionable
+at one order.
