@@ -4,6 +4,33 @@
 the calls that were made, the reasoning behind them, and what is still owed to whom. It
 exists because this context lived only in a conversation, and conversations do not survive.
 
+## The rule every decision is measured against
+
+Stated by the merchant, 28 Aug: **make money, in the fastest and simplest way.**
+
+This is not a mood. It is the tie-breaker. When two options both look reasonable, the one that
+gets to profit sooner with fewer moving parts wins, and the other is dropped rather than
+deferred. Three things follow from it directly:
+
+**Simple beats complete.** Two good products with week-long delivery beat six mediocre ones.
+Five variants where three cannot rationally sell is worse than two that can. Every "but" in a
+setup is a place that breaks later and costs a day.
+
+**Do not invest further in the China brush.** It cannot reach the US warehouse — Zendrop
+confirmed it, permanently. If the store moves to US-sourced products, work spent perfecting
+this one is work thrown away. Keep it alive and selling; stop improving it. That specifically
+means: no new photography effort for it beyond what the arriving unit gives for free, no
+variant restructuring beyond deleting dead ones, no copy polishing.
+
+**Nothing gets decided on an unknown margin.** Cost price is the gate. Pricing, ad budget, and
+which products to add are all downstream of it, and guessing at it risks selling at a loss
+faster and more simply than any other available mistake.
+
+What this rule does *not* excuse: the no-invented-claims rule, the refund policy, and never
+publishing or writing to the live theme without care. Those are constraints, not preferences,
+and moving fast through them is how a store gets shut down rather than profitable.
+
+
 ## Supplier — Zendrop
 
 ### Answered (28 Aug, agent "Nina", ticket still open)
