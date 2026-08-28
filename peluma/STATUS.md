@@ -630,3 +630,44 @@ With two markets now defined, the header renders a **region and language selecto
 was the only market. It is not broken, but it does let a US visitor switch themselves into the
 Israel market. If that is unwanted, it is a header setting in the theme editor, in the same
 place `show_language: false` was set earlier.
+
+## 28 Aug — LIVE
+
+The merchant published theme `189462839609`. Verified against the live storefront with no
+preview parameter — this is what a customer sees.
+
+`Shopify.theme` reports id `189462839609`, **role `main`**. The previous live theme
+`189442031929` drops to unpublished and remains the rollback point.
+
+Swept all ten customer-facing pages at 1440×900 and on an iPhone 13:
+
+| | |
+|---|---|
+| "VelvetPaw" | **0 occurrences**, all ten pages — the cleaned policies were pasted |
+| Hebrew characters | **0**, all ten pages, including `/collections/all` |
+| Homepage `<title>` | `Peluma \| Pet Grooming Essentials for Cats & Dogs` |
+| Homepage meta | the new description, no VelvetPaw |
+| Shipping policy | "7 to 15 business days" and "1 to 3 business days" both gone |
+| Cart | 1 item, $29.90 USD, thumbnail is the clean porcelain-white brush |
+| Checkout | `/en-us`, Country defaults to **United States**, State and ZIP fields, no stock problem |
+| Theme console errors | none — every console error traces to a host blocked by this environment |
+
+Every fix from this session survived publication: media order and variant images, alt text,
+the Zendrop rate wording, the US market and its delivery zone, and the disabled filters.
+
+One cosmetic leftover in the shipping policy: a doubled period in "about 12–18 days in
+total..". The duplicated "Processing Time:" label the merchant introduced on first paste was
+caught and corrected.
+
+### Accepted at launch, knowingly
+
+- **PayPal is the only payment method.** Shopify Payments does not serve Israel-based
+  merchants — verified against Shopify's supported-countries list, not assumed. The three
+  offered alternatives (PayPlus, Hyp, Checkout.com) each add Shopify's 2% on top of their own
+  fee. Deferred until there are 20–50 orders to decide against.
+- **Delivery is 2–3 weeks**, because this SKU ships from China. Zendrop stocks top SKUs in a
+  California warehouse and the catalogue has a `Ships From: US` filter; sourcing from it would
+  cut delivery to roughly a week. That is the single largest improvement available and it is a
+  catalogue decision, not a settings one.
+- The `$49.90` compare-at price and the pre-checked marketing consent remain open merchant
+  decisions.
