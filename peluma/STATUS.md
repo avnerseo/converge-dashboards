@@ -533,3 +533,41 @@ does not.
 **Correct sequence, not yet done:** add United States explicitly to the Zendrop profile's zone
 (or give that profile a US zone carrying the same free rate) **first**, then flip the US market
 back to ACTIVE, then re-verify cart and checkout. Doing it in the other order is what broke it.
+
+**Item 4 — retried in the correct order, and it worked.**
+
+The hypothesis held. Added an explicit `United States` zone to the **Zendrop** delivery profile
+carrying the same free rate (Shopify rejected the first attempt: a US zone must include its
+provinces, so `includeAllProvinces: true`). The profile now has two zones, both free:
+`United States` and the original `[Zendrop — Worldwide Zone]` / Rest of World.
+
+Then set the US market back to ACTIVE and verified end to end on an iPhone viewport with a
+real US address:
+
+- cart 1 item, $29.90 USD
+- checkout `/en-us`, **no stock problem**
+- Country/Region defaults to **United States**, with State and ZIP fields
+- shipping method renders: *"Free Shipping — Free shipping on every order. Orders are
+  processed within 2-3 days, and delivery typically takes a further 10-15 days - about 12-18
+  days in total. FREE"*
+- order-summary thumbnail is the clean brush from item 1
+
+So the ordering rule is now established for this store: **a market cannot go active before its
+countries are named explicitly in the delivery profile that serves the products.** "Rest of
+World" does not cover a country that has its own market.
+
+**Item 5 — the theme. Deliberately no changes.**
+
+Read `templates/index.json` on the working theme. Everything earlier sessions fixed is intact:
+`overlay_color` is `#12121299`, the `<h1>` is a real h1 at the h1 preset, `Shop Peluma` is the
+product-list heading, the CTA is solid black at fit-content, the hero content is centred.
+
+The one remaining theme-level observation is `"columns": 4` on the product list, which is why
+one product looks lost in a wide row. That is **not** changed, on purpose: the grid is sparse
+because the catalogue has one item, and `DECISIONS.md` plans 4–8 more, at which point 4 columns
+is correct. Editing this file to set 3 and editing it back later is churn on the one file that
+has already been corrupted once by a theme-editor save. The fix for a sparse grid is products.
+
+For whoever adds those products: `"image_ratio": "adapt"` on the product card means cards will
+be ragged once images with different aspect ratios sit side by side. Set a fixed ratio in the
+same edit that adds the products, not before.
