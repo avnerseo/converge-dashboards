@@ -1037,3 +1037,32 @@ Three other store settings visible in the same response, none of them blocking:
 
 Remaining before the store can earn: **traffic.** Pinterest is prepared and unshipped, and is
 the only thing left between this store and a first real sale.
+
+### Tracking page enabled, in response to Zendrop's delivery disclaimer
+
+Zendrop's first-order notice closes with:
+
+> "Dropshipping suppliers are not logistics companies. We always use the best option for shipping
+> your products but once it leaves our fulfillment center, it's the shipping company's
+> responsibility to ensure speedy delivery."
+
+So neither processing time nor delivery time is guaranteed. **The corrected product copy already
+covers this** — "delivery to the United States *typically* takes a further 10–15 days" — and was
+left alone rather than reworked again.
+
+The real consequence is operational: unguaranteed delivery produces "where is my order" messages
+and, left unanswered, PayPal disputes. The defence is visible tracking. So
+`tracking_page_enabled` was turned on via `update_store_settings` (two-step, previewed then
+confirmed) and verified with `get_store`:
+
+```
+auto_fulfillment_enabled : true
+daily_fulfillment_enabled: false
+tracking_page_enabled    : true   ← changed
+origin_country_hidden    : false  ← deliberately unchanged
+```
+
+The preview confirmed `tracking_page_enabled` was the only field changing. **`origin_country_hidden`
+was left `false` on purpose** — hiding where goods ship from would obscure a material fact from
+customers, against this project's rule on unsupported claims. It is available in the same call
+and was not used.
