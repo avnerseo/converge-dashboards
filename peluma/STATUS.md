@@ -420,3 +420,46 @@ open merchant decision in `DECISIONS.md`.
 The one-card-in-a-four-column-grid problem `DECISIONS.md` describes is confirmed visually and
 looks worse in a browser than on paper. Separately, the `$49.90` compare-at price runs on every
 surface and is a reference-price claim — it belongs in `DECISIONS.md` and is not there yet.
+
+## 28 Aug — full store sweep against the English / US-first target
+
+Full write-up in `peluma/LAUNCH-READINESS-2026-08-28.md`. Merchant restated the target this
+session: **English only, United States primary.** Every page crawled in a browser at 1440×900
+and 390×844, plus an Admin API audit of markets, delivery profiles, variants and media.
+All 10 customer-facing pages return 200; no broken internal links.
+
+**Changed live (one write, verified by read-back):** the Zendrop profile's Free Shipping rate
+description, `DeliveryMethodDefinition/1186423898425`. Was "Delivery in 7-15 business days",
+now "Free worldwide shipping on every order. Orders are processed within 2-3 days, and
+delivery typically takes a further 10-15 days - about 12-18 days in total." No theme writes.
+
+New blockers, all against the English/US target:
+
+1. **Hebrew on `/collections/all`** — the two filter labels render `זמינות` and `מחיר`. Not
+   the theme: `locales/en.default.json` was read in full and is entirely English, and the shop
+   has one locale (`en`, primary, published). It is the Search & Discovery app's filter labels,
+   created while the admin UI was Hebrew. The "Shop" nav link points at this page.
+2. **The only market is Israel** (`handle: il`, primary, `webPresence: null`). That, not this
+   environment's IP, is why checkout is `/en-il` and defaults Country to Israel — correcting
+   what the previous audit assumed. US customers can still buy (the International zone
+   includes US), but a US-first store needs a US market as primary.
+3. **The default delivery profile is `פרופיל כללי` with rate `רגיל` at ₪35/₪57 ILS.** The
+   current product is on the Zendrop profile so customers see Free Shipping in USD — but every
+   new import that lands on the default profile will show a US shopper a Hebrew, shekel-priced
+   rate. Fix before the 4–8 product expansion in `DECISIONS.md`, not after.
+4. **VelvetPaw is still live in the Privacy Policy (3) and Terms (24).** The cleaned files
+   have been in this directory since 27 Aug and were never pasted.
+5. **The shipping policy still says 1–3 and 7–15 business days** — missed in the correction
+   pass. The delivery claim is now right in three places and wrong in one.
+6. Homepage `<title>` and meta still sell VelvetPaw.
+
+**Product media is worse than the first pass showed.** Twelve images: four are near-duplicate
+`68mm` dimension diagrams, one of those still carries the supplier's red annotation boxes, two
+have baked-in marketing text in non-native English ("Stain from sofa hair dust", "Sticky snack
+crumbs"), and one is a static JPEG with a **fake video play button painted into it**. All
+twelve share near-identical alt text. A reorder putting the clean white-brush shot first was
+attempted and **blocked by the permission classifier** — order unchanged.
+
+Still open for the merchant: compare-at prices on all five variants ($49.90 / $69.90),
+pre-checked marketing consent at checkout, `avnerseo@gmail.com` on five customer-facing pages,
+and card payment still unverified because `checkout.pci.shopifyinc.com` is blocked here.
