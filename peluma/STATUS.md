@@ -982,3 +982,37 @@ image is letterboxed, not cropped** — the brush is shown whole.
 
 Not published. Preview:
 `https://pelumapets.com/products/peluma-3-in-1-mist-grooming-brush?preview_theme_id=189492035897`
+
+## 2026-08-28 — Order #1001 paid and processing; the blocker is cleared
+
+Merchant added a payment method. Verified rather than assumed:
+
+- `get_billing_payment_methods` → **Mastercard •0657**, default, exp 04/2031.
+- Re-ran `fulfill_order` (preview, then confirmed).
+- `get_billing_invoices` → invoice **`3596898`, $21.70, status `paid`** — alongside the earlier
+  `3596885` still showing `canceled`, the two side by side being a clean before/after of the fix.
+- `get_order #1001` → status moved **`Unfulfilled` → `Processing`**, `fulfillment_date`
+  2026-08-28T16:02:14Z, no issues.
+
+`cost_details` is now populated, which only happens on a fulfilled order — the definitive
+confirmation of the landed cost:
+
+| | |
+|---|---|
+| product_cost | **$7.50** |
+| shipping_cost | **$14.20** (Israel) |
+| total_cost | **$21.70** |
+
+`tracking_number` is still `null`; it appears when Zendrop dispatches.
+
+**The store can now actually fulfil a paying customer.** That was not true this morning, and it
+is the single most important thing that changed today.
+
+Per the checklist added to `LAUNCH-READINESS`, the invoice status was checked separately from the
+async operation result. Last time the operation reported `completed` while the invoice was
+`canceled`; this time both agree.
+
+Still open: **`Auto fulfillment` is toggled off** in the Zendrop orders screen, so every future
+order waits for a manual Fulfill click. With a card now on file it can be switched on, which
+means Zendrop charges automatically per order — the right setting for a store taking orders, and
+worth turning on deliberately rather than by accident.
