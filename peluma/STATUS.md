@@ -1016,3 +1016,24 @@ Still open: **`Auto fulfillment` is toggled off** in the Zendrop orders screen, 
 order waits for a manual Fulfill click. With a card now on file it can be switched on, which
 means Zendrop charges automatically per order — the right setting for a store taking orders, and
 worth turning on deliberately rather than by accident.
+
+### Auto fulfilment on — the supply chain is now closed end to end
+
+`get_store 3546333` confirms `auto_fulfillment_enabled: true`. Combined with the card on file,
+an incoming order now routes to Zendrop, charges automatically and dispatches with no manual
+step. **The full path from customer payment to supplier shipment works without intervention** —
+the thing that was broken this morning.
+
+Three other store settings visible in the same response, none of them blocking:
+
+- `daily_fulfillment_enabled: false` — orders go out as they arrive rather than batched once a
+  day. Faster; leave as is.
+- `tracking_page_enabled: false` — no branded tracking page. Customers still get tracking by
+  email from Shopify. Worth enabling later to cut "where is my order" messages, not urgent.
+- `origin_country_hidden: false` — the origin country is visible to customers. **Left alone
+  deliberately.** Hiding it would obscure where goods actually come from, which sits badly beside
+  this project's rule against unsupported claims, and the store already states 12–18 day delivery
+  honestly. Not recommended.
+
+Remaining before the store can earn: **traffic.** Pinterest is prepared and unshipped, and is
+the only thing left between this store and a first real sale.
