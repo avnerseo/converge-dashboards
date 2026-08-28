@@ -487,3 +487,49 @@ the frame. Two deliberate choices: the image with the fake play button gets ordi
 that does not mention video, and the rolling-ball images are described as a rolling ball
 lint remover rather than as the brush — which is also the clearest evidence that this listing
 is carrying two different products under one product record.
+
+**Item 3 — the default delivery profile.** The International zone (27 countries including the
+US) was `International` at ₪57 ILS. It is now `Free Shipping` at **$0 USD** with the corrected
+English description. Verified by read-back.
+
+The Domestic (Israel) zone **could not be changed** — Shopify rejected it: that method
+definition carries a rate range condition, and this API version cannot edit a definition with
+multiple conditions. It is still `רגיל` at ₪35 and needs admin. The profile's own name,
+`פרופיל כללי`, is admin-side only and was left alone.
+
+Confirmed end to end afterwards: checkout now renders "Free Shipping — Free worldwide shipping
+on every order. Orders are processed within 2-3 days…", so the earlier Zendrop-profile fix is
+verified live and not just by mutation result.
+
+**Item 4 — the US market. Attempted, broke checkout, rolled back.**
+
+First, a correction to the earlier audit. The Israel market's condition is `SPECIFIED` over a
+single region: Israel. It is the only market. So it is not that the primary market was merely
+*wrong* — **no market covered the United States at all.** US visitors fell through to the
+default market, which is why checkout was `/en-il`.
+
+Created `United States` (`handle: us`, ACTIVE, base currency USD, region US). The checkout URL
+did move to `/en-us` — and then checkout landed on `/stock-problems` with an empty cart. The
+cart permalink that had added a unit minutes earlier returned `item_count: 0`.
+
+Set the market to DRAFT immediately and re-verified: cart back to 1 item at $29.90, checkout
+back to `/en-il` and working. Total time broken was one verification cycle. **The market still
+exists, as DRAFT** — it is not deleted, so it can be activated once the cause is fixed.
+
+Cause, from the follow-up reads:
+
+- The only location returned by `locations` is `Adnei-Paz Street 29`, **country IL**, active
+  and fulfilling online orders.
+- The product's inventory is not there. It sits at a separate `Zendrop` location with 50,000
+  available and `tracked: false`.
+- The Zendrop delivery profile's only zone is `[Zendrop — Worldwide Zone]`, whose country list
+  is a single entry: **`Rest of World` (countryCode `null`)** — the US is not named explicitly.
+
+So the working hypothesis is that with a US market active, the US stops resolving through
+"Rest of World" and no rate or fulfilment route is found, which surfaces as a stock problem.
+Note the general profile's International zone *does* name `US` explicitly — the Zendrop one
+does not.
+
+**Correct sequence, not yet done:** add United States explicitly to the Zendrop profile's zone
+(or give that profile a US zone carrying the same free rate) **first**, then flip the US market
+back to ACTIVE, then re-verify cart and checkout. Doing it in the other order is what broke it.
