@@ -308,3 +308,23 @@ listing has to be done in admin.
 - **Variant weights** — no data. Asking Zendrop for packed weight per variant, rather than
   inventing a number.
 - **Mobile, cart and checkout testing** — the storefront is blocked from this environment.
+
+### Verified by read-back (28 Aug, second attempt)
+
+The earlier read was blocked by the permission classifier; a retry went through.
+`templates/product.json` on the working theme is confirmed correct: one accordion,
+three rows, and a single shipping paragraph reading
+
+> Free worldwide shipping on every order. Orders are processed within 2–3 days, and
+> delivery to the United States typically takes a further 10–15 days — about 12–18 days in
+> total. You'll receive a tracking number by email as soon as your order ships.
+
+No stray accordion, no Manufacturing boilerplate. File is 9,819 bytes, down from 12,961.
+The live theme is untouched and still carries its original product template.
+
+### Footer newsletter copy
+
+`sections/footer-group.json` — replaced Horizon's default *"Get exclusive deals and early
+access to new products"* with *"Occasional emails when we add something new. No spam, and
+you can unsubscribe at any time."* Same defect class as the Manufacturing boilerplate: a
+theme default promising something the store does not have.
