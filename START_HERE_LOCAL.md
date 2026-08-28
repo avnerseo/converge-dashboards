@@ -56,6 +56,6 @@
 | קובץ | מה |
 |---|---|
 | `trading-engine/crypto/RUN_ME.py` | בקטסט גריד מתגלגל, v4, מאומת |
-| `trading-engine/crypto/funding_scanner.py` | סורק קאריי מימון — **לא נבדק מול API חי** |
+| `trading-engine/crypto/funding_scanner.py` | סורק קאריי מימון — **אומת ותוקן מול ה-API החי 28/08.** ראה `CRYPTO_STATE.md` §13. נתיב `--mine` עדיין לא נבדק |
 | `trading-engine/crypto/fetch_klines.py` | הורדת נרות דקה |
 | `trading-engine/crypto/grid_optimize.py` | אופטימייזר גריד |
