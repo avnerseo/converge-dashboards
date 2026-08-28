@@ -881,3 +881,41 @@ entirely lost.
 connector registry for a Pinterest MCP and there is none — the closest results are analytics
 aggregators (Supermetrics, Funnel) and Klaviyo, none of which publish pins. Account creation and
 pin upload stay with the merchant.
+
+### Mobile buy button — checked further, and it is worse than first recorded
+
+The product template already carries `"enable_sticky_add_to_cart": true`, so the below-fold
+button looked like it might be a non-issue. It was tested rather than assumed, at three scroll
+positions on an iPhone 13 viewport, looking for any `fixed` or `sticky` element containing
+"Add to cart" or "Buy it now":
+
+| scrollY | sticky buy bar found |
+|---|---|
+| 0 | none |
+| 900 | none (the in-flow button is on screen here) |
+| 1500 (page bottom) | **none** |
+
+**The setting is enabled but no sticky bar renders on mobile.** So once a visitor scrolls past
+y≈850, there is no way to buy without scrolling back up. Screenshots at each position confirm it
+visually.
+
+Sequence of what a phone visitor actually sees:
+
+1. **First screen: the product image and nothing else.** No price, no variant picker, no button —
+   the title only begins at the very bottom edge.
+2. Scrolling reveals title, price, the five variant buttons, then Add to cart / Buy it now.
+3. Past that, the buy controls are gone for the rest of the page.
+
+The page content below is good and needs no work — description, "Why pet owners love it",
+suitability, how to use, in the box, then the email capture.
+
+Root cause is in the media gallery block: `"aspect_ratio": "adapt"` with
+`"constrain_to_viewport": true` lets a tall product image occupy the whole first screen. Both are
+theme-editor settings, not code.
+
+Not changed here — `189462839609` is `MAIN` (live), and writing to the live theme is prohibited
+in this project. Handed to the merchant as editor steps.
+
+Also visible in the scrolled screenshot: the variant picker renders the five options as stacked
+buttons, where **"Set"** sits directly under "Purple Brush" with nothing to distinguish it. On a
+phone that ambiguity is more prominent than on desktop.
