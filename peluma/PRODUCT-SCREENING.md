@@ -313,3 +313,53 @@ below, it fails like the other five.
 
 **Nothing about the basket argument changes.** Pairing a second item with the brush still nearly
 doubles net per order; it simply has to be a second item that survives this screen first.
+
+## Resolved: the nail grinder, with real prices — and what it reveals
+
+The merchant ran the Google Shopping check. Actual observed prices for the same class of device:
+
+| Tier | Sellers | Price |
+|---|---|---|
+| **Direct from China** | Made-in-China.com, AliExpress, Temu | **$2.99 · $5.10** · ₪8.90–₪50 (~$2.40–$13.50) |
+| **Branded, US retail** | Wahl, HARDELL (Lowe's), LUCKY TAIL (Amazon), Trim Masters (eBay), Casfuy (Chewy) | **~$20–30** |
+| Small Shopify/POD stores | Heusom "Silent Groom Pro", Petzwick, FurStyle, Bark&Whiskers, PetGroomLab | ₪84–₪139 (~$23–$38) |
+
+**Our landed cost of $6.15 is higher than what a consumer pays buying direct** ($2.99–$5.10). In
+that tier the product is unsellable, exactly like the brush.
+
+### The finding that actually matters
+
+**The same device sells for $2.99 and for $38 — a 20× spread.** Price is not what moves it.
+Branding, packaging, reviews and presentation are. Wahl and HARDELL sell a commodity grinder at
+5–6× the AliExpress price because they are a name on a box.
+
+That reframes six rounds of screening. **There is no product in Zendrop's catalog with a cost
+advantage — that search is over.** What exists is a large band of small stores selling
+commodity goods at brand-tier prices on presentation alone.
+
+### What this means for pricing
+
+The earlier $16.90 proposal was wrong: it priced the product as a commodity, and in that tier
+Temu wins on every listing.
+
+| Price | Position | Net after ~9% fees |
+|---|---|---|
+| $16.90 | commodity tier | $8.77 — **loses to Temu, below the $12 screen** |
+| **$24.90** | **brand tier** | **$16.51 — clears the screen** |
+
+At $24.90 the product passes. But it passes as a **marketing position, not a sourcing win** —
+and that is a materially different bet from the ones this document has been screening for.
+
+### The honest risk
+
+At $24.90 the competition is Wahl and HARDELL, and the small stores in that band, all of which
+have reviews, packaging and brand recognition. Peluma has a clean store, a real brand, and five
+Pins — and **supplier photography**, which is the weakest asset in the whole setup and the one
+thing every competitor in the brand tier has beaten.
+
+**Recommendation: hold, do not list yet.** Add it only as part of a bundle with the brush, and
+only once there are photographs of our own. Until then Peluma is another store with supplier
+images in a crowded band, which is precisely the position that does not convert.
+
+**The blocker is no longer product selection. It is that we cannot yet present a commodity as a
+brand — and that is unblocked the day the brush physically arrives and gets photographed.**
