@@ -118,3 +118,52 @@ do print-on-demand orders count toward the 20 monthly orders required for a Priv
 
 With the shipping figure in hand the POD decision resolves immediately — the base costs are
 already confirmed competitive, so shipping is the only variable left.
+
+## POD base costs — verified from the dashboard (2026-08-28)
+
+The merchant opened the Print-on-demand catalog, so these are read off Zendrop's own screens
+rather than inferred. `Catalog > Women's clothing > All shirts > T-shirts`, page 1 of 3:
+
+| Blank | Zendrop base | Colors | Note |
+|---|---|---|---|
+| Gildan 64000L (women's) | **$7.50** | 6 | cheapest quality blank in the catalog |
+| Gildan 5000 | **$9.25** | 30 | |
+| Gildan 64000 (unisex) | **$9.44** | 29 | industry-standard blank |
+| Next Level 6210 CVC | $11.25 | 8 | |
+| Gildan 8000 sports tee | $11.29 | 12 | |
+| Bella+Canvas 6405CVC (women's V) | $15.25 | 4 | |
+| Bella+Canvas 4810GD heavyweight | $16.49 | 1 | |
+| Bella+Canvas 3005 V-neck | $17.09 | — | |
+| Bella+Canvas 3413 tri-blend | $17.95 | 18 | |
+| Comfort Colors 6030 pocket | $19.55 | 6 | |
+| All-Over Print women's athletic | $32.10 | — | |
+| All-Over Print boxy football jersey | $37.00 | — | |
+
+Bella+Canvas 3001 was not on page 1; **Gildan 64000 at $9.44 is the working candidate** — most
+colors, standard blank, good price.
+
+These sit **below** Printify's and Printful's published base costs on comparable blanks. The POD
+side of Zendrop is priced normally, unlike its dropship catalog. Confirmed again alongside the
+earlier mug ($7.95 vs Printify $13.09) and poster ($6.50 vs $10.95) figures.
+
+**Shipping is still the only unknown**, and it is not shown on the catalog grid — it appears
+inside the design flow. Steps issued: `Start Design` on the $9.44 Gildan 64000, any placeholder
+image, Black / L, continue to the pricing step, screenshot the cost breakdown.
+
+## Which POD products actually fit this store
+
+A grooming store selling plain t-shirts makes no sense. A product carrying **the customer's own
+pet's photo or name** does, and it is the one thing that cannot be price-compared at all — the
+design is the customer's. That is the whole reason POD survives the screen.
+
+Ranked by fit, once shipping is known:
+
+| Candidate | Base | Indicative retail |
+|---|---|---|
+| Mug with the pet's photo | $7.95 | $24.99 |
+| Pillow / blanket with the pet's photo | $13.75 | $44.99 |
+| Tee | $9.44 | $26.99 |
+
+The mug and the pillow fit Peluma better than apparel. The tee is being measured first only
+because it was the open screen; the shipping structure should carry across, and one real figure
+lets all three be costed.
