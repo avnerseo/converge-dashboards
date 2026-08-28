@@ -1092,3 +1092,52 @@ The old "processed within 2–3 days" string returns zero matches — fully repl
 
 `189462839609` ("Horizon — Peluma fixes (2026-08-27)") is now `UNPUBLISHED` and is the rollback
 point if anything about the new layout proves wrong.
+
+## 2026-08-28 — Google & YouTube channel connected (second free channel opened)
+
+The channel had been installed since 2026-08-27 with the product published to it, but was
+**never connected to a Google account** — it still showed "Connect Google account". So the free
+Google Shopping listings had never run at all. That was found by inspection, not reported.
+
+Setup completed by the merchant, **5 of 5 tasks**:
+
+| | |
+|---|---|
+| Google account | ✅ |
+| Merchant Center account | ✅ created new and linked |
+| Online store requirements | ✅ payment method, no store password, refund policy + ToS, contact info |
+| Recommended store setup | ✅ |
+| Terms and conditions | ✅ |
+
+The contact-information requirement was **verified before confirming it**, rather than ticked on
+trust: `/pages/contact` returns 200, carries an email and phone, and is linked from the homepage
+navigation alongside `/pages/about`. The confirmation was therefore a true statement.
+
+**OAuth note:** the app refuses to work unless all scopes are granted — "Please allow access to
+Google Shopping, Google Ads, and YouTube in order to use the Google & YouTube app". Granting only
+the Shopping/Ads/Analytics scopes and declining the two YouTube ones fails. There is no way
+around it; it is Google's own first-party channel app.
+
+**YouTube Shopping (0 of 3) is irrelevant** — it requires monetization approval and 1,000
+subscribers. Ignore it permanently.
+
+### Still unverified: whether the product is actually approved
+
+`mm-google-shopping` metafields remain **empty** after setup, and Merchant Center approval status
+lives in Google, not in Shopify — the Admin API cannot see it. So the GTIN question is still open:
+
+- All five variants have `barcode: null`, correctly and permanently (Zendrop confirmed no GTIN
+  exists for China-sourced goods; fabricating one is forbidden and risks the account).
+- Without an explicit "no manufacturer identifier" declaration, Merchant Center rejects products
+  for a missing GTIN.
+
+**Next check (give it a few hours, not minutes):** `Google & YouTube` → `Products`, or
+`merchants.google.com` → Products → All products. Look for `Approved` / `Pending` /
+`Disapproved` and the stated reason. A `Disapproved` with a missing-GTIN reason is fixable from
+the API side once the exact error text is known.
+
+### Why this channel matters more than it did this morning
+
+With Pinterest advertising permanently closed by Aleph's ILS 75,125 minimum, **Google Shopping's
+free listings are now the second and last free channel available**, and the only one reaching
+people already searching to buy rather than browsing. It costs nothing and it is now connected.
