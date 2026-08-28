@@ -702,3 +702,45 @@ That order also puts the physical product in the merchant's hands, which is the 
 replace the supplier imagery: four near-duplicate dimension diagrams, one with the supplier's
 red annotation boxes, two with broken English baked into the pixels, and one static JPEG with a
 fake video play button painted on.
+
+## 28 Aug — first order placed and paid
+
+Order **#1001**, $29.90 USD, `displayFinancialStatus: PAID`.
+
+The merchant could not test by paying from their own PayPal: PayPal blocks a merchant buying
+through their own seller account, in every path — login, guest, and a fresh incognito session.
+That block is a PayPal rule about self-purchase, not a store defect, and a real customer never
+meets it. Recording it so nobody burns another hour on it.
+
+**The path that worked, and what it proves.** PayPal's guest checkout — *"pay with a credit or
+debit card"*, no PayPal account, no login — with an email other than the seller's. It went
+through.
+
+That settles the largest open question from the payments review. "PayPal only" does **not** mean
+"no card payments": a US customer without a PayPal account can pay by card, through PayPal's
+screen rather than in the Shopify checkout. Worse than an embedded gateway, far better than the
+PayPal-account-only reading that was feared.
+
+Verified on the resulting order:
+
+| | |
+|---|---|
+| Financial status | PAID |
+| Total / tax | $29.90 USD, $4.56 Israeli VAT included |
+| Shipping | Free Shipping, $0.00 |
+| Line item | Porcelain White Set, SKU `PE17TFL2V`, vendor Peluma |
+| Line item image | `33e6eede…` — the clean brush, so the media fix carried into the order |
+| Fulfillment service | **Zendrop** |
+| Tags | `test-order`, `internal` |
+
+Two PayPal transactions are recorded, a `FAILURE` then a `SUCCESS`, both $29.90 — the failure
+is the blocked self-purchase attempt. The customer was charged once.
+
+**Not verifiable from here:** `fulfillmentOrders` returns an empty list on a paid order, and
+`fulfillments` likewise. Almost certainly a missing scope on this connection —
+fulfillment-order reads need their own scopes and return empty rather than erroring without
+them — not a real gap, since the line item's `fulfillmentService` resolves to Zendrop. The
+definitive check is the Zendrop dashboard: does order #1001 appear there.
+
+The order confirmation email and the invoice email both rendered correctly: Peluma branding,
+English, no VelvetPaw.
