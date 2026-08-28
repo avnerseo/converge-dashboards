@@ -228,12 +228,12 @@ verified per item rather than assumed: **$0, 6 days to the US** on every one che
 
 | Candidate | ID | Landed (US) | US market | Verdict |
 |---|---|---|---|---|
-| **Electric pet nail grinder** | `2000800` | **$6.15** | $15–25 (Casfuy, Dremel, CATPICK) | ✅ **passes** |
+| **Electric pet nail grinder** | `2000800` | **$6.15** | **UNVERIFIED** — see retraction below | ⏸️ **on hold** |
 | Dog paw cleaner cup | `1997733` | $7.65 | $13.49 (Dexas MudBuster) | ⚠️ thin |
 | Pet eye / tear-stain wipes | `2002337` | $10.49 | $5–15 for 60–120ct | ❌ fails |
 | Flea & tick comb | `3135693` | $8.99 | $6–12 | ❌ fails |
 
-### The nail grinder is the first product in six to clear the margin screen
+### RETRACTED — the nail grinder was not verified
 
 At **$16.90** against a $15–25 market: cost $6.15, fees ~$1.98, **net ~$8.80 — a 52% margin.**
 And it ships **free from the US in 6 days**, against the brush's 12–18 days from China. It is
@@ -276,3 +276,40 @@ what that buys:
 Even at break-even there is only ~$10 of room, still below the $15–30 a cold paid click costs.
 **A price cut improves conversion on free traffic; it does not unlock paid advertising.** Only a
 larger basket does that.
+
+## Retraction: the nail grinder recommendation does not stand
+
+The section above claimed the nail grinder cleared the margin screen against a "$15–25" US
+market. **That figure has no source and the recommendation is withdrawn.** Two errors produced it:
+
+1. **Amazon's price *filter buckets* were read as market prices.** The search summary listed
+   "under $15, $15–20, $20–25, $25 and above" — those are the sidebar filters Amazon offers on
+   any category page, not what anything sells for.
+2. **The comparison was to the wrong market tier.** `get_catalog_product` on `2000800` shows a
+   **13 × 2.8 cm ABS plastic pen-style grinder**, rated for "Cat, Small & Medium Dog, Rabbit,
+   Guinea Pig, Hamster & Bird", sourced from CJdropshipping. It was benchmarked against Casfuy
+   (6-speed, large dogs) and the Dremel 7350-PET — different products at a different price point
+   entirely. This is the same mistake made earlier in the session with the brush.
+
+**The market price for the correct comparable is still unknown**, and cannot be established from
+this environment: `amazon.com` is blocked by the egress proxy and search summaries do not return
+live prices.
+
+Applying the pattern this session has verified six times — Zendrop lands at 50–60% of US retail,
+and Temu undercuts everything — a $6.15 pen grinder plausibly retails at **$10–16 on Amazon and
+$3–6 on Temu**. If that holds, selling at $14.90 nets roughly **$6.95**, which is **below the
+~$12 net that screen 3 requires** to carry a customer acquisition cost. It would be an add-on,
+not a second hero product.
+
+**But "plausibly" is not a verified number, and the whole point of this document is not to act on
+those.** The product stays on hold.
+
+### What would settle it
+
+A two-minute check the merchant can do and this environment cannot: search Amazon and Temu for
+"pet nail grinder USB rechargeable" and read the prices of the *cheap pen-style* results — not
+the branded multi-speed ones. If the street price is $15+, the product passes. If it is $10 or
+below, it fails like the other five.
+
+**Nothing about the basket argument changes.** Pairing a second item with the brush still nearly
+doubles net per order; it simply has to be a second item that survives this screen first.
