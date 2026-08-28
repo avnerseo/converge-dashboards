@@ -431,3 +431,43 @@ Links: `pin-6` … `pin-10` all point at
 `https://pelumapets.com/products/peluma-3-in-1-mist-grooming-brush`.
 
 **Cadence:** 2–3 a week, not all at once. Ten Pins posted over a month beats ten in a day.
+
+## Catalogs is open without an ad account — the automatic-Pins path is alive
+
+Tested after claiming the domain. **`pinterest.com/business/catalogs/` opens and works with no ad
+account**, which contradicts the assumption made earlier from the Shopify app's gated wizard.
+A retail catalog was created (`4860981355946`), and `Add a retail catalog data source` offers four
+routes:
+
+| Route | Status |
+|---|---|
+| **Provide a URL link** | ✅ **open** — Pinterest ingests a hosted feed daily |
+| Upload manually | ✅ open — a file upload, no automation |
+| **Connect to Shopify** | ❌ **circular** — redirects to the Shopify App Store listing for the Pinterest app, which is already installed and whose wizard is gated behind the Aleph-blocked ad account |
+| Use Shopping API | needs developer credentials |
+
+So the Shopify shortcut is genuinely closed, but **catalog ingestion itself is not**. The
+`Provide a URL link` route needs a product feed in a format Pinterest accepts (CSV, TSV, or
+RSS/Atom XML with real `id`, `title`, `description`, `link`, `image_link`, `price`,
+`availability` fields).
+
+**Shopify's native feed is not sufficient.** `https://pelumapets.com/collections/all.atom` returns
+HTTP 200 and 4,081 bytes, and carries `id`, `link`, `title`, `s:type` and `s:vendor` — but the
+price, image and description are buried inside an HTML table in `<summary>`, not exposed as
+fields. Pinterest will reject it.
+
+**Next step (not tonight):** install a free Shopify product-feed app that publishes a
+Google-Shopping-format feed URL, then paste that URL into `Provide a URL link`. Once that
+ingests, Product Pins generate and update themselves daily — prices, images and availability
+included — and manual pinning stops being necessary.
+
+### What was won tonight regardless
+
+**The domain is claimed.** `pelumapets.com` now shows without the "claim" prefix on the profile.
+That was done by appending the verification meta tag to `snippets/meta-tags.liquid` on a theme
+copy, which the merchant published — confirmed live on `pelumapets.com`.
+
+Claiming brings analytics on Pins that link to the site, correct attribution, and the Peluma logo
+on Pins others save from the store. It is also the prerequisite for merchant review, which is why
+`Begin review process` did nothing when clicked: **there is no catalog for it to review yet.** The
+order is catalog first, review second — the reverse of what was assumed.
