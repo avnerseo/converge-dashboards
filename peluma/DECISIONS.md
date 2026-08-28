@@ -207,3 +207,76 @@ Sources: [Research and Markets — US pet grooming products](https://www.researc
 [Product Lair — best pet dropshipping products, US trends](https://productlair.com/blog/best-pet-dropshipping-products).
 Market figures are third-party estimates, quoted as such — they are not measurements of this
 store and must not appear in customer-facing copy.
+
+## Zendrop answered the open ticket (28 Aug, Nina)
+
+### 1. Calendar days — the storefront copy was already right
+
+> "For the processing and shipping days, both of these are calendar days, but to note these are
+> average days and can take more or less depending on exact real-time data."
+
+This closes the question this file flagged as urgent. The store says "processed within 2–3
+days… a further 10–15 days — about 12–18 days in total", unqualified, which is exactly how a US
+shopper reads calendar days. **No change needed.** A change to "about 2–3 weeks" was proposed
+twice while the answer was ambiguous; with the ambiguity resolved it would now overstate the
+wait, so it is dropped.
+
+"Average, can take more or less" is already carried by "typically takes" in the live copy.
+
+### 2. Packed weights — applied
+
+| Variant | SKU | Price | Weight |
+|---|---|---|---|
+| Porcelain White Set | PE17TFL2V | $29.90 | **0.307 kg** |
+| Milk Brown Set | 1O3NPE8 | $39.90 | **0.307 kg** |
+| Set | Z75Y6C7M0 | $29.90 | **0.307 kg** |
+| Porcelain White Brush | MDYQJZF3J | $29.90 | **0.173 kg** |
+| Purple Brush | ZAF7RY7XJ | $29.90 | **0.125 kg** |
+
+Written to Shopify and verified. The `0.0 kg` that showed on order #1001 is gone, and the
+Merchant Center feed and any future weight-based rate now have real numbers.
+
+(Zendrop also quoted `FORC9Q8LH` at 0.173 kg — a SKU this store does not carry.)
+
+### 3. The weights settle the pricing anomaly, and it is worse than described
+
+Nina confirmed each variant contains **one** of each item shown, the rolling ball included.
+The weights then say something the price list does not:
+
+- **The three "Set" variants weigh exactly the same: 0.307 kg.** Same contents by mass.
+- 0.307 − 0.173 = 0.134 kg — the second item, consistent with a brush plus a rolling ball.
+- **Porcelain White Set and Milk Brown Set are identical in weight and structure. One is
+  $29.90, the other $39.90.** The only difference is colour. A $10 gap for a colour.
+- **Porcelain White Set (brush + ball, 0.307 kg) costs the same $29.90 as Porcelain White
+  Brush (brush alone, 0.173 kg).** The Set strictly dominates: more product, same money.
+
+The practical consequence: **the single-brush variants can never rationally sell.** Any shopper
+comparing them picks a Set. Three of the five options are doing nothing except adding choice
+paralysis, and one of them is priced $10 above its identical twin.
+
+This still cannot be fixed without cost prices — repricing blind risks selling at a loss. But
+the shape of the fix is now clear, and it is a pricing decision, not a naming one.
+
+### 4. The brush cannot move to the US warehouse — ever
+
+> "This is available from Chinese suppliers (Zendrop Fulfilment) and cannot be added to the US
+> warehouse, since the current suppliers are shipping from China. That said, you can certainly
+> review our US catalog and find any similar products you can use."
+
+Definitive. **This product is permanently a 12–18 day product.** The delivery-speed lever does
+not exist for it.
+
+That reframes the catalogue plan in this file. It is no longer "add 4–8 adjacent products". It
+is: **the US catalog is where a competitive store gets built, and this brush is the legacy
+item.** Zendrop is pointing at the same conclusion — find similar products that ship from the US.
+
+Whether the brush stays, becomes the slow option alongside fast ones, or is eventually replaced,
+is a decision for after the first US-stocked products are live and their conversion can be
+compared against it.
+
+### Still unanswered: cost price per SKU
+
+Nina answered days, weights and contents, but **not cost price** — the one number that decides
+whether any of this is profitable. It no longer needs a support reply: **order #1001 has gone to
+Zendrop, and their fulfilment charge for it is the cost price of `PE17TFL2V`.** It will land in
+the Zendrop dashboard or on the card within days.
