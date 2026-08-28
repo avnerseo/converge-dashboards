@@ -71,48 +71,47 @@ def grab(sym):
 
 # ---------- grid simulation ----------
 def simulate(bars, lo, hi, n, capital):
-    """Full grid accounting.
+    """Per-level slot model -- how a real grid bot actually works.
 
-    Each grid slot holds either cash or one lot of base. Buying at level L
-    spends q = capital/n USDT. Selling the lot at the level above returns
-    q*(L_sell/L_buy).  CRITICAL: lots still held at the end are marked to
-    the final price -- a grid that bought all the way down and never sold
-    is sitting on a real loss, and reporting only realised grid profit
-    (the earlier bug) makes a losing bot look spectacular.
+    A buy order rests at levels[j]. When it fills, a sell order is placed at
+    levels[j+1]. That pair is what earns one step. Matching is PER LEVEL.
+
+    An earlier version used a LIFO stack of buy prices; once the inventory
+    cap bound during a long decline it started selling lots bought near the
+    top of the range at prices near the bottom, which turned realised grid
+    profit negative -- an impossible result that revealed the bug.
     """
     step=(hi-lo)/n
     levels=[lo+step*i for i in range(n+1)]
     q=capital/n
-    inv=[]                      # buy levels of lots still held
-    realised=0.0; trades=0; out=0
-    prev=min(max(bars[0][3], lo), hi)
+    hold=[False]*n
+    filled=0; realised=0.0; trades=0; out=0
+
+    def idx(p):
+        if p<=lo: return 0
+        if p>=hi: return n
+        return min(n, max(0, int((p-lo)/step)))
+
+    cur=idx(bars[0][3])
     for (_ts,h,l,c) in bars:
         if c<lo or c>hi: out+=1
-        seq=(l,h,c) if abs(l-prev)<abs(h-prev) else (h,l,c)
-        for p in seq:
-            p=min(max(p, lo), hi)          # no trading outside the range
-            while p<prev-1e-12:
-                b=[L for L in levels if L<prev-1e-12]
-                if not b or max(b)<p: break
-                lvl=max(b)
-                if len(inv)<n:             # capital cap: n lots max
-                    inv.append(lvl)
-                    realised -= q*FEE      # buy fee
-                prev=lvl
-            while p>prev+1e-12:
-                a=[L for L in levels if L>prev+1e-12]
-                if not a or min(a)>p: break
-                lvl=min(a)
-                if inv:
-                    Lb=inv.pop()           # sell the most recent lot
-                    proceeds=q*(lvl/Lb)
+        for p in ((l,h,c) if abs(l-bars[0][3])<abs(h-bars[0][3]) else (h,l,c)):
+            tgt=idx(p)
+            while cur>tgt:                       # crossing levels[cur] downward
+                j=cur
+                if j<n and not hold[j] and filled<n:
+                    hold[j]=True; filled+=1; realised -= q*FEE
+                cur-=1
+            while cur<tgt:                       # crossing levels[cur+1] upward
+                j=cur
+                if j<n and hold[j]:
+                    proceeds=q*(levels[j+1]/levels[j])
                     realised += (proceeds-q) - proceeds*FEE
-                    trades+=1
-                prev=lvl
-            prev=p
+                    hold[j]=False; filled-=1; trades+=1
+                cur+=1
     final=bars[-1][3]
-    unreal=sum(q*(final/Lb-1) for Lb in inv)
-    return trades, realised, unreal, realised+unreal, len(inv)*q, out/len(bars)
+    unreal=sum(q*(final/levels[j]-1) for j in range(n) if hold[j])
+    return trades, realised, unreal, realised+unreal, filled*q, out/len(bars)
 # ---------- main ----------
 say("="*72)
 say("GRID PARAMETER SCAN -- generated " + dt.datetime.now().isoformat(timespec="seconds"))
