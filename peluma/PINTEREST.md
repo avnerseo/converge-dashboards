@@ -314,3 +314,52 @@ the funnel separately.
 Give it a week. Pinterest surfaces Pins over weeks, not hours, and five Pins on a new account
 with no domain claim will start slow. The question at the first check is only whether `social`
 appears at all — not what it converts.
+
+## Pinterest ads are permanently closed for this store — and that resolves things
+
+The Aleph request was submitted and **rejected outright**:
+
+> "Unfortunately, advertisers must meet a **ILS 75,125 yearly minimum** to request to advertise
+> on Pinterest."
+
+That is roughly **$20,000 a year / $1,700 a month** in ad spend, as a *minimum to be considered*.
+It is not a threshold this store will approach, so **Pinterest advertising is closed — not
+pending, not "3–4 business days", closed.**
+
+The ₪6,000 figure suggested here was an honest estimate of real intent and was far below their
+floor. **Inflating it is not an option**: Aleph's own form warns that advertisers who do not meet
+their spend threshold do not continue advertising, so a declaration the merchant cannot honour
+risks the account for nothing.
+
+### Three things closed at once, and none of them were wanted
+
+| Closed | Why it does not matter |
+|---|---|
+| Pinterest paid ads | The margin analysis already showed paid traffic loses money at ~$10 net |
+| The Pinterest Tag | Gated behind the ad account |
+| Catalog auto-sync | Same gate |
+
+**Pinterest's restriction and this store's economics agree.** Nothing was lost that the numbers
+had not already ruled out.
+
+**Pinterest here is organic, permanently.** That is exactly what was built — five Pins on five
+boards, which distribute over weeks at no cost. Attribution stays with Shopify's session
+analytics, already verified working against a clean zero-`social` baseline.
+
+**Remove "waiting for Aleph" from every plan.** There is nothing to wait for.
+
+### What this promotes
+
+With paid Pinterest gone, **Google Shopping's free listings become the second free channel** —
+and it is already installed with the product published to it since 2026-08-27. It has never been
+verified. That check is now the highest-value open item after photography:
+
+- All five variants have `barcode: null` — correct and permanent; Zendrop confirmed no GTIN
+  exists for China-sourced goods, and fabricating one is forbidden.
+- The `mm-google-shopping` metafield namespace is **empty** — no declaration that the product
+  has no manufacturer identifier.
+
+Without that declaration Google Merchant Center rejects a product for a missing GTIN, so the feed
+is likely failing silently. Not fixed blind from here: the Google channel has changed how it
+stores these settings across versions, and overwriting one it manages itself could make things
+worse. The definitive check is the channel's own product status screen.
