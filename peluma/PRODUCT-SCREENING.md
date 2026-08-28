@@ -167,3 +167,55 @@ Ranked by fit, once shipping is known:
 The mug and the pillow fit Peluma better than apparel. The tee is being measured first only
 because it was the open screen; the shipping structure should carry across, and one real figure
 lets all three be costed.
+
+## POD verdict: Zendrop cannot do the product that would have worked
+
+Checked before building anything, and it changes the answer.
+
+**Zendrop POD is merchant-designed, fixed-listing only.** From their own documentation: you add a
+design in their builder, it saves as a product, and that product is what sells. Their sourcing
+article states plainly that *custom-made or fully personalized sourcing requests are not
+supported*, and even branded thank-you cards are unavailable on POD items. Nothing in the
+documentation describes per-order customer artwork.
+
+That kills the one candidate that passed the margin test. The pillow/blanket only cleared the
+screen **because** the design was the customer's own pet — that is what made it
+price-incomparable and what justified $44.99. A generic printed blanket has neither property.
+
+Sensitivity analysis, net after ~9% fees, across the whole plausible shipping range:
+
+| Item | Base | Retail | ship $5 | ship $8 | ship $12 | ship $15 |
+|---|---|---|---|---|---|---|
+| Gildan 64000 tee | $9.44 | $26.99 | $10.12 | $7.12 | $3.12 | — |
+| Mug | $7.95 | $24.99 | $9.79 | $6.79 | $2.79 | — |
+| All-over print pillow | $13.75 | $44.99 | $26.19 | $23.19 | $19.19 | $16.19 |
+
+Worth noting for its own sake: **the decision never actually depended on the missing shipping
+number.** The tee and the mug fail at *every* value in the range — they never reach the ~$12 net
+that screen 3 requires to carry a customer acquisition cost. Blocking on that number was a
+mistake; the right move was to test whether the conclusion was sensitive to it, and it was not.
+
+Per-order personalization does exist — Printify and Printful support it, via apps such as
+Teeinblue or Customily, or by placing manual orders. That is a different supplier and a
+different setup, and it is parked, not rejected.
+
+## The actual bottleneck
+
+Five products screened, two suppliers compared, a whole POD category investigated. All of it
+sound, and none of it the thing standing between this store and revenue.
+
+- The store is live, in English, US-targeted, checkout verified end to end, one real order through.
+- Five variants are priced against verified market comparisons.
+- **Nobody has ever visited it.**
+- Pinterest — profile, 5 boards, 5 rendered 1000×1500 pins, all copy — has been ready and unshipped.
+
+A new product is not the fast path to profit; it is more setup. Sending traffic to a store that
+already works costs nothing, adds no supplier, no app and no reversible-decision risk, and
+returns the one thing missing from every decision made this week: **real behaviour**. Product
+choices after ~200 visitors rest on what people click, not on cost tables.
+
+**Recommendation: park POD, ship Pinterest.** Revisit POD through Printify only if traffic shows
+demand that the current margin cannot fund.
+
+The five rendered pins are now committed at `peluma/pinterest-pins/` so they survive this
+container; copy for each is in `PINTEREST.md`.
