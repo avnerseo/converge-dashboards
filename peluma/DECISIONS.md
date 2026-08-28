@@ -30,6 +30,59 @@ What this rule does *not* excuse: the no-invented-claims rule, the refund policy
 publishing or writing to the live theme without care. Those are constraints, not preferences,
 and moving fast through them is how a store gets shut down rather than profitable.
 
+## Check before deciding — a rule written after breaking it three times
+
+On 28 Aug, three decisions were made on inference while a check was available. The merchant
+caught the pattern. Recording it so it does not repeat.
+
+| Decision made on inference | What a check showed | Cost |
+|---|---|---|
+| Pushed twice to reword delivery to "about 2–3 weeks" | Zendrop: calendar days — the live copy was already right | Two wasted rounds |
+| Estimated margin at 66–87%, assuming shipping was in the product cost | Shipping is billed separately, $9.92 of a $17.42 landed cost. Real margin 33% | A wrong conclusion that paid traffic was affordable, then withdrawn |
+| Repriced the Sets to $39.90 from cost plus margin | eBay sells the same generic product at $8.99–$16.94 — below the landed cost | A reprice and a revert |
+
+**The rule:** before changing any customer-facing number or claim, check the primary source
+first. Supplier data before statements about supply. Market prices before pricing. Real landed
+cost before margin arithmetic.
+
+**And when a check is blocked, say so before deciding, not after.** `WebFetch` is blocked for
+every domain outside Shopify in this environment — Amazon, Walmart, eBay and Zendrop's own help
+centre all return `EGRESS_BLOCKED`. `WebSearch` runs server-side and does work. That limit
+should be stated up front as a caveat on the decision, rather than discovered afterwards.
+
+## Market research on the brush — the product is a commodity
+
+Searched 28 Aug. The same generic "3-in-1 cat steam brush" is sold by:
+
+- **Amazon** — at least nine different brands
+- **Walmart** — several versions
+- **Home Depot** — two versions
+- **eBay** — listed at **$8.99, $12.00 and $16.94**
+
+Against a landed cost of $17.42 for the Sets, **eBay sellers are listing below Peluma's cost.**
+They buy direct rather than through Zendrop's markup, and ship slow and cheap.
+
+This reframes the product. It is not differentiated, it is available everywhere with two-day
+domestic delivery, and Peluma loses on price, speed, reviews and brand recognition
+simultaneously. **At Zendrop's cost structure it is not viable as a standalone item.**
+
+One thing the research did surface, and it inverts an earlier claim in this file:
+
+| | Price | Landed cost | Net |
+|---|---|---|---|
+| Single brush | $29.90 | **$8.82** | **~$18.50** |
+| Set | $29.90 | $17.42 | ~$9.88 |
+
+An earlier note said the single-brush variants "can never rationally sell" because the Sets
+dominated them at the same price. That was reasoning about the variants against each other
+while ignoring the market outside. **The single brush is the viable product here** — $29.90 sits
+inside the Amazon range and it earns roughly twice what a Set earns at the same price. The Sets
+only work above market, which is to say they do not work.
+
+Data quality: the prices above are eBay figures returned by search, and eBay is the cheapest
+channel. Amazon's actual prices could not be retrieved — the domain is blocked. Treat the range
+as directional, and confirm on Amazon before pricing decisions rest on it.
+
 
 ## Supplier — Zendrop
 
