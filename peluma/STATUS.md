@@ -1066,3 +1066,29 @@ The preview confirmed `tracking_page_enabled` was the only field changing. **`or
 was left `false` on purpose** — hiding where goods ship from would obscure a material fact from
 customers, against this project's rule on unsupported claims. It is available in the same call
 and was not used.
+
+### Theme published by the merchant — verified live, and better than the preview showed
+
+`themes` now reports `189492035897` as **`MAIN`**. Verified on the live URL with no preview
+parameter, iPhone 13 viewport, after full load:
+
+| | Before | Live now |
+|---|---|---|
+| **Add to cart top** | 1065px | **592px** |
+| Page height | 2285px | 1831px |
+| Variant control | 5 stacked buttons | `<select>` dropdown |
+
+**Add to cart is now above the fold** on a 664px screen. The earlier preview measurement of 749px
+was pessimistic — Shopify's preview bar occupies roughly 80px that does not exist on the
+published theme. The real gain is **1065px → 592px**.
+
+Shipping copy confirmed live in the page source:
+
+> "Most orders are processed within 3 days, though occasionally longer, and delivery to the
+> United States typically takes a further 10–15 days. You'll receive a tracking number by email
+> as soon as your order ships."
+
+The old "processed within 2–3 days" string returns zero matches — fully replaced.
+
+`189462839609` ("Horizon — Peluma fixes (2026-08-27)") is now `UNPUBLISHED` and is the rollback
+point if anything about the new layout proves wrong.
