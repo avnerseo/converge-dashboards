@@ -48,81 +48,130 @@ def grab(sym):
         except Exception as e:
             print(f"    {ym}  skipped ({getattr(e,'code',type(e).__name__)})")
         time.sleep(0.2)
+    # the monthly archive lags, so fill the current partial month from REST
+    if rows:
+        start=max(r[0] for r in rows)+60_000
+        now=int(time.time()*1000)
+        n0=len(rows)
+        while start < now:
+            try:
+                u=(f"https://api.binance.com/api/v3/klines?symbol={sym}"
+                   f"&interval=1m&startTime={start}&limit=1000")
+                with urllib.request.urlopen(u, timeout=30) as r:
+                    d=json.loads(r.read())
+            except Exception as e:
+                print(f"    rest fill stopped: {type(e).__name__}"); break
+            if not d: break
+            for k in d:
+                rows.append((int(k[0]), float(k[2]), float(k[3]), float(k[4])))
+            start=int(d[-1][0])+60_000
+            time.sleep(0.2)
+        print(f"    current month via REST: {len(rows)-n0:,} bars")
     return sorted(set(rows))
 
-# ---------- grid simulation (verified against known-answer cases) ----------
+# ---------- grid simulation ----------
 def simulate(bars, lo, hi, n, capital):
+    """Full grid accounting.
+
+    Each grid slot holds either cash or one lot of base. Buying at level L
+    spends q = capital/n USDT. Selling the lot at the level above returns
+    q*(L_sell/L_buy).  CRITICAL: lots still held at the end are marked to
+    the final price -- a grid that bought all the way down and never sold
+    is sitting on a real loss, and reporting only realised grid profit
+    (the earlier bug) makes a losing bot look spectacular.
+    """
     step=(hi-lo)/n
     levels=[lo+step*i for i in range(n+1)]
-    per=capital/n
-    held=0; real=0.0; trades=0; out=0
-    prev=bars[0][3]
+    q=capital/n
+    inv=[]                      # buy levels of lots still held
+    realised=0.0; trades=0; out=0
+    prev=min(max(bars[0][3], lo), hi)
     for (_ts,h,l,c) in bars:
         if c<lo or c>hi: out+=1
         seq=(l,h,c) if abs(l-prev)<abs(h-prev) else (h,l,c)
         for p in seq:
+            p=min(max(p, lo), hi)          # no trading outside the range
             while p<prev-1e-12:
                 b=[L for L in levels if L<prev-1e-12]
                 if not b or max(b)<p: break
-                if held*per<capital: held+=1
-                prev=max(b)
+                lvl=max(b)
+                if len(inv)<n:             # capital cap: n lots max
+                    inv.append(lvl)
+                    realised -= q*FEE      # buy fee
+                prev=lvl
             while p>prev+1e-12:
                 a=[L for L in levels if L>prev+1e-12]
                 if not a or min(a)>p: break
                 lvl=min(a)
-                if held>0:
-                    held-=1; trades+=1
-                    real += per*(step/lvl) - 2*FEE*per
+                if inv:
+                    Lb=inv.pop()           # sell the most recent lot
+                    proceeds=q*(lvl/Lb)
+                    realised += (proceeds-q) - proceeds*FEE
+                    trades+=1
                 prev=lvl
             prev=p
-    return trades, real, out/len(bars)
-
+    final=bars[-1][3]
+    unreal=sum(q*(final/Lb-1) for Lb in inv)
+    return trades, realised, unreal, realised+unreal, len(inv)*q, out/len(bars)
 # ---------- main ----------
-say("="*64)
+say("="*72)
 say("GRID PARAMETER SCAN -- generated " + dt.datetime.now().isoformat(timespec="seconds"))
-say("="*64)
+say("v2: full accounting. realised grid profit AND unsold inventory marked to market.")
+say("="*72)
 
 for sym in SYMBOLS:
     print(f"\nDownloading {sym} ({MONTHS} months of 1-minute bars)...")
     bars = grab(sym)
     if len(bars) < 10000:
-        say(f"\n{sym}: only {len(bars)} bars downloaded -- skipping"); continue
+        say(f"\n{sym}: only {len(bars)} bars -- skipping"); continue
     px = bars[-1][3]; px0 = bars[0][3]
     days = (bars[-1][0]-bars[0][0])/86400000
+    bh = 100*(px/px0-1)
     say("")
-    say(f"### {sym}   {len(bars):,} minute bars, {days:.0f} days")
-    say(f"    price {px0:.5f} -> {px:.5f}    BUY-AND-HOLD: {100*(px/px0-1):+.1f}%")
+    say(f"### {sym}   {len(bars):,} bars, {days:.0f} days, "
+        f"{dt.datetime.utcfromtimestamp(bars[0][0]/1000).date()} -> "
+        f"{dt.datetime.utcfromtimestamp(bars[-1][0]/1000).date()}")
+    say(f"    price {px0:.5f} -> {px:.5f}    BUY-AND-HOLD: {bh:+.1f}%")
     say("")
-    say(f"    {'range':>8}{'grids':>7}{'step':>8}{'$/ord':>7}{'trades':>8}{'profit':>9}{'APR':>8}{'outside':>9}")
-    say("    " + "-"*56)
+    say(f"    {'range':>7}{'grids':>6}{'step':>7}{'trades':>8}{'grid$':>9}"
+        f"{'stuck$':>9}{'TOTAL$':>9}{'TOT%':>8}{'vs hold':>9}{'out':>6}")
+    say("    "+"-"*78)
     best=None
     for w in (0.05,0.10,0.15,0.20,0.30,0.40):
-        for n in (10,20,40,80,160):
+        for n in (10,20,40,80):
             if CAPITAL/n < MIN_NOTIONAL: continue
             lo,hi = px*(1-w), px*(1+w)
-            t,p,out = simulate(bars,lo,hi,n,CAPITAL)
-            apr = 100*p/CAPITAL*365/days
-            say(f"    {'+-'+str(int(100*w))+'%':>8}{n:>7}{200*w/n:>7.2f}%"
-                f"{CAPITAL/n:>7.2f}{t:>8}{p:>9.2f}{apr:>7.1f}%{100*out:>8.0f}%")
-            if best is None or apr>best[0]: best=(apr,w,n,200*w/n,t,out)
+            t,r,u,tot,stuck,out = simulate(bars,lo,hi,n,CAPITAL)
+            totpct=100*tot/CAPITAL
+            say(f"    {'+-'+str(int(100*w))+'%':>7}{n:>6}{200*w/n:>6.2f}%"
+                f"{t:>8}{r:>9.2f}{u:>9.2f}{tot:>9.2f}{totpct:>7.1f}%"
+                f"{totpct-bh:>+8.1f}{100*out:>5.0f}%")
+            if best is None or tot>best[0]: best=(tot,w,n,200*w/n,t,r,u,out)
     if best:
+        tot,w,n,step,t,r,u,out=best
         say("")
-        say(f"    BEST: range +-{100*best[1]:.0f}%  ({px*(1-best[1]):.5f} - {px*(1+best[1]):.5f})")
-        say(f"          {best[2]} grids, step {best[3]:.2f}%  ->  {best[0]:.1f}% APR")
-        say(f"          {best[4]} trades, outside range {100*best[5]:.0f}% of the time")
+        say(f"    BEST TOTAL: range +-{100*w:.0f}%  ({px*(1-w):.5f} - {px*(1+w):.5f}), {n} grids, step {step:.2f}%")
+        say(f"      grid profit {r:+.2f}   unsold inventory {u:+.2f}   TOTAL {tot:+.2f} on ${CAPITAL:.0f}")
+        say(f"      = {100*tot/CAPITAL:+.1f}%  vs buy-and-hold {bh:+.1f}%  ->  {100*tot/CAPITAL-bh:+.1f}pp")
+        if 100*tot/CAPITAL < bh:
+            say(f"      *** LOSES TO SIMPLY HOLDING. the grid is not worth running here. ***")
 
 say("")
-say("CAVEAT: assumes every resting order fills at its level with no slippage.")
-say("Treat the APR as an upper bound, and compare it to buy-and-hold above.")
+say("Reading this table:")
+say("  grid$  = realised profit from completed buy-sell pairs")
+say("  stuck$ = lots still held at the end, marked to the final price")
+say("  TOTAL$ = what you would actually have. THIS is the number that matters.")
+say("  vs hold = percentage points better/worse than just holding the coin.")
+say("")
+say("CAVEAT: assumes every resting order fills at its level with no slippage")
+say("or queue position, so TOTAL is still an optimistic upper bound.")
 
-# works whether run as a file, or exec()'d straight into the REPL
 try:
     base = os.path.dirname(os.path.abspath(__file__))
 except NameError:
-    base = os.path.expanduser("~")          # home folder, easy to find
+    base = os.path.expanduser("~")
 p = os.path.join(base, "RESULTS.txt")
 open(p, "w", encoding="utf-8").write("\n".join(OUT))
-print("\n" + "="*64)
+print("\n" + "="*72)
 print(f"SAVED TO:  {p}")
-print("="*64)
-print("Open that file and send it back.")
+print("="*72)
