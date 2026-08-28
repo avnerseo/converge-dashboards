@@ -219,3 +219,60 @@ demand that the current margin cannot fund.
 
 The five rendered pins are now committed at `peluma/pinterest-pins/` so they survive this
 container; copy for each is in `PINTEREST.md`.
+
+## Second screening round — 2026-08-28, with the lessons applied
+
+Searched **NexoraUSA (supplier 416) only** — the one US supplier whose pricing behaves like a
+supplier's — for grooming items that fit the existing basket. 18 products under $20. Shipping
+verified per item rather than assumed: **$0, 6 days to the US** on every one checked.
+
+| Candidate | ID | Landed (US) | US market | Verdict |
+|---|---|---|---|---|
+| **Electric pet nail grinder** | `2000800` | **$6.15** | $15–25 (Casfuy, Dremel, CATPICK) | ✅ **passes** |
+| Dog paw cleaner cup | `1997733` | $7.65 | $13.49 (Dexas MudBuster) | ⚠️ thin |
+| Pet eye / tear-stain wipes | `2002337` | $10.49 | $5–15 for 60–120ct | ❌ fails |
+| Flea & tick comb | `3135693` | $8.99 | $6–12 | ❌ fails |
+
+### The nail grinder is the first product in six to clear the margin screen
+
+At **$16.90** against a $15–25 market: cost $6.15, fees ~$1.98, **net ~$8.80 — a 52% margin.**
+And it ships **free from the US in 6 days**, against the brush's 12–18 days from China. It is
+cheaper to land, faster to arrive, and sits in the same grooming routine as the hero product.
+
+The paw cleaner is a different case: at $14.90 it nets only ~$5.90 against a well-known branded
+competitor at $13.49. Not worth listing on its own; only defensible as a basket add-on.
+
+### The real lever is the basket, not the product
+
+Six rounds of screening keep returning the same structural number: **Zendrop lands at roughly
+50–60% of US retail.** That is a fixed ~40% gross before fees, so at $20–30 price points the
+absolute net is always $5–10. No single product escapes that.
+
+What does escape it is **more items per order**:
+
+| | Revenue | Cost | Fees | **Net** |
+|---|---|---|---|---|
+| Brush alone | $29.90 | $17.42 | $2.69 | **$10** |
+| **Brush + nail grinder** | **$46.80** | **$23.57** | **$4.21** | **~$19** |
+
+Same customer, same acquisition effort, **nearly double the net**. This is the concrete form of
+the AOV argument, and it is what would eventually make paid traffic viable — not a price cut.
+
+**One honest caveat:** the brush ships from China and the grinder from the US, so a bundle
+arrives as **two packages on two timelines**. That is normal for marketplaces but must be stated
+plainly on the product page, not discovered by the customer.
+
+### On selling for less to get started
+
+The merchant is willing to take a smaller margin to start moving units. Worth being precise about
+what that buys:
+
+| Price | Net |
+|---|---|
+| $29.90 (today) | ~$10 |
+| $24.90 | ~$5 |
+| $19.90 | ~$0.50 |
+
+Even at break-even there is only ~$10 of room, still below the $15–30 a cold paid click costs.
+**A price cut improves conversion on free traffic; it does not unlock paid advertising.** Only a
+larger basket does that.
