@@ -571,3 +571,24 @@ has already been corrupted once by a theme-editor save. The fix for a sparse gri
 For whoever adds those products: `"image_ratio": "adapt"` on the product card means cards will
 be ragged once images with different aspect ratios sit side by side. Set a fixed ratio in the
 same edit that adds the products, not before.
+
+### Two "admin-only" items re-tested against the API, 28 Aug
+
+Both turned out to be addressable as *resources* but not writable, so both stay admin-only.
+Recording the attempts so nobody re-runs them.
+
+**Filter labels.** They are real resources: `OnlineStoreFilterSetting/122377273657` (`זמינות`)
+and `/122377306425` (`מחיר`), each with a translatable `label` at `locale: en`.
+`translationsRegister` refuses them — *"Locale cannot be the same as the shop's primary region
+and language settings."* Those Hebrew strings are the **base** values, not translations, and
+the Admin API exposes no mutation to edit an `OnlineStoreFilterSetting`. Apps → Search &
+Discovery → Filters → click the filter → **Filter label**.
+
+**Homepage SEO.** Also a real resource: `Shop/101098225977` carries `meta_title`
+"VelvetPaw | Premium Pet Essentials & Accessories" and a matching `meta_description`, again at
+`locale: en` and again refused by `translationsRegister` for the same reason. Shopify's SEO
+docs point at `global.title_tag` / `global.description_tag` metafields, so that was tried:
+`metafieldsSet` accepted them on the Shop owner, but the rendered homepage `<title>` did not
+change — checked twice, once with a cache-buster. **Shop-level `title_tag` does not drive the
+homepage title.** The two stray metafields were deleted afterwards so nothing junk is left on
+the shop. Online Store → Preferences is the only route.
