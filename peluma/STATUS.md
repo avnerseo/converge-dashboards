@@ -919,3 +919,66 @@ in this project. Handed to the merchant as editor steps.
 Also visible in the scrolled screenshot: the variant picker renders the five options as stacked
 buttons, where **"Set"** sits directly under "Purple Brush" with nothing to distinguish it. On a
 phone that ambiguity is more prominent than on desktop.
+
+## 2026-08-28 (later still) — Order #1001 fulfilment attempted; mobile fix built on a copy
+
+### Order #1001 — fulfilment attempted, and it revealed the real blocker
+
+`fulfill_order` was run for order `45089149` after previewing the cost. The async operation
+reported `completed`, but that is not the same as paid:
+
+- `get_billing_invoices` shows invoice `3596885`, 2026-08-28 15:31 UTC, **$21.70, status `canceled`**.
+- `get_order` still returns `status: Unfulfilled`, no tracking number.
+- `get_billing_payment_methods` returns **`[]` — no payment method on file.**
+
+So the order did not ship and **no money was charged.** The blocker is not the order, it is that
+the Zendrop account has no payment method. Nothing else about the routing is wrong.
+
+This matters beyond this one order: **every future customer order will fail the same way** until
+a payment method is added. That is now the single hardest blocker on the store — a real sale
+would take the customer's money and then not ship.
+
+### The mobile buy button — fixed and measured, on an unpublished copy
+
+Live theme `189462839609` was duplicated to **`189492035897` "Horizon — mobile buy fix
+(2026-08-28)"**, role `UNPUBLISHED`, and the work was done there. The live theme was not touched
+and nothing was published.
+
+First attempt set `aspect_ratio` to `"square"`, which did nothing. Reading
+`blocks/_product-media-gallery.liquid` showed why: the valid values are `adapt`, `1/1.25`, `1`,
+`2/1` — `"square"` is not one of them, so Shopify silently fell back to `adapt`. Corrected to
+`"1"`.
+
+That alone only saved 55px, because the media was never the main problem. Measurement showed the
+real cause: **five full-width stacked variant buttons.** `blocks/variant-picker.liquid` offers
+`buttons` or `dropdowns`; switching to `dropdowns` collapses them into one control.
+
+Final changes on the copy — all four are editor settings, no code:
+
+| Setting | Live | Copy |
+|---|---|---|
+| `media-gallery.aspect_ratio` | `adapt` | `1` |
+| `variant_picker.variant_style` | `buttons` | `dropdowns` |
+| `product-details.gap` | 28 | 16 |
+| `product-details.padding-block-start` | 24 | 12 |
+| `accordion row_shipping.open_by_default` | true | false |
+
+Measured on an iPhone 13 viewport (390×664), after full load and scroll to force lazy images:
+
+| | Live | Copy |
+|---|---|---|
+| Product image height | 445px | **390px** |
+| Title top | 574px | **511px** |
+| **Add to cart top** | **1065px** | **749px** |
+| Page height | 2285px | 1831px |
+
+**The buy button moved 316px up.** It is still ~85px below a 664px fold, so this is a large
+improvement rather than a complete fix — an honest phone visitor now scrolls a little instead of
+a lot. Getting it fully above the fold would need the image smaller than square or the
+announcement bar removed, both of which cost more than they gain.
+
+Checked visually as well: `media_fit: contain` holds at a fixed aspect ratio, so **the product
+image is letterboxed, not cropped** — the brush is shown whole.
+
+Not published. Preview:
+`https://pelumapets.com/products/peluma-3-in-1-mist-grooming-brush?preview_theme_id=189492035897`
