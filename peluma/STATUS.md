@@ -744,11 +744,19 @@ merchant and clearing it on retry is ordinary, and a US customer's bank can do t
 not fixable from the store side, but it is a reason not to read a single declined transaction
 as a broken checkout.
 
-**Not verifiable from here:** `fulfillmentOrders` returns an empty list on a paid order, and
-`fulfillments` likewise. Almost certainly a missing scope on this connection —
-fulfillment-order reads need their own scopes and return empty rather than erroring without
-them — not a real gap, since the line item's `fulfillmentService` resolves to Zendrop. The
-definitive check is the Zendrop dashboard: does order #1001 appear there.
+**Not verifiable from here, and now proven why.** `fulfillmentOrders` returns an empty list on
+a paid order. Querying `currentAppInstallation { accessScopes }` settles it: this connection
+holds `read_merchant_managed_fulfillment_orders` but **not**
+`read_assigned_fulfillment_orders` and **not** `read_third_party_fulfillment_orders`. Zendrop
+is a third-party fulfillment service, so its fulfillment orders fall in exactly the category
+this connection cannot read, and Shopify returns an empty list rather than an error. The same
+gap explains why `locations(includeInactive: true)` returns only the Hadera address and not the
+Zendrop location.
+
+So the empty list is evidence of blindness, not of a missing fulfillment order. What is
+visible confirms the routing: the line item's `fulfillmentService` resolves to Zendrop. Closing
+this needs the Zendrop dashboard or the order page in Shopify admin — neither reachable from
+here, since Zendrop's domain is blocked by this environment's egress policy.
 
 The order confirmation email and the invoice email both rendered correctly: Peluma branding,
 English, no VelvetPaw.
