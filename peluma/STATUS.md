@@ -760,3 +760,29 @@ here, since Zendrop's domain is blocked by this environment's egress policy.
 
 The order confirmation email and the invoice email both rendered correctly: Peluma branding,
 English, no VelvetPaw.
+
+### Zendrop confirmed on the order page
+
+The order page closes the loop that the API could not. Order #1001's fulfillment section reads
+**"לא מומש · Zendrop"** — unfulfilled, assigned to Zendrop. Shopify has routed the fulfillment
+to them, which is exactly what the empty `fulfillmentOrders` response could not show.
+
+The timeline confirms the rest:
+
+- Payment of $29.90 USD processed through **PayPal Express Checkout**, authorization `3C1JMFYQH`
+- Order confirmation email sent to `avnerseo@gmail.com`
+- Created from draft order #D1
+- The earlier failure recorded 13 minutes prior — the issuer hold, per the merchant
+
+Also on the order: risk assessed **low**, and PayPal Seller Protection may apply.
+
+**One thing a real order surfaced.** The shipping line renders as
+`Free Shipping (0.0 kg: items 0.0 kg, package 0.0 kg)` — the zero variant weights, now visible
+on a live order rather than only in the API. Harmless while shipping is free and flat, and a
+problem the moment a weight-based rate or a quality Merchant Center feed matters. It stays part
+of the open Zendrop question about packed weight per SKU.
+
+**Channel caveat worth carrying forward:** this order's channel is *Draft Orders*, not *Online
+Store*, because it was created as an invoice. Some fulfillment apps sync only storefront
+orders. Zendrop was assigned here, so this looks fine — but the first genuine storefront order
+is still worth watching, in case draft-origin orders behave differently in Zendrop's own sync.
