@@ -73,6 +73,12 @@ rely on, and it is the only surviving instance of the old claim.
 Not theme-scoped and not in `templates/`: it is the rate name and description under
 Settings → Shipping and delivery. This is the fourth place that claim lives.
 
+Worse than a stale number: the checkout rate says **business days** explicitly, while the
+product page says plain "days". `DECISIONS.md` flags "business days or calendar days?" as the
+urgent open question to Zendrop precisely because the storefront now says "days" unqualified.
+Checkout is already answering that question on its own, with the retired figure. Whatever
+Nina comes back with has to land here too.
+
 ### 2. The cart thumbnail is a technical drawing
 
 The cart line item for "Porcelain White Set" renders a pale grey diagram annotated `68mm`
@@ -110,25 +116,33 @@ compete on.** They are supplier-catalogue images — several are white-backgroun
 at least two are dimension diagrams. There is no lifestyle photograph among them, which is
 the gap the hero image currently fills single-handedly.
 
-### 5. Variant selection does not change the gallery
+### 5. The homepage grid renders one card in a four-column row
+
+Confirmed visually at 1440px: a single product card at the far left, roughly three quarters of
+the row empty, directly above the newsletter block. `DECISIONS.md` already calls this out as
+reading "unfinished" rather than focused, and proposes filling the `frontpage` collection
+(`gid://shopify/Collection/533092860217`, empty today) and pointing the grid at it instead of
+`all`. Nothing in this audit contradicts that; it is simply worse in a browser than on paper.
+
+### 6. Variant selection does not change the gallery
 
 With "Porcelain White Set" selected, the large desktop image is the orange-and-tan brush.
 Colour-named variants that never show their colour.
 
-### 6. No sticky add-to-cart on mobile
+### 7. No sticky add-to-cart on mobile
 
 `STATUS.md` records sticky add-to-cart as on and verified via the API. At 390px, scrolled to
 y=1400 and y=1900, the only fixed element pinned to the bottom of the viewport is the Shopify
 preview bar (an empty 68px div). No add-to-cart bar appeared. Either the setting does not
 apply at this breakpoint, or the preview bar suppresses it. Worth one look in the editor.
 
-### 7. Two `<h1>` elements on the homepage
+### 8. Two `<h1>` elements on the homepage
 
 The hero `<h1>` ("Groom Smarter. Enjoy a Cleaner Home.", 56px, visible) plus a 1×1px
 visually-hidden `<h1>` reading "Peluma" from Horizon's header logo. The hero fix worked; the
 theme simply ships a second one. Minor, and a known Horizon default.
 
-### 8. Homepage SEO title still says VelvetPaw
+### 9. Homepage SEO title still says VelvetPaw
 
 `<title>` renders `VelvetPaw | Premium Pet Essentials & Accessories`. Already known and
 already recorded as admin-only — now confirmed against the rendered page rather than inferred.
@@ -179,10 +193,23 @@ The better lever is composition, not opacity: the product — the brush in the h
 right edge and is cropped out entirely at 390px. A hero crop that keeps the brush visible would
 do more for the page than any overlay value.
 
+## Against the open decisions in `DECISIONS.md`
+
+That file lists the hero overlay as an open merchant decision, on the assumption that 60% was
+calibrated for the cartoon and "may not need to be that heavy". Measured, it does need to be:
+see the table above. That item can be closed — keep 60%, or 55% if a lighter hero is wanted.
+
+The `$49.90` compare-at price is not in `DECISIONS.md` and should be. It appears on the
+homepage card, the product page, the cart and checkout, and it is a reference-price claim in
+exactly the sense the no-invented-claims rule covers. The variant pricing anomaly recorded
+there — Porcelain White Set at $29.90 containing more than a bare brush at $29.90, while Milk
+Brown Set is $39.90 — is a separate question and was not re-examined here.
+
 ## Suggested order of work
 
 1. Fix the checkout shipping description (admin, Settings → Shipping and delivery). It is the
-   only place still asserting the retired delivery claim.
+   only place still asserting the retired delivery claim, and it asserts it in business days
+   while the open Zendrop question is exactly business-versus-calendar.
 2. Reorder product media so a product photo, not the `68mm` diagram, is first — fixes the cart
    thumbnail and the mobile first slide together.
 3. Confirm card payment is live, and decide on the pre-checked marketing consent and the

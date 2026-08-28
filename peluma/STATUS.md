@@ -391,6 +391,8 @@ New defects, in priority order:
 1. **Checkout still says "Delivery in 7-15 business days."** The shipping *rate* description
    was missed when the claim was corrected in the accordion, the About page and the shipping
    policy. It is the last screen before payment. Settings → Shipping and delivery, admin only.
+   Note it says *business* days, while the product page says plain "days" — checkout is
+   pre-answering the business-vs-calendar question `DECISIONS.md` is still waiting on Zendrop for.
 2. **The cart thumbnail is the `68mm` dimension diagram**, not a product photo.
 3. **On mobile the product gallery opens on that same diagram**, letterboxed with large margins.
 4. **Product image masters are 476×467 to 695×683** — the theme requests `width=3840`, so the
@@ -412,4 +414,9 @@ the brightest part of the image. Measuring WCAG contrast on the real composited 
 both the heading and the subheading pass everywhere; at 50% a quarter of the subheading falls
 below 4.5:1; at the live theme's 40% both fail. Keep `#12121299`, or `#1212128C` (55%) as the
 floor. Dialling back to 45% would be an accessibility regression. The real improvement is the
-crop — the brush is cropped out entirely at 390px.
+crop — the brush is cropped out entirely at 390px. This closes the overlay item listed as an
+open merchant decision in `DECISIONS.md`.
+
+The one-card-in-a-four-column-grid problem `DECISIONS.md` describes is confirmed visually and
+looks worse in a browser than on paper. Separately, the `$49.90` compare-at price runs on every
+surface and is a reference-price claim — it belongs in `DECISIONS.md` and is not there yet.
