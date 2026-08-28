@@ -367,3 +367,49 @@ policy-update action — a search for one returns `SHOPIFY_CREATE_PAGE` / `SHOPI
 unrelated. What it does add is `SHOPIFY_UPDATE_THEME` with `role: "main"` (publish) and
 `SHOPIFY_DELETE_THEME`. Publishing is one click in admin and should be deliberate; theme
 deletion is not power worth holding. Recommendation: do not connect it.
+
+## 28 Aug — the storefront was finally rendered in a browser
+
+Full write-up in `peluma/PREVIEW-AUDIT-2026-08-28.md`. Read-only session; no theme writes.
+
+Chromium reached the store once TLS was capped with `--ssl-version-max=tls1.2` — the egress
+gateway resets Chrome 141's 1783-byte post-quantum ClientHello, and the `PostQuantumKyber` /
+`UseMLKEM` flags no longer shrink it. Capping the version drops it to 201 bytes. TLS
+verification stays on. Preview via `?preview_theme_id=189462839609` once; the cookie carries
+through checkout.
+
+Verified on theme 189462839609, desktop 1440×900 and iPhone 13: add to cart → cart → checkout
+completes on both, no horizontal overflow, no theme-origin console errors, announcement bar at
+14px black weight 400, and every earlier fix visible on the rendered page.
+
+Desktop `html`/`body` compute to `overflow:hidden; height:100dvh` at ≥990px — that is Horizon
+by design, `.page-wrapper` is the scroll container. The live theme does the same. Automation
+must scroll `.page-wrapper`, not `window`.
+
+New defects, in priority order:
+
+1. **Checkout still says "Delivery in 7-15 business days."** The shipping *rate* description
+   was missed when the claim was corrected in the accordion, the About page and the shipping
+   policy. It is the last screen before payment. Settings → Shipping and delivery, admin only.
+2. **The cart thumbnail is the `68mm` dimension diagram**, not a product photo.
+3. **On mobile the product gallery opens on that same diagram**, letterboxed with large margins.
+4. **Product image masters are 476×467 to 695×683** — the theme requests `width=3840`, so the
+   desktop gallery is upscaling roughly 2×. Supplier cut-outs and spec sheets, no lifestyle
+   photograph. Good enough to launch on, not good enough to compete on.
+5. Variant selection does not change the gallery image.
+6. No sticky add-to-cart appeared at 390px, though it is recorded here as on.
+7. Two `<h1>`s on the homepage — the hero plus Horizon's hidden header-logo one.
+8. `<title>` still renders `VelvetPaw | Premium Pet Essentials & Accessories` (already known).
+
+Could not verify: **card payment**. `checkout.pci.shopifyinc.com` is blocked by egress, so the
+card fields could not load and checkout showed PayPal only. That is an artefact of this
+environment, not a finding — confirm Shopify Payments in admin. Two things that did render and
+need a decision: the marketing-consent checkbox is **pre-checked**, and `$29.90` is struck
+against `$49.90` everywhere, which is a reference-price claim if `$49.90` was never charged.
+
+**The hero overlay question is answered, and the premise was wrong.** The text is centred over
+the brightest part of the image. Measuring WCAG contrast on the real composited pixels: at 60%
+both the heading and the subheading pass everywhere; at 50% a quarter of the subheading falls
+below 4.5:1; at the live theme's 40% both fail. Keep `#12121299`, or `#1212128C` (55%) as the
+floor. Dialling back to 45% would be an accessibility regression. The real improvement is the
+crop — the brush is cropped out entirely at 390px.
