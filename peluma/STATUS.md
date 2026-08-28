@@ -786,3 +786,34 @@ of the open Zendrop question about packed weight per SKU.
 Store*, because it was created as an invoice. Some fulfillment apps sync only storefront
 orders. Zendrop was assigned here, so this looks fine — but the first genuine storefront order
 is still worth watching, in case draft-origin orders behave differently in Zendrop's own sync.
+
+## 2026-08-28 — Supplier screen via Zendrop MCP; POD confirmed out of reach
+
+Ran the product screen against the Zendrop catalog through the MCP connection.
+
+**Grooming vacuum kits (the merchant's own category, higher ticket):**
+- `2000023` Daski Vkiskli 4-in-1, NexoraUSA — $61.33, shipping **$0**, **6 days** to US.
+- `2001005` N3 9-in-1, NexoraUSA — $55.11, shipping **$0**, **6 days** to US.
+- US market: oneisall $35–55, Afloia $65, a 12,000Pa kit recently at $39.99.
+- **Rejected on margin.** Landed cost sits inside the market's retail band.
+
+**Supplier 417 "Amazon Products" screened out permanently** — Amazon retail pricing or above
+($176.66 / $232.70 / $352.16 on comparable kits), plus a $1.17 listing that is a data error.
+
+That is five candidates across four categories, all failing the same screen. Recorded in
+`DECISIONS.md` as a supplier problem rather than a product-selection problem, and the earlier
+"US sourcing is the highest-value move" hypothesis is marked tested and disproven — US shipping
+does fix delivery times ($0–6.99, 6 days) but the base prices absorb the saving.
+
+**Print-on-demand is not exposed through the MCP.** Verified against
+`get_catalog_categories` (no POD category; the only "print" match is *Print, Copy, Scan & Fax*)
+and against keyword searches on the POD blank names (returns supplier-417 blanks instead).
+Zendrop's POD help article is blocked by the egress proxy.
+
+POD base costs *were* confirmed competitive against Printify ($7.95 vs $13.09 on a mug, $6.50
+vs $10.95 on a poster) — the first cost structure this week that starts in the right place.
+Shipping remains the one unknown, and the recommendation is deliberately parked until it is a
+real Zendrop figure rather than a Printful benchmark. Numbered steps written into
+`PRODUCT-SCREENING.md`.
+
+No storefront or theme changes in this pass — research and documentation only.

@@ -61,3 +61,60 @@ A product must pass all four. Expect most candidates to fail; that is the screen
 When something is needed from the merchant, it is written as numbered steps — where to click,
 what to copy, what to send back — not as a general request. And before asking, check whether it
 can be done without them, and say what was checked.
+
+## Screen results so far
+
+Applied to five candidates. All five failed on the margin screen (screen 3), and for the same
+reason each time: the Zendrop landed cost lands at or above what the US market already charges.
+Full numbers and sources in `DECISIONS.md`.
+
+Two operational rules came out of it:
+
+- **Screen out supplier 417 ("Amazon Products", US) before anything else.** Its prices are
+  Amazon retail or higher, and it carries obvious data errors ($1.17 on a grooming vacuum
+  listed in stock). Nothing there can be resold.
+- **NexoraUSA (supplier 416) is the one US supplier priced like a supplier**, and it ships free
+  in 6 days. It is still not cheap enough on commodity goods, but it is the only US source
+  worth screening.
+
+## Open item: the POD shipping number
+
+This is the one number blocking the print-on-demand decision, and it is the only thing standing
+between us and a product category that structurally escapes the price-comparison problem.
+
+**Checked first, without the merchant** — none of these produced the number:
+
+- `get_catalog_categories` on the Zendrop MCP — 200+ categories, no print-on-demand among them.
+- `get_catalog_products` on the POD blank names — returns plain blanks from supplier 417, not
+  the POD service.
+- `get_catalog_shipping_estimate` — needs a catalog product id, and POD items have none.
+- Zendrop's own help article on POD fulfilment costs — blocked by this environment's egress
+  proxy, and per the search summary it gives no fixed rate anyway.
+
+So it has to come from the dashboard. **Steps:**
+
+1. Go to `app.zendrop.com` and sign in.
+2. In the left sidebar, click **Print on Demand**.
+3. Open the **Bella+Canvas 3001 Unisex Short Sleeve Tee** (base cost $11.69).
+4. Click **Start designing** / **Create product** — any placeholder design is fine, this will
+   not be published and nothing is charged.
+5. Pick one variant: **Black, size L**.
+6. Look for the pricing or shipping panel on that page and copy back:
+   - the **base cost** for that variant,
+   - the **shipping cost to the United States**,
+   - the **estimated delivery time**,
+   - and the **print location / country** if it is shown anywhere.
+7. If no shipping figure appears on the product page, open the same screen for the
+   **White Glossy Mug** ($7.95) and copy whatever cost lines it shows.
+8. If neither page shows shipping, message Zendrop support with exactly this:
+
+   > For print-on-demand orders shipped to the United States: what is the shipping cost for
+   > one Bella+Canvas 3001 t-shirt, and for one white glossy mug? What does each additional
+   > item in the same order add? Which country are POD orders printed and shipped from for a
+   > US customer, and what is the production time before dispatch?
+
+**Also worth asking in the same message**, since it is still open from the last exchange:
+do print-on-demand orders count toward the 20 monthly orders required for a Private Agent?
+
+With the shipping figure in hand the POD decision resolves immediately — the base costs are
+already confirmed competitive, so shipping is the only variable left.

@@ -420,3 +420,99 @@ Organic stays the affordable channel, not the slow alternative to a better one.
 that. Domestic US shipping typically runs $3–6, so moving to US-sourced products would add
 roughly $4–7 per order *and* cut delivery from 12–18 days to 3–11. One move, both problems.
 That remains the highest-value action available, and it costs nothing to make.
+
+---
+
+## 2026-08-28 — The supplier screen, run four times, with the same answer
+
+### The US-sourcing hypothesis was tested and it failed
+
+The section above closed by saying that moving to US-sourced products was "the highest-value
+action available." That was a hypothesis, not a finding. It has now been tested directly
+through the Zendrop MCP, and it does not hold.
+
+US shipping is genuinely better — a flat **$6.99** on most US suppliers, and **$0.00 with
+6-day delivery** on NexoraUSA. The delivery problem really does go away. **The cost problem
+does not**, because the US base prices absorb the shipping saving and then some.
+
+| Product | Category | Zendrop landed (US) | US market price | Verdict |
+|---|---|---|---|---|
+| Pet hair brush (CN) | Grooming | $17.42 | eBay $8.99–$16.94 · Temu ~$4 | ✗ |
+| Pet hair brush (US supplier) | Grooming | $14.00 | same | ✗ |
+| Cat tree, NexoraUSA `1998045` | Furniture | $72.77 | Chewy $39.87–$80 | ✗ |
+| Grooming vacuum kit, NexoraUSA `2000023` | Grooming appliance | **$61.33** | oneisall $35–55 · Afloia $65 | ✗ |
+| Grooming vacuum kit, NexoraUSA `2001005` | Grooming appliance | **$55.11** | same | ✗ |
+
+Both grooming vacuums ship free in 6 days, so $55.11 and $61.33 *are* the landed costs — the
+best case Zendrop offers. To clear even a 40% margin they would have to retail at $92–$102,
+against `oneisall` at $35–55 and `Afloia` at $65 on Amazon today, and a 12,000Pa kit that was
+recently on offer at $39.99. Nobody pays $99 for the thing they can see at $45. Rejected on
+the margin screen.
+
+**Four products, four categories, cheap and expensive, China and US — the same outcome every
+time.** This has stopped being a product-selection problem. Zendrop is a middleman, and it is
+being asked to undercut retailers who buy direct at volume. On any item a customer can
+recognise and search for, it cannot.
+
+### The "Amazon Products" supplier is not a supplier
+
+Supplier id **417, "Amazon Products" (US)** carries a large share of the US catalog. Its
+prices are Amazon *retail*, sometimes well above it:
+
+- FUKUMARU grooming vacuum — **$176.66**
+- KungFuPet grooming vacuum — **$232.70**
+- A generic 5-tool kit — **$352.16**
+- Sweetcrispy grooming vacuum — **$1.17** (an obvious data error, listed as in stock)
+
+There is no price at which these resell. Treat supplier 417 as unusable and screen it out
+before looking at anything else. **NexoraUSA (id 416) is the one US supplier whose pricing
+behaves like a supplier's.**
+
+### What this leaves
+
+The screen only ever fails for one reason: the customer can find the identical object
+somewhere else. So the products that survive it are the ones where that comparison is not
+possible:
+
+1. **Personalised / print-on-demand** — the design is ours, so there is no identical object
+   to compare against. This is the only category that structurally escapes the problem.
+2. **Bundles** — a combination nobody else sells as a single SKU. Weaker, because the parts
+   are still individually searchable.
+
+That makes POD the main line now, not a side experiment.
+
+### Print-on-demand: what is verified, and the one number still missing
+
+**POD is not exposed through the Zendrop MCP.** Confirmed, not assumed: `get_catalog_categories`
+returns 200+ categories with no print-on-demand among them (the only "print" match is
+*Print, Copy, Scan & Fax* — printers). Searching the POD blank names returns plain blanks
+resold by supplier 417, not the POD service. So the POD numbers cannot be pulled from here.
+
+Zendrop does not publish POD shipping rates either — their help centre says shipping is
+calculated per product by weight, destination and type. That article is also blocked by this
+environment's egress proxy, so it cannot be read from here directly.
+
+What *can* be checked is whether the POD base costs are competitive, and they are. Against
+Printify's published base costs, Zendrop's POD catalog is at or below market:
+
+| Item | Zendrop POD base | Printify base |
+|---|---|---|
+| White glossy mug | $7.95 | $13.09 |
+| Matte paper poster | $6.50 | $10.95 |
+| Gildan 64000 tee | $9.44 | — |
+| Bella+Canvas 3001 tee | $11.69 | — |
+
+This matters: unlike the dropship catalog, **Zendrop's POD pricing is not marked up above the
+industry.** That is the first cost structure this week that starts in the right place.
+
+The industry shipping benchmark, for scale only: Printful charges **$4.75** for the first tee
+(+$2.20 each additional) and **$4.69** for the first mug (+$2.55 each additional) inside the US.
+If Zendrop is anywhere near that, a Bella+Canvas 3001 lands around **$17** and retails at
+$29.99–$34.99 for a **43–51% margin against no comparable competitor**.
+
+**That "if" is doing all the work, and I am not going to build on it.** The margin error earlier
+today came from exactly this — assuming a shipping cost instead of reading it. Printful's rate
+is Printful's rate, not Zendrop's, and Zendrop's own documentation says the number is
+weight-and-destination dependent. So the recommendation stays parked until the real figure is
+in hand. It is a two-minute check inside the Zendrop dashboard; the steps are in
+`PRODUCT-SCREENING.md`.
