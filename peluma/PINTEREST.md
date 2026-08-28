@@ -200,3 +200,62 @@ The pin images are committed at `peluma/pinterest-pins/pin-1.png` … `pin-5.png
 **Noted, not acted on:** the variant named simply **"Set"** carries no colour, which reads as
 ambiguous next to four named variants. Traffic is about to land on this page for the first time,
 so it is worth a decision — but it is the merchant's call and is not blocking the launch.
+
+---
+
+## Blocked by Israel: the Shopify app cannot complete setup (2026-08-28)
+
+The Pinterest business account connected successfully, but the app's setup wizard stops there.
+Observed directly in the Shopify admin:
+
+```
+✅ Your Pinterest Business account            avnerseo@gmail.com
+⛔ Connect your Ad Account
+⛔ Pinterest Tag and conversion measurement
+   [Complete setup]  ← disabled
+```
+
+**The Pinterest Tag is step 3 and is gated behind the Ad Account.** An earlier note here
+speculated the catalog might sync without an ads account; that was wrong — `Complete setup`
+stays disabled until all three are green, and the app's own text says the merchant account
+connection is what connects the catalog.
+
+**Why the ad account is blocked:** Pinterest does not sell advertising directly in Israel. Since
+August 2024 its sales partner there is **Aleph Israel**, covering 11 markets. Working with them
+means signing a partnership contract, confirming ad account details and accepting the Pinterest
+Advertising Service Agreement. The in-app request form promises a decision **within 3–4 business
+days** by email.
+
+The request form asks for a 12-month advertising spend figure and warns that "advertisers who do
+not meet their spend threshold may not qualify to continue advertising on Pinterest" — so the
+figure has to be a real intention, not a number chosen to pass review.
+
+### What is genuinely unaffected
+
+Verified against Pinterest's own documentation rather than assumed:
+
+- **Claiming the domain** — Pinterest offers four independent methods (Google Merchant Center,
+  HTML tag, HTML file, TXT record). None involve advertising.
+- **Boards and organic Pins** — core account functionality, created on pinterest.com directly,
+  not through the Shopify app.
+
+So the entire traffic-generating half of the plan works today. What is deferred is measurement
+precision and catalog automation.
+
+### Measurement fallback, tested not assumed
+
+Without the Pinterest Tag, attribution comes from Shopify's own analytics. Confirmed working:
+
+```
+FROM sessions SHOW sessions GROUP BY referrer_source SINCE -30d
+direct  130 · search  5 · unknown  1
+```
+
+**Those 130 direct sessions are this project's own automated browser checks and admin previews —
+real customer traffic is zero.** That is the baseline to measure against.
+
+Pinterest traffic will appear under `social`, and the full funnel is available
+(`sessions_with_cart_additions`, `sessions_that_reached_checkout`,
+`sessions_that_completed_checkout`, `conversion_rate`). Less precise than the tag — it cannot
+attribute a sale to an individual Pin — but sufficient for the only question that matters now:
+**does Pinterest send people who buy.**
