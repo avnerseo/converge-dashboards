@@ -251,3 +251,60 @@ The hero overlay was raised from 40% to 60% black **because the background was
 then a busy light cartoon** and the subheading was unreadable over it. The
 background is now a purpose-made hero image, so 60% may be heavier than it
 needs to be. Worth looking at in preview; dialling it back is one write.
+
+## 28 Aug — Zendrop answered, and a bad merge in the product template
+
+### Zendrop's answers
+
+- **Ships from China only.** 2–3 days processing, 10–15 days transit. No US warehouse.
+- **No GTIN / UPC / EAN exists** for any China-sourced Zendrop product — a shipping-regulation
+  constraint, not a gap in their data. This applies to every future import, not just this
+  product. HS codes were offered instead: useful for customs, not for Merchant Center.
+- **"Set" (Z75Y6C7M0)** = a white brush plus a milk brown brush.
+- **"Porcelain White Set" and "Milk Brown Set"** = a brush plus a rolling ball, and both
+  cost Zendrop more for that reason.
+
+### Two problems found in the theme editor's save
+
+The merchant edited the Shipping row in the theme editor. Reading the saved file back
+showed two things the editor's UI did not:
+
+1. **The new text was appended to the old text, not replacing it.** The row contained the
+   7–15 day claim immediately followed by the 12–18 day claim, with no space between
+   sentences — a paragraph asserting two different delivery times at once.
+2. **A second, unrelated accordion appeared** (`accordion_zYLCEc`) carrying Horizon's stock
+   preset rows: "Return policy", "Shipping" and "Manufacturing". The Manufacturing row read
+   *"Our products are manufactured both locally and globally. We carefully select our
+   manufacturing partners…"* — boilerplate about a supply chain this store does not have,
+   sitting on a product that ships from a single Chinese supplier.
+
+Both were rewritten out. The Shipping row now reads:
+
+> Free worldwide shipping on every order. Orders are processed within 2–3 days, and delivery
+> to the United States typically takes a further 10–15 days — about 12–18 days in total.
+> You'll receive a tracking number by email as soon as your order ships.
+
+**Not verified by read-back.** The write returned no errors, but the permission classifier
+blocked the follow-up read, so this rests on the mutation result alone rather than on a
+diff. Worth re-checking.
+
+### About page
+
+Updated live (`/pages/about`): the "Honest delivery times" line now reads 2–3 days
+processing and a further 10–15 days, about 12–18 in total.
+
+### Google & YouTube
+
+`marketingActivities` returns **zero** — no campaign is running and nothing is being spent.
+The product is still published to the Google & YouTube channel as a free listing.
+`publishableUnpublish` is blocked by this connection's safety policy, so pausing that
+listing has to be done in admin.
+
+### Still not doable from here
+
+- **Shop name is already `Peluma`.** What still says VelvetPaw is the homepage SEO title and
+  meta description, which live in Online Store → Preferences and have no Admin API mutation.
+- **Policies** — no `write_legal_policies` scope. Files in this directory.
+- **Variant weights** — no data. Asking Zendrop for packed weight per variant, rather than
+  inventing a number.
+- **Mobile, cart and checkout testing** — the storefront is blocked from this environment.
