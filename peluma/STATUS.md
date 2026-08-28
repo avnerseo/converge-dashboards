@@ -1141,3 +1141,40 @@ the API side once the exact error text is known.
 With Pinterest advertising permanently closed by Aleph's ILS 75,125 minimum, **Google Shopping's
 free listings are now the second and last free channel available**, and the only one reaching
 people already searching to buy rather than browsing. It costs nothing and it is now connected.
+
+## 2026-08-28 — Pinterest domain verification tag added (theme copy, awaiting publish)
+
+Pinterest's claim dialog issued an HTML tag:
+`<meta name="p:domain_verify" content="5638d1af67ed09e066ab4dde356f05b7">`
+
+**Where it went, and why:** the tag must sit in `<head>`, which is `layout/theme.liquid` — 7,742
+bytes, most of it inline JavaScript. Rewriting that whole file through `themeFilesUpsert` to add
+one line is needless risk. `snippets/meta-tags.liquid` is **2,689 bytes**, is already rendered
+inside `<head>` by theme.liquid, and contains nothing but meta tags. The verification tag was
+appended there instead.
+
+Done on a new duplicate, **`189496885561` "Horizon — Pinterest verify (2026-08-28)"**,
+`UNPUBLISHED`. The live theme was not touched.
+
+Verified on the preview (needs a cookie jar — `preview_theme_id` alone silently falls back to the
+live theme, which produced a false negative on the first check):
+
+```
+theme served : 189496885561
+<meta name="p:domain_verify" content="5638d1af67ed09e066ab4dde356f05b7">
+title / og:title / canonical : all intact
+```
+
+**Why this matters beyond the tag:** claiming the domain is the prerequisite for
+**`Merchant status → Begin review process`** in the Pinterest Business Hub. That review is what
+unlocks **automatic Product Pins from the store's catalog** — pins that create and update
+themselves, with no manual uploading ever again.
+
+That path was never tested. The Shopify app's catalog sync is gated behind the ad account, which
+Aleph has permanently closed — **but Pinterest's own merchant review may not be**, and their
+documentation states catalog and advertising are separate ("We will not advertise your products
+until you choose to"). If it opens, manual pinning stops being necessary. If it demands an ad
+account, nothing is lost.
+
+**Merchant steps:** publish `189496885561`, then in Pinterest set the URL to `https://` (the
+dialog defaulted to `http://`) and press **Claim your website**. Then try **Begin review process**.
