@@ -149,3 +149,54 @@ The structure above — business account, domain claim, keyworded display name a
 descriptions on everything — is standard Pinterest practice, not something measured for this
 store. No performance is promised. The store has had no marketing traffic at all, so the first
 weeks are the baseline, not a test of whether this works.
+
+---
+
+## Revision 2026-08-28 — install the Shopify app first, then pin
+
+The two setup steps above (business account, manual domain claim) still stand, but the manual
+claim is now the slow way round. **Shopify's free Pinterest app does more, in one flow.**
+Verified before recommending:
+
+- **Claims `pelumapets.com` automatically** — no meta tag to paste, no DNS record, no wait.
+- **Syncs the product catalog** into Pinterest as a data source, which generates **organic
+  Product Pins for free**. Prices, images and descriptions then update themselves — the feed
+  refreshes every 24 hours, collections every 48.
+- **Installs the Pinterest tag and the Conversions API**, browser-side and server-side, without
+  editing theme files by hand.
+
+Organic Product Pins cost nothing; only ads are paid. So the app produces a second, automatic
+stream of pins alongside the five designed ones, and it is what makes any of this measurable.
+
+**One thing to know before installing:** the app injects a meta tag into the live theme's head.
+That is normal and it is the app doing it with the merchant's authorisation — but it is a write
+to the live theme, so **the Shopify theme editor must be closed while it installs**, for the
+same reason that rule exists everywhere else in this project.
+
+Revised order:
+
+1. Pinterest Business account.
+2. Install the Pinterest app in Shopify — claim, tag and catalog sync all happen here.
+3. Fill in the profile fields (below).
+4. Create the five boards (below).
+5. Upload the five designed pins with their copy (below).
+
+Steps 1–2 are the ones that compound; 3–5 are the creative on top.
+
+## Link check, 2026-08-28
+
+Both pin destinations verified live, HTTP 200:
+
+- `https://pelumapets.com`
+- `https://pelumapets.com/products/peluma-3-in-1-mist-grooming-brush`
+
+Live variants confirmed against the pin copy — Porcelain White Set $29.90, Milk Brown Set
+$39.90, Porcelain White Brush $29.90, Purple Brush $29.90, Set $29.90. Pin 3 names porcelain
+white, milk brown and purple, which matches. "Free worldwide shipping" appears on the live
+product page, so the claim in pins 1 and 2 is copy that already exists on the store.
+
+The pin images are committed at `peluma/pinterest-pins/pin-1.png` … `pin-5.png`, 1000×1500.
+
+**Noted, not acted on:** the variant named simply **"Set"** carries no colour, which reads as
+ambiguous next to four named variants. Traffic is about to land on this page for the first time,
+so it is worth a decision — but it is the merchant's call and is not blocking the launch.
