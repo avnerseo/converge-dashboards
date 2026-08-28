@@ -592,3 +592,41 @@ docs point at `global.title_tag` / `global.description_tag` metafields, so that 
 change — checked twice, once with a cache-buster. **Shop-level `title_tag` does not drive the
 homepage title.** The two stray metafields were deleted afterwards so nothing junk is left on
 the shop. Online Store → Preferences is the only route.
+
+### Item 1 solved without the app — filters disabled on the collection template
+
+The Search & Discovery app **is not installed** on this store (installed apps: Zendrop, the
+Claude connector, Messaging). So the Hebrew filter labels were not app configuration — they
+are Shopify's built-in default storefront filters, whose labels are base values that no
+mutation can edit.
+
+Rather than install an app to rename two labels, the filters were switched off. In
+`templates/collection.json` on the working theme, the `filters` block of `main-collection`:
+
+```
+"enable_filtering": true   →   false
+```
+
+Correct on the merits regardless of language: an "Availability" and a "Price" filter on a
+collection holding one in-stock product at a single price refine nothing. `enable_sorting` and
+`enable_grid_density` are untouched, and both render in English ("Sort", "Column grid").
+
+Procedure, since this file class has been corrupted once before:
+
+1. `themeFilesCopy` within the theme → `templates/collection.pre-filter-fix-backup.json`,
+   byte-identical at 7215 bytes, as a restore point.
+2. `themeFilesUpsert` with the full file, one value changed. Result size 7216 — exactly +1 for
+   `true` → `false`, which is itself a check that nothing else moved.
+3. Verified in a browser at 1440×900 and on an iPhone 13: **zero Hebrew characters** in the DOM
+   on `/collections/all`, on both viewports.
+
+**Before publishing, delete `templates/collection.pre-filter-fix-backup.json`.** It is reachable
+as an alternate template (`?view=pre-filter-fix-backup`) and should not ship.
+
+### Side effect of the US market to review
+
+With two markets now defined, the header renders a **region and language selector** ("USD",
+"Region and language selector") on desktop `/collections/all` — it was not there when Israel
+was the only market. It is not broken, but it does let a US visitor switch themselves into the
+Israel market. If that is unwanted, it is a header setting in the theme editor, in the same
+place `show_language: false` was set earlier.
