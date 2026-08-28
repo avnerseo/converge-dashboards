@@ -363,3 +363,71 @@ Without that declaration Google Merchant Center rejects a product for a missing 
 is likely failing silently. Not fixed blind from here: the Google channel has changed how it
 stores these settings across versions, and overwriting one it manages itself could make things
 worse. The definitive check is the channel's own product status screen.
+
+## Batch 2 — five more Pins, 2026-08-28
+
+Five Pins is thin for a new account, and Pinterest rewards consistency over volume. This batch
+gives a month of posting at 2–3 a week without needing anything new made.
+
+Same visual system as batch 1, five different search intents, and **every claim traced to copy
+already live on the store** — nothing new asserted.
+
+| File | Board | Angle |
+|---|---|---|
+| `pin-6` | Peluma | the 3-in-1 feature |
+| `pin-7` | Cat Grooming at Home | cats that dislike brushing |
+| `pin-8` | Peluma | rechargeable, no batteries |
+| `pin-9` | Dog Grooming at Home | coat types and colours |
+| `pin-10` | Peluma | gift framing |
+
+**Three supplier images had to be discarded**, caught by rendering a contact sheet and looking
+rather than trusting filenames: two carry the supplier's own burnt-in English captions
+("Sticky snack crumbs", "Stain from sofa hair dust") and one is a dimensions diagram with red
+annotation boxes. A first render used two of them before the check — the images were selected
+blind, which is the same failure mode as quoting a market price without reading the listing.
+They are deleted from the working set so they cannot be picked up again.
+
+### Copy
+
+**pin-6** — `Three things, one brush`
+```
+Mist, brush and collect loose fur in a single pass. A fine mist helps reduce flyaway hair while
+soft silicone bristles brush and massage the coat.
+
+#petgrooming #groomingbrush #catgrooming #doggrooming
+```
+
+**pin-7** — `For cats who hate being brushed`
+```
+Soft silicone bristles that brush and massage, for gentle everyday use on cats and dogs.
+
+#catgrooming #catcare #catsofinstagram #petgrooming
+```
+
+**pin-8** — `No batteries, just a USB cable`
+```
+Rechargeable with USB charging, and easy to clean after each grooming session.
+
+#petgroomingtools #groomingbrush #petcare #catsanddogs
+```
+
+**pin-9** — `Short, medium or long coats`
+```
+Suitable for cats and dogs with short, medium or long coats, in porcelain white, milk brown and
+purple.
+
+#doggrooming #dogcare #petgrooming #groomingtools
+```
+
+**pin-10** — `A small gift for a dog person`
+```
+Both Peluma sets include the mist grooming brush and a rolling lint remover. Free worldwide
+shipping on every order.
+
+#dogmom #dogdad #petgifts #petgrooming
+```
+
+Links: `pin-6` … `pin-10` all point at
+`https://pelumapets.com/products/peluma-3-in-1-mist-grooming-brush`.
+
+**Cadence:** 2–3 a week, not all at once. Ten Pins posted over a month beats ten in a day.
