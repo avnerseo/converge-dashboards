@@ -127,3 +127,83 @@ connection's safety policy.
 The support address `avnerseo@gmail.com` appears in six places: shop `contactEmail`, the
 Contact page, the privacy policy, the terms (twice) and the refund policy (twice). The
 refund-policy occurrences must be hand-edited — that policy must never be regenerated.
+
+## Catalogue expansion — what to add, and the gate in front of it
+
+Added 28 Aug, after the full store sweep. Merchant restated the target: English only, US primary.
+
+### The gate: do not import anything yet
+
+The default delivery profile is `פרופיל כללי`, carrying rate `רגיל` at ₪35 domestic and ₪57
+international. The current product escapes it only because Zendrop put it on its own profile.
+**Every new import that lands on the default profile shows a US shopper a Hebrew rate name
+priced in shekels.** Fix the profile first; importing first means finding this in a support
+email from a confused customer. Same for the Search & Discovery filter labels, which render
+`זמינות` / `מחיר` on `/collections/all` — the page the Shop nav points at.
+
+### The category is validated
+
+US pet grooming products: **$5.11B (2024) → $7.01B (2030), 5.47% CAGR**. De-shedding sits in
+the fastest-rising application segment at **7–9% annually**. E-commerce is **26–34% of market
+value by 2026**. Grooming tools are consistently cited as the highest-margin, lowest-risk entry
+point in the niche, with realistic margins of **40–65%**. Sources at the end of this section.
+
+So the existing product is in the right category. The problem is that it is alone.
+
+### The constraint that should pick the products
+
+China-only fulfilment at 12–18 days rules out a whole class of otherwise-good items:
+
+- **Nothing impulse-driven, seasonal or gift-timed.** A buyer who wants it this week buys it
+  on Amazon. Everything added has to survive "I'll get it in about two weeks."
+- **Nothing that competes head-on with a Prime-shipped identical item.** The defence is a
+  narrower audience and a better page, not price.
+- **Nothing that needs video to sell**, while filming is impossible. Supplier stills have to
+  carry it — and per the media audit, this supplier's stills need heavy filtering.
+
+What survives: considered, repeat-use grooming items a shedding-season owner buys as a set.
+
+### The cheapest second SKU already exists in the catalogue
+
+The "Porcelain White Set" and "Milk Brown Set" variants each include a **rolling ball lint
+remover**, and the product already carries three images of it (media #3, #8, #12). It is
+supplied, photographed, and priced — and it is not sold on its own. Listing it standalone
+costs one Zendrop link and no new photography. It is also the natural cross-sell to the brush:
+same job, different surface — the pet, then the sofa.
+
+Caveat from the media audit: #3 and #8 have marketing text baked into the pixels in non-native
+English ("Stain from sofa hair dust", "Sticky snack crumbs"). Those two cannot ship as-is.
+#12 is clean.
+
+### Then, in order of fit
+
+1. **De-shedding grooming glove.** Same job as the brush, different form. The most-cited safe
+   entry product in the niche. Bundles naturally.
+2. **Self-cleaning slicker brush.** Same buyer, same session, higher basket.
+3. **Paw washer.** Sourcing under $5, retails $15–25. Different moment, same owner.
+4. **Rechargeable quiet nail grinder.** Same "rechargeable grooming device" buyer as the mist
+   brush; a considered purchase, so the wait is tolerable.
+
+That is five SKUs including the rolling ball, against a Zendrop tier that allows 20. It leaves
+room and respects the "six good ones beat twenty mediocre ones" rule already in this file.
+
+### Positioning
+
+The sub-niche advice in the sources is worth taking: rather than "pet grooming", narrow to
+**shedding season for indoor cat and dog owners**. It matches the product, matches the hero
+image, matches the announcement bar copy that is already live, and it is the one framing where
+a two-week wait is normal — shedding is a recurring season, not an emergency.
+
+### What is still missing before any of this earns money
+
+Cost prices per SKU are still owed by Zendrop (see above). Margin cannot be checked without
+them, and the existing pricing anomaly — Porcelain White Set at the same $29.90 as a bare
+brush while containing more — is unresolved. Adding four more SKUs on top of an unexplained
+price structure multiplies the problem rather than diluting it.
+
+Sources: [Research and Markets — US pet grooming products](https://www.researchandmarkets.com/report/united-states-grooming-product-market),
+[Grand View Research — pet grooming products market](https://www.grandviewresearch.com/industry-analysis/pet-grooming-products-market),
+[Dropified — pet products dropshipping 2026](https://www.dropified.com/blog/pet-products-dropshipping-in-2026-best-selling-items-suppliers-profit-margins/),
+[Product Lair — best pet dropshipping products, US trends](https://productlair.com/blog/best-pet-dropshipping-products).
+Market figures are third-party estimates, quoted as such — they are not measurements of this
+store and must not appear in customer-facing copy.
