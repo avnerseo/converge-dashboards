@@ -259,3 +259,58 @@ Pinterest traffic will appear under `social`, and the full funnel is available
 `sessions_that_completed_checkout`, `conversion_rate`). Less precise than the tag — it cannot
 attribute a sale to an individual Pin — but sufficient for the only question that matters now:
 **does Pinterest send people who buy.**
+
+---
+
+## Shipped 2026-08-28 — five Pins, five boards, live
+
+All five Pins are published from the organic Pin builder, each creating its own board:
+
+| Pin | Board | Destination |
+|---|---|---|
+| pin-1 | Peluma | homepage |
+| pin-2 | Cat Grooming at Home | product page |
+| pin-3 | Dog Grooming at Home | product page |
+| pin-4 | Pet Hair & a Clean Home | product page |
+| pin-5 | Shedding Season Survival | product page |
+
+The plan originally put each Pin on two boards. That was dropped — a Pin is created on one board
+and a second placement needs manual repinning, for no real gain. One board per Pin produces the
+same five boards with half the work.
+
+### Two traps hit along the way, recorded so they are not repeated
+
+**`pinterest.com/pin-builder/` served the "Create Pin for ad" builder**, whose header reads
+*Create Pin for ad* and which has **no board selector** — ad creatives do not live on boards.
+Scrolling to the bottom looking for one is wasted effort. The organic builder is
+`pinterest.com/pin-creation-tool/`, titled plainly **Create Pin** with *Working on: Your profile*.
+
+**`Show similar products` was switched off on every Pin.** Its own description is "People can shop
+products similar to what's shown in this Pin" — it surfaces *competitors'* products on our Pin.
+There is no reason to hand traffic away on creative we paid attention to build.
+
+Also set per Pin: `Tagged topics` (invisible to viewers, a free distribution signal), Alt Text,
+comments left on, `Mark as AI-Modified` left off — the photography is genuine supplier imagery
+with text composed over it, not AI-generated, so the label would have been inaccurate in the
+other direction.
+
+### Baseline at launch — measured, so the before/after is clean
+
+```
+FROM sessions SHOW sessions GROUP BY referrer_source SINCE -7d
+direct  130 · search  5 · unknown  1     (social: absent)
+```
+
+Those 130 direct sessions are this project's own automated browser checks and the merchant's
+admin previews. **Real customer traffic at the moment the Pins went live: zero, and `social` does
+not appear at all.** Any `social` row that appears from here is genuinely Pinterest.
+
+Note: `sessions_with_cart_additions` and `sessions_that_completed_checkout` fail when combined
+with `GROUP BY referrer_source` in this store's analytics — query sessions by source first, then
+the funnel separately.
+
+### What to check, and when
+
+Give it a week. Pinterest surfaces Pins over weeks, not hours, and five Pins on a new account
+with no domain claim will start slow. The question at the first check is only whether `social`
+appears at all — not what it converts.
