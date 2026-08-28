@@ -184,3 +184,35 @@ Admin, in this order:
 
 Then publish the theme. Items 1–5 are all things a US visitor sees; none of them are
 cosmetic.
+
+---
+
+## Gap found after the fact: the audit only covered half the supply chain
+
+This document checked the storefront end to end — checkout, taxes, delivery zones, policies, the
+US market, prices, media, copy. It never asked whether **the supplier could actually be paid.**
+
+That gap surfaced on the first real order. Zendrop had no payment method on file, so the
+fulfilment invoice for order #1001 was created and immediately cancelled, and the order never
+shipped. Shopify showed "unfulfilled · Zendrop", which was read as "routing works, waiting on
+Zendrop" — correct, but the next question was never asked: *what does Zendrop need in order to
+actually fulfil?*
+
+It could not have been caught much earlier — Zendrop is blocked at the network level in this
+environment and its MCP only connected late on 2026-08-28, and there were no orders before that
+day. But it belonged on the pre-launch list regardless, and it was not there.
+
+### Supplier-side readiness checklist — run this before any future launch
+
+- [ ] Supplier account has a **valid payment method on file** (`get_billing_payment_methods` must
+      not return `[]`).
+- [ ] Credit balance known (`get_billing_credit_balance`) — zero credit means the card is charged.
+- [ ] A test order actually **reaches `Shipped`**, not merely `Unfulfilled` in the supplier system.
+- [ ] Fulfilment invoice status checked after fulfilling (`get_billing_invoices`) — a `completed`
+      async operation is **not** proof of payment; the invoice can come back `canceled`.
+- [ ] Landed cost read from a real fulfilment (`get_order_fulfillment_cost`), not from a catalog
+      listing.
+- [ ] Supplier can ship to the target market at the price and speed the storefront promises.
+
+**Rule:** "routing confirmed" is not "order will ship". Verify the money path to the supplier,
+not just the data path.
