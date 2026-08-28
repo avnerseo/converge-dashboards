@@ -463,3 +463,27 @@ attempted and **blocked by the permission classifier** — order unchanged.
 Still open for the merchant: compare-at prices on all five variants ($49.90 / $69.90),
 pre-checked marketing consent at checkout, `avnerseo@gmail.com` on five customer-facing pages,
 and card payment still unverified because `checkout.pci.shopifyinc.com` is blocked here.
+
+### 28 Aug — item-by-item fixes, merchant approving each step
+
+**Item 1 — product media.** Reordered all 12 so the clean porcelain-white brush leads and
+everything questionable (the supplier's red annotation boxes, the fake video play button, the
+two images with marketing text baked into the pixels) sits at the bottom of the gallery.
+
+Reordering alone did **not** fix the mobile first slide or the cart thumbnail. Both are driven
+by the **variant** image, not the product media order. Found on inspection: "Porcelain White
+Set" (the default variant) and "Milk Brown Set" both had a `68mm` dimension diagram as their
+variant image. With the merchant's approval:
+
+- Porcelain White Set → `33e6eede…` (clean porcelain-white brush)
+- Milk Brown Set → `490627294…` (milk brown brush)
+
+Verified in a browser afterwards: the mobile product page and the cart both now show the clean
+brush. The diagram is gone from both.
+
+**Item 2 — alt text.** All 12 images carried near-identical alt text, including the four
+dimension diagrams and the three rolling-ball shots. Each now describes what is actually in
+the frame. Two deliberate choices: the image with the fake play button gets ordinary alt text
+that does not mention video, and the rolling-ball images are described as a rolling ball
+lint remover rather than as the brush — which is also the clearest evidence that this listing
+is carrying two different products under one product record.
