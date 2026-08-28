@@ -115,8 +115,14 @@ say("")
 say("CAVEAT: assumes every resting order fills at its level with no slippage.")
 say("Treat the APR as an upper bound, and compare it to buy-and-hold above.")
 
-p=os.path.join(os.path.dirname(os.path.abspath(__file__)),"RESULTS.txt")
-open(p,"w",encoding="utf-8").write("\n".join(OUT))
-print(f"\n\nSaved to: {p}")
-print("Send that file back.")
-input("\nPress Enter to close...")
+# works whether run as a file, or exec()'d straight into the REPL
+try:
+    base = os.path.dirname(os.path.abspath(__file__))
+except NameError:
+    base = os.path.expanduser("~")          # home folder, easy to find
+p = os.path.join(base, "RESULTS.txt")
+open(p, "w", encoding="utf-8").write("\n".join(OUT))
+print("\n" + "="*64)
+print(f"SAVED TO:  {p}")
+print("="*64)
+print("Open that file and send it back.")
