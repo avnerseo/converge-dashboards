@@ -671,3 +671,34 @@ caught and corrected.
   catalogue decision, not a settings one.
 - The `$49.90` compare-at price and the pre-checked marketing consent remain open merchant
   decisions.
+
+### Post-launch verification — order calculation across US states
+
+The merchant has no US address, so a real US test order is not possible. Ran
+`draftOrderCalculate` instead — it computes the full order without creating or persisting
+anything, so there is zero footprint on the live store and no charge.
+
+| Scenario | Subtotal | Shipping | Tax | Total |
+|---|---|---|---|---|
+| New York, 1 × Porcelain White Set | $29.90 | Free Shipping $0.00 | $0.00 | $29.90 |
+| California, 1 × Porcelain White Set | $29.90 | Free Shipping $0.00 | $0.00 | $29.90 |
+| Texas, 1 × Milk Brown Set | $39.90 | Free Shipping $0.00 | $0.00 | $39.90 |
+| Illinois, 2 × Porcelain White Set | $59.80 | Free Shipping $0.00 | $0.00 | $59.80 |
+
+**Exactly one shipping rate is offered in every case** — the US zone added to the Zendrop
+profile is serving, with no competing or duplicate rate. Variant pricing resolves correctly
+($39.90 for Milk Brown Set, not the default $29.90).
+
+Tax is zero everywhere, which is correct: no US nexus, and the shop is `taxesIncluded: true`,
+so the displayed price is what the customer pays. Nothing is added at checkout.
+
+Still unverifiable without a real order: that a PayPal payment actually clears, that the order
+reaches Zendrop, and that the confirmation email is clean. The merchant is placing a test order
+to their own Israeli address, which exercises the Rest of World zone rather than the US zone —
+acceptable, since the US zone is covered by the table above, and the three untested items are
+address-independent.
+
+That order also puts the physical product in the merchant's hands, which is the only way to
+replace the supplier imagery: four near-duplicate dimension diagrams, one with the supplier's
+red annotation boxes, two with broken English baked into the pixels, and one static JPEG with a
+fake video play button painted on.
