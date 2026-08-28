@@ -733,8 +733,16 @@ Verified on the resulting order:
 | Fulfillment service | **Zendrop** |
 | Tags | `test-order`, `internal` |
 
-Two PayPal transactions are recorded, a `FAILURE` then a `SUCCESS`, both $29.90 — the failure
-is the blocked self-purchase attempt. The customer was charged once.
+Two PayPal transactions are recorded, a `FAILURE` then a `SUCCESS`, both $29.90. **Correcting
+an earlier reading of this:** the failure was *not* the blocked self-purchase. Those blocks
+happen before payment and never create a transaction at all. The failure was the card itself —
+the Israeli issuer held the charge pending the cardholder's own approval, and it cleared on the
+retry. The customer was charged once.
+
+Worth carrying forward: an issuer declining a first cross-border charge to an unfamiliar
+merchant and clearing it on retry is ordinary, and a US customer's bank can do the same. It is
+not fixable from the store side, but it is a reason not to read a single declined transaction
+as a broken checkout.
 
 **Not verifiable from here:** `fulfillmentOrders` returns an empty list on a paid order, and
 `fulfillments` likewise. Almost certainly a missing scope on this connection —
