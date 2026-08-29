@@ -471,3 +471,51 @@ Claiming brings analytics on Pins that link to the site, correct attribution, an
 on Pins others save from the store. It is also the prerequisite for merchant review, which is why
 `Begin review process` did nothing when clicked: **there is no catalog for it to review yet.** The
 order is catalog first, review second — the reverse of what was assumed.
+
+## Catalog feed built and validated — 2026-08-29
+
+Pinterest's `Connect to Shopify` route is circular, so the feed was built **inside the theme**
+rather than with a third-party app: a Liquid template that renders a Google-Shopping-format RSS
+feed live from the store's own product data.
+
+**`templates/page.pinterest-feed.liquid`** + a page at **`/pages/pinterest-feed`**.
+
+```
+https://pelumapets.com/pages/pinterest-feed
+```
+
+Why this over a feed app: it is **dynamic** — prices, stock and any new product appear
+automatically — with no monthly fee, no third-party dependency, and no app that can break or
+start charging. `{% layout none %}` is what lets a page template emit raw XML instead of the
+site's HTML shell.
+
+### Three defects caught by validating instead of assuming
+
+1. **`g:price` and `g:sale_price` were identical.** Per the spec `price` is the list price and
+   `sale_price` the current one. Fixed to emit `sale_price` only when a genuine compare-at exists.
+2. **XML would not parse.** The `&` in `...jpg?v=...&width=1200` is illegal raw in XML. Fixed with
+   `| escape` on both the image and item URLs.
+3. **Description words ran together** — `coat.Why pet owners love it:Helps collect...` — because
+   `strip_html` removes tags without inserting a space. Fixed by injecting a space before each tag
+   first.
+
+Each was found by parsing the output with a real XML parser, not by reading it.
+
+### Pinterest's own validator: passed
+
+Run through `Test your data source` with Currency `USD` and Country `United States`:
+
+- **No errors.**
+- One non-blocking **Alert 157**: `google_product_category` missing, which "may limit visibility
+  in recommendations, search results and shopping experiences".
+
+Added `Animals & Pet Supplies > Pet Supplies > Pet Grooming Supplies` on a further theme copy,
+`189506421049`, and verified it renders. **The text path was used rather than the numeric ID
+(6383)** — `google.com` is blocked by this environment's egress proxy so the official taxonomy
+file could not be fetched to confirm the number, and a wrong ID would miscategorise silently
+whereas a wrong path fails loudly.
+
+### Sequencing note
+
+The alert does not block ingestion, so the data source can be uploaded before the category ships
+— the daily re-ingest picks it up on the next run. No need to hold the merchant on it.
