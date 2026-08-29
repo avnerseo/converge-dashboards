@@ -738,3 +738,68 @@ no traffic and no photographs of its own.
 dropped mid-session, so this is reasoning from the established pattern rather than a measurement.
 It is a cheap check to run — and now a reliable one, since `inventoryItem.unitCost` on a fresh
 import gives true per-variant cost. **Worth running before the next product decision, not after.**
+
+## The bundle argument, and where it holds (29 Aug)
+
+The merchant argued the store should not sell a single $15–20 Amazon best-seller at all, because
+US paid acquisition costs $15–25 per customer: sell a brush at $20 with an $18 CPA and $4 of
+product and you **lose $2 a sale**. The proposed fix is a 3-item bundle at $44.99–49.99 with
+COGS $7.50–9.00, netting $12–15 at 25–30%.
+
+**The logic is right. Two of its inputs are not ours.**
+
+### Input 1 — our CPA is zero
+
+The whole argument is a **paid-traffic model**. This store cannot run paid traffic: Pinterest ads
+are permanently closed (Aleph Israel, ILS 75,125 yearly minimum), and the margin analysis had
+already ruled out paid acquisition at ~$10 net. Every channel here is organic — Pinterest Pins,
+Google free listings, SEO.
+
+So the $18 CPA that makes a $20 product a $2 loss **does not exist for us**. The paw cup at
+$16.90 nets ~$7 in full. Under the merchant's own model that product is unsellable; under ours it
+is profitable. **The constraint the argument optimises against is not the one that binds us.**
+
+### Input 2 — COGS $7.50–9.00 is the Alibaba number again
+
+That figure assumes bulk OEM purchase. Our verified per-order Zendrop costs:
+
+| | Cost | Shipping |
+|---|---|---|
+| Mist brush set | $7.50 | $9.92 |
+| Paw wash cup | $7.65–8.56 | $0 |
+| A roller (estimated) | ~$6–8 | ~$0 |
+
+A three-item Zendrop bundle costs roughly **$32–34**, not $7.50–9.00. At $49.99 that nets ~$12
+*before* advertising — and with the merchant's $18 CPA it would **lose $5–6 a sale**. The bundle
+does not rescue paid traffic at our cost base; it only works on the inventory model.
+
+### Input 3 — the high-ticket alternative is already tested and dead
+
+The suggested fallback (a $59.99–79.99 grooming vacuum kit) was screened on 28 Aug against real
+Zendrop data: `2000023` lands at **$61.33** and `2001005` at **$55.11**, against a US market of
+$35–65. **Landed cost sits inside the retail band.** Recorded then, unchanged now.
+
+### What survives, and it is the valuable part
+
+**The bundle is right for us — for a different reason.** Not to absorb ad spend, but because the
+brush carries $9.92 of shipping whether it travels alone or not, while the cup ships free. A
+second item adds margin against costs already paid.
+
+**Shipped:** an automatic Buy-X-Get-Y discount — buy the brush, take $3.90 off the cup.
+
+| | Price | Cost | Net after ~9% |
+|---|---|---|---|
+| Brush alone | $29.90 | $17.42 | **$9.88** |
+| **Brush + cup** | **$42.90** | $25.98 | **$13.06** |
+
+**+32% profit per order.** Verified on a live cart: $46.80 → $42.90, the cup at $13.00.
+
+This is a real discount that actually applies at checkout, not a compare-at price — no
+Merchant Center exposure, and automatic discounts do not appear in the product feed.
+
+### The question underneath both of the merchant's messages
+
+Two rounds of research have now arrived at the same place from different categories: the numbers
+that work require **buying inventory**. That is the real fork — not which product, but which
+business model — and it costs $1,500–4,000 upfront. It is the merchant's decision, and it should
+be made deliberately rather than drifted into.
