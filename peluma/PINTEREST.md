@@ -519,3 +519,18 @@ whereas a wrong path fails loudly.
 
 The alert does not block ingestion, so the data source can be uploaded before the category ships
 — the daily re-ingest picks it up on the next run. No need to hold the merchant on it.
+
+### Data source connected — 2026-08-29
+
+`Peluma Shopify Feed` is registered against `https://pelumapets.com/pages/pinterest-feed`,
+format XML, United States / USD, ingesting every 24 hours.
+
+**A snag worth recording:** the first attempt silently failed. `Test your data source` opens a
+*separate* debugger screen, and returning from it loses the dialog — the form has to be filled
+again and `Upload` pressed directly. Testing and saving are two different actions, and the test
+is not a step in the upload flow. Since validation had already passed, the second attempt skipped
+the test entirely and went straight to `Upload`.
+
+**From here Pinterest pulls the catalog itself, daily.** Any product added to the store enters
+Pinterest without manual work; prices and stock stay in sync on their own. Manual pinning is now
+optional creative rather than the only route in.
