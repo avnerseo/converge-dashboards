@@ -590,3 +590,50 @@ of its bristles. Both come from the same single photograph.
 abstraction.** It is no longer "our images are weaker than competitors'" — it is "we can produce
 two Pins for this product and no more." Own photographs unlock colour Pins, size-comparison Pins,
 in-use Pins, and the entire variant story, none of which can be made today.
+
+## Pinning is automated now — 2026-08-29
+
+**Claude can post Pins directly.** Four Pins went up in one pass with no merchant action:
+
+| Pin | Board | Pinterest ID |
+|---|---|---|
+| `pin-11` Turn it inside out | Paw & Nail Care | `916552961685357448` |
+| `pin-12` Gentle on paws | Paw & Nail Care | `916552961685357449` |
+| `pin-6` Three things, one brush | Peluma | `916552961685357510` |
+| `pin-7` For cats who hate being brushed | Cat Grooming at Home | `916552961685357509` |
+
+Both Paw Wash Cup Pins came back with **`is_product: true`** — Pinterest matched the destination
+URL to the claimed domain and the catalog, so they registered as **Product Pins**, which carry
+price and availability and get richer placement than a plain image Pin.
+
+`pin-8`, `pin-9` and `pin-10` are scheduled for **31 Aug, 2 Sep and 4 Sep at 19:00 Israel time**,
+keeping the 2–3-a-week cadence rather than posting five at once.
+
+### How, after it was written off
+
+Earlier in the project `pinterest.com` was found blocked at the network gateway (403 on CONNECT,
+organisation egress policy) and the whole channel was written off as merchant-only work. **That
+conclusion was wrong, and the evidence to see it was already in this file:** MCP traffic does not
+go through the container proxy — that is exactly why Zendrop and Shopify work here. Two known
+facts, never connected, until the merchant pushed back.
+
+The route is **`PINTEREST_CREATE_PIN` via the Composio MCP connector**, authorised once by the
+merchant with a single OAuth click. Everything else is automatic.
+
+### Two things that had to be solved along the way
+
+1. **The `Paw & Nail Care` board did not exist.** It was named in this document as a destination
+   but was never created — the account had five boards, none of them that one. Created via
+   `PINTEREST_CREATE_BOARD` before pinning. Writing a plan is not the same as executing it, and
+   this file asserted a board that was never checked.
+2. **Pin images needed public URLs.** Base64 payloads are 600–830 KB, too large to pass inline.
+   All seven Pins were uploaded to **Shopify Files** (`stagedUploadsCreate` → `fileCreate`),
+   giving stable `cdn.shopify.com` URLs that Pinterest fetches directly. Shopify Files are
+   separate from product media, so this does not touch the Google Merchant feed.
+
+### Known risk on the scheduled Pins
+
+The three scheduled Routines bind to this session so they inherit its Composio connection —
+fresh-session Routines cannot carry connectors on this organisation, and the API rejects the
+`connectors` parameter outright. **If a scheduled run reports no Pinterest tools, the Pin must be
+posted manually from a live session.** Untested until 31 Aug.
