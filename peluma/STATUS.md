@@ -1352,3 +1352,41 @@ return 0 occurrences, all seven kept images are present.
 Rejecting an asset in one place is not the same as removing it everywhere. The audit that fixed
 the *new, cheaper* product had never been run on the *old, flagship* one — because the flagship
 was set up first and was assumed done.
+
+## 2026-08-29 — "It looks like a vase" — the critique that mattered most today
+
+Three generated lifestyle scenes were produced for the Paw Wash Cup. The merchant's response:
+*"it looks like a vase, you can't tell what it's for."*
+
+**Correct, and it exposed a much larger problem than the scenes.** Removing the supplier's
+hangtag removed the only element in any image that said "paw cleaner". Every catalogue shot was
+now a well-lit silicone object with no visible purpose — and the one lifestyle photograph shows
+the cup used as a *bath brush*, not as a paw washer.
+
+**The store had zero images showing its primary use.** That is a bigger conversion problem than
+image cleanliness, and cleaning the images is what created it.
+
+### The fix
+
+Two product-in-use images generated: a dog's paw resting inside the cup with the interior
+bristles visible, and a paw being lowered into the cup on a floor by a front door. The first is
+now the **featured image**.
+
+That places it on the collection grid and the homepage — where a shopper meets the product
+first. Verified on the live catalogue page: the card now reads as a paw cleaner at a glance
+instead of as an ornament.
+
+### Where the line was drawn
+
+Showing a paw inside the cup depicts the **documented use** — the supplier's own instruction is
+"place the paw inside and turn gently". It asserts no outcome. A generated before/after showing
+mud disappearing would be a performance claim about a product nobody here has tested, and was
+not produced. **Presentation, not evidence** — the same rule as everywhere else in this project.
+
+### A limit of the theme, recorded not fought
+
+The product page gallery still leads with the **selected variant's** colour shot, because Horizon
+orders variant media first. Changing that needs a theme edit and a merchant publish. It was left
+alone: showing the chosen colour on the product page is correct behaviour, the use image sits
+one swipe away, and the surfaces that decide whether anyone clicks through — collection grid,
+homepage, social preview — all use the featured image, which is now the paw shot.
