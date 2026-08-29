@@ -687,3 +687,54 @@ is *less* than selling the brush alone at $29.90 ($9.88). **The bundle destroys 
   cheapest variant's `unitCost` equals the catalog `price` on both products, and every price is a
   uniform 3.14× of it. **Caveat:** the legacy brush's `unitCost` ($3.76 / $22.20) does *not* match
   its verified costs ($1.27 / $7.50), so this holds for imports made now, not for that one.
+
+## The roller category, researched by the merchant (29 Aug)
+
+The merchant brought market research on the two US category leaders — **ChomChom Roller**
+($20–28, 150k–200k Amazon reviews) and **Hertzko self-cleaning slicker brush** ($15–22, 90k+
+reviews) — plus a full margin model for rollers, which are **34.2% of the pet hair-removal
+category**, its largest slice.
+
+### It independently confirms the finding this project reached from the other direction
+
+Their own conclusion: *"ChomChom keeps its lead through brand authority, tens of thousands of
+positive reviews and superior packaging — not through technological exclusivity,"* and
+*"Amazon is flooded with hundreds of Chinese manufacturers selling an identical product at
+$9.99–$12.99."*
+
+That is the same structure the nail grinder exposed — the identical device at $2.99 and at $38, a
+20× spread — arrived at from a different category and a different data source. **The pattern is
+now confirmed twice, independently. It is a property of the market, not of one product.**
+
+### But the margin model describes a different business
+
+| | Their model | This store |
+|---|---|---|
+| Sourcing | Alibaba bulk / OEM | Zendrop, per order |
+| Unit cost | $1.20–2.50 + $1.00–1.80 freight | 50–60% of US retail, proven six times |
+| Capital required | **MOQ 500–1,000 units — $1,500–$4,000 upfront**, plus freight and prep | **$0** |
+| Channel | Amazon FBA (fees $5.50–7.50 + PPC $4–7) | Shopify, organic |
+| Gross margin | 60–70% | ~30–35% |
+
+The 60–70% is real — **it is bought with inventory capital**. It is not available to a
+dropshipping store at any product choice, so it is not a reason to add a roller here. It is a
+reason to consider a different business model, which is a separate decision and the merchant's
+to make.
+
+### The roller has the same shape as the grinder
+
+Applying the proven 50–60% rule to the merchant's own retail figures:
+
+| Position | Price | Competitor | Verdict |
+|---|---|---|---|
+| Brand tier | $22.90 | ChomChom, $20–28, ~175k reviews | Requires beating a review moat with supplier photos |
+| Clone tier | $12.99 | ORDORA/Delomo, $12–16 | Nets ~$4 |
+
+**Recommendation: do not add it now** — not because the demand is wrong (the demand signal is the
+strongest in the research) but because it is a review-moat category and the store has no reviews,
+no traffic and no photographs of its own.
+
+**Not yet verified:** the actual Zendrop cost of a comparable roller. The Zendrop MCP connection
+dropped mid-session, so this is reasoning from the established pattern rather than a measurement.
+It is a cheap check to run — and now a reliable one, since `inventoryItem.unitCost` on a fresh
+import gives true per-variant cost. **Worth running before the next product decision, not after.**
