@@ -1277,3 +1277,48 @@ cup is $46.80 and nets **~$16.31**.
   while shipping is free and flat; it renders as `0.0 kg` on the order.
 - Zendrop import-list entry `62596297` now points at a deleted Shopify product — merchant
   clean-up, alongside the 11 stale items already listed.
+
+## 2026-08-29 — The competitor's hangtag is gone from the catalogue
+
+Every product photo of the Paw Wash Cup carried a hanging paper tag for a different brand,
+*Soft Gentle · HistoTree*, reading "Muddy paws go in, clean paws come out!". It was the first
+thing a shopper saw on the product page. **All eight are now clean.**
+
+### Model chosen by testing, not by price
+
+The same navy image was run through two models and compared at full size before committing to
+a batch:
+
+| Model | Cost | Result |
+|---|---|---|
+| Kling 3 Omni | 10 cr | Tag gone, but a **dark ghost of the tag remained** in the upper cup, and the silhouette widened |
+| **GPT Image 2** | **42 cr** | **Clean, no ghost; outline, flares and rim dip faithful to the original** |
+
+The cheap model would have shipped a visible artifact to eight product pages. **336 credits spent
+against 12,000 available — the four-times price difference was irrelevant, the quality was not.**
+
+### A wrong call caught by zooming in
+
+On the contact sheet at 250px, `Blue / L` and `Blue / S` looked like they had lost their white
+tie-dye marbling, and both were nearly rejected. At full size the marbling is intact — the
+thumbnails were simply too small to show it. **The check that mattered was looking at the actual
+size, not the overview.**
+
+### What shipped
+
+- 8 cleaned images created as product media with the original alt text preserved
+- Each mapped to its own variant; verified variant-by-variant after the swap
+- 8 tagged originals detached and deleted
+- Lifestyle photo remains the featured image
+- Live page verified: **0 occurrences** of "Soft Gentle" or "HistoTree" in the page source
+- Feed verified: **8 cleaned images, 0 still tagged**, 13 items total
+
+Credits: **12,000 → 11,712**. The remaining balance covers the lifestyle scenes and ~50 videos
+a month, so the Motion top-up is not needed.
+
+### The honest limit, restated
+
+These are **reconstructions of the covered area, not pixel retouches.** The tag is packaging, not
+the product, and the silicone cup itself is unchanged in shape, colour and texture — which is why
+they are fit for the catalogue. Photographs of the real item, when the merchant takes them,
+remain better than this and are still the goal.
