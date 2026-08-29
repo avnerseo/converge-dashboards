@@ -1322,3 +1322,33 @@ These are **reconstructions of the covered area, not pixel retouches.** The tag 
 the product, and the silicone cup itself is unchanged in shape, colour and texture — which is why
 they are fit for the catalogue. Photographs of the real item, when the merchant takes them,
 remain better than this and are still the goal.
+
+## 2026-08-29 — The flagship's own product page had the worst images in the store
+
+After cleaning the Paw Wash Cup, the same audit was finally run on the **Mist Grooming Brush** —
+the flagship, $29.90, 64% of the bundle, and the destination of five of the eight live Pins. Its
+media had never been looked at. **Six of twelve images were unusable.**
+
+| Image | Problem |
+|---|---|
+| Lint remover on a sofa | Burnt-in English caption **"Stain from sofa hair dust"** plus a paragraph of the supplier's broken English |
+| Lint remover on a table | Burnt-in caption **"Sticky snack crumbs"**, same treatment |
+| Size guide | **Red annotation boxes** — a supplier's internal QC markup, shipped to customers |
+| 3 × 68 mm size guides | Near-duplicates of each other, and for the accessory rather than the brush |
+
+**These are the same three images rejected for Pins earlier the same day.** They were rejected as
+Pin creative and nobody checked whether they were also on the product page. They were, and they
+had been since launch.
+
+**Deleted:** the two captioned images, the red-boxed diagram, and two of the three duplicate size
+guides. Seven clean images remain.
+
+Variant media was checked **before** deleting: the four images bound to variants were not in the
+delete set, so no variant lost its picture. Verified on the live page — all five deleted images
+return 0 occurrences, all seven kept images are present.
+
+### The lesson worth keeping
+
+Rejecting an asset in one place is not the same as removing it everywhere. The audit that fixed
+the *new, cheaper* product had never been run on the *old, flagship* one — because the flagship
+was set up first and was assumed done.
