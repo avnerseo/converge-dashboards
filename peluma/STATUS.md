@@ -1390,3 +1390,22 @@ orders variant media first. Changing that needs a theme edit and a merchant publ
 alone: showing the chosen colour on the product page is correct behaviour, the use image sits
 one swipe away, and the surfaces that decide whether anyone clicks through — collection grid,
 homepage, social preview — all use the featured image, which is now the paw shot.
+
+### The same fix applied to the flagship
+
+The brush had the identical problem: its featured image was the product alone on white, which
+tells a shopper nothing. Its real in-use photographs were checked first — **476×467 and 647×649
+pixels**, too small to crop into a hero — so two in-use images were generated instead, the
+brush drawn along a long-haired cat's coat and used on a golden retriever.
+
+The cat frame is now featured: the looped handle, button and body read faithfully and the
+product sits large in the frame. Both products now show themselves **in use** on the collection
+grid and homepage.
+
+Credits: **12,000 → 11,435** for the whole day's imagery.
+
+**A note for whoever picks this up:** the two hero images on the storefront are now generated
+in-use photographs built on the real product shots. They depict documented use and assert no
+outcome, but they are not photographs of the item in someone's hands. Real photographs replace
+them the day the merchant takes them, and any Pin built from them should carry Pinterest's
+`AI_MODIFIED` disclosure.
