@@ -864,3 +864,59 @@ Now tested against the Pinterest connector:
 
 So the division of labour is: the merchant films; Claude publishes stills and carousels to
 Pinterest automatically; video goes up manually on TikTok and Reels.
+
+## The merchant's roadmap, executed rather than debated (29 Aug)
+
+The merchant re-sent the high-ticket grooming-vacuum roadmap. Rather than restate an opinion,
+its free steps were **run**.
+
+### Step 1 — Ad intelligence: cannot be run from here
+
+`facebook.com/ads/library`, `ads.tiktok.com/business/creativecenter` and `alibaba.com` all
+return `000` at the egress gateway. Only server-side web search reaches them. **This step is the
+merchant's to do**, and it remains worth doing.
+
+### Step 3 — sourcing: this is the step that decides it, and it fails
+
+The roadmap's whole case rests on **$20–30 landed cost**. Actual wholesale listings for
+5-in-1 / 7-in-1 pet grooming vacuum kits:
+
+| | Roadmap assumption | Found |
+|---|---|---|
+| Unit price | $20–30 incl. freight | **$30.50–34 FOB at MOQ 500** |
+| Plus air freight to US | — | roughly $5–8/unit |
+| **Landed** | **$20–30** | **~$36–42** |
+| Capital at MOQ 500 | not stated | **$15,250–17,000** |
+
+Reworking the roadmap's own margin table at real prices:
+
+| Retail | Landed | Fees ~9% | Gross | Less CPA $30–40 | Net |
+|---|---|---|---|---|---|
+| $79.99 | $39 | $7.20 | **$33.79** | | **$0 to −$6** |
+| $119.99 | $39 | $10.80 | **$70.19** | | **$30–40** |
+
+**The claimed $60–90 gross does not exist at $79.99.** It appears only at $119.99 — which is
+Neakasa's price, and reaching it requires being a brand with reviews. That is the same
+review-moat conclusion every previous round reached, now produced by the merchant's own method
+instead of by argument.
+
+And the capital requirement is **five times** the $2,500–4,000 previously discussed.
+
+### Step 2 — review mining: this worked exactly as promised
+
+The most valuable part of the document. Recurring complaints on the leading kits:
+
+- **Motors burning out** — one AIRROBO PG100 "died after 5 minutes… turned it to medium, it burned out and started giving off that burnt smell"
+- **Dust cup too small** — with a long-haired dog, "constantly had to stop to empty the container"
+- **Weak suction** — "less suction than any of my battery-powered handheld vacuums"
+- **Hose splitting** in use
+- **Flimsy brush teeth** — metal on one head, plastic on the other, hair having to be pushed through by hand
+
+That is a supplier specification and a landing-page hierarchy, written by customers. **It is
+reusable whatever the product** — the same technique applied to our own mist brush produced the
+distilled-water and tank-seal instructions now live on the product page.
+
+### Verdict
+
+**Method: keep. Product conclusion: not supported by its own step 3.** The roadmap is a good
+process that, when actually run, argues against the thing it recommends.
