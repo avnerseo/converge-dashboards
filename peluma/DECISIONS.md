@@ -803,3 +803,64 @@ Two rounds of research have now arrived at the same place from different categor
 that work require **buying inventory**. That is the real fork — not which product, but which
 business model — and it costs $1,500–4,000 upfront. It is the merchant's decision, and it should
 be made deliberately rather than drifted into.
+
+## Short-form video: the right diagnosis, three different price tags (29 Aug)
+
+The merchant proposed UGC short-form video as the leading 2026 strategy — "oddly satisfying"
+before/after ASMR clips, TikTok Shop integration, a $45–50 bundle, and a four-step plan ending in
+TikTok/Meta ad campaigns.
+
+**The format insight is correct and it is the most useful thing brought to this project.** Every
+previous entry has named "supplier photography" as the blocker without saying what would replace
+it. This does: for pet grooming, the converting asset is **20 seconds of before and after**, not
+a better still. That turns a vague weakness into a specific, cheap, achievable ask.
+
+**But the plan bundles four steps whose costs differ by three orders of magnitude.** Split:
+
+| Step | Cost to us | Status |
+|---|---|---|
+| The creative format (before/after, natural sound) | **$0** | **Do it. This is the path.** |
+| Organic posting to TikTok / Reels / Pinterest | **$0** | Open, no eligibility gate |
+| Sending samples to 3–5 US creators for 10–15 clips | **$1,000–4,500** + samples + freight | Same order as the inventory decision |
+| TikTok Shop checkout | Company formation | **Blocked — verified** |
+| TikTok / Meta ad campaigns | $15–25 CPA | Collides with our COGS |
+
+### TikTok Shop is blocked, and it is the Aleph pattern again
+
+Checked rather than assumed. TikTok Shop US requires **a named US person** with government ID,
+address verification and a selfie video; **a US business entity**; **a US business bank account
+matching the entity**; and alignment across entity, owner, bank and account identity. A non-US
+founder can operate through a US LLC, but TikTok reviews beneficial ownership and operational
+control, so the LLC alone does not settle it.
+
+This is the third channel to close on the same structural fact — the store is operated from
+Israel. Pinterest ads (Aleph), TikTok Shop, and now the US-payments assumption behind both.
+**Organic posting has no such gate**, which is exactly why it keeps being the answer.
+
+### The paid step collides with the previous entry
+
+The merchant's own CPA figure is $15–25. The bundle shipped today nets **$13.06**. Paid
+acquisition loses money on it, and better creative lowers CPA without changing the fact that our
+COGS is 50–60% of retail. UGC does not fix unit economics; it fixes *organic* reach, where CPA
+is zero.
+
+### The reframe
+
+**The plan assumes we need creators. We need one dog and one phone.**
+
+Peluma is not buying reach — it is producing content for free channels. Ten creator videos would
+be for ad testing we cannot afford to run. One honest before/after clip of the merchant's own dog
+serves Pinterest, TikTok organic, Reels and the product page at once, and it is the same single
+event this document has now pointed at three times: **the brush arriving.**
+
+### What can be published automatically, and what cannot
+
+Now tested against the Pinterest connector:
+
+- **Still Pins — yes.** Four posted today.
+- **Carousel Pins (2–5 images) — yes.** A before/after sequence fits in one Pin.
+- **Video Pins — no.** They need a `media_id` from Pinterest's media-registration endpoint, which
+  the connector does not expose. Video has to be posted by hand, or through another route.
+
+So the division of labour is: the merchant films; Claude publishes stills and carousels to
+Pinterest automatically; video goes up manually on TikTok and Reels.
