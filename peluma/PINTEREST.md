@@ -637,3 +637,59 @@ The three scheduled Routines bind to this session so they inherit its Composio c
 fresh-session Routines cannot carry connectors on this organisation, and the API rejects the
 `connectors` parameter outright. **If a scheduled run reports no Pinterest tools, the Pin must be
 posted manually from a live session.** Untested until 31 Aug.
+
+## Carousel Pin shipped — 2026-08-29
+
+A three-card carousel for the Paw Wash Cup, `creative_type: CAROUSEL`, Pinterest id
+`916552961685358081`, on the **Paw & Nail Care** board. Each card carries its own title,
+description and destination link.
+
+| Card | Image | Line |
+|---|---|---|
+| 1 | lifestyle | *Muddy paws stop at the door* |
+| 2 | bristle macro | *Soft silicone bristles* |
+| 3 | four-colour grid | *Four colours, two sizes* |
+
+### The card that was rejected as a Pin works as card 3
+
+The four-colour grid was built earlier today and **thrown out** — cropped below the supplier's
+hangtag, the cups read as abstract coloured blobs, and an unidentifiable product does not get
+saved. As the third card of a carousel it works, because cards 1 and 2 have already established
+what the object is.
+
+**Sequence buys context that a single image has to earn on its own.** Same asset, opposite
+verdict, decided by position.
+
+## Image generation: what free tooling can and cannot do — 2026-08-29
+
+The merchant challenged the assumption that new product imagery has to wait for the physical
+product. Correct — and the assumption was lazy. Tested properly:
+
+**Paid (OpenArt, `kling-3-omni` image2image, 10 credits):** removed the third-party
+*Soft Gentle · HistoTree* hangtag and its carabiner cleanly, rebuilding the ribbed bands, raised
+dots and tie-dye gradient underneath. No text, no logo. **The result is a reconstruction, not a
+retouch** — the silhouette shifts slightly and the background greys off. Fine for marketing
+creative; not yet trusted as the primary catalogue image, which must represent the product
+exactly.
+
+**Free (OpenCV, two attempts):** both failed, and the failures are recorded rather than hidden.
+
+| Method | Result |
+|---|---|
+| Telea / Navier-Stokes inpainting | Smeared the upper cup; NS pushed a white streak through the body |
+| Symmetry reconstruction (mirror about the cup's centre) | Covered only 29% of the hole; the fallback pulled the tag's green into the fill |
+
+**Why:** the masked region is 9% of the frame and sits **on the product's outline**, not on flat
+background. Classical inpainting continues texture; it cannot invent shape.
+
+**So the split is:** templates, typography, carousels, composition and publishing are free and
+already automated. Removing the hangtag is not — it costs ~10 credits per image, 80 for the set.
+
+### A blocked CDN, routed around legitimately
+
+`cdn.openart.ai` is blocked by the same egress policy as `pinterest.com`, so generated images
+cannot be downloaded here. **Shopify fetches `originalSource` URLs server-side**, so passing the
+OpenArt URL to `fileCreate` pulls the image into Shopify Files, from where its `cdn.shopify.com`
+URL is readable. Pinterest fetches image URLs the same way. The pipeline
+**generate → Shopify → Pinterest** therefore runs end to end without the container ever needing
+to reach the blocked host.
