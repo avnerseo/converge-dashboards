@@ -632,3 +632,58 @@ loss and worth stating plainly. **What it buys:** a price the store can stand be
 exposure to an instant suspension on the only paid channel that is free to use.
 
 Industry-normal is not the same as safe. Plenty of stores do this; Google suspends for it.
+
+## The screening cost column was wrong all along (29 Aug)
+
+Before pricing the two newly imported products I checked the real per-variant cost, and the check
+overturned a number this document has been reasoning from for a week.
+
+**Zendrop's catalog `price` field is the cheapest variant's cost — a "from" price, not the
+product's cost.**
+
+Proven on the nail grinder `2000800`. The catalog reports `price: "6.15"`. Shopify received 20
+variants, and `$6.15` turns out to be the cost of **`White grinding head`** — a *spare abrasive
+head*. The actual rechargeable device costs **$15.67**.
+
+| Variant | Real cost |
+|---|---|
+| White grinding head (a spare part) | **$6.15** ← the catalog's headline price |
+| **White rechargeable sharpener (the device)** | **$15.67** |
+| 1pc | $16.57 |
+| 1set | $17.89 |
+| Grinding Head 20pcs | $49.49 |
+
+Corroborated on the paw cleaner `1997733`: catalog `price: "7.65"` is exactly the **S** variant's
+cost, the cheapest of eight. Same rule, second product.
+
+Every "landed cost" in `PRODUCT-SCREENING.md` is therefore a **floor, not a cost**, and every
+margin cleared on those numbers was cleared against a spare part. The `$6.76` "Dog Shaver" and
+the rest of the sub-$8 US list are almost certainly accessories, not devices.
+
+### The nail grinder is dead, and the retraction did not go far enough
+
+The 28 Aug section resolved the grinder at **$24.90** on the strength of a **$6.15** cost, netting
+a claimed **$16.51**. With the real cost:
+
+| | Claimed | Actual |
+|---|---|---|
+| Cost | $6.15 | **$15.67** |
+| Price | $24.90 | $24.90 |
+| Net after ~9% fees | **$16.51** | **$6.99** |
+
+To net the $12 the screen demands, the price would have to be **$30.41** — above the top of the
+branded band (Wahl, HARDELL, Casfuy at $20–30), with supplier photos and no reviews. And the
+bundle escape hatch closes too: brush + grinder at $46.80 costs $33.09 and nets **$9.50**, which
+is *less* than selling the brush alone at $29.90 ($9.88). **The bundle destroys value.**
+
+**Deleted from Shopify.** It was never publicly visible.
+
+### Two tools validated in the process
+
+- **`get_catalog_shipping_estimate` is trustworthy.** Run against the brush it returns
+  `$9.92 / 8 days` — matching the figure independently verified from the Zendrop product page and
+  order #1001. So `$0 / 6 days` on both NexoraUSA products is real, not a default.
+- **`inventoryItem.unitCost` carries Zendrop's true per-variant cost on a fresh import** — the
+  cheapest variant's `unitCost` equals the catalog `price` on both products, and every price is a
+  uniform 3.14× of it. **Caveat:** the legacy brush's `unitCost` ($3.76 / $22.20) does *not* match
+  its verified costs ($1.27 / $7.50), so this holds for imports made now, not for that one.

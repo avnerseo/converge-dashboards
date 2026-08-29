@@ -1218,3 +1218,62 @@ Everything that can be built without customers is now built. What remains is tim
 distribution takes weeks, Google's review takes days — and the one asset money cannot substitute
 for: **photographs of the actual product**, which unlock better Pins, TikTok, and brand-tier
 positioning. That waits on the brush arriving.
+
+## 2026-08-29 — Second product live; the grinder deleted on corrected costs
+
+The store is no longer a one-product store. **Peluma 2-in-1 Paw Wash Cup, $16.90**, live on
+Online Store, Google & YouTube and Pinterest. The nail grinder was deleted — see `DECISIONS.md`
+for the cost correction that killed it.
+
+### What the imports actually looked like
+
+Both products arrived from Zendrop as **`ACTIVE`** — live on the storefront — carrying raw
+supplier titles (`2 In 1 Dog Paw Cleaner Cup Soft Pet Dog Foot Cleaning Washer Brush Cup
+Portable...`), descriptions with ~20 embedded `cf.cjdropshipping.com` image URLs, empty
+`productType`, no tags, and `compareAtPrice` set equal to `price` on every variant. They were
+dropped to `DRAFT` immediately and rebuilt.
+
+### The blocker that would have made it unsellable
+
+The feed read **`out of stock` on all eight variants**. Zendrop imported them with
+`inventoryItem.tracked: true`, quantity `0`, policy `DENY`. The brush is `tracked: false` — the
+correct dropshipping configuration, since Zendrop holds no stock counts we can mirror. All eight
+inventory items set to `tracked: false`; the feed now reads `in stock` on all 13 items.
+
+**Nobody could have bought it.** This is not visible on the product page, only in the feed.
+
+### Three things only found by looking at the images
+
+1. **The hero image had burnt-in supplier text** ("2 in 1 Paw Cleaner"). Google Merchant Center
+   treats promotional overlays as a policy violation, and the store is mid-review. Deleted; the
+   clean version of the same shot is now the featured image.
+2. **The size guidance was wrong.** The first draft read "Small for cats and small dogs, Large for
+   medium and larger breeds." Zooming into the manufacturer's hangtag shows **"For Small & Medium
+   Pets"** on the S variants and **"For Large Pets"** on the L. Corrected to the manufacturer's own
+   wording. The S/L option names were checked against the tags and are right — no rename needed.
+3. **Every product photo carries a third-party hangtag** reading *Soft Gentle · HistoTree*. It
+   cannot be removed without editing the photo, and the physical product ships with it. This is
+   the documented "we cannot present a commodity as a brand" weakness, now visible on the page.
+
+### The listing
+
+| | |
+|---|---|
+| Price | **$16.90**, all 8 variants, no compare-at |
+| Cost | $7.65 (S) / $8.56 (L), **shipping $0**, ~6 days from a US supplier |
+| Net after ~9% fees | **$7.73 (S) / $6.82 (L)** |
+| Copy | English, brand voice matching the brush, every claim traceable to the supplier spec |
+| Alt text | written on all 9 images |
+| Channels | Online Store · Google & YouTube · Pinterest |
+| Feed | 13 items, valid XML, all `in stock` |
+
+Thinner than the brush's $9.88, and it is an **accessory, not a second hero** — its job is to make
+the store look like a shop and to add margin to an order whose costs are already paid. Brush +
+cup is $46.80 and nets **~$16.31**.
+
+### Open
+
+- Variant weights are `0` (the supplier publishes none, and inventing one is not on). Cosmetic
+  while shipping is free and flat; it renders as `0.0 kg` on the order.
+- Zendrop import-list entry `62596297` now points at a deleted Shopify product — merchant
+  clean-up, alongside the 11 stale items already listed.
