@@ -584,3 +584,51 @@ Relatedly, Zendrop offers **"Safety Stock"**: once a product is selling at volum
 inventory so orders ship within 24 hours, and they say they reach out when that point comes. Like
 Private Agent, it is a consequence of traction, not a route to it — worth knowing, not actionable
 at one order.
+
+## The $49.90 compare-at was never a price — removed 2026-08-29
+
+The compare-at question had been open since the first day. The data closes it:
+
+```
+product createdAt   2026-08-26 18:10:44Z
+variants createdAt  2026-08-26 18:10:44Z   ← same second
+compareAtPrice      set at creation
+order history       one order, #1001, at $29.90
+```
+
+**The compare-at did not come from a price reduction — it arrived with the Zendrop import**, which
+is what dropshipping importers set by default. The product has existed for three days and has
+never been sold, listed or charged at $49.90. **It was never a price.**
+
+### Why that mattered enough to act on immediately
+
+Google's **Misrepresentation** policy names `inaccurate promotions or fake discounts` as a
+violation, and it carries **immediate suspension with no warning and no grace period**. The
+Merchant Center account was created the day before. An account one day old with no trading
+history, suspended for misrepresentation, is very hard to recover.
+
+It also contradicted this project's own founding constraint — no unsupported claims — and the
+claim was not confined to a feed: **every visitor to the product page was being shown $29.90 with
+$49.90 struck through**, which is the same assertion made directly to the customer.
+
+### Done
+
+`compareAtPrice` set to `null` on all five variants via `productVariantsBulkUpdate`, verified on
+the live product JSON and in the generated feed:
+
+| Variant | Price | compare-at |
+|---|---|---|
+| Porcelain White Set | $29.90 | none |
+| Milk Brown Set | $39.90 | none |
+| Porcelain White Brush | $29.90 | none |
+| Purple Brush | $29.90 | none |
+| Set | $29.90 | none |
+
+The feed template needed no change — its `compare_at_price > price` branch simply stops firing,
+so each item now carries a single `g:price` and no `g:sale_price`.
+
+**What this costs:** the strike-through display, which does affect conversion. That is a real
+loss and worth stating plainly. **What it buys:** a price the store can stand behind, and no
+exposure to an instant suspension on the only paid channel that is free to use.
+
+Industry-normal is not the same as safe. Plenty of stores do this; Google suspends for it.
