@@ -543,3 +543,50 @@ clean, all in stock. The storefront was checked in the same pass and is unaffect
 returns 200 with the buy button present.
 
 This closes Pinterest's Alert 157. The next daily ingest picks it up.
+
+## Batch 3 — two Pins for the Paw Wash Cup, 2026-08-29
+
+The second product now has Pins. **Two, not three** — and the reason is the point of this entry.
+
+| Pin | Board | Destination |
+|---|---|---|
+| `pin-11.png` | Paw & Nail Care | `/products/peluma-2-in-1-paw-wash-cup` |
+| `pin-12.png` | Paw & Nail Care | `/products/peluma-2-in-1-paw-wash-cup` |
+
+Destination verified HTTP 200. Both rendered on the same 1000×1500 template as pins 1–10 —
+logo, image box, headline, subhead and footer measured against `pin-7.png` and matching it to
+the pixel (footer width 275px in both).
+
+### Copy
+
+**pin-11** — `Turn it inside out. Now it's a bath brush.`
+```
+One soft silicone cup — a paw washer one way, a bath and grooming brush the other. Add a little
+water, place the paw inside and turn gently.
+
+#dogpaws #pawcare #petgrooming #muddypaws
+```
+
+**pin-12** — `Gentle on paws. Tough on mud.`
+```
+Soft silicone bristles that work around the pads and between the toes, lifting mud, sand and
+dirt before it reaches the floor.
+
+#pawcleaner #dogwalking #petgrooming #dogcare
+```
+
+### Why there is no third Pin
+
+A third was built — a four-colour grid showing all the variants — and **rejected after looking at
+it**. Every one of the eight supplier product photos carries a hanging paper tag for a different
+brand (*Soft Gentle · HistoTree*). The only crop that removes the tag also removes the top of the
+cup, and what is left reads as an abstract coloured blob. Unidentifiable products do not get
+saved on Pinterest.
+
+That leaves exactly **two usable frames** for this product: the lifestyle shot and a macro crop
+of its bristles. Both come from the same single photograph.
+
+**This is the photography blocker showing up as a hard limit on output rather than as an
+abstraction.** It is no longer "our images are weaker than competitors'" — it is "we can produce
+two Pins for this product and no more." Own photographs unlock colour Pins, size-comparison Pins,
+in-use Pins, and the entire variant story, none of which can be made today.
