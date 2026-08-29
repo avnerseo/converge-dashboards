@@ -1178,3 +1178,43 @@ account, nothing is lost.
 
 **Merchant steps:** publish `189496885561`, then in Pinterest set the URL to `https://` (the
 dialog defaulted to `http://`) and press **Claim your website**. Then try **Begin review process**.
+
+## 2026-08-29 — Both free channels live
+
+**Google Shopping** — Merchant Center connected, feed syncing, product status:
+
+```
+Total 10 · Approved 0 · Under review 0 · Limited 10 · Not approved 0
+Issue: "Pending initial review"
+```
+
+`Not approved: 0` is the number that matters — **nothing was rejected.** "Pending initial review"
+is Google's standard check on any new Merchant Center account, typically 3–5 business days.
+`Limited` means reduced visibility until it clears. No action available or needed.
+
+**Worth noting on timing:** the fabricated $49.90 compare-at was removed from both the store and
+the feed *this morning*, before that initial review completed. Initial review is exactly when
+Google catches Misrepresentation, and the penalty is immediate suspension. Whether Google had
+already snapshotted the old data is unknowable from here — but the exposure was removed before
+the review finished, which is why it was done immediately rather than queued.
+
+**Pinterest** — domain claimed, catalog data source connected and ingesting daily, five Pins
+live, `google_product_category` shipped.
+
+### State of play
+
+| | |
+|---|---|
+| Store fulfils a paying customer end to end | ✅ |
+| Mobile add-to-cart above the fold | ✅ 1065px → 592px |
+| Copy matches what the supplier commits to | ✅ |
+| No unsubstantiated price claims | ✅ |
+| Google Shopping | ✅ connected, in initial review |
+| Pinterest organic Pins | ✅ 5 live, 5 ready |
+| Pinterest catalog feed | ✅ self-updating daily |
+| **Real customer traffic** | **still zero** |
+
+Everything that can be built without customers is now built. What remains is time — Pinterest
+distribution takes weeks, Google's review takes days — and the one asset money cannot substitute
+for: **photographs of the actual product**, which unlock better Pins, TikTok, and brand-tier
+positioning. That waits on the brush arriving.

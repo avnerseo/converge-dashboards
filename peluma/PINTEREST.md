@@ -534,3 +534,12 @@ the test entirely and went straight to `Upload`.
 **From here Pinterest pulls the catalog itself, daily.** Any product added to the store enters
 Pinterest without manual work; prices and stock stay in sync on their own. Manual pinning is now
 optional creative rather than the only route in.
+
+### google_product_category shipped — 2026-08-29
+
+`Horizon — feed category (2026-08-29)` published. Verified live on the feed: all five items now
+carry `Animals & Pet Supplies > Pet Supplies > Pet Grooming Supplies`, XML still parses, prices
+clean, all in stock. The storefront was checked in the same pass and is unaffected — product page
+returns 200 with the buy button present.
+
+This closes Pinterest's Alert 157. The next daily ingest picks it up.
