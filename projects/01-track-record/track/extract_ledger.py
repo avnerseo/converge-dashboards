@@ -15,8 +15,32 @@ commits = [l.split("\x1f") for l in
 CARD = re.compile(r'<div class="stock-card"([^>]*)>(.*?)(?=<div class="stock-card"|</div></section>|$)', re.S)
 ATTR = lambda s,k: (re.search(rf'data-{k}="([^"]*)"', s) or [None,None])[1]
 PRICE = re.compile(r'class="price ltr">\s*\$?([\d,]+\.\d{2})\s*([+-][\d.]+%)?[^<]*<')
-SCORE = re.compile(r'class="chip score2?">\s*([^<]{0,40})<')
+SCORE = re.compile(r'class="chip score2?">\s*([^<]{0,60})<')
 TIER1 = re.compile(r'<section id="tier1".*?(?=<section id=)', re.S)
+
+# Two markup eras. From 2026-08-27 the cards carry data-ticker/data-name; before
+# that the ticker only exists as the rendered <span class="ticker ltr"> and the
+# data attribute is data-q, a lowercased search string. Reading the span is not
+# a fallback of convenience — it is the only place the older ticker was ever
+# written, and skipping it is what kept eight publication days out of the ledger.
+SPAN_TICKER = re.compile(r'class="ticker ltr">\s*([A-Z.\-]{1,6})\s*<')
+SPAN_NAME = re.compile(r'class="company-name">\s*([^<]*?)\s*<')
+
+
+def read_card(attrs, body):
+    t = ATTR(attrs, "ticker")
+    src = "data-ticker"
+    if not t:
+        m = SPAN_TICKER.search(body)
+        if not m:
+            return None
+        t, src = m.group(1), "ticker-span"
+    name = ATTR(attrs, "name")
+    if not name:
+        m = SPAN_NAME.search(body)
+        # the older span is "Broadcom Inc. · טכנולוגיה" — the sector is its own field
+        name = m.group(1).split(" · ")[0] if m else None
+    return t, name, src
 
 VERSIONS = meth.load_all()
 
@@ -31,22 +55,24 @@ for sha, date, subj in commits:
     block = m.group(0)
     before = len(rows)
     for attrs, body in CARD.findall(block):
-        t = ATTR(attrs, "ticker")
-        if not t: continue
+        card = read_card(attrs, body)
+        if not card: continue
+        t, name, src = card
         p = PRICE.search(body); s = SCORE.search(body)
         rows.append(OrderedDict(
             date=date[:10], sha=sha[:7], ticker=t,
-            name=ATTR(attrs,"name"), sector=ATTR(attrs,"sector"),
+            name=name, sector=ATTR(attrs,"sector"),
             price=float(p.group(1).replace(",","")) if p else None,
             chg=p.group(2) if p and p.group(2) else None,
             conviction=s.group(1).strip() if s else None,
+            ticker_source=src,
         ))
     # A tier-1 section that yields no tickers is a hole in the record, not a
     # no-op. Say so per commit instead of letting it vanish into a counter.
     if len(rows) == before:
-        legacy = len(re.findall(r'<div class="stock-card"[^>]*data-q="', block))
-        if legacy:
-            unparsed.append((sha[:7], date[:10], legacy))
+        cards = len(re.findall(r'<div class="stock-card"', block))
+        if cards:
+            unparsed.append((sha[:7], date[:10], cards))
 
 # de-dup: keep last commit of each day (the day's final published state)
 by_day = OrderedDict()
@@ -99,9 +125,6 @@ if unstamped:
 if unparsed:
     total = sum(n for _,_,n in unparsed)
     print(f"\nNOT IN THE LEDGER: {len(unparsed)} commits carry a tier-1 section with "
-          f"{total} cards this parser cannot read.")
-    print("Those commits mark tickers with data-q= (a search string) instead of "
-          "data-ticker=; the attribute only appears from 2026-08-27 on.")
+          f"{total} cards this parser cannot read. Investigate before trusting a count.")
     for sha, d, n in unparsed:
         print(f"  {d}  {sha}  {n} tier-1 cards unread")
-    print("The picks are not lost — they are in git. They are simply not yet extracted.")

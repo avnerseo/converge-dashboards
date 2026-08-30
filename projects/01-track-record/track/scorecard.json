@@ -1,25 +1,252 @@
 {
-  "positions": 14,
+  "positions": 29,
+  "unpriced_positions": 12,
   "horizons": {},
   "methodology_mix": {
-    "v8": 3,
-    "v9": 6,
-    "v11": 5
+    "v1": 7,
+    "v3": 6,
+    "v4": 5,
+    "v6": 1,
+    "v7": 2,
+    "v8": 1,
+    "v9": 5,
+    "v11": 2
   },
-  "methodology_versions_spanned": 3,
+  "methodology_versions_spanned": 8,
   "pick_months": 0,
   "powered": false,
   "verdict": "NO SIGNAL YET — 0 of ~250 pick-months needed before any number here means anything.",
   "opened_positions": [
     {
+      "ticker": "AVGO",
+      "entry_date": "2026-08-18",
+      "entry_price": 392.99,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": "published_card"
+    },
+    {
       "ticker": "MSFT",
-      "entry_date": "2026-08-27",
-      "entry_price": 496.37,
+      "entry_date": "2026-08-18",
+      "entry_price": 495.4,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "GOOGL",
+      "entry_date": "2026-08-18",
+      "entry_price": null,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "MELI",
+      "entry_date": "2026-08-18",
+      "entry_price": null,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "USB",
+      "entry_date": "2026-08-18",
+      "entry_price": null,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "XOM",
+      "entry_date": "2026-08-18",
+      "entry_price": null,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "DIS",
+      "entry_date": "2026-08-18",
+      "entry_price": null,
+      "sector": null,
+      "conviction": "★ 2 מקורות",
+      "sha": "93eb01f",
+      "methodology_version": "v1",
+      "methodology_rule_hash": "sha256:bb6d23f932a718cc",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "NVDA",
+      "entry_date": "2026-08-19",
+      "entry_price": 219.74,
       "sector": "טכנולוגיה",
-      "conviction": "3/3 מקורות",
-      "sha": "f354588",
-      "methodology_version": "v8",
-      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "SHOP",
+      "entry_date": "2026-08-19",
+      "entry_price": 146.58,
+      "sector": "טכנולוגיה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "MU",
+      "entry_date": "2026-08-19",
+      "entry_price": null,
+      "sector": "טכנולוגיה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "APP",
+      "entry_date": "2026-08-19",
+      "entry_price": 307.26,
+      "sector": "טכנולוגיה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "ABNB",
+      "entry_date": "2026-08-19",
+      "entry_price": 183.25,
+      "sector": "צריכה מחזורית",
+      "conviction": "★ שכבה 1 · 2 מקורות (ב+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "BMY",
+      "entry_date": "2026-08-19",
+      "entry_price": null,
+      "sector": "בריאות",
+      "conviction": "★ שכבה 1 · 2 מקורות (ב+ג)",
+      "sha": "0473e0b",
+      "methodology_version": "v3",
+      "methodology_rule_hash": "sha256:f09f4853cbf6bf8c",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "V",
+      "entry_date": "2026-08-20",
+      "entry_price": null,
+      "sector": "פיננסים",
+      "conviction": "★ שכבה 1 · 2-3 מקורות (א+ג)",
+      "sha": "a7a3827",
+      "methodology_version": "v4",
+      "methodology_rule_hash": "sha256:8f212edcc0ba9141",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "UBER",
+      "entry_date": "2026-08-20",
+      "entry_price": null,
+      "sector": "תעשייה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "a7a3827",
+      "methodology_version": "v4",
+      "methodology_rule_hash": "sha256:8f212edcc0ba9141",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "GE",
+      "entry_date": "2026-08-20",
+      "entry_price": null,
+      "sector": "תעשייה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "a7a3827",
+      "methodology_version": "v4",
+      "methodology_rule_hash": "sha256:8f212edcc0ba9141",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "ETN",
+      "entry_date": "2026-08-20",
+      "entry_price": null,
+      "sector": "תעשייה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "a7a3827",
+      "methodology_version": "v4",
+      "methodology_rule_hash": "sha256:8f212edcc0ba9141",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "NBIX",
+      "entry_date": "2026-08-20",
+      "entry_price": null,
+      "sector": "בריאות",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "a7a3827",
+      "methodology_version": "v4",
+      "methodology_rule_hash": "sha256:8f212edcc0ba9141",
+      "entry_price_source": null
+    },
+    {
+      "ticker": "KO",
+      "entry_date": "2026-08-24",
+      "entry_price": 91.1,
+      "sector": "צריכה בסיסית",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ב)",
+      "sha": "bc42003",
+      "methodology_version": "v6",
+      "methodology_rule_hash": "sha256:da638e9657cc045a",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "AMZN",
+      "entry_date": "2026-08-26",
+      "entry_price": 261.06,
+      "sector": "צריכה מחזורית",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ג)",
+      "sha": "85477f6",
+      "methodology_version": "v7",
+      "methodology_rule_hash": "sha256:fb7c676c3b33095a",
+      "entry_price_source": "published_card"
+    },
+    {
+      "ticker": "AMD",
+      "entry_date": "2026-08-26",
+      "entry_price": 479.18,
+      "sector": "טכנולוגיה",
+      "conviction": "★ שכבה 1 · 2 מקורות (א+ב)",
+      "sha": "85477f6",
+      "methodology_version": "v7",
+      "methodology_rule_hash": "sha256:fb7c676c3b33095a",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "CMCSA",
@@ -29,17 +256,8 @@
       "conviction": "2/3 מקורות",
       "sha": "f354588",
       "methodology_version": "v8",
-      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
-    },
-    {
-      "ticker": "BMY",
-      "entry_date": "2026-08-27",
-      "entry_price": 67.57,
-      "sector": "בריאות",
-      "conviction": "2/3 מקורות",
-      "sha": "f354588",
-      "methodology_version": "v8",
-      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
+      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "CVX",
@@ -49,7 +267,8 @@
       "conviction": "2/3 מקורות: א׳+ב׳",
       "sha": "280245e",
       "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
+      "methodology_rule_hash": "sha256:ccb8956d14026531",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "CAT",
@@ -59,17 +278,8 @@
       "conviction": "2/3 מקורות: א׳+ב׳",
       "sha": "280245e",
       "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
-    },
-    {
-      "ticker": "KO",
-      "entry_date": "2026-08-28",
-      "entry_price": 89.06,
-      "sector": "צריכה בסיסית",
-      "conviction": "2/3 מקורות: א׳+ב׳",
-      "sha": "280245e",
-      "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
+      "methodology_rule_hash": "sha256:ccb8956d14026531",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "GEV",
@@ -79,7 +289,8 @@
       "conviction": "2/3 מקורות: א׳+ג׳",
       "sha": "280245e",
       "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
+      "methodology_rule_hash": "sha256:ccb8956d14026531",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "BRK.B",
@@ -89,7 +300,8 @@
       "conviction": "2/3 מקורות: ב׳+ג׳",
       "sha": "280245e",
       "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
+      "methodology_rule_hash": "sha256:ccb8956d14026531",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "NKE",
@@ -99,27 +311,8 @@
       "conviction": "2/3 מקורות: ב׳+ג׳",
       "sha": "280245e",
       "methodology_version": "v9",
-      "methodology_rule_hash": "sha256:ccb8956d14026531"
-    },
-    {
-      "ticker": "V",
-      "entry_date": "2026-08-30",
-      "entry_price": 381.6,
-      "sector": "פיננסים",
-      "conviction": "3/3 מקורות: א׳+ב׳+ג׳",
-      "sha": "ae95024",
-      "methodology_version": "v11",
-      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
-    },
-    {
-      "ticker": "AMZN",
-      "entry_date": "2026-08-30",
-      "entry_price": 266.43,
-      "sector": "צריכה מחזורית",
-      "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "ae95024",
-      "methodology_version": "v11",
-      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
+      "methodology_rule_hash": "sha256:ccb8956d14026531",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "LLY",
@@ -129,27 +322,19 @@
       "conviction": "2/3 מקורות: א׳+ג׳",
       "sha": "ae95024",
       "methodology_version": "v11",
-      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
-    },
-    {
-      "ticker": "GOOGL",
-      "entry_date": "2026-08-30",
-      "entry_price": 346.59,
-      "sector": "תקשורת ומדיה",
-      "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "ae95024",
-      "methodology_version": "v11",
-      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9",
+      "entry_price_source": "published_card"
     },
     {
       "ticker": "JPM",
       "entry_date": "2026-08-30",
       "entry_price": 357.62,
       "sector": "פיננסים",
-      "conviction": null,
+      "conviction": "2/3 מקורות: א׳+ב׳ (א׳ ברמת ביטחון בינונית)",
       "sha": "ae95024",
       "methodology_version": "v11",
-      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9",
+      "entry_price_source": "published_card"
     }
   ]
 }

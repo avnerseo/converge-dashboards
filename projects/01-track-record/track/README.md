@@ -22,7 +22,8 @@ either. That is the asset being destroyed daily.
 ## Files
 
 - `extract_ledger.py` — replays every commit touching `index.html`, parses the
-  tier-1 cards (`data-ticker` / `.price`), and writes one row per pick per day.
+  tier-1 cards across both markup eras (`data-ticker` from 08-27, the rendered
+  `.ticker` span before it), and writes one row per pick per day.
   Git is the audit trail: commits are hash-chained, so a pick provably existed
   before its outcome was known. That property cannot be retrofitted.
 - `tier1_ledger.jsonl` — the recovered ledger. Every row carries the
@@ -68,22 +69,34 @@ number can be quoted without showing how many definitions it spans. It does not
 refuse to pool across versions — at n=14 there is nothing else to do — it
 refuses to hide that it is pooling. The power gate is untouched.
 
-## Open: eight publication days are not in the ledger
+## Closed: six publication days were missing from the ledger
 
-The extractor reads tickers from `data-ticker`, an attribute that only appears
-from 2026-08-27. Every earlier commit marks its cards with `data-q` (a search
-string) instead. Ten commits across **2026-08-18, 08-19, 08-20, 08-23, 08-24 and
-08-26 carry a tier-1 section with 48 cards this parser cannot read.**
+The extractor read tickers only from `data-ticker`, an attribute that first
+appears on 2026-08-27. Every earlier commit writes the ticker as the rendered
+`<span class="ticker ltr">` and puts a lowercased search string in `data-q`.
+Six publication days — 08-18, 08-19, 08-20, 08-23, 08-24, 08-26 — were being
+dropped without a word.
 
-They were being dropped silently. `extract_ledger.py` now names them at the end
-of every run. They are not lost — they are hash-chained in git and recoverable
-whenever the parser is taught the older markup. They are also the *oldest*
-picks, the ones with the most outcome runway, so recovering them is worth more
-per pick than any future day.
+Teaching the parser the older markup took the ledger from 23 rows over 4 days to
+**61 rows over 10 days, and from 14 opened positions to 29**. The recovered days
+are the oldest ones, with the most outcome runway ahead of them.
 
-One wrinkle for whoever does it: the ledger keeps the last commit of each day as
-that day's published state, and 08-26's last commit (`7e28804`) is a truncated
-rebuild whose tier-1 section is empty. Day-final is the wrong rule there.
+The dashboard's truncated rebuilds (`7e28804`, `c4b0f28`) turn out to be
+harmless: their tier-1 sections are empty, so they produce no rows and can never
+win the day-final tiebreak. `extract_ledger.py` now reports any commit whose
+tier-1 section holds cards it could not read — that count is zero today, and a
+non-zero one means the markup changed again.
+
+## Open: 12 positions have no entry price
+
+Several runs shipped tier-1 cards with no price at all — 08-20 published
+fourteen of them, with the Alpha Vantage quota gone. Those positions open on
+their first appearance and stay unpriced; `score.py` will not score them and,
+critically, will not postpone their entry to a later day that happens to carry a
+price. Re-dating a pick to a more convenient entry is the same accounting hole
+as pretending a dropped ticker was never picked.
+
+They need the daily close store below. Nothing else unblocks them.
 
 ## Blocker: no close-price store
 

@@ -54,10 +54,19 @@ def positions(rows):
     already excludes it, but a run that carried a ticker forward before its
     own first appearance would not be an entry either — hence the explicit
     check rather than relying on ordering.
+
+    A missing published price does NOT postpone the entry. Several runs shipped
+    tier-1 cards with no price at all (2026-08-20 published fourteen of them —
+    the Alpha Vantage quota was gone). Skipping those rows and opening the
+    position on the next day that happened to carry a price would silently
+    re-date the pick to a more convenient entry, which is the same accounting
+    hole as pretending a dropped ticker was never picked. The position opens on
+    first appearance; entry_price stays None until a daily close store supplies
+    the close for entry_date, and score() will not score an unpriced position.
     """
     seen, out, dropped = set(), [], []
     for r in sorted(rows, key=lambda r: r["date"]):
-        if r["ticker"] in seen or r["price"] is None:
+        if r["ticker"] in seen:
             continue
         if r.get("methodology_version") is None:
             dropped.append(r)          # unstamped: rule set unknown, not scoreable
@@ -71,6 +80,7 @@ def positions(rows):
             "conviction": r["conviction"], "sha": r["sha"],
             "methodology_version": r["methodology_version"],
             "methodology_rule_hash": r.get("methodology_rule_hash"),
+            "entry_price_source": "published_card" if r["price"] is not None else None,
         })
     return out, dropped
 
@@ -79,13 +89,17 @@ def score(pos, prices, bench):
     """prices/bench: {(ticker, horizon): pct_return}. Missing -> unscored."""
     per_h = defaultdict(list)
     for p in pos:
+        if p["entry_price"] is None:
+            continue          # no entry close yet: unscoreable, never re-dated
         for h in HORIZONS:
             r, b = prices.get((p["ticker"], h)), bench.get(h)
             if r is None or b is None:
                 continue
             per_h[h].append(r - b)
 
-    card = {"positions": len(pos), "horizons": {}}
+    unpriced = [p for p in pos if p["entry_price"] is None]
+    card = {"positions": len(pos), "unpriced_positions": len(unpriced),
+            "horizons": {}}
     total_pick_months = 0
     for h, xs in per_h.items():
         if not xs:
@@ -135,3 +149,7 @@ if __name__ == "__main__":
     if unstamped:
         print(f"{len(unstamped)} row(s) not scored: no methodology version claims "
               f"their commit.")
+    if card["unpriced_positions"]:
+        print(f"{card['unpriced_positions']} position(s) opened without a published "
+              f"entry price. Their entry dates stand; they need a daily close store "
+              f"before they can be scored.")
