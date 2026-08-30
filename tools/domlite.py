@@ -66,6 +66,35 @@ class Node:
     def clean_text(self):
         return " ".join(self.text.split())
 
+    def inner_html(self):
+        """Serialise children back to HTML.
+
+        Rich fields on the dashboards carry inline markup that is part of the
+        content -- <b>עדכון היום:</b> inside a rationale, links inside a table
+        cell -- so round-tripping has to keep it rather than flatten to text.
+        """
+        return "".join(_serialise(c) for c in self.children)
+
+    def outer_html(self):
+        return _serialise(self)
+
+
+def escape_text(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def escape_attr(s):
+    return escape_text(s).replace('"', "&quot;")
+
+
+def _serialise(node):
+    if isinstance(node, str):
+        return escape_text(node)
+    attrs = "".join(' %s="%s"' % (k, escape_attr(v)) for k, v in node.attrs.items())
+    if node.tag in VOID:
+        return "<%s%s>" % (node.tag, attrs)
+    return "<%s%s>%s</%s>" % (node.tag, attrs, node.inner_html(), node.tag)
+
 
 class _Builder(HTMLParser):
     def __init__(self):

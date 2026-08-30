@@ -91,6 +91,13 @@ def parse_updated(badge_text):
     return date, (t.group(1).strip() if t else None)
 
 
+def rich(node):
+    """Content that carries inline markup (<b>, <a>) as part of its meaning."""
+    if node is None:
+        return None
+    return " ".join(node.inner_html().split()) or None
+
+
 def links(node):
     return [{"name": a.clean_text(), "url": a.get("href")}
             for a in node.find_all("a") if a.get("href")]
@@ -105,7 +112,8 @@ def chips(node):
 
 
 def table_rows(table):
-    head = [th.clean_text() for th in table.find_all("th")]
+    head = [{"text": th.clean_text(), "sortable": bool(th.get("onclick"))}
+            for th in table.find_all("th")]
     rows = []
     body = table.find("tbody") or table
     for tr in body.find_all("tr"):
@@ -114,14 +122,9 @@ def table_rows(table):
             continue
         cells = []
         for td in tds:
-            cell = {"text": td.clean_text()}
-            ls = links(td)
-            if ls:
-                cell["links"] = ls
-            tags = [s.clean_text() for s in td.find_all("span")
-                    if any(c.endswith("-tag") for c in s.classes)]
-            if tags:
-                cell["tags"] = tags
+            cell = {"html": rich(td)}
+            if td.get("class"):
+                cell["class"] = td.get("class")
             cells.append(cell)
         row = {"cells": cells}
         for attr in ("data-ticker", "data-sector"):
@@ -149,10 +152,21 @@ def section(doc, sid):
 
 
 def heading(sec):
-    h = sec.find("h2") if sec else None
-    sub = sec.find("div", "section-sub") if sec else None
-    return ({"title": h.clean_text() if h else None,
-             "subtitle": sub.clean_text() if sub else None})
+    """Section title, its icon, and its sub-line, kept apart so the renderer
+    does not have to pick the emoji back out of the heading text."""
+    if sec is None:
+        return {"title": None, "icon": None, "subtitle": None}
+    h = sec.find("h2")
+    badge = h.find("span", "icon-badge") if h else None
+    title = h.clean_text() if h else None
+    icon = badge.clean_text() if badge else None
+    if icon and title and title.startswith(icon):
+        title = title[len(icon):].strip()
+    out = {"title": title, "icon": icon,
+           "subtitle": rich(sec.find("div", "section-sub"))}
+    if badge and "risk" in badge.classes:
+        out["icon_variant"] = "risk"
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -160,27 +174,31 @@ def heading(sec):
 # --------------------------------------------------------------------------
 
 def common_head(doc):
+    title_el = doc.find("title")
     h1 = doc.find("h1")
     sub = doc.find("div", "subtitle")
     badges = [b.clean_text() for b in doc.find_all("span", "badge")]
     updated_date, updated_time = parse_updated(" ".join(badges))
     note = doc.find("div", "today-note")
     disc = doc.find("div", "disclaimer")
+    foot = doc.find("footer")
     return {
+        "page_title": title_el.clean_text() if title_el else None,
         "title": h1.clean_text() if h1 else None,
-        "subtitle": sub.clean_text() if sub else None,
+        "subtitle": rich(sub),
         "badges": badges,
         "as_of": updated_date,
         "updated_time": updated_time,
-        "run_note": note.clean_text() if note else None,
-        "disclaimer": disc.clean_text() if disc else None,
+        "run_note": rich(note),
+        "disclaimer": rich(disc),
+        "footer": rich(foot),
     }
 
 
 def prose_paragraphs(sec):
     if not sec:
         return []
-    return [p.clean_text() for p in sec.find_all("p") if p.clean_text()]
+    return [rich(p) for p in sec.find_all("p") if p.clean_text()]
 
 
 def list_items(sec, cls=None):
@@ -189,7 +207,7 @@ def list_items(sec, cls=None):
     ul = sec.find("ul", cls) if cls else sec.find("ul")
     if not ul:
         return []
-    return [li.clean_text() for li in ul.find_all("li") if li.clean_text()]
+    return [rich(li) for li in ul.find_all("li") if li.clean_text()]
 
 
 # --------------------------------------------------------------------------
@@ -211,12 +229,12 @@ def stock_card(card):
         "sector": card.get("data-sector") or None,
         "price": parse_price(price_el.clean_text() if price_el else ""),
         "chips": chips(card),
-        "rationale": rat.clean_text() if rat else None,
+        "rationale": rich(rat),
     }
     if badge:
         out["risk_badge"] = badge.clean_text()
     if risk:
-        out["risk_note"] = risk.clean_text()
+        out["risk_note"] = rich(risk)
     out["sources"] = links(src) if src else []
     return out
 
@@ -225,6 +243,18 @@ def extract_stocks(html):
     doc = domlite.parse(html)
     data = {"schema_version": SCHEMA_VERSION, "dashboard": "stocks"}
     data.update(common_head(doc))
+
+    nav = doc.find("nav", "quicknav")
+    if nav:
+        inp = nav.find("input")
+        blank = next((o for o in nav.find_all("option") if o.get("value") == ""), None)
+        data["quicknav"] = {
+            "search_placeholder": inp.get("placeholder") if inp else None,
+            "all_sectors_label": blank.clean_text() if blank else None,
+            # Short labels, deliberately not the full section headings.
+            "links": [{"href": a.get("href"), "label": a.clean_text()}
+                      for a in nav.find_all("a")],
+        }
 
     top_kpi = doc.find("div", "kpi-row")
     data["kpis"] = kpis(top_kpi) if top_kpi else []
@@ -240,23 +270,27 @@ def extract_stocks(html):
     tabs = {}
     if tables_sec:
         labels = [b.clean_text() for b in tables_sec.find_all("button", "tab-btn")]
+        panels = tables_sec.find_all("div", "tab-panel")
         for i, tid in enumerate(("tableA", "tableB", "tableC")):
             t = next((x for x in tables_sec.find_all("table") if x.get("id") == tid), None)
-            if t:
-                tabs[tid[-1]] = {"label": labels[i] if i < len(labels) else tid,
-                                 **table_rows(t)}
-        excluded = [b.clean_text() for b in tables_sec.find_all("div", "excluded-box")]
-        if excluded:
-            tabs["excluded"] = excluded
-    data["tables"] = tabs
+            if not t:
+                continue
+            panel = next((p for p in panels if p.get("id") == "tab" + tid[-1]), None)
+            tabs[tid[-1]] = {"label": labels[i] if i < len(labels) else tid,
+                             **table_rows(t)}
+            if panel:
+                notes = [rich(b) for b in panel.find_all("div", "excluded-box")]
+                if notes:
+                    tabs[tid[-1]]["notes"] = notes
+    data["tables"] = {**heading(tables_sec), "tabs": tabs}
 
     hr = section(doc, "highrisk")
-    banner = hr.find("div", "highrisk-banner") if hr else None
     data["highrisk"] = {
         **heading(hr),
-        "banner": banner.clean_text() if banner else None,
+        "banner": rich(hr.find("div", "highrisk-banner")) if hr else None,
         "kpis": kpis(hr.find("div", "risk-kpi-row")) if hr and hr.find("div", "risk-kpi-row") else [],
         "cards": [stock_card(c) for c in hr.find_all("div", "risk-card")] if hr else [],
+        "flag_note": rich(hr.find("div", "flag-note")) if hr else None,
     }
 
     sent = section(doc, "sentiment")
@@ -270,15 +304,18 @@ def extract_stocks(html):
                     continue
                 direction = next((c.split("-")[1] for c in tds[2].classes
                                   if c.startswith("dir-")), None)
+                tag = next((sp for sp in tds[2].find_all("span")
+                            if any(c.endswith("-tag") for c in sp.classes)), None)
                 rows.append({"ticker": tds[0].clean_text(),
-                             "note": tds[1].clean_text(),
+                             "note": rich(tds[1]),
                              "classification": tds[2].clean_text(),
+                             "tag_kind": tag.get("class") if tag else None,
                              "direction": direction})
     data["sentiment"] = {**heading(sent), "rows": rows}
 
     chart = section(doc, "sectorchart")
-    legend = chart.find("div", "chart-legend") if chart else None
-    data["sector_chart"] = {**heading(chart), "legend": legend.clean_text() if legend else None}
+    data["sector_chart"] = {**heading(chart),
+                            "legend": rich(chart.find("div", "chart-legend")) if chart else None}
 
     cmp_sec = section(doc, "compare")
     cmp_tbl = cmp_sec.find("table", "compare-table") if cmp_sec else None

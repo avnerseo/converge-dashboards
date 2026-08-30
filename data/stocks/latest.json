@@ -1,16 +1,56 @@
 {
   "schema_version": 1,
   "dashboard": "stocks",
+  "page_title": "Converge — מנוע מעקב מניות אטרקטיביות | שוק ארה\"ב",
   "title": "מנוע מעקב וסינון מניות אטרקטיביות — שוק ארה\"ב",
-  "subtitle": "S&P 500 + Nasdaq + Small Cap · דירוג ממוקד \"קנייה והחזקה לטווח ארוך\" לפי התכנסות בין מקורות מקצועיים בלתי-תלויים",
+  "subtitle": "S&amp;P 500 + Nasdaq + Small Cap · דירוג ממוקד \"קנייה והחזקה לטווח ארוך\" לפי התכנסות בין מקורות מקצועיים בלתי-תלויים",
   "badges": [
     "🕐 עודכן: 29 באוגוסט 2026 · 05:32 UTC",
     "🔁 עדכון יומי אוטומטי"
   ],
   "as_of": "2026-08-29",
   "updated_time": "05:32 UTC",
-  "run_note": "ℹ️ הערת שקיפות להרצה של 29 באוגוסט 2026: מכסת ה-WebSearch של הסשן (200 קריאות) ומכסת המפתח החינמי של Alpha Vantage (25 קריאות/יום) אזלו במהלך ההרצה — ראו פירוט מלא ב-§שקיפות ומגבלות בתחתית הדף. כתוצאה מכך: (1) לא התקבלו מחירים חיים חדשים היום לאף מניה — כל המחירים המוצגים מתויגים \"28.8, לא עודכן היום\" או \"לא זמין\"; (2) שכבה 1 נשמרה כפי שהייתה אתמול (לא אומתה מחדש היום); (3) טבלאות המתודולוגיה עודכנו עם 25 שורות חדשות מהרצה זו, בנוסף לשורות שאומתו בהרצות קודמות.",
-  "disclaimer": "⚠️ לא ייעוץ השקעות. למחקר בלבד, אינו המלצה אישית. יש להתייעץ עם בעל רישיון לפני קבלת החלטות השקעה.",
+  "run_note": "ℹ️ <b>הערת שקיפות להרצה של 29 באוגוסט 2026:</b> מכסת ה-WebSearch של הסשן (200 קריאות) ומכסת המפתח החינמי של Alpha Vantage (25 קריאות/יום) אזלו במהלך ההרצה — ראו פירוט מלא ב-§שקיפות ומגבלות בתחתית הדף. כתוצאה מכך: (1) לא התקבלו מחירים חיים חדשים היום לאף מניה — כל המחירים המוצגים מתויגים \"28.8, לא עודכן היום\" או \"לא זמין\"; (2) שכבה 1 נשמרה כפי שהייתה אתמול (לא אומתה מחדש היום); (3) טבלאות המתודולוגיה עודכנו עם 25 שורות חדשות מהרצה זו, בנוסף לשורות שאומתו בהרצות קודמות.",
+  "disclaimer": "⚠️ <b>לא ייעוץ השקעות.</b> למחקר בלבד, אינו המלצה אישית. יש להתייעץ עם בעל רישיון לפני קבלת החלטות השקעה.",
+  "footer": "Converge™ Stock Intelligence · נבנה עם Claude (Cowork) · לא ייעוץ השקעות",
+  "quicknav": {
+    "search_placeholder": "🔍 חיפוש טיקר או חברה",
+    "all_sectors_label": "כל הסקטורים",
+    "links": [
+      {
+        "href": "#tier1",
+        "label": "🏆 שכבה 1"
+      },
+      {
+        "href": "#tier2",
+        "label": "🥈 שכבה משנית"
+      },
+      {
+        "href": "#tables",
+        "label": "📋 טבלאות מתודולוגיה"
+      },
+      {
+        "href": "#highrisk",
+        "label": "🚨 סיכון גבוה"
+      },
+      {
+        "href": "#sentiment",
+        "label": "💬 סנטימנט"
+      },
+      {
+        "href": "#sectorchart",
+        "label": "📊 פילוח סקטוריאלי"
+      },
+      {
+        "href": "#compare",
+        "label": "⚖️ השוואה"
+      },
+      {
+        "href": "#methodology",
+        "label": "🔬 מתודולוגיה"
+      }
+    ]
+  },
   "kpis": [
     {
       "value": "70",
@@ -30,7 +70,8 @@
     }
   ],
   "tier1": {
-    "title": "🏆שכבה 1 — שכנוע גבוה",
+    "title": "שכבה 1 — שכנוע גבוה",
+    "icon": "🏆",
     "subtitle": "מניה המופיעה בשתיים מתוך שלוש רשימות המתודולוגיה הראשיות (א׳ קונצנזוס אנליסטים · ב׳ איכות/ערך פונדמנטלי · ג׳ עריכתי). נשמרה מהרצת 28.8.2026 — ראו הערת שקיפות למעלה.",
     "cards": [
       {
@@ -52,7 +93,7 @@
             "kind": "score2"
           }
         ],
-        "rationale": "TipRanks Buy Rating (א׳); Seeking Alpha \"Top 2026 Pick\" + Motley Fool דיבידנד לעשור (ב׳/ג׳ בהרצה הקודמת). תגלית נפט באנגולה, שיא רווח רבעוני, הסכם חשמל 20 שנה עם Microsoft. סנטימנט Bigdata.com שלילי (-0.234) בשל כותרות משפטיות/רגולטוריות (זיהום מזקקת Richmond, מחלוקת Gorgon) — מתח בין יסודות חיוביים לסיכון ליטיגציה. עדכון היום: CVX הופיעה שוב באופן עצמאי ב-Motley Fool (דיבידנד יציב לעשור, 24.8.2026) — חיזוק נוסף לתזה.",
+        "rationale": "TipRanks Buy Rating (א׳); Seeking Alpha \"Top 2026 Pick\" + Motley Fool דיבידנד לעשור (ב׳/ג׳ בהרצה הקודמת). תגלית נפט באנגולה, שיא רווח רבעוני, הסכם חשמל 20 שנה עם Microsoft. סנטימנט Bigdata.com שלילי (-0.234) בשל כותרות משפטיות/רגולטוריות (זיהום מזקקת Richmond, מחלוקת Gorgon) — מתח בין יסודות חיוביים לסיכון ליטיגציה. <b>עדכון היום:</b> CVX הופיעה שוב באופן עצמאי ב-Motley Fool (דיבידנד יציב לעשור, 24.8.2026) — חיזוק נוסף לתזה.",
         "sources": [
           {
             "name": "TipRanks",
@@ -161,7 +202,7 @@
             "kind": "score2"
           }
         ],
-        "rationale": "TipRanks Strong Buy בהשוואת מניות תשתית AI (א׳); Motley Fool — \"3 מניות אנרגיה תעשייתית להחזקה לעשורים\" (ג׳). מיזם משותף HVDC עם LS Electric בקוריאה, חוזה שדרוג רשת חשמל בבריטניה. סנטימנט Bigdata.com נייטרלי עם מומנטום שלילי (-0.229, z-score חריג -2.0) — עזיבת CFO ל-Rivian מסיטה תשומת לב תקשורתית. עדכון היום: GEV הוזכרה שוב ב-Motley Fool באותה כתבה — ממצא עקבי, אין שינוי מהותי.",
+        "rationale": "TipRanks Strong Buy בהשוואת מניות תשתית AI (א׳); Motley Fool — \"3 מניות אנרגיה תעשייתית להחזקה לעשורים\" (ג׳). מיזם משותף HVDC עם LS Electric בקוריאה, חוזה שדרוג רשת חשמל בבריטניה. סנטימנט Bigdata.com נייטרלי עם מומנטום שלילי (-0.229, z-score חריג -2.0) — עזיבת CFO ל-Rivian מסיטה תשומת לב תקשורתית. <b>עדכון היום:</b> GEV הוזכרה שוב ב-Motley Fool באותה כתבה — ממצא עקבי, אין שינוי מהותי.",
         "sources": [
           {
             "name": "TipRanks",
@@ -228,7 +269,7 @@
           }
         ],
         "rationale": "Morningstar — ברשימת \"cheapest wide-moat US stocks\" (ב׳, ייתכן שמקורי ל-2025 — תאריך לא ודאי) ו-\"Best Companies to Own: 2026\" (ג׳). עם זאת, הנתונים החיים מראים תמונה שלילית: JPMorgan הורידה ל-Underweight (יעד $40), Truist הורידה ל-Hold (יעד $42) בעקבות אזהרת Dick's Sporting Goods, והמניה נסחרת בשפל 12 שנה.",
-        "risk_note": "⚠️ איתות סותר: תמיכה עריכתית ארוכת-טווח מול הרעה חדה בסנטימנט האנליסטים והמחיר בשבועות האחרונים. מומלץ בדיקה נוספת לפני החלטה.",
+        "risk_note": "⚠️ <b>איתות סותר:</b> תמיכה עריכתית ארוכת-טווח מול הרעה חדה בסנטימנט האנליסטים והמחיר בשבועות האחרונים. מומלץ בדיקה נוספת לפני החלטה.",
         "sources": [
           {
             "name": "Morningstar",
@@ -243,7 +284,8 @@
     ]
   },
   "tier2": {
-    "title": "🥈שכבה משנית",
+    "title": "שכבה משנית",
+    "icon": "🥈",
     "subtitle": "מניות שהופיעו במקור אחד בלבד אך זכו לגיבוי סנטימנט אמין (StockTwits/Reddit/X, מאומת גם ב-Bigdata.com) לתזה ארוכת-טווח.",
     "cards": [
       {
@@ -265,7 +307,7 @@
             "kind": "score2"
           }
         ],
-        "rationale": "TipRanks — \"אנליסטים מובילים ממליצים לקנות NVDA, רואים Upside חזק ל-2026\" (מקור א׳ בלבד — לא נמצאה חפיפה עם מקור ב׳ או ג׳ בהרצה זו). גיבוי סנטימנט Bigdata.com: טון חיובי מתון (0.279 מול בסיס 0.229, מומנטום +0.05) בעקבות דוח רבעוני עם זינוק הכנסות של 106% והנחיה לצמיחה של 70% בשנה הבאה; מספר בתי השקעות העלו יעד מחיר (Raymond James ל-$550). גם בשכבת הסנטימנט החברתי (StockTwits/X) — באזז חיובי הנתמך בביקוש AI אמיתי, לא ספקולציה טהורה (ראו §שכבת סנטימנט). סיכון: ידיעות על השהיית תוכנית מימון ענן AI על רקע חשש אנטי-טראסט (28.8.2026), ולחץ מסוים על שוליים מעליית מחירי זיכרון HBM.",
+        "rationale": "TipRanks — \"אנליסטים מובילים ממליצים לקנות NVDA, רואים Upside חזק ל-2026\" (מקור א׳ בלבד — לא נמצאה חפיפה עם מקור ב׳ או ג׳ בהרצה זו). גיבוי סנטימנט Bigdata.com: טון חיובי מתון (0.279 מול בסיס 0.229, מומנטום +0.05) בעקבות דוח רבעוני עם זינוק הכנסות של 106% והנחיה לצמיחה של 70% בשנה הבאה; מספר בתי השקעות העלו יעד מחיר (Raymond James ל-$550). גם בשכבת הסנטימנט החברתי (StockTwits/X) — באזז חיובי הנתמך בביקוש AI אמיתי, לא ספקולציה טהורה (ראו §שכבת סנטימנט). <b>סיכון:</b> ידיעות על השהיית תוכנית מימון ענן AI על רקע חשש אנטי-טראסט (28.8.2026), ולחץ מסוים על שוליים מעליית מחירי זיכרון HBM.",
         "sources": [
           {
             "name": "TipRanks",
@@ -280,2125 +322,1890 @@
     ]
   },
   "tables": {
-    "A": {
-      "label": "א׳ קונצנזוס",
-      "columns": [
-        "טיקר",
-        "שם",
-        "סקטור",
-        "ציון/דירוג",
-        "מקור"
-      ],
-      "rows": [
-        {
-          "cells": [
-            {
-              "text": "MDB"
-            },
-            {
-              "text": "MongoDB"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "MDB",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "MRVL"
-            },
-            {
-              "text": "Marvell Technology"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "MRVL",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "META"
-            },
-            {
-              "text": "Meta Platforms"
-            },
-            {
-              "text": "תקשורת ומדיה"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks/MSN",
-              "links": [
-                {
-                  "name": "TipRanks/MSN",
-                  "url": "https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz"
-                }
-              ]
-            }
-          ],
-          "ticker": "META",
-          "sector": "תקשורת ומדיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "AVGO"
-            },
-            {
-              "text": "Broadcom"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks Perfect 10 + Trending Strong Buy"
-            },
-            {
-              "text": "TipRanks/MSN",
-              "links": [
-                {
-                  "name": "TipRanks/MSN",
-                  "url": "https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz"
-                }
-              ]
-            }
-          ],
-          "ticker": "AVGO",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "AMAT"
-            },
-            {
-              "text": "Applied Materials"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/know-applied-materials-amat-rating-160003573.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "AMAT",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "UNH"
-            },
-            {
-              "text": "UnitedHealth Group"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Zacks Strong Buy List"
-            },
-            {
-              "text": "Simply Wall St/Zacks",
-              "links": [
-                {
-                  "name": "Simply Wall St/Zacks",
-                  "url": "https://simplywall.st/stocks/us/healthcare/nyse-unh/unitedhealth-group/news/unitedhealth-group-unh-joins-zacks-strong-buy-list-as-underv"
-                }
-              ]
-            }
-          ],
-          "ticker": "UNH",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "LLY"
-            },
-            {
-              "text": "Eli Lilly"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "TipRanks Strong Buy"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/ratings/eli-lilly-co-strong-buy-rating-backed-by-robust-performance-and-growth-prospects-ratings"
-                }
-              ]
-            }
-          ],
-          "ticker": "LLY",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "JPM"
-            },
-            {
-              "text": "JPMorgan Chase"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy (18.7)"
-            },
-            {
-              "text": "MarketBeat",
-              "links": [
-                {
-                  "name": "MarketBeat",
-                  "url": "https://www.marketbeat.com/instant-alerts/jpmorgan-chase-co-nysejpm-upgraded-by-zacks-research-to-strong-buy-rating-2026-07-18/"
-                }
-              ]
-            }
-          ],
-          "ticker": "JPM",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "GSBC"
-            },
-            {
-              "text": "Great Southern Bancorp"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/great-southern-bancorp-gsbc-upgraded-160004530.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "GSBC",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "CZFS"
-            },
-            {
-              "text": "Citizens Financial Services"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/know-citizens-financial-services-czfs-160001632.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "CZFS",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "WSFS"
-            },
-            {
-              "text": "WSFS Financial"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks",
-              "links": [
-                {
-                  "name": "Zacks",
-                  "url": "https://www.zacks.com/stock/news/2883995/wsfs-wsfs-upgraded-to-strong-buy-heres-why"
-                }
-              ]
-            }
-          ],
-          "ticker": "WSFS",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "V"
-            },
-            {
-              "text": "Visa"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "V",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "CVX"
-            },
-            {
-              "text": "Chevron"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "TipRanks Buy"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/ratings/chevrons-strategic-growth-and-shareholder-returns-drive-buy-rating"
-                }
-              ]
-            }
-          ],
-          "ticker": "CVX",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "VLO"
-            },
-            {
-              "text": "Valero Energy"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/know-valero-energy-vlo-rating-160003618.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "VLO",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CAT"
-            },
-            {
-              "text": "Caterpillar"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "TipRanks Buy"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/ratings/caterpillar-buy-rating-navigating-tariff-challenges-and-anticipating-2026-growth-ratings"
-                }
-              ]
-            }
-          ],
-          "ticker": "CAT",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "VRT"
-            },
-            {
-              "text": "Vertiv Holdings"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks",
-              "links": [
-                {
-                  "name": "Zacks",
-                  "url": "https://www.zacks.com/stock/news/2966810/vertiv-vrt-upgraded-to-strong-buy-heres-what-you-should-know"
-                }
-              ]
-            }
-          ],
-          "ticker": "VRT",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "GEV"
-            },
-            {
-              "text": "GE Vernova"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "TipRanks Strong Buy"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/vrt-vs-apld-vs-gev-which-strong-buy-data-center-infrastructure-stock-could-offer-the-best-upside"
-                }
-              ]
-            }
-          ],
-          "ticker": "GEV",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "ZWS"
-            },
-            {
-              "text": "Zurn Elkay Water Solutions"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "Zacks Upgrade→Strong Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/zurn-water-zws-upgraded-strong-160006117.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "ZWS",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "UAL"
-            },
-            {
-              "text": "United Airlines"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/pdd-li-ual-3-stocks-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "UAL",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "KO"
-            },
-            {
-              "text": "Coca-Cola"
-            },
-            {
-              "text": "צריכה בסיסית"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks/MSN",
-              "links": [
-                {
-                  "name": "TipRanks/MSN",
-                  "url": "https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz"
-                }
-              ]
-            }
-          ],
-          "ticker": "KO",
-          "sector": "צריכה בסיסית"
-        },
-        {
-          "cells": [
-            {
-              "text": "WMT"
-            },
-            {
-              "text": "Walmart"
-            },
-            {
-              "text": "צריכה בסיסית"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "WMT",
-          "sector": "צריכה בסיסית"
-        },
-        {
-          "cells": [
-            {
-              "text": "DKNG"
-            },
-            {
-              "text": "DraftKings"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "DKNG",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "AMZN"
-            },
-            {
-              "text": "Amazon"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "TipRanks Perfect 10"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score"
-                }
-              ]
-            }
-          ],
-          "ticker": "AMZN",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "AEE"
-            },
-            {
-              "text": "Ameren"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "Zacks Upgrade→Buy (לא Strong Buy)"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/ameren-aee-upgraded-buy-heres-160004619.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "AEE",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "QBTS"
-            },
-            {
-              "text": "D-Wave Quantum"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks \"Perfect 10s\" — ציון מדויק לא צוין בכותרת"
-            },
-            {
-              "text": "TipRanks/Yahoo",
-              "links": [
-                {
-                  "name": "TipRanks/Yahoo",
-                  "url": "https://finance.yahoo.com/news/tipranks-perfect-10s-unveiling-3-080000767.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "QBTS",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "DY"
-            },
-            {
-              "text": "Dycom Industries"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "TipRanks \"Perfect 10\" Smart Score"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes"
-                }
-              ]
-            }
-          ],
-          "ticker": "DY",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "NVDA"
-            },
-            {
-              "text": "Nvidia"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks — Strong Upside 2026 (ראו גם שכבה משנית)"
-            },
-            {
-              "text": "TipRanks",
-              "links": [
-                {
-                  "name": "TipRanks",
-                  "url": "https://www.tipranks.com/news/top-analysts-recommend-buying-nvidia-stock-nvda-see-strong-upside-in-2026"
-                }
-              ]
-            }
-          ],
-          "ticker": "NVDA",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "TER"
-            },
-            {
-              "text": "Teradyne"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "Zacks Strong Buy — מהחמות של S&P500 ל-2026"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/news/3-zacks-strong-buy-stocks-163000467.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "TER",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "GS"
-            },
-            {
-              "text": "Goldman Sachs"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Top-Ranked Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/markets/stocks/articles/buy-3-top-ranked-big-124400728.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "GS",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "BLK"
-            },
-            {
-              "text": "BlackRock"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "BLK",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "BK"
-            },
-            {
-              "text": "Bank of New York Mellon"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "BK",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "STT"
-            },
-            {
-              "text": "State Street"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Zacks Buy"
-            },
-            {
-              "text": "Zacks/Yahoo",
-              "links": [
-                {
-                  "name": "Zacks/Yahoo",
-                  "url": "https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html"
-                }
-              ]
-            }
-          ],
-          "ticker": "STT",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "NXRT"
-            },
-            {
-              "text": "NexPoint Residential Trust"
-            },
-            {
-              "text": "נדל\"ן"
-            },
-            {
-              "text": "Zacks New Strong Buy (7.8.2026)"
-            },
-            {
-              "text": "Zacks/Globe and Mail",
-              "links": [
-                {
-                  "name": "Zacks/Globe and Mail",
-                  "url": "https://www.theglobeandmail.com/investing/markets/stocks/NXRT-N/pressreleases/3714301/new-strong-buy-stocks-for-august-7th/"
-                }
-              ]
-            }
-          ],
-          "ticker": "NXRT",
-          "sector": "נדל\"ן"
-        }
-      ]
-    },
-    "B": {
-      "label": "ב׳ איכות/ערך",
-      "columns": [
-        "טיקר",
-        "שם",
-        "סקטור",
-        "איתות איכות/ערך",
-        "מקור"
-      ],
-      "rows": [
-        {
-          "cells": [
-            {
-              "text": "COP"
-            },
-            {
-              "text": "ConocoPhillips"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "Seeking Alpha Quant: Strong Buy"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4904836-conocophillips-cop-stock-analysis-why-the-quant-system-says-strong-buy-2-minute-analysis"
-                }
-              ]
-            }
-          ],
-          "ticker": "COP",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CVX"
-            },
-            {
-              "text": "Chevron"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "SA \"Top 2026 Pick\"; Fool דיבידנד לעשור"
-            },
-            {
-              "text": "Seeking Alpha/Fool",
-              "links": [
-                {
-                  "name": "Seeking Alpha/Fool",
-                  "url": "https://seekingalpha.com/article/4929164-chevron-top-2026-pick-for-higher-for-longer-oil-market"
-                }
-              ]
-            }
-          ],
-          "ticker": "CVX",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "XOM"
-            },
-            {
-              "text": "Exxon Mobil"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "SA — \"Continues To Lead Over Chevron\""
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4929286-exxon-mobil-continues-to-lead-over-chevron"
-                }
-              ]
-            }
-          ],
-          "ticker": "XOM",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "WFC"
-            },
-            {
-              "text": "Wells Fargo"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Morningstar Wide Moat, מתחת לשווי הוגן"
-            },
-            {
-              "text": "Morningstar",
-              "links": [
-                {
-                  "name": "Morningstar",
-                  "url": "https://www.morningstar.com/stocks/wide-moat-wells-fargo-worth-look"
-                }
-              ]
-            }
-          ],
-          "ticker": "WFC",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "GS"
-            },
-            {
-              "text": "Goldman Sachs"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "SA — \"Still The Bank To Buy\""
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4937643-goldman-sachs-is-still-the-bank-to-buy"
-                }
-              ]
-            }
-          ],
-          "ticker": "GS",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "C"
-            },
-            {
-              "text": "Citigroup"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "SA Growth Grade \"Buy\" מוביל"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/news/4635917-citigroup-and-goldman-sachs-lead-as-most-financial-giants-earn-buy-growth-grades"
-                }
-              ]
-            }
-          ],
-          "ticker": "C",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "BRK.B"
-            },
-            {
-              "text": "Berkshire Hathaway"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "SA — \"Getting Aggressive, Reiterate Buy\""
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4934444-berkshire-hathaway-stock-getting-aggressive-reiterate-buy"
-                }
-              ]
-            }
-          ],
-          "ticker": "BRK.B",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "PFE"
-            },
-            {
-              "text": "Pfizer"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "SA \"Strong Buy\"; Morningstar wide-moat (תאריך לא ודאי)"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4886592-why-pfizer-remains-a-strong-buy-in-2026"
-                }
-              ]
-            }
-          ],
-          "ticker": "PFE",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "JNJ"
-            },
-            {
-              "text": "Johnson & Johnson"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "עמוד נתונים פעיל (ללא ציון מדויק בתוצאה)"
-            },
-            {
-              "text": "StockAnalysis.com",
-              "links": [
-                {
-                  "name": "StockAnalysis.com",
-                  "url": "https://stockanalysis.com/stocks/jnj/"
-                }
-              ]
-            }
-          ],
-          "ticker": "JNJ",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "NKE"
-            },
-            {
-              "text": "Nike"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "Morningstar cheapest wide-moat (תאריך לא ודאי)"
-            },
-            {
-              "text": "Morningstar"
-            }
-          ],
-          "ticker": "NKE",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "EL"
-            },
-            {
-              "text": "Estée Lauder"
-            },
-            {
-              "text": "צריכה בסיסית"
-            },
-            {
-              "text": "Simply Wall St — מתחת לשווי הוגן (אוגוסט 2026)"
-            },
-            {
-              "text": "Simply Wall St",
-              "links": [
-                {
-                  "name": "Simply Wall St",
-                  "url": "https://simplywall.st/stocks/us/household/nyse-el/estee-lauder-companies/news/3-stocks-possibly-trading-below-their-estimated-value-in-aug"
-                }
-              ]
-            }
-          ],
-          "ticker": "EL",
-          "sector": "צריכה בסיסית"
-        },
-        {
-          "cells": [
-            {
-              "text": "GPC"
-            },
-            {
-              "text": "Genuine Parts Company"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "Simply Wall St — עד 45%-46% מתחת לשווי הוגן"
-            },
-            {
-              "text": "Simply Wall St",
-              "links": [
-                {
-                  "name": "Simply Wall St",
-                  "url": "https://simplywall.st/stocks/us/consumer-durables/nyse-gpc/genuine-parts/news/genuine-parts-gpc-stock-may-be-45-undervalued-as-cash-flow"
-                }
-              ]
-            }
-          ],
-          "ticker": "GPC",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "HON"
-            },
-            {
-              "text": "Honeywell"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "SA — הרחבת שוליים"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4864270-honeywell-q4-earnings-review-margin-expansion-is-just-beginning"
-                }
-              ]
-            }
-          ],
-          "ticker": "HON",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CAT"
-            },
-            {
-              "text": "Caterpillar"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "מובילת דאו-ג'ונס 2026 (24/7 Wall St)"
-            },
-            {
-              "text": "24/7 Wall St",
-              "links": [
-                {
-                  "name": "24/7 Wall St",
-                  "url": "https://247wallst.com/investing/2026/02/19/caterpillar-honeywell-and-chevron-lead-the-dow-jones-in-2026/"
-                }
-              ]
-            }
-          ],
-          "ticker": "CAT",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "NEE"
-            },
-            {
-              "text": "NextEra Energy"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "SA — \"Dip Is A Buying Opportunity\""
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4938582-next-era-energy-stock-dip-buying-opportunity"
-                }
-              ]
-            }
-          ],
-          "ticker": "NEE",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "DUK"
-            },
-            {
-              "text": "Duke Energy"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "SA — פוטנציאל ארוך-טווח"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential"
-                }
-              ]
-            }
-          ],
-          "ticker": "DUK",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "SO"
-            },
-            {
-              "text": "Southern Company"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "SA — פוטנציאל ארוך-טווח"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential"
-                }
-              ]
-            }
-          ],
-          "ticker": "SO",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "KO"
-            },
-            {
-              "text": "Coca-Cola"
-            },
-            {
-              "text": "צריכה בסיסית"
-            },
-            {
-              "text": "מובילת דירוגי צמיחה; אחזקת ליבה ברקשייר"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/news/4636195-coca-cola-leads-consumer-staples-growth-rankings-pg-altria-lag"
-                }
-              ]
-            }
-          ],
-          "ticker": "KO",
-          "sector": "צריכה בסיסית"
-        },
-        {
-          "cells": [
-            {
-              "text": "GOOGL"
-            },
-            {
-              "text": "Alphabet"
-            },
-            {
-              "text": "תקשורת ומדיה"
-            },
-            {
-              "text": "A+ Profitability, A+ Momentum (SA); ~22% מתחת לשווי הוגן (Simply Wall St); ROE 56% (GuruFocus) — ⚠ סנטימנט Bigdata.com שלילי כרגע (רגולציה/ליטיגציה, ראו כרטיס למטה)"
-            },
-            {
-              "text": "Seeking Alpha/Simply Wall St",
-              "links": [
-                {
-                  "name": "Seeking Alpha/Simply Wall St",
-                  "url": "https://seekingalpha.com/article/4853715-googl-stock-a-plus-profitability-and-a-plus-momentum-2-minute-analysis"
-                }
-              ]
-            }
-          ],
-          "ticker": "GOOGL",
-          "sector": "תקשורת ומדיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "FCX"
-            },
-            {
-              "text": "Freeport-McMoRan"
-            },
-            {
-              "text": "חומרים"
-            },
-            {
-              "text": "SA \"Buy\"; מובילת גרייד-צמיחה בחומרים"
-            },
-            {
-              "text": "Seeking Alpha",
-              "links": [
-                {
-                  "name": "Seeking Alpha",
-                  "url": "https://seekingalpha.com/article/4909533-freeport-mcmoran-stock-robust-pipeline-significant-long-term-potential-make-it-buy"
-                }
-              ]
-            }
-          ],
-          "ticker": "FCX",
-          "sector": "חומרים"
-        },
-        {
-          "cells": [
-            {
-              "text": "FSBC"
-            },
-            {
-              "text": "Five Star Bancorp"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Simply Wall St — Small Cap עם קניית פנים"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "FSBC",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "RM"
-            },
-            {
-              "text": "Regional Management Corp"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Simply Wall St — Small Cap עם קניית פנים (+22%)"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "RM",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "SYM"
-            },
-            {
-              "text": "Symbotic"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "Simply Wall St — Top 3 מתחת לשווי הוגן"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "SYM",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CSCO"
-            },
-            {
-              "text": "Cisco Systems"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "Simply Wall St undervalued; ROE 27.94%, D/E ~0.60-0.64 (GuruFocus)"
-            },
-            {
-              "text": "Simply Wall St/GuruFocus",
-              "links": [
-                {
-                  "name": "Simply Wall St/GuruFocus",
-                  "url": "https://simplywall.st/stocks/us/tech/nasdaq-csco/cisco-systems/news/cisco-csco-stock-still-looks-undervalued-as-its-3-year-ga"
-                }
-              ]
-            }
-          ],
-          "ticker": "CSCO",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "KKR"
-            },
-            {
-              "text": "KKR & Co."
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Simply Wall St undervalued; D/E 1.83 (GuruFocus, ספט' 2025)"
-            },
-            {
-              "text": "Simply Wall St/GuruFocus",
-              "links": [
-                {
-                  "name": "Simply Wall St/GuruFocus",
-                  "url": "https://www.gurufocus.com/term/DebtToEquity/KKR"
-                }
-              ]
-            }
-          ],
-          "ticker": "KKR",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "SCHW"
-            },
-            {
-              "text": "Charles Schwab"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Morningstar — סדרת ניתוחי moat קבועה (רייטינג מדויק לא אושר)"
-            },
-            {
-              "text": "Morningstar"
-            }
-          ],
-          "ticker": "SCHW",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "BMY"
-            },
-            {
-              "text": "Bristol-Myers Squibb"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "24/7 Wall St — Strong Buy, 16% Upside (אפריל 2026)"
-            },
-            {
-              "text": "24/7 Wall St"
-            }
-          ],
-          "ticker": "BMY",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "MDLZ"
-            },
-            {
-              "text": "Mondelez International"
-            },
-            {
-              "text": "צריכה בסיסית"
-            },
-            {
-              "text": "Morningstar Wide Moat — מאושר במפורש בכותרת; ⚠ סנטימנט Bigdata.com שלילי מאוד כרגע (תקיפות רוסיה באוקראינה על מפעל, רגולציית FSSAI בהודו)"
-            },
-            {
-              "text": "Morningstar/Bigdata.com",
-              "links": [
-                {
-                  "name": "Morningstar/Bigdata.com",
-                  "url": "https://bigdata.com"
-                }
-              ]
-            }
-          ],
-          "ticker": "MDLZ",
-          "sector": "צריכה בסיסית"
-        },
-        {
-          "cells": [
-            {
-              "text": "BLMN"
-            },
-            {
-              "text": "Bloomin' Brands"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "Simply Wall St — Undervalued אוגוסט 2026 לאחר Q2 beat"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "BLMN",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "HAE"
-            },
-            {
-              "text": "Haemonetics"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Simply Wall St — עד 49% מתחת לשווי הוגן (לאחר העלאת תחזית)"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "HAE",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "BE"
-            },
-            {
-              "text": "Bloom Energy"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "Simply Wall St — תמונה מעורבת: הנחה בתזרים מזומנים אך פרימיום במכירות"
-            },
-            {
-              "text": "Simply Wall St"
-            }
-          ],
-          "ticker": "BE",
-          "sector": "אנרגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "UAL"
-            },
-            {
-              "text": "United Airlines"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "TipRanks — Strong Buy, P/E נמוך"
-            },
-            {
-              "text": "TipRanks"
-            }
-          ],
-          "ticker": "UAL",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CI"
-            },
-            {
-              "text": "The Cigna Group"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "TipRanks — Strong Buy, P/E נמוך; ROE 15.77% (GuruFocus)"
-            },
-            {
-              "text": "TipRanks/GuruFocus"
-            }
-          ],
-          "ticker": "CI",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "MSTR"
-            },
-            {
-              "text": "Strategy (MicroStrategy)"
-            },
-            {
-              "text": "טכנולוגיה"
-            },
-            {
-              "text": "TipRanks Strong Buy, P/E נמוך — ⚠ סיכון: אחזקת ביטקוין ממונפת מאוד, לא מתאימה לפרופיל איכות פונדמנטלית קלאסי לטווח ארוך"
-            },
-            {
-              "text": "TipRanks"
-            }
-          ],
-          "ticker": "MSTR",
-          "sector": "טכנולוגיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "SM"
-            },
-            {
-              "text": "SM Energy Company"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "Finviz News — Undervalued בסיכון עולה במחירי נפט"
-            },
-            {
-              "text": "Finviz News"
-            }
-          ],
-          "ticker": "SM",
-          "sector": "אנרגיה"
-        }
-      ]
-    },
-    "C": {
-      "label": "ג׳ עריכתי",
-      "columns": [
-        "טיקר",
-        "שם",
-        "סקטור",
-        "פרסומים",
-        "מקור"
-      ],
-      "rows": [
-        {
-          "cells": [
-            {
-              "text": "ABT"
-            },
-            {
-              "text": "Abbott Laboratories"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Motley Fool — Dividend King להחזקה לנצח"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/02/12/abbott-labs-healthcare-dividend-stock-id-hold/"
-                }
-              ]
-            }
-          ],
-          "ticker": "ABT",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "BMY"
-            },
-            {
-              "text": "Bristol-Myers Squibb"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Motley Fool — Top Healthcare Dividend"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/"
-                }
-              ]
-            }
-          ],
-          "ticker": "BMY",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "MDT"
-            },
-            {
-              "text": "Medtronic"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Motley Fool — Top Healthcare Dividend"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/"
-                }
-              ]
-            }
-          ],
-          "ticker": "MDT",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "ISRG"
-            },
-            {
-              "text": "Intuitive Surgical"
-            },
-            {
-              "text": "בריאות"
-            },
-            {
-              "text": "Motley Fool — Top AI Healthcare Stock (16.2.2026)"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/02/16/my-1-top-ai-healthcare-stock-to-buy-and-hold-isrg/"
-                }
-              ]
-            }
-          ],
-          "ticker": "ISRG",
-          "sector": "בריאות"
-        },
-        {
-          "cells": [
-            {
-              "text": "GEV"
-            },
-            {
-              "text": "GE Vernova"
-            },
-            {
-              "text": "תשתיות ציבוריות"
-            },
-            {
-              "text": "Motley Fool — 3 מניות אנרגיה תעשייתית לעשורים"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/05/27/best-industrial-energy-stocks-buy-hold-gev/"
-                }
-              ]
-            }
-          ],
-          "ticker": "GEV",
-          "sector": "תשתיות ציבוריות"
-        },
-        {
-          "cells": [
-            {
-              "text": "LIN"
-            },
-            {
-              "text": "Linde plc"
-            },
-            {
-              "text": "חומרים"
-            },
-            {
-              "text": "Motley Fool — 3 מניות חומרים לפני בום תעשייתי"
-            },
-            {
-              "text": "Motley Fool",
-              "links": [
-                {
-                  "name": "Motley Fool",
-                  "url": "https://www.fool.com/investing/2026/05/13/3-materials-stocks-to-buy-before-next-industrial/"
-                }
-              ]
-            }
-          ],
-          "ticker": "LIN",
-          "sector": "חומרים"
-        },
-        {
-          "cells": [
-            {
-              "text": "BRK.B"
-            },
-            {
-              "text": "Berkshire Hathaway"
-            },
-            {
-              "text": "פיננסים"
-            },
-            {
-              "text": "Morningstar — Best Companies to Own 2026"
-            },
-            {
-              "text": "Morningstar",
-              "links": [
-                {
-                  "name": "Morningstar",
-                  "url": "https://www.morningstar.com/stocks/best-companies-own-2026-edition"
-                }
-              ]
-            }
-          ],
-          "ticker": "BRK.B",
-          "sector": "פיננסים"
-        },
-        {
-          "cells": [
-            {
-              "text": "NKE"
-            },
-            {
-              "text": "Nike"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "Morningstar — Best Companies to Own 2026 (⚠ ראו איתות סותר בשכבה 1)"
-            },
-            {
-              "text": "Morningstar"
-            }
-          ],
-          "ticker": "NKE",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "DIS"
-            },
-            {
-              "text": "Walt Disney"
-            },
-            {
-              "text": "תקשורת ומדיה"
-            },
-            {
-              "text": "Morningstar — Best Companies to Own 2026; Barron's Top 10 for 2026"
-            },
-            {
-              "text": "Morningstar/Barron's"
-            }
-          ],
-          "ticker": "DIS",
-          "sector": "תקשורת ומדיה"
-        },
-        {
-          "cells": [
-            {
-              "text": "AMZN"
-            },
-            {
-              "text": "Amazon.com"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "Barron's Top 10 Stocks for 2026 (דצמבר 2025)"
-            },
-            {
-              "text": "Barron's (via X/Dividend Talks)"
-            }
-          ],
-          "ticker": "AMZN",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "DASH"
-            },
-            {
-              "text": "DoorDash"
-            },
-            {
-              "text": "צריכה מחזורית"
-            },
-            {
-              "text": "Barron's Roundtable 2026"
-            },
-            {
-              "text": "Barron's (via intellectia.ai)"
-            }
-          ],
-          "ticker": "DASH",
-          "sector": "צריכה מחזורית"
-        },
-        {
-          "cells": [
-            {
-              "text": "UPS"
-            },
-            {
-              "text": "United Parcel Service"
-            },
-            {
-              "text": "תעשייה"
-            },
-            {
-              "text": "Motley Fool — 2 מניות תעשייה מובילות לעשורים (רמת ביטחון בינונית — לא אומת ישירות מול fool.com)"
-            },
-            {
-              "text": "Motley Fool (סינדוק Globe and Mail)"
-            }
-          ],
-          "ticker": "UPS",
-          "sector": "תעשייה"
-        },
-        {
-          "cells": [
-            {
-              "text": "CVX"
-            },
-            {
-              "text": "Chevron"
-            },
-            {
-              "text": "אנרגיה"
-            },
-            {
-              "text": "Motley Fool — דיבידנד יציב לעשור הבא (24.8.2026)"
-            },
-            {
-              "text": "Motley Fool"
-            }
-          ],
-          "ticker": "CVX",
-          "sector": "אנרגיה"
-        }
-      ]
-    },
-    "excluded": [
-      "הוצא מהטבלה: PDD Holdings — הופיעה עם TipRanks Perfect 10 אך היא חברה סינית (ADR בנאסד\"ק), לא רלוונטית למיקוד השוק האמריקאי של הדשבורד.",
-      "מגבלת מקור: Finviz ו-StockAnalysis.com לא החזירו נתוני סינון מספריים מלאים (ROE/FCF yield/P-E/D-E) ברוב המקרים בחיפושי WebSearch — רק עמודי כלי חלקיים. נתוני GuruFocus שנוספו היום (ROE/D-E ל-GOOGL, CSCO, KKR, CI) מגבירים את הכיסוי המספרי אך עדיין חלקיים. סיכון סותר מסומן: MSTR מופיעה עם דירוג Strong Buy אך מסומנת במפורש כלא-מתאימה לפרופיל איכות קלאסי (מינוף ביטקוין גבוה).",
-      "מגבלת מקור: מכסת WebSearch אזלה גם בהרצה זו לפני שנבדקו רשימות Kiplinger ו-Forbes לרמת טיקר בפועל — קיימות כתבות מאומתות (\"9 Best Stocks To Buy Now For August 2026\" ועוד) אך הטיקרים הספציפיים לא עלו בתוצאות. ייתכנו חפיפות בין-פרסומיות נוספות שלא זוהו בהרצה זו."
-    ]
+    "title": "טבלאות מלאות לפי מתודולוגיה",
+    "icon": "📋",
+    "subtitle": null,
+    "tabs": {
+      "A": {
+        "label": "א׳ קונצנזוס",
+        "columns": [
+          {
+            "text": "טיקר",
+            "sortable": true
+          },
+          {
+            "text": "שם",
+            "sortable": true
+          },
+          {
+            "text": "סקטור",
+            "sortable": true
+          },
+          {
+            "text": "ציון/דירוג",
+            "sortable": true
+          },
+          {
+            "text": "מקור",
+            "sortable": false
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              {
+                "html": "MDB",
+                "class": "tk"
+              },
+              {
+                "html": "MongoDB"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "MDB",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "MRVL",
+                "class": "tk"
+              },
+              {
+                "html": "Marvell Technology"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "MRVL",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "META",
+                "class": "tk"
+              },
+              {
+                "html": "Meta Platforms"
+              },
+              {
+                "html": "תקשורת ומדיה"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
+              }
+            ],
+            "ticker": "META",
+            "sector": "תקשורת ומדיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "AVGO",
+                "class": "tk"
+              },
+              {
+                "html": "Broadcom"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks Perfect 10 + Trending Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
+              }
+            ],
+            "ticker": "AVGO",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "AMAT",
+                "class": "tk"
+              },
+              {
+                "html": "Applied Materials"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-applied-materials-amat-rating-160003573.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "AMAT",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "UNH",
+                "class": "tk"
+              },
+              {
+                "html": "UnitedHealth Group"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Zacks Strong Buy List"
+              },
+              {
+                "html": "<a href=\"https://simplywall.st/stocks/us/healthcare/nyse-unh/unitedhealth-group/news/unitedhealth-group-unh-joins-zacks-strong-buy-list-as-underv\">Simply Wall St/Zacks</a>"
+              }
+            ],
+            "ticker": "UNH",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "LLY",
+                "class": "tk"
+              },
+              {
+                "html": "Eli Lilly"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "TipRanks Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/ratings/eli-lilly-co-strong-buy-rating-backed-by-robust-performance-and-growth-prospects-ratings\">TipRanks</a>"
+              }
+            ],
+            "ticker": "LLY",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "JPM",
+                "class": "tk"
+              },
+              {
+                "html": "JPMorgan Chase"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy (18.7)"
+              },
+              {
+                "html": "<a href=\"https://www.marketbeat.com/instant-alerts/jpmorgan-chase-co-nysejpm-upgraded-by-zacks-research-to-strong-buy-rating-2026-07-18/\">MarketBeat</a>"
+              }
+            ],
+            "ticker": "JPM",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "GSBC",
+                "class": "tk"
+              },
+              {
+                "html": "Great Southern Bancorp"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/great-southern-bancorp-gsbc-upgraded-160004530.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "GSBC",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "CZFS",
+                "class": "tk"
+              },
+              {
+                "html": "Citizens Financial Services"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-citizens-financial-services-czfs-160001632.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "CZFS",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "WSFS",
+                "class": "tk"
+              },
+              {
+                "html": "WSFS Financial"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://www.zacks.com/stock/news/2883995/wsfs-wsfs-upgraded-to-strong-buy-heres-why\">Zacks</a>"
+              }
+            ],
+            "ticker": "WSFS",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "V",
+                "class": "tk"
+              },
+              {
+                "html": "Visa"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "V",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "CVX",
+                "class": "tk"
+              },
+              {
+                "html": "Chevron"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "TipRanks Buy"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/ratings/chevrons-strategic-growth-and-shareholder-returns-drive-buy-rating\">TipRanks</a>"
+              }
+            ],
+            "ticker": "CVX",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "VLO",
+                "class": "tk"
+              },
+              {
+                "html": "Valero Energy"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-valero-energy-vlo-rating-160003618.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "VLO",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CAT",
+                "class": "tk"
+              },
+              {
+                "html": "Caterpillar"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "TipRanks Buy"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/ratings/caterpillar-buy-rating-navigating-tariff-challenges-and-anticipating-2026-growth-ratings\">TipRanks</a>"
+              }
+            ],
+            "ticker": "CAT",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "VRT",
+                "class": "tk"
+              },
+              {
+                "html": "Vertiv Holdings"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://www.zacks.com/stock/news/2966810/vertiv-vrt-upgraded-to-strong-buy-heres-what-you-should-know\">Zacks</a>"
+              }
+            ],
+            "ticker": "VRT",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "GEV",
+                "class": "tk"
+              },
+              {
+                "html": "GE Vernova"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "TipRanks Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/vrt-vs-apld-vs-gev-which-strong-buy-data-center-infrastructure-stock-could-offer-the-best-upside\">TipRanks</a>"
+              }
+            ],
+            "ticker": "GEV",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "ZWS",
+                "class": "tk"
+              },
+              {
+                "html": "Zurn Elkay Water Solutions"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "Zacks Upgrade→Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/zurn-water-zws-upgraded-strong-160006117.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "ZWS",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "UAL",
+                "class": "tk"
+              },
+              {
+                "html": "United Airlines"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/pdd-li-ual-3-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "UAL",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "KO",
+                "class": "tk"
+              },
+              {
+                "html": "Coca-Cola"
+              },
+              {
+                "html": "צריכה בסיסית"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
+              }
+            ],
+            "ticker": "KO",
+            "sector": "צריכה בסיסית"
+          },
+          {
+            "cells": [
+              {
+                "html": "WMT",
+                "class": "tk"
+              },
+              {
+                "html": "Walmart"
+              },
+              {
+                "html": "צריכה בסיסית"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "WMT",
+            "sector": "צריכה בסיסית"
+          },
+          {
+            "cells": [
+              {
+                "html": "DKNG",
+                "class": "tk"
+              },
+              {
+                "html": "DraftKings"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "DKNG",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "AMZN",
+                "class": "tk"
+              },
+              {
+                "html": "Amazon"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "TipRanks Perfect 10"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
+              }
+            ],
+            "ticker": "AMZN",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "AEE",
+                "class": "tk"
+              },
+              {
+                "html": "Ameren"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "Zacks Upgrade→Buy (לא Strong Buy)"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/ameren-aee-upgraded-buy-heres-160004619.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "AEE",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "QBTS",
+                "class": "tk"
+              },
+              {
+                "html": "D-Wave Quantum"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks \"Perfect 10s\" — ציון מדויק לא צוין בכותרת"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/news/tipranks-perfect-10s-unveiling-3-080000767.html\">TipRanks/Yahoo</a>"
+              }
+            ],
+            "ticker": "QBTS",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "DY",
+                "class": "tk"
+              },
+              {
+                "html": "Dycom Industries"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "TipRanks \"Perfect 10\" Smart Score"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes\">TipRanks</a>"
+              }
+            ],
+            "ticker": "DY",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "NVDA",
+                "class": "tk"
+              },
+              {
+                "html": "Nvidia"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks — Strong Upside 2026 (ראו גם שכבה משנית)"
+              },
+              {
+                "html": "<a href=\"https://www.tipranks.com/news/top-analysts-recommend-buying-nvidia-stock-nvda-see-strong-upside-in-2026\">TipRanks</a>"
+              }
+            ],
+            "ticker": "NVDA",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "TER",
+                "class": "tk"
+              },
+              {
+                "html": "Teradyne"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "Zacks Strong Buy — מהחמות של S&amp;P500 ל-2026"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/news/3-zacks-strong-buy-stocks-163000467.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "TER",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "GS",
+                "class": "tk"
+              },
+              {
+                "html": "Goldman Sachs"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Top-Ranked Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/buy-3-top-ranked-big-124400728.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "GS",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "BLK",
+                "class": "tk"
+              },
+              {
+                "html": "BlackRock"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "BLK",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "BK",
+                "class": "tk"
+              },
+              {
+                "html": "Bank of New York Mellon"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "BK",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "STT",
+                "class": "tk"
+              },
+              {
+                "html": "State Street"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Zacks Buy"
+              },
+              {
+                "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
+              }
+            ],
+            "ticker": "STT",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "NXRT",
+                "class": "tk"
+              },
+              {
+                "html": "NexPoint Residential Trust"
+              },
+              {
+                "html": "נדל\"ן"
+              },
+              {
+                "html": "Zacks New Strong Buy (7.8.2026)"
+              },
+              {
+                "html": "<a href=\"https://www.theglobeandmail.com/investing/markets/stocks/NXRT-N/pressreleases/3714301/new-strong-buy-stocks-for-august-7th/\">Zacks/Globe and Mail</a>"
+              }
+            ],
+            "ticker": "NXRT",
+            "sector": "נדל\"ן"
+          }
+        ],
+        "notes": [
+          "<b>הוצא מהטבלה:</b> PDD Holdings — הופיעה עם TipRanks Perfect 10 אך היא חברה סינית (ADR בנאסד\"ק), לא רלוונטית למיקוד השוק האמריקאי של הדשבורד."
+        ]
+      },
+      "B": {
+        "label": "ב׳ איכות/ערך",
+        "columns": [
+          {
+            "text": "טיקר",
+            "sortable": true
+          },
+          {
+            "text": "שם",
+            "sortable": true
+          },
+          {
+            "text": "סקטור",
+            "sortable": true
+          },
+          {
+            "text": "איתות איכות/ערך",
+            "sortable": true
+          },
+          {
+            "text": "מקור",
+            "sortable": false
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              {
+                "html": "COP",
+                "class": "tk"
+              },
+              {
+                "html": "ConocoPhillips"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "Seeking Alpha Quant: Strong Buy"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4904836-conocophillips-cop-stock-analysis-why-the-quant-system-says-strong-buy-2-minute-analysis\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "COP",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CVX",
+                "class": "tk"
+              },
+              {
+                "html": "Chevron"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "SA \"Top 2026 Pick\"; Fool דיבידנד לעשור"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4929164-chevron-top-2026-pick-for-higher-for-longer-oil-market\">Seeking Alpha/Fool</a>"
+              }
+            ],
+            "ticker": "CVX",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "XOM",
+                "class": "tk"
+              },
+              {
+                "html": "Exxon Mobil"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "SA — \"Continues To Lead Over Chevron\""
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4929286-exxon-mobil-continues-to-lead-over-chevron\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "XOM",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "WFC",
+                "class": "tk"
+              },
+              {
+                "html": "Wells Fargo"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Morningstar Wide Moat, מתחת לשווי הוגן"
+              },
+              {
+                "html": "<a href=\"https://www.morningstar.com/stocks/wide-moat-wells-fargo-worth-look\">Morningstar</a>"
+              }
+            ],
+            "ticker": "WFC",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "GS",
+                "class": "tk"
+              },
+              {
+                "html": "Goldman Sachs"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "SA — \"Still The Bank To Buy\""
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4937643-goldman-sachs-is-still-the-bank-to-buy\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "GS",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "C",
+                "class": "tk"
+              },
+              {
+                "html": "Citigroup"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "SA Growth Grade \"Buy\" מוביל"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/news/4635917-citigroup-and-goldman-sachs-lead-as-most-financial-giants-earn-buy-growth-grades\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "C",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "BRK.B",
+                "class": "tk"
+              },
+              {
+                "html": "Berkshire Hathaway"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "SA — \"Getting Aggressive, Reiterate Buy\""
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4934444-berkshire-hathaway-stock-getting-aggressive-reiterate-buy\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "BRK.B",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "PFE",
+                "class": "tk"
+              },
+              {
+                "html": "Pfizer"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "SA \"Strong Buy\"; Morningstar wide-moat (תאריך לא ודאי)"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4886592-why-pfizer-remains-a-strong-buy-in-2026\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "PFE",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "JNJ",
+                "class": "tk"
+              },
+              {
+                "html": "Johnson &amp; Johnson"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "עמוד נתונים פעיל (ללא ציון מדויק בתוצאה)"
+              },
+              {
+                "html": "<a href=\"https://stockanalysis.com/stocks/jnj/\">StockAnalysis.com</a>"
+              }
+            ],
+            "ticker": "JNJ",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "NKE",
+                "class": "tk"
+              },
+              {
+                "html": "Nike"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "Morningstar cheapest wide-moat (תאריך לא ודאי)"
+              },
+              {
+                "html": "Morningstar"
+              }
+            ],
+            "ticker": "NKE",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "EL",
+                "class": "tk"
+              },
+              {
+                "html": "Estée Lauder"
+              },
+              {
+                "html": "צריכה בסיסית"
+              },
+              {
+                "html": "Simply Wall St — מתחת לשווי הוגן (אוגוסט 2026)"
+              },
+              {
+                "html": "<a href=\"https://simplywall.st/stocks/us/household/nyse-el/estee-lauder-companies/news/3-stocks-possibly-trading-below-their-estimated-value-in-aug\">Simply Wall St</a>"
+              }
+            ],
+            "ticker": "EL",
+            "sector": "צריכה בסיסית"
+          },
+          {
+            "cells": [
+              {
+                "html": "GPC",
+                "class": "tk"
+              },
+              {
+                "html": "Genuine Parts Company"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "Simply Wall St — עד 45%-46% מתחת לשווי הוגן"
+              },
+              {
+                "html": "<a href=\"https://simplywall.st/stocks/us/consumer-durables/nyse-gpc/genuine-parts/news/genuine-parts-gpc-stock-may-be-45-undervalued-as-cash-flow\">Simply Wall St</a>"
+              }
+            ],
+            "ticker": "GPC",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "HON",
+                "class": "tk"
+              },
+              {
+                "html": "Honeywell"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "SA — הרחבת שוליים"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4864270-honeywell-q4-earnings-review-margin-expansion-is-just-beginning\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "HON",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CAT",
+                "class": "tk"
+              },
+              {
+                "html": "Caterpillar"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "מובילת דאו-ג'ונס 2026 (24/7 Wall St)"
+              },
+              {
+                "html": "<a href=\"https://247wallst.com/investing/2026/02/19/caterpillar-honeywell-and-chevron-lead-the-dow-jones-in-2026/\">24/7 Wall St</a>"
+              }
+            ],
+            "ticker": "CAT",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "NEE",
+                "class": "tk"
+              },
+              {
+                "html": "NextEra Energy"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "SA — \"Dip Is A Buying Opportunity\""
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4938582-next-era-energy-stock-dip-buying-opportunity\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "NEE",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "DUK",
+                "class": "tk"
+              },
+              {
+                "html": "Duke Energy"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "SA — פוטנציאל ארוך-טווח"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "DUK",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "SO",
+                "class": "tk"
+              },
+              {
+                "html": "Southern Company"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "SA — פוטנציאל ארוך-טווח"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "SO",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "KO",
+                "class": "tk"
+              },
+              {
+                "html": "Coca-Cola"
+              },
+              {
+                "html": "צריכה בסיסית"
+              },
+              {
+                "html": "מובילת דירוגי צמיחה; אחזקת ליבה ברקשייר"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/news/4636195-coca-cola-leads-consumer-staples-growth-rankings-pg-altria-lag\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "KO",
+            "sector": "צריכה בסיסית"
+          },
+          {
+            "cells": [
+              {
+                "html": "GOOGL",
+                "class": "tk"
+              },
+              {
+                "html": "Alphabet"
+              },
+              {
+                "html": "תקשורת ומדיה"
+              },
+              {
+                "html": "A+ Profitability, A+ Momentum (SA); ~22% מתחת לשווי הוגן (Simply Wall St); ROE 56% (GuruFocus) — ⚠ סנטימנט Bigdata.com שלילי כרגע (רגולציה/ליטיגציה, ראו כרטיס למטה)"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4853715-googl-stock-a-plus-profitability-and-a-plus-momentum-2-minute-analysis\">Seeking Alpha/Simply Wall St</a>"
+              }
+            ],
+            "ticker": "GOOGL",
+            "sector": "תקשורת ומדיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "FCX",
+                "class": "tk"
+              },
+              {
+                "html": "Freeport-McMoRan"
+              },
+              {
+                "html": "חומרים"
+              },
+              {
+                "html": "SA \"Buy\"; מובילת גרייד-צמיחה בחומרים"
+              },
+              {
+                "html": "<a href=\"https://seekingalpha.com/article/4909533-freeport-mcmoran-stock-robust-pipeline-significant-long-term-potential-make-it-buy\">Seeking Alpha</a>"
+              }
+            ],
+            "ticker": "FCX",
+            "sector": "חומרים"
+          },
+          {
+            "cells": [
+              {
+                "html": "FSBC",
+                "class": "tk"
+              },
+              {
+                "html": "Five Star Bancorp"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Simply Wall St — Small Cap עם קניית פנים"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "FSBC",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "RM",
+                "class": "tk"
+              },
+              {
+                "html": "Regional Management Corp"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Simply Wall St — Small Cap עם קניית פנים (+22%)"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "RM",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "SYM",
+                "class": "tk"
+              },
+              {
+                "html": "Symbotic"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "Simply Wall St — Top 3 מתחת לשווי הוגן"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "SYM",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CSCO",
+                "class": "tk"
+              },
+              {
+                "html": "Cisco Systems"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "Simply Wall St undervalued; ROE 27.94%, D/E ~0.60-0.64 (GuruFocus)"
+              },
+              {
+                "html": "<a href=\"https://simplywall.st/stocks/us/tech/nasdaq-csco/cisco-systems/news/cisco-csco-stock-still-looks-undervalued-as-its-3-year-ga\">Simply Wall St/GuruFocus</a>"
+              }
+            ],
+            "ticker": "CSCO",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "KKR",
+                "class": "tk"
+              },
+              {
+                "html": "KKR &amp; Co."
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Simply Wall St undervalued; D/E 1.83 (GuruFocus, ספט' 2025)"
+              },
+              {
+                "html": "<a href=\"https://www.gurufocus.com/term/DebtToEquity/KKR\">Simply Wall St/GuruFocus</a>"
+              }
+            ],
+            "ticker": "KKR",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "SCHW",
+                "class": "tk"
+              },
+              {
+                "html": "Charles Schwab"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Morningstar — סדרת ניתוחי moat קבועה (רייטינג מדויק לא אושר)"
+              },
+              {
+                "html": "Morningstar"
+              }
+            ],
+            "ticker": "SCHW",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "BMY",
+                "class": "tk"
+              },
+              {
+                "html": "Bristol-Myers Squibb"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "24/7 Wall St — Strong Buy, 16% Upside (אפריל 2026)"
+              },
+              {
+                "html": "24/7 Wall St"
+              }
+            ],
+            "ticker": "BMY",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "MDLZ",
+                "class": "tk"
+              },
+              {
+                "html": "Mondelez International"
+              },
+              {
+                "html": "צריכה בסיסית"
+              },
+              {
+                "html": "Morningstar Wide Moat — מאושר במפורש בכותרת; ⚠ סנטימנט Bigdata.com שלילי מאוד כרגע (תקיפות רוסיה באוקראינה על מפעל, רגולציית FSSAI בהודו)"
+              },
+              {
+                "html": "<a href=\"https://bigdata.com\">Morningstar/Bigdata.com</a>"
+              }
+            ],
+            "ticker": "MDLZ",
+            "sector": "צריכה בסיסית"
+          },
+          {
+            "cells": [
+              {
+                "html": "BLMN",
+                "class": "tk"
+              },
+              {
+                "html": "Bloomin' Brands"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "Simply Wall St — Undervalued אוגוסט 2026 לאחר Q2 beat"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "BLMN",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "HAE",
+                "class": "tk"
+              },
+              {
+                "html": "Haemonetics"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Simply Wall St — עד 49% מתחת לשווי הוגן (לאחר העלאת תחזית)"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "HAE",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "BE",
+                "class": "tk"
+              },
+              {
+                "html": "Bloom Energy"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "Simply Wall St — תמונה מעורבת: הנחה בתזרים מזומנים אך פרימיום במכירות"
+              },
+              {
+                "html": "Simply Wall St"
+              }
+            ],
+            "ticker": "BE",
+            "sector": "אנרגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "UAL",
+                "class": "tk"
+              },
+              {
+                "html": "United Airlines"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "TipRanks — Strong Buy, P/E נמוך"
+              },
+              {
+                "html": "TipRanks"
+              }
+            ],
+            "ticker": "UAL",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CI",
+                "class": "tk"
+              },
+              {
+                "html": "The Cigna Group"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "TipRanks — Strong Buy, P/E נמוך; ROE 15.77% (GuruFocus)"
+              },
+              {
+                "html": "TipRanks/GuruFocus"
+              }
+            ],
+            "ticker": "CI",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "MSTR",
+                "class": "tk"
+              },
+              {
+                "html": "Strategy (MicroStrategy)"
+              },
+              {
+                "html": "טכנולוגיה"
+              },
+              {
+                "html": "TipRanks Strong Buy, P/E נמוך — ⚠ סיכון: אחזקת ביטקוין ממונפת מאוד, לא מתאימה לפרופיל איכות פונדמנטלית קלאסי לטווח ארוך"
+              },
+              {
+                "html": "TipRanks"
+              }
+            ],
+            "ticker": "MSTR",
+            "sector": "טכנולוגיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "SM",
+                "class": "tk"
+              },
+              {
+                "html": "SM Energy Company"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "Finviz News — Undervalued בסיכון עולה במחירי נפט"
+              },
+              {
+                "html": "Finviz News"
+              }
+            ],
+            "ticker": "SM",
+            "sector": "אנרגיה"
+          }
+        ],
+        "notes": [
+          "<b>מגבלת מקור:</b> Finviz ו-StockAnalysis.com לא החזירו נתוני סינון מספריים מלאים (ROE/FCF yield/P-E/D-E) ברוב המקרים בחיפושי WebSearch — רק עמודי כלי חלקיים. נתוני GuruFocus שנוספו היום (ROE/D-E ל-GOOGL, CSCO, KKR, CI) מגבירים את הכיסוי המספרי אך עדיין חלקיים. <b>סיכון סותר מסומן:</b> MSTR מופיעה עם דירוג Strong Buy אך מסומנת במפורש כלא-מתאימה לפרופיל איכות קלאסי (מינוף ביטקוין גבוה)."
+        ]
+      },
+      "C": {
+        "label": "ג׳ עריכתי",
+        "columns": [
+          {
+            "text": "טיקר",
+            "sortable": true
+          },
+          {
+            "text": "שם",
+            "sortable": true
+          },
+          {
+            "text": "סקטור",
+            "sortable": true
+          },
+          {
+            "text": "פרסומים",
+            "sortable": true
+          },
+          {
+            "text": "מקור",
+            "sortable": false
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              {
+                "html": "ABT",
+                "class": "tk"
+              },
+              {
+                "html": "Abbott Laboratories"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Motley Fool — Dividend King להחזקה לנצח"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/02/12/abbott-labs-healthcare-dividend-stock-id-hold/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "ABT",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "BMY",
+                "class": "tk"
+              },
+              {
+                "html": "Bristol-Myers Squibb"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Motley Fool — Top Healthcare Dividend"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "BMY",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "MDT",
+                "class": "tk"
+              },
+              {
+                "html": "Medtronic"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Motley Fool — Top Healthcare Dividend"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "MDT",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "ISRG",
+                "class": "tk"
+              },
+              {
+                "html": "Intuitive Surgical"
+              },
+              {
+                "html": "בריאות"
+              },
+              {
+                "html": "Motley Fool — Top AI Healthcare Stock (16.2.2026)"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/02/16/my-1-top-ai-healthcare-stock-to-buy-and-hold-isrg/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "ISRG",
+            "sector": "בריאות"
+          },
+          {
+            "cells": [
+              {
+                "html": "GEV",
+                "class": "tk"
+              },
+              {
+                "html": "GE Vernova"
+              },
+              {
+                "html": "תשתיות ציבוריות"
+              },
+              {
+                "html": "Motley Fool — 3 מניות אנרגיה תעשייתית לעשורים"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/05/27/best-industrial-energy-stocks-buy-hold-gev/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "GEV",
+            "sector": "תשתיות ציבוריות"
+          },
+          {
+            "cells": [
+              {
+                "html": "LIN",
+                "class": "tk"
+              },
+              {
+                "html": "Linde plc"
+              },
+              {
+                "html": "חומרים"
+              },
+              {
+                "html": "Motley Fool — 3 מניות חומרים לפני בום תעשייתי"
+              },
+              {
+                "html": "<a href=\"https://www.fool.com/investing/2026/05/13/3-materials-stocks-to-buy-before-next-industrial/\">Motley Fool</a>"
+              }
+            ],
+            "ticker": "LIN",
+            "sector": "חומרים"
+          },
+          {
+            "cells": [
+              {
+                "html": "BRK.B",
+                "class": "tk"
+              },
+              {
+                "html": "Berkshire Hathaway"
+              },
+              {
+                "html": "פיננסים"
+              },
+              {
+                "html": "Morningstar — Best Companies to Own 2026"
+              },
+              {
+                "html": "<a href=\"https://www.morningstar.com/stocks/best-companies-own-2026-edition\">Morningstar</a>"
+              }
+            ],
+            "ticker": "BRK.B",
+            "sector": "פיננסים"
+          },
+          {
+            "cells": [
+              {
+                "html": "NKE",
+                "class": "tk"
+              },
+              {
+                "html": "Nike"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "Morningstar — Best Companies to Own 2026 (⚠ ראו איתות סותר בשכבה 1)"
+              },
+              {
+                "html": "Morningstar"
+              }
+            ],
+            "ticker": "NKE",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "DIS",
+                "class": "tk"
+              },
+              {
+                "html": "Walt Disney"
+              },
+              {
+                "html": "תקשורת ומדיה"
+              },
+              {
+                "html": "Morningstar — Best Companies to Own 2026; Barron's Top 10 for 2026"
+              },
+              {
+                "html": "Morningstar/Barron's"
+              }
+            ],
+            "ticker": "DIS",
+            "sector": "תקשורת ומדיה"
+          },
+          {
+            "cells": [
+              {
+                "html": "AMZN",
+                "class": "tk"
+              },
+              {
+                "html": "Amazon.com"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "Barron's Top 10 Stocks for 2026 (דצמבר 2025)"
+              },
+              {
+                "html": "Barron's (via X/Dividend Talks)"
+              }
+            ],
+            "ticker": "AMZN",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "DASH",
+                "class": "tk"
+              },
+              {
+                "html": "DoorDash"
+              },
+              {
+                "html": "צריכה מחזורית"
+              },
+              {
+                "html": "Barron's Roundtable 2026"
+              },
+              {
+                "html": "Barron's (via intellectia.ai)"
+              }
+            ],
+            "ticker": "DASH",
+            "sector": "צריכה מחזורית"
+          },
+          {
+            "cells": [
+              {
+                "html": "UPS",
+                "class": "tk"
+              },
+              {
+                "html": "United Parcel Service"
+              },
+              {
+                "html": "תעשייה"
+              },
+              {
+                "html": "Motley Fool — 2 מניות תעשייה מובילות לעשורים (רמת ביטחון בינונית — לא אומת ישירות מול fool.com)"
+              },
+              {
+                "html": "Motley Fool (סינדוק Globe and Mail)"
+              }
+            ],
+            "ticker": "UPS",
+            "sector": "תעשייה"
+          },
+          {
+            "cells": [
+              {
+                "html": "CVX",
+                "class": "tk"
+              },
+              {
+                "html": "Chevron"
+              },
+              {
+                "html": "אנרגיה"
+              },
+              {
+                "html": "Motley Fool — דיבידנד יציב לעשור הבא (24.8.2026)"
+              },
+              {
+                "html": "Motley Fool"
+              }
+            ],
+            "ticker": "CVX",
+            "sector": "אנרגיה"
+          }
+        ],
+        "notes": [
+          "<b>מגבלת מקור:</b> מכסת WebSearch אזלה גם בהרצה זו לפני שנבדקו רשימות Kiplinger ו-Forbes לרמת טיקר בפועל — קיימות כתבות מאומתות (\"9 Best Stocks To Buy Now For August 2026\" ועוד) אך הטיקרים הספציפיים לא עלו בתוצאות. ייתכנו חפיפות בין-פרסומיות נוספות שלא זוהו בהרצה זו."
+        ]
+      }
+    }
   },
   "highrisk": {
-    "title": "🚨שכבת סיכון גבוה",
+    "title": "שכבת סיכון גבוה",
+    "icon": "🚨",
     "subtitle": "10 מניות קבועות: הנפקות מהחמש שנים האחרונות, וחברות ותיקות שהפכו אטרקטיביות למוסדיים בעקבות קטליסט (ביטחון וגיאופוליטיקה, אנרגיה גרעינית, מינרלים קריטיים, תשתיות AI). כניסה/יציאה מוסדית (13F/13G) היא האות המרכזי כאן.",
-    "banner": "🚨 קטגוריית סיכון גבוה: תנודתיות משמעותית, חלק מהחברות טרם רווחיות או בתחילת דרכן הציבורית. אינה מיועדת לפרופיל \"קנייה והחזקה\" השמרני של שכבה 1 — מתאימה רק לחלק ספקולטיבי מוגבל בתיק.",
+    "icon_variant": "risk",
+    "banner": "🚨 <b>קטגוריית סיכון גבוה:</b> תנודתיות משמעותית, חלק מהחברות טרם רווחיות או בתחילת דרכן הציבורית. אינה מיועדת לפרופיל \"קנייה והחזקה\" השמרני של שכבה 1 — מתאימה רק לחלק ספקולטיבי מוגבל בתיק.",
     "kpis": [
       {
         "value": "3",
@@ -2437,7 +2244,7 @@
             "kind": "catalyst"
           }
         ],
-        "rationale": "BNY Mellon פתחה פוזיציה חדשה (24.8); EP Wealth Advisors הגדילה אחזקה (23.8); Ieq Capital קנתה 54,913 מניות (24.8). קטליסט: עסקאות ענן AI רב-מיליארדיות חדשות; סיכון: החמרה רגולטורית אפשרית במרכזי נתונים. עדכון היום: Motley Fool (18.8) ציינה ירידה במניה על רקע חששות מימון-חוב ולחצי הוצאות הון — מעקב מומלץ, אינה עדות 13F/13G.",
+        "rationale": "BNY Mellon פתחה פוזיציה חדשה (24.8); EP Wealth Advisors הגדילה אחזקה (23.8); Ieq Capital קנתה 54,913 מניות (24.8). קטליסט: עסקאות ענן AI רב-מיליארדיות חדשות; סיכון: החמרה רגולטורית אפשרית במרכזי נתונים. <b>עדכון היום:</b> Motley Fool (18.8) ציינה ירידה במניה על רקע חששות מימון-חוב ולחצי הוצאות הון — מעקב מומלץ, אינה עדות 13F/13G.",
         "risk_badge": "IPO 2025",
         "sources": []
       },
@@ -2491,7 +2298,7 @@
             "kind": "catalyst"
           }
         ],
-        "rationale": "Legal & General Group השקיעה $311.47M (26.8) — כניסה מוסדית משמעותית. קטליסט: ביקוש קישוריות AI לקראת דוח רבעוני. אומת שוב היום — אותו ממצא, ללא עדות לשינוי נוסף.",
+        "rationale": "Legal &amp; General Group השקיעה $311.47M (26.8) — כניסה מוסדית משמעותית. קטליסט: ביקוש קישוריות AI לקראת דוח רבעוני. <b>אומת שוב היום</b> — אותו ממצא, ללא עדות לשינוי נוסף.",
         "risk_badge": "IPO 2024",
         "sources": []
       },
@@ -2595,7 +2402,7 @@
             "kind": "catalyst"
           }
         ],
-        "rationale": "כותרת מפורשת: \"MP Materials Shares Face Mounting Pressure Amid Institutional and Insider Selling\". קנייה קטנה בלבד: Odyssean LLC עם פוזיציה של $1.58M (26.8). קטליסט חיובי: עסקת אספקה חדשה בתעופה וחלל, תמיכת מחיר של הפנטגון, ראלי סקטור אדמות נדירות. עדכון היום: חדשות נוספות על ריבית שורט גבוהה במיוחד בין מניות החומרים — סימן לפוזיציונינג ספקולטיבי, לא זרימה מוסדית.",
+        "rationale": "כותרת מפורשת: \"MP Materials Shares Face Mounting Pressure Amid Institutional and Insider Selling\". קנייה קטנה בלבד: Odyssean LLC עם פוזיציה של $1.58M (26.8). קטליסט חיובי: עסקת אספקה חדשה בתעופה וחלל, תמיכת מחיר של הפנטגון, ראלי סקטור אדמות נדירות. <b>עדכון היום:</b> חדשות נוספות על ריבית שורט גבוהה במיוחד בין מניות החומרים — סימן לפוזיציונינג ספקולטיבי, לא זרימה מוסדית.",
         "risk_badge": "קטליסט: מינרלים",
         "sources": []
       },
@@ -2622,7 +2429,7 @@
             "kind": "catalyst"
           }
         ],
-        "rationale": "לא נמצאה עדות ל-13F/13G מוסדי חדש ב-30 הימים האחרונים. נמצאה מכירת פנים (-$22,151.89, 25.8) והורדות אנליסטים — קטגוריה שונה מיציאה מוסדית, אך שלילית. קטליסט חיובי: DOE אישרה את כור הבדיקה Groves, הסכם 1.2GW עם Meta, משא ומתן מתקדם עם DOE לתוכנית פלוטוניום עודף. עדכון היום: הכנסות רבעון Q2 עקפו תחזיות בבירור — קטליסט תפעולי חיובי, לא ממצא מוסדי.",
+        "rationale": "לא נמצאה עדות ל-13F/13G מוסדי חדש ב-30 הימים האחרונים. נמצאה מכירת פנים (-$22,151.89, 25.8) והורדות אנליסטים — קטגוריה שונה מיציאה מוסדית, אך שלילית. קטליסט חיובי: DOE אישרה את כור הבדיקה Groves, הסכם 1.2GW עם Meta, משא ומתן מתקדם עם DOE לתוכנית פלוטוניום עודף. <b>עדכון היום:</b> הכנסות רבעון Q2 עקפו תחזיות בבירור — קטליסט תפעולי חיובי, לא ממצא מוסדי.",
         "risk_badge": "IPO 2024",
         "sources": []
       },
@@ -2649,7 +2456,7 @@
             "kind": "catalyst"
           }
         ],
-        "rationale": "First Trust Advisors מכרה 6,306 מניות (7.8) — מכירה קטנה. CalSTRS מחזיקה פוזיציה של $3.40M (לא ברור אם חדשה). קטליסט: גידול בצבר הזמנות HALEU, שותפות העשרת אורניום עם חברות קוריאניות (+8.5%). עדכון היום: לא אותרה עדות חדשה בתוצאות החיפוש (מכסה מוגבלת).",
+        "rationale": "First Trust Advisors מכרה 6,306 מניות (7.8) — מכירה קטנה. CalSTRS מחזיקה פוזיציה של $3.40M (לא ברור אם חדשה). קטליסט: גידול בצבר הזמנות HALEU, שותפות העשרת אורניום עם חברות קוריאניות (+8.5%). <b>עדכון היום:</b> לא אותרה עדות חדשה בתוצאות החיפוש (מכסה מוגבלת).",
         "risk_badge": "קטליסט: גרעין",
         "sources": []
       },
@@ -2680,231 +2487,286 @@
         "risk_badge": "קטליסט: AI תשתיות",
         "sources": []
       }
-    ]
+    ],
+    "flag_note": "⚠️ עדכון קל בוצע היום (29.8) עבור כל 10 המניות — לא נמצאה עדות לשינוי מוסדי מהותי מעבר למה שכבר תועד (ALAB/Legal &amp; General אומת מחדש). מחירים לא התעדכנו היום כלל — מכסת Alpha Vantage החינמית (25 קריאות/יום) הייתה מוצתה מתחילת ההרצה (0 קריאות זמינות). המחירים המוצגים הם מהרצת 28.8.2026."
   },
   "sentiment": {
-    "title": "💬שכבת סנטימנט משנית",
+    "title": "שכבת סנטימנט משנית",
+    "icon": "💬",
     "subtitle": "אינה נכללת בציון הראשי — מיועדת להבחין בין מומנטום ספקולטיבי לתזה ארוכת-טווח אמינה.",
     "rows": [
       {
         "ticker": "WEN",
         "note": "Meme/short squeeze — JPMorgan סימנה כמועמדת squeeze, ריבית שורט עולה",
         "classification": "ספקולטיבי",
+        "tag_kind": "speculative-tag",
         "direction": "neg"
       },
       {
         "ticker": "OPEN / GPRO / KSS / DNUT",
         "note": "גל מניות מם קמעונאי מחודש (Reddit r/WallStreetBets, StockTwits) — Opendoor, GoPro, Kohl's, Krispy Kreme; \"money-losing microcap surges amid r/WallStreetBets chatter\"",
         "classification": "ספקולטיבי",
+        "tag_kind": "speculative-tag",
         "direction": "neg"
       },
       {
         "ticker": "GME",
         "note": "מניית meme קלאסית, WallStreetBets Index 2026 — עדיין נזכרת לצד Palantir/SpaceX בבאזז שבועי",
         "classification": "ספקולטיבי",
+        "tag_kind": "speculative-tag",
         "direction": "neg"
       },
       {
         "ticker": "RGTI / QBTS / IONQ / QUBT",
         "note": "סל מחשוב קוונטי — ראלי דו-ספרתי על רקע ספקולציה; Jim Cramer הזהיר מפני החום הספקולטיבי בשמות אלה",
         "classification": "ספקולטיבי",
+        "tag_kind": "speculative-tag",
         "direction": "neg"
       },
       {
         "ticker": "ASTS",
         "note": "ברשימת WSB Index לצד תזה לוויינית ארוכת-טווח — טרם רווחית, תנודתיות גבוהה",
         "classification": "מעורב",
+        "tag_kind": "mixed-flag-tag",
         "direction": "mix"
       },
       {
         "ticker": "PLTR",
         "note": "באזז חברתי גבוה (Benzinga \"Buzzing This Week\") הנתמך בצמיחה עסקית אמיתית בתחום ה-AI הממשלתי/ארגוני, אך גם אזהרת ולואציה גבוהה (Seeking Alpha: \"Applaud The Fundamentals, But Short Valuation\")",
         "classification": "מעורב",
+        "tag_kind": "mixed-flag-tag",
         "direction": "mix"
       },
       {
         "ticker": "NBIS / SMCI / CRWV",
         "note": "אשכול תשתיות AI (דאטה-סנטרים/GPU cloud) בבאזז שבועי חם — ביקוש תשתית AI אמיתי ברקע, אך תנודתיות וסיכון ביצוע גבוהים מקשים על סיווג כתזה שמרנית",
         "classification": "מעורב",
+        "tag_kind": "mixed-flag-tag",
         "direction": "mix"
       },
       {
         "ticker": "NVDA",
         "note": "באזז StockTwits/X מוביל, מבוסס ביקוש AI ותוצאות רבעון (\"Beat-And-Raise\", הכנסות +106%); ראו גם שכבה משנית למעלה",
         "classification": "תזה ארוכת-טווח",
+        "tag_kind": "longterm-tag",
         "direction": "pos"
       },
       {
         "ticker": "MSFT / AAPL / TSLA",
         "note": "Dan Ives (Wedbush) — טופ-5 מניות AI ל-2026, תזת אימוץ רב-שנתית",
         "classification": "תזה ארוכת-טווח",
+        "tag_kind": "longterm-tag",
         "direction": "pos"
       },
       {
         "ticker": "MU",
         "note": "ברשימת WallStreetBets Index אך קשורה לביקוש שבבי זיכרון/AI יסודי",
         "classification": "תזה ארוכת-טווח",
+        "tag_kind": "longterm-tag",
         "direction": "pos"
       }
     ]
   },
   "sector_chart": {
-    "title": "📊פילוח סקטוריאלי",
+    "title": "פילוח סקטוריאלי",
+    "icon": "📊",
     "subtitle": null,
     "legend": "מבוסס על 70 מניות ייחודיות בטבלאות א׳+ב׳+ג׳ (ללא כפילויות) · פיננסים 16/70 · 23% — הסקטור המוביל, ללא ריכוז יתר בטכנולוגיה (9/70 · 13%)."
   },
   "compare": {
-    "title": "⚖️השוואה כנה",
+    "title": "השוואה כנה",
+    "icon": "⚖️",
     "subtitle": null,
     "columns": [
-      "יכולת",
-      "Converge",
-      "Finviz",
-      "TipRanks",
-      "Bloomberg"
+      {
+        "text": "יכולת",
+        "sortable": false
+      },
+      {
+        "text": "Converge",
+        "sortable": false
+      },
+      {
+        "text": "Finviz",
+        "sortable": false
+      },
+      {
+        "text": "TipRanks",
+        "sortable": false
+      },
+      {
+        "text": "Bloomberg",
+        "sortable": false
+      }
     ],
     "rows": [
       {
         "cells": [
           {
-            "text": "עברית"
+            "html": "עברית"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "הצלבה מקורות"
+            "html": "הצלבה מקורות"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           },
           {
-            "text": "חלקי"
+            "html": "חלקי",
+            "class": "check-n"
           },
           {
-            "text": "חלקי"
+            "html": "חלקי",
+            "class": "check-n"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "מחירים בזמן אמת"
+            "html": "מחירים בזמן אמת"
           },
           {
-            "text": "מושהה/מוגבל"
+            "html": "מושהה/מוגבל",
+            "class": "check-n"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "סינון פונדמנטלי"
+            "html": "סינון פונדמנטלי"
           },
           {
-            "text": "חלקי"
+            "html": "חלקי",
+            "class": "check-n"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "חלקי"
+            "html": "חלקי",
+            "class": "check-n"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "סנטימנט AI מצוטט"
+            "html": "סנטימנט AI מצוטט"
           },
           {
-            "text": "✓ Bigdata.com"
+            "html": "✓ Bigdata.com",
+            "class": "check-y"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           },
           {
-            "text": "חלקי"
+            "html": "חלקי",
+            "class": "check-n"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "13F/13G"
+            "html": "13F/13G"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✗"
+            "html": "✗",
+            "class": "check-n"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           },
           {
-            "text": "✓"
+            "html": "✓",
+            "class": "check-y"
           }
         ]
       },
       {
         "cells": [
           {
-            "text": "עלות"
+            "html": "עלות"
           },
           {
-            "text": "חינם"
+            "html": "חינם",
+            "class": "check-y"
           },
           {
-            "text": "$0-40"
+            "html": "$0-40"
           },
           {
-            "text": "$35-40"
+            "html": "$35-40"
           },
           {
-            "text": "~$2000+"
+            "html": "~$2000+"
           }
         ]
       }
     ]
   },
   "methodology": {
-    "title": "🔬מתודולוגיה ומקורות",
+    "title": "מתודולוגיה ומקורות",
+    "icon": "🔬",
     "subtitle": null,
     "paragraphs": [
       "שלוש מתודולוגיות עצמאיות, כל אחת בסוכן מחקר נפרד המבוסס אך ורק על WebSearch (ללא WebFetch): (א) קונצנזוס אנליסטים כמותי — TipRanks Smart Score, Zacks Rank, MarketBeat. (ב) איכות וערך פונדמנטלי — Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat, GuruFocus. (ג) המלצות עריכתיות ארוכות-טווח — Motley Fool, Barron's, Morningstar, Kiplinger, Forbes. מניה המופיעה בשתיים מתוך שלוש הרשימות מקבלת מעמד שכבה 1. שכבת סנטימנט משנית (StockTwits/Reddit/X) נבדקת בנפרד ואינה משפיעה על הציון הראשי. הדשבורד מתעדכן מדי יום; שכבה 1 ושכבת הסיכון הגבוה נשמרות בין הרצות כאשר לא נמצא שינוי מהותי או עדות סותרת, כדי לשמר רצף מעקב אמין.",
-      "נתונים חיים: Alpha Vantage GLOBAL_QUOTE — 0 קריאות הצליחו מתוך 18 שנוסו היום (מכסת 25/יום הייתה מוצתה מתחילת ההרצה, כנראה משימוש קודם באותו יום/מפתח). סנטימנט מצוטט: Bigdata.com bigdata_sentiment_tearsheet, הופעל היום על 5 מניות מרכזיות (NVDA, GOOGL, AVGO, GS, MDLZ). תודה ל-Bigdata.com על הנתונים."
+      "נתונים חיים: <a href=\"https://www.alphavantage.co\">Alpha Vantage</a> GLOBAL_QUOTE — 0 קריאות הצליחו מתוך 18 שנוסו היום (מכסת 25/יום הייתה מוצתה מתחילת ההרצה, כנראה משימוש קודם באותו יום/מפתח). סנטימנט מצוטט: <a href=\"https://bigdata.com\">Bigdata.com</a> bigdata_sentiment_tearsheet, הופעל היום על 5 מניות מרכזיות (NVDA, GOOGL, AVGO, GS, MDLZ). תודה ל-Bigdata.com על הנתונים."
     ],
     "sources": [
       {
@@ -2918,13 +2780,14 @@
     ]
   },
   "transparency": {
-    "title": "🔍שקיפות ומגבלות",
+    "title": "שקיפות ומגבלות",
+    "icon": "🔍",
     "subtitle": null,
     "items": [
       "המחקר מבוסס על תוצאות חיפוש (כותרות/URL/תקצירים) ועל מחברי נתונים חיים (Alpha Vantage, Bigdata.com) — לא על טעינת עמודי מקור מלאים (WebFetch לא שימש בהרצה זו כלל, כנדרש).",
       "מכסת ה-WebSearch של הסשן (200 קריאות) אזלה במהלך ההרצה, לפני שכל סוכני המחקר השלימו כיסוי מלא (במיוחד עריכתי — Barron's/Kiplinger/Forbes ברמת טיקר, וסיכון גבוה — נתוני מחיר/שווי שוק). זה גם מנע ממני (הסוכן הראשי) לבצע חיפושי הצלבה נוספים בין הרשימות.",
-      "מכסת Alpha Vantage החינמית (25 קריאות/יום) הייתה כבר מוצתה כליל בתחילת ההרצה (0/18 קריאות הצליחו) — כל נתוני המחיר בדשבורד הם מהרצת 28.8.2026 ומתויגים בבירור ככאלה, או \"לא זמין\" עבור מניות שלא נבדקו אתמול.",
-      "שכבה 1 לא אומתה מחדש היום: שלוש הרשימות (א׳/ב׳/ג׳) שנאספו היום הן מדגם חדש ועצמאי מתוך היקום העצום של השוק (מוגבל ע\"י מכסת החיפושים), ולא חפפו את שכבה 1 מאתמול. מאחר שלא נמצאה עדות סותרת לשש המניות (CVX, CAT, KO, GEV, BRK.B, NKE), הן נשמרו כפי שהיו — זוהי החלטת עריכה מכוונת לטובת רצף מעקב, ולא אימות טרי. משתמש שרוצה רק מניות שאומתו היום מוזמן להתמקד בטבלאות המתודולוגיה למטה.",
+      "<b>מכסת Alpha Vantage החינמית (25 קריאות/יום) הייתה כבר מוצתה כליל בתחילת ההרצה (0/18 קריאות הצליחו)</b> — כל נתוני המחיר בדשבורד הם מהרצת 28.8.2026 ומתויגים בבירור ככאלה, או \"לא זמין\" עבור מניות שלא נבדקו אתמול.",
+      "<b>שכבה 1 לא אומתה מחדש היום:</b> שלוש הרשימות (א׳/ב׳/ג׳) שנאספו היום הן מדגם חדש ועצמאי מתוך היקום העצום של השוק (מוגבל ע\"י מכסת החיפושים), ולא חפפו את שכבה 1 מאתמול. מאחר שלא נמצאה עדות סותרת לשש המניות (CVX, CAT, KO, GEV, BRK.B, NKE), הן נשמרו כפי שהיו — זוהי החלטת עריכה מכוונת לטובת רצף מעקב, ולא אימות טרי. משתמש שרוצה רק מניות שאומתו היום מוזמן להתמקד בטבלאות המתודולוגיה למטה.",
       "שכבה משנית כללה היום מועמדת חדשה אחת (NVDA) — הופיעה במקור א׳ בלבד וזכתה לגיבוי סנטימנט מפורש הן ב-Bigdata.com והן בשכבת הסנטימנט החברתי.",
       "NKE מסומנת במפורש כאיתות סותר: תמיכה עריכתית (\"Best Companies to Own\") מול הורדות דירוג טריות (JPMorgan Underweight, Truist Hold) ושפל 12 שנה במחיר (מהרצה קודמת, לא אומת מחדש).",
       "MSTR (טבלה ב׳) מסומנת בסיכון: דירוג Strong Buy קיים אך אינה מתאימה לפרופיל איכות פונדמנטלית קלאסי לטווח ארוך (אחזקת ביטקוין ממונפת מאוד) — נכללה בטבלה עם דגל אזהרה ברור, לא הוצאה לגמרי.",

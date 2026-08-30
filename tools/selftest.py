@@ -42,13 +42,13 @@ def _(data):
 
 @case("a methodology table is written but left empty")
 def _(data):
-    data["tables"]["B"]["rows"] = []
+    data["tables"]["tabs"]["B"]["rows"] = []
     return data
 
 
 @case("a table row loses a cell")
 def _(data):
-    data["tables"]["A"]["rows"][0]["cells"].pop()
+    data["tables"]["tabs"]["A"]["rows"][0]["cells"].pop()
     return data
 
 

@@ -94,7 +94,7 @@ def check_structure(data, rep):
             rep.warn("no '%s' section — the other dashboard has one" % key)
 
     tables = data.get("tables") or {}
-    groups = tables.get("groups", tables)
+    groups = tables.get("groups") or tables.get("tabs") or {}
     found = 0
     for name, tbl in groups.items():
         if not isinstance(tbl, dict) or "rows" not in tbl:
@@ -126,11 +126,11 @@ def check_structure(data, rep):
 def check_consistency(data, rep):
     if data["dashboard"] != "stocks":
         return
-    tables = data.get("tables") or {}
+    tabs = (data.get("tables") or {}).get("tabs") or {}
     unique = set()
     for key in ("A", "B", "C"):
-        for row in (tables.get(key) or {}).get("rows", []):
-            unique.add(row.get("ticker") or row["cells"][0]["text"])
+        for row in (tabs.get(key) or {}).get("rows", []):
+            unique.add(row.get("ticker") or row["cells"][0].get("html"))
 
     def count(key):
         return len((data.get(key) or {}).get("cards", []))

@@ -23,6 +23,9 @@ jobs:
       - name: Validate both dashboards
         run: python3 tools/validate.py
 
+      - name: Renderer still reproduces the live page
+        run: python3 tools/roundtrip.py
+
       - name: Data layer is in sync with the HTML
         run: |
           python3 tools/extract.py
