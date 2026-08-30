@@ -1,4 +1,4 @@
-import subprocess, re, json, sys
+import subprocess, re, json, sys, os
 from collections import OrderedDict
 
 REPO = "/home/user/converge-dashboards"
@@ -41,7 +41,7 @@ for r in rows: by_day.setdefault(r["date"], {})[r["sha"]] = None
 final = {d: list(sh)[-1] for d, sh in by_day.items()}
 ledger = [r for r in rows if final.get(r["date"]) == r["sha"]]
 
-out = "/home/user/converge-dashboards/track/tier1_ledger.jsonl"
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tier1_ledger.jsonl")
 with open(out,"w") as f:
     for r in ledger: f.write(json.dumps(r, ensure_ascii=False)+"\n")
 
