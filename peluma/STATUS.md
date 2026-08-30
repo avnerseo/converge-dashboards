@@ -1444,3 +1444,50 @@ personal needs 1,000.
 `peluma/peluma-avatar.png` — 800x800 profile picture built from the real storefront logo
 (`Peluma-Logo.png`, icon cropped at x 70-655, trimmed, 20% padding on white). For TikTok,
 YouTube and any other brand profile, so the mark is identical everywhere.
+
+## First Short published to the Peluma YouTube channel — 2026-08-30
+
+Channel: **Peluma**, `@peluma-v2p`, `UCRxrWRucsEzb8lbGrtXaoOg`, created 15:27 UTC.
+The existing Composio connection picked it up with no re-auth, as predicted — the OAuth grant
+was already in place and only the channel was missing.
+
+Video: `EksxVG-38OQ` — "Muddy paws to a brushed coat — Peluma #shorts"
+`processingStatus: succeeded`, `uploadStatus: processed`, `privacyStatus: public`, 10s, HD,
+category 15 (Pets & Animals), 7 tags. Verified after upload, not assumed.
+
+### The upload path, since it took four attempts
+
+`YOUTUBE_MULTIPART_UPLOAD_VIDEO.videoFile` will not take a URL and will not take an external
+one dressed as an `s3key` — it needs a key inside Composio's own storage. The MCP surface
+cannot produce one. The remote workbench can:
+
+1. `stagedUploadsCreate` + POST + `fileCreate` on Shopify → public `cdn.shopify.com` mp4 URL.
+2. In `COMPOSIO_REMOTE_WORKBENCH`: download that URL to `/mnt/files/`.
+3. `get_mount_file_s3_key(path)` → **returns a `(key, error)` tuple**, not a string. Unpack it.
+4. `run_composio_tool(..., account="youtube_prefab-surahi")` — `account`, not
+   `connected_account_id`.
+
+### The guard that mattered
+
+The default YouTube account on this Composio user is **DADDYAURA**, a toddler-music channel.
+An upload without an explicit account would have put pet-store content there. Before
+publishing, the sandbox asserted the resolved channel was `Peluma` /
+`UCRxrWRucsEzb8lbGrtXaoOg` and aborted otherwise. It passed, then published.
+
+### Honest limitations of this first Short
+
+- **Silent.** The reel was concatenated with OpenCV's `VideoWriter`, which cannot write an
+  audio track, and there is no standalone ffmpeg in this container. Shorts without audio
+  under-perform.
+- **No on-screen text.** A silent Short with no captions gives the viewer nothing to read.
+- The footage is AI-generated; the description says so explicitly.
+
+Both limitations are fixable in the next cut and should be, before more Shorts go up.
+
+### One process note
+
+The 3-second paw-cup segment was re-checked frame by frame before publishing, because the
+recorded defect was "the paw is not inside the cup". On a downscaled contact sheet it again
+looked wrong. At full resolution the front rim clearly occludes the paw at 0.0s, 1.5s, 2.08s
+and 3.0s — the shot is correct. Second time the small-preview trap has been hit; the rule
+holds: judge images at actual size.
