@@ -9,6 +9,7 @@ outputs — stays inside its own folder.
 | 01 | `01-track-record/` | Make Converge's stock engine falsifiable: a public, verified track record | slowest, most defensible |
 | 02 | `02-data-video-engine/` | A machine that turns any data feed into a daily video; sell the machine | medium |
 | 03 | `03-dubbing-arbitrage/` | Produce in Hebrew, export to many languages at the cost of one | fastest to revenue |
+| 04 | `04-peluma/` | Live Shopify store: fix unit economics before any video spend | live business |
 
 Each folder has a `BRIEF.md` that is self-contained — a session starting fresh
 should be able to read only that file plus this one and begin work.
@@ -22,6 +23,7 @@ collide:
 - `claude/track-record`
 - `claude/data-video-engine`
 - `claude/dubbing-arbitrage`
+- `claude/peluma`
 
 Never push to another project's branch.
 
@@ -56,7 +58,7 @@ Checked directly on 2026-08-30 — these are measured, not assumed.
 - **Bigdata.com MCP** — institutional unstructured content with entity
   resolution. Needs `rp_entity_id` from `find_securities` for tearsheets.
 
-### Commerce (context, not an active workstream here)
+### Commerce (workstream 04)
 - **Shopify** — store "Peluma", pelumapets.com, Basic plan, USD. Two products:
   Mist Grooming Brush ($29.90) and Paw Wash Cup ($16.90).
 - **Zendrop** — store id `3546333`. 2026-06-01→08-30: **1 order, $29.90 revenue,
@@ -67,7 +69,32 @@ Checked directly on 2026-08-30 — these are measured, not assumed.
 `COMPOSIO` and `openart_ai` returned 404 on connect. The working OpenArt server
 is the one named `OPENART`.
 
-## Two external constraints that shape all three projects
+## Network egress — verified 2026-08-30, affects what is buildable
+
+Container egress is **allowlisted, not open**. This was measured, not assumed.
+
+**Reachable:** `pypi.org` / `files.pythonhosted.org`, `registry.npmjs.org`,
+`jsr.io`, `index.crates.io`, `proxy.golang.org`, `api.anthropic.com`,
+`mcp-proxy.anthropic.com`, GitHub. So: pip and npm installs work, every
+connected MCP server works (they route through the exempt mcp-proxy host), and
+git clone/push works.
+
+**Blocked:** arbitrary third-party hosts. Confirmed `connect_rejected` by
+organization policy for `elevenlabs.io`, `www.heygen.com`, `www.rask.ai`.
+`WebFetch` against a blocked domain returns `EGRESS_BLOCKED` — it uses the same
+policy, so it is not a way around this.
+
+`WebSearch` does work, but it returns **secondhand summaries of vendor pages,
+not the pages themselves**. That is not verification, and must never be recorded
+as if it were.
+
+Consequence: any task requiring a live call to a third-party API or a read of a
+vendor's own pricing page cannot be completed in this environment as configured.
+Say so plainly rather than substituting a search summary. The user can widen the
+environment's network policy (see the Claude Code on the web docs) or run that
+step manually and paste the result back.
+
+## Two external constraints that shape all four projects
 
 1. **YouTube "inauthentic content".** Policy renamed 2025-07-15; a coordinated
    enforcement sweep in January 2026 removed channels totalling ~35M subscribers
