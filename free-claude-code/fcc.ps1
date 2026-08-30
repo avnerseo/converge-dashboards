@@ -5,12 +5,18 @@
 # settings are never touched: everything lives under $FccHome and the proxied
 # Claude Code runs with its own CLAUDE_CONFIG_DIR.
 #
-# Usage:  .\fcc.ps1 setup | start | claude | status | stop | uninstall
+# Three ways to run Claude Code, from one place:
+#   .\fcc.ps1 claude  - through the local proxy (free third-party models)
+#   .\fcc.ps1 api     - straight to Anthropic with your own API key (billed per
+#                       token, does NOT consume your subscription quota)
+#   plain `claude`    - your normal subscription install, untouched by this script
+#
+# Usage:  .\fcc.ps1 setup | start | claude | api | status | stop | uninstall
 # If PowerShell blocks the script:  Set-ExecutionPolicy -Scope Process Bypass
 
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('setup', 'start', 'claude', 'status', 'stop', 'uninstall')]
+    [ValidateSet('setup', 'start', 'claude', 'api', 'status', 'stop', 'uninstall')]
     [string]$Command = 'status',
 
     [Parameter(ValueFromRemainingArguments = $true)]
@@ -23,7 +29,9 @@ $FccHome  = if ($env:FCC_HOME) { $env:FCC_HOME } else { Join-Path $HOME '.free-c
 $FccPort  = if ($env:FCC_PORT) { [int]$env:FCC_PORT } else { 8082 }
 $AppDir    = Join-Path $FccHome 'app'
 $EnvFile   = Join-Path $AppDir  '.env'
-$ConfigDir = Join-Path $FccHome 'claude-config'
+$ConfigDir    = Join-Path $FccHome 'claude-config'
+$ApiConfigDir = Join-Path $FccHome 'api-config'
+$KeyFile      = Join-Path $FccHome 'api-key'
 $LogFile   = Join-Path $FccHome 'server.log'
 $PidFile   = Join-Path $FccHome 'server.pid'
 $RepoUrl   = 'https://github.com/Alishahryar1/free-claude-code.git'
@@ -132,6 +140,39 @@ function Invoke-Claude {
     }
 }
 
+function Invoke-Api {
+    if (-not (Have claude)) { Die "the 'claude' command is not installed" }
+    # Key precedence: an already-set env var wins, then the saved file, then ask.
+    $preExistingKey = $env:ANTHROPIC_API_KEY
+    $key = $preExistingKey
+    if (-not $key -and (Test-Path $KeyFile)) { $key = (Get-Content $KeyFile -Raw).Trim() }
+    if (-not $key) {
+        Write-Host 'No API key found. Create one at https://console.anthropic.com/settings/keys'
+        $secure = Read-Host 'ANTHROPIC_API_KEY (input hidden)' -AsSecureString
+        $key = [System.Net.NetworkCredential]::new('', $secure).Password
+        if (-not $key) { Die 'no key entered' }
+        $save = Read-Host "save it to $KeyFile for next time? [y/N]"
+        if ($save -match '^[yY]') {
+            New-Item -ItemType Directory -Force -Path $FccHome | Out-Null
+            Set-Content -Path $KeyFile -Value $key -NoNewline -Encoding utf8
+            Write-Info 'saved'
+        }
+    }
+    New-Item -ItemType Directory -Force -Path $ApiConfigDir | Out-Null
+    Write-Info 'launching Claude Code on your API key - billed per token, separate from your subscription'
+    # No ANTHROPIC_BASE_URL here: this talks to Anthropic directly, not to the proxy.
+    # Its own config dir keeps this profile apart from both the subscription login
+    # and the proxied profile.
+    $env:CLAUDE_CONFIG_DIR  = $ApiConfigDir
+    $env:ANTHROPIC_API_KEY  = $key
+    try { & claude @Rest } finally {
+        Remove-Item Env:CLAUDE_CONFIG_DIR -ErrorAction SilentlyContinue
+        # Restore whatever the shell had before, so we don't clobber the user's own export.
+        if ($preExistingKey) { $env:ANTHROPIC_API_KEY = $preExistingKey }
+        else { Remove-Item Env:ANTHROPIC_API_KEY -ErrorAction SilentlyContinue }
+    }
+}
+
 function Invoke-Status {
     Write-Host "FCC_HOME : $FccHome"
     Write-Host ("app      : " + $(if (Test-Path $AppDir) { 'present' } else { 'missing (run setup)' }))
@@ -139,6 +180,8 @@ function Invoke-Status {
     Write-Host ("port     : $FccPort " + $(if (Test-PortOpen) { '(listening)' } else { '(closed)' }))
     if (Test-Path $PidFile) { Write-Host ("pid      : " + (Get-Content $PidFile)) }
     Write-Host "profile  : $ConfigDir   # proxied Claude Code config, separate from your main one"
+    $keyState = if ($env:ANTHROPIC_API_KEY) { 'set in environment' } elseif (Test-Path $KeyFile) { "saved in $KeyFile" } else { 'not configured' }
+    Write-Host "api key  : $keyState"
 }
 
 function Invoke-Stop {
@@ -153,6 +196,7 @@ function Invoke-Stop {
 
 function Invoke-Uninstall {
     Invoke-Stop
+    if (Test-Path $KeyFile) { Write-Warn "this also deletes the saved API key at $KeyFile" }
     $a = Read-Host "delete $FccHome and everything in it? [y/N]"
     if ($a -match '^[yY]') {
         Remove-Item -Recurse -Force $FccHome
@@ -164,6 +208,7 @@ switch ($Command) {
     'setup'     { Invoke-Setup }
     'start'     { Invoke-Start }
     'claude'    { Invoke-Claude }
+    'api'       { Invoke-Api }
     'status'    { Invoke-Status }
     'stop'      { Invoke-Stop }
     'uninstall' { Invoke-Uninstall }

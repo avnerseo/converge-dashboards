@@ -6,7 +6,13 @@
 # settings are never touched: everything lives under $FCC_HOME and the proxied
 # Claude Code runs with its own CLAUDE_CONFIG_DIR.
 #
-# Usage: ./fcc.sh setup | start | claude | status | stop | uninstall
+# Three ways to run Claude Code, from one place:
+#   ./fcc.sh claude   - through the local proxy (free third-party models)
+#   ./fcc.sh api      - straight to Anthropic with your own API key (billed per
+#                       token, does NOT consume your subscription quota)
+#   plain `claude`    - your normal subscription install, untouched by this script
+#
+# Usage: ./fcc.sh setup | start | claude | api | status | stop | uninstall
 
 set -euo pipefail
 
@@ -15,6 +21,8 @@ FCC_PORT="${FCC_PORT:-8082}"
 APP_DIR="$FCC_HOME/app"
 ENV_FILE="$APP_DIR/.env"
 CONFIG_DIR="$FCC_HOME/claude-config"
+API_CONFIG_DIR="$FCC_HOME/api-config"
+KEY_FILE="$FCC_HOME/api-key"
 LOG_FILE="$FCC_HOME/server.log"
 PID_FILE="$FCC_HOME/server.pid"
 REPO_URL="https://github.com/Alishahryar1/free-claude-code.git"
@@ -125,6 +133,29 @@ cmd_claude() {
       claude "$@"
 }
 
+cmd_api() {
+  have claude || die "the 'claude' CLI is not installed"
+  # Key precedence: an already-exported env var wins, then the saved file, then ask.
+  local key="${ANTHROPIC_API_KEY:-}"
+  if [ -z "$key" ] && [ -f "$KEY_FILE" ]; then key=$(cat "$KEY_FILE"); fi
+  if [ -z "$key" ]; then
+    echo "No API key found. Create one at https://console.anthropic.com/settings/keys"
+    printf 'ANTHROPIC_API_KEY (input hidden): '; read -rs key; echo
+    [ -n "$key" ] || die "no key entered"
+    printf 'save it to %s for next time? [y/N]: ' "$KEY_FILE"; read -r save
+    case "$save" in
+      [yY]*) mkdir -p "$FCC_HOME"; umask 077; printf '%s' "$key" > "$KEY_FILE"; chmod 600 "$KEY_FILE"
+             info "saved (mode 600)" ;;
+    esac
+  fi
+  mkdir -p "$API_CONFIG_DIR"
+  info "launching Claude Code on your API key — billed per token, separate from your subscription"
+  # No ANTHROPIC_BASE_URL here: this talks to Anthropic directly, not to the proxy.
+  # Its own config dir keeps this profile apart from both the subscription login
+  # and the proxied profile.
+  env CLAUDE_CONFIG_DIR="$API_CONFIG_DIR" ANTHROPIC_API_KEY="$key" claude "$@"
+}
+
 cmd_status() {
   echo "FCC_HOME : $FCC_HOME"
   echo "app      : $([ -d "$APP_DIR" ] && echo present || echo 'missing (run setup)')"
@@ -132,6 +163,7 @@ cmd_status() {
   echo "port     : $FCC_PORT $(port_open && echo '(listening)' || echo '(closed)')"
   [ -f "$PID_FILE" ] && echo "pid      : $(cat "$PID_FILE")"
   echo "profile  : $CONFIG_DIR   # proxied Claude Code config, separate from ~/.claude"
+  echo "api key  : $([ -n "${ANTHROPIC_API_KEY:-}" ] && echo 'set in environment' || { [ -f "$KEY_FILE" ] && echo "saved in $KEY_FILE" || echo 'not configured'; })"
 }
 
 cmd_stop() {
@@ -146,6 +178,7 @@ cmd_stop() {
 
 cmd_uninstall() {
   cmd_stop || true
+  [ -f "$KEY_FILE" ] && warn "this also deletes the saved API key at $KEY_FILE"
   printf 'delete %s and everything in it? [y/N]: ' "$FCC_HOME"; read -r a
   case "$a" in
     [yY]*) rm -rf "$FCC_HOME"; info "removed $FCC_HOME — your ~/.claude was never modified" ;;
@@ -157,8 +190,9 @@ case "${1:-}" in
   setup)     cmd_setup ;;
   start)     cmd_start ;;
   claude)    shift; cmd_claude "$@" ;;
+  api)       shift; cmd_api "$@" ;;
   status)    cmd_status ;;
   stop)      cmd_stop ;;
   uninstall) cmd_uninstall ;;
-  *) echo "usage: $0 {setup|start|claude|status|stop|uninstall}" >&2; exit 2 ;;
+  *) echo "usage: $0 {setup|start|claude|api|status|stop|uninstall}" >&2; exit 2 ;;
 esac
