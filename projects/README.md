@@ -9,6 +9,7 @@ outputs — stays inside its own folder.
 | 01 | `01-track-record/` | Make Converge's stock engine falsifiable: a public, verified track record | slowest, most defensible |
 | 02 | `02-data-video-engine/` | A machine that turns any data feed into a daily video; sell the machine | medium |
 | 03 | `03-dubbing-arbitrage/` | Produce in Hebrew, export to many languages at the cost of one | fastest to revenue |
+| 04 | `04-peluma/` | Live Shopify store: fix unit economics before any video spend | live business |
 
 Each folder has a `BRIEF.md` that is self-contained — a session starting fresh
 should be able to read only that file plus this one and begin work.
@@ -22,6 +23,7 @@ collide:
 - `claude/track-record`
 - `claude/data-video-engine`
 - `claude/dubbing-arbitrage`
+- `claude/peluma`
 
 Never push to another project's branch.
 
@@ -56,7 +58,7 @@ Checked directly on 2026-08-30 — these are measured, not assumed.
 - **Bigdata.com MCP** — institutional unstructured content with entity
   resolution. Needs `rp_entity_id` from `find_securities` for tearsheets.
 
-### Commerce (context, not an active workstream here)
+### Commerce (workstream 04)
 - **Shopify** — store "Peluma", pelumapets.com, Basic plan, USD. Two products:
   Mist Grooming Brush ($29.90) and Paw Wash Cup ($16.90).
 - **Zendrop** — store id `3546333`. 2026-06-01→08-30: **1 order, $29.90 revenue,
