@@ -1,0 +1,95 @@
+{
+  "version": "v7",
+  "rule_hash": "sha256:fb7c676c3b33095a",
+  "published": {
+    "first_date": "2026-08-26",
+    "last_date": "2026-08-26",
+    "commits": [
+      "e5057ab",
+      "85477f6",
+      "7e28804"
+    ]
+  },
+  "supersedes": "v6",
+  "summary_he": "שש בחירות שכבה 1 פורסמו בלי שסקציית המתודולוגיה קיימת בקובץ. הכללים של אותו יום אינם ניתנים לאימות מהפרסום עצמו.",
+  "changes_from_previous": [
+    {
+      "field": "__document__",
+      "type": "regression",
+      "substantive": true,
+      "note_he": "סקציית §methodology נעדרת מ-index.html בכל שלושת הקומיטים של היום. אין מקור מתועד לכללים שהפיקו את הבחירות. הכללים כאן מסומנים undocumented ולא הועתקו מ-v6 — העתקה כזו הייתה המצאת ראיה."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": "undocumented",
+      "webfetch": "undocumented"
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים",
+        "sources": [],
+        "sources_documented": false
+      },
+      "B": {
+        "label_he": "איכות-ערך פונדמנטלי",
+        "sources": [],
+        "sources_documented": false
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות",
+        "sources": [],
+        "sources_documented": false
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": null,
+    "conflict_handling": {
+      "policy": "undocumented"
+    },
+    "sentiment_layer": {
+      "affects_tier1": "undocumented",
+      "sources": []
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": false
+    },
+    "high_risk_layer": {
+      "fixed_count": "undocumented",
+      "primary_signal": "undocumented"
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §tier1 @85477f6",
+      "quote_he": "מניות שהופיעו בשתיים או שלוש מתוך שלוש מתודולוגיות המחקר הראשיות (קונצנזוס אנליסטים / איכות-ערך פונדמנטלי / המלצות עריכתיות) באופן עצמאי. הרצה זו זיהתה שש מועמדות."
+    },
+    {
+      "where": "index.html @85477f6",
+      "quote_he": "[אין סקציית §methodology בקובץ — נבדק ונמצא נעדר]"
+    }
+  ],
+  "unverifiable": [
+    "source list per screen",
+    "conflict handling",
+    "web-access rule",
+    "tier-2 definition",
+    "sentiment-layer isolation",
+    "high-risk layer rule",
+    "listing eligibility rule"
+  ]
+}

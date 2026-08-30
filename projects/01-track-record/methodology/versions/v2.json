@@ -1,0 +1,126 @@
+{
+  "version": "v2",
+  "rule_hash": "sha256:ddf689a1b273ca7c",
+  "published": {
+    "first_date": "2026-08-19",
+    "last_date": "2026-08-19",
+    "commits": [
+      "b90a165",
+      "61193a7"
+    ]
+  },
+  "supersedes": "v1",
+  "summary_he": "רשימות מקורות מלאות לראשונה; שכבה משנית מוגדרת; איתות סותר גורם להוצאה מהרשימה.",
+  "changes_from_previous": [
+    {
+      "field": "screens.*.sources",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "שלוש רשימות מקורות מפורטות בשמן לראשונה."
+    },
+    {
+      "field": "tier2_rule",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "שכבה משנית מוגדרת: מקור בודד + גיבוי סנטימנט מוסדי אמין."
+    },
+    {
+      "field": "conflict_handling",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "איתותים סותרים בין מקורות מוצאים במפורש מהרשימות."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": true
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "TipRanks Strong Buy/Smart Score",
+          "Zacks Rank #1"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "סינון פונדמנטלי איכות+ערך",
+        "sources": [
+          "StockAnalysis.com",
+          "Seeking Alpha Quant Ratings",
+          "Finviz",
+          "Simply Wall St",
+          "Morningstar Wide Moat"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות מפרסומים מקצועיים",
+        "sources": [
+          "Motley Fool",
+          "Barron's",
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט מוסדי אמין ומוכר",
+      "sentiment_kind": "institutional"
+    },
+    "conflict_handling": {
+      "policy": "exclude",
+      "example_he": "Zacks #1 מול קונצנזוס אנליסטים בפועל Hold"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X"
+      ],
+      "speculative_tag_he": "short squeeze / ריבית שורט גבוהה"
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G",
+      "reports_exits": true
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @61193a7",
+      "quote_he": "מניה שמופיעה בשתיים מתוך השלוש מסומנת \"שכבה 1\". מניה שהופיעה במקור בודד אך זכתה לגיבוי סנטימנט מוסדי אמין ומוכר מסומנת \"שכבה משנית\". איתותים סותרים בין מקורות (למשל Zacks #1 מול קונצנזוס אנליסטים בפועל Hold) מוצאים במפורש מהרשימות."
+    },
+    {
+      "where": "index.html §methodology @61193a7",
+      "quote_he": "שכבת סנטימנט משנית (StockTwits, Reddit, אנליסטים/פרשנים מוכרים ב-X) נאספת בנפרד ואינה נכללת בציון הראשי בשום אופן; מניות עם דינמיקת short squeeze / ריבית שורט גבוהה מתויגות במפורש כספקולטיביות."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}

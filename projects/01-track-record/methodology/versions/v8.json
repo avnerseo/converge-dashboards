@@ -1,0 +1,125 @@
+{
+  "version": "v8",
+  "rule_hash": "sha256:1ba49cc44b7ba5e5",
+  "published": {
+    "first_date": "2026-08-27",
+    "last_date": "2026-08-27",
+    "commits": [
+      "d25442d",
+      "e1c967f",
+      "d9ab5ce",
+      "f354588"
+    ]
+  },
+  "supersedes": "v7",
+  "summary_he": "המתודולוגיה חוזרת לקובץ בנוסח מקוצר; מסך ב׳ מוצהר מחדש עם ארבעה מקורות. הסימון עובר ל-data-ticker.",
+  "changes_from_previous": [
+    {
+      "field": "__document__",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "סקציית §methodology חזרה, בנוסח מקוצר בהרבה מ-v6."
+    },
+    {
+      "field": "screens.B.sources",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "מסך ב׳ מוצהר כ-GuruFocus / Simply Wall St / Finviz / Seeking Alpha — התרחבות מ-GuruFocus בלבד."
+    },
+    {
+      "field": "__markup__",
+      "type": "deliberate",
+      "substantive": false,
+      "note_he": "כרטיסי המניות עברו מ-data-q ל-data-ticker/data-name/data-sector. זהו הקומיט הראשון שממנו הלדג'ר יודע לקרוא טיקר."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": "undocumented"
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים",
+        "sources": [
+          "TipRanks",
+          "Zacks",
+          "MarketBeat"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "איכות/ערך פונדמנטלי",
+        "sources": [
+          "GuruFocus",
+          "Simply Wall St",
+          "Finviz",
+          "Seeking Alpha"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות",
+        "sources": [
+          "Motley Fool",
+          "Barron's",
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט",
+      "sentiment_kind": "undocumented"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag",
+      "observed_he": "BMY סומנה \"דגל סתירה\" בכרטיס עצמו ונשארה בשכבה 1."
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "Bigdata.com"
+      ]
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G"
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @f354588",
+      "quote_he": "שלוש מתודולוגיות: (א) TipRanks/Zacks/MarketBeat. (ב) GuruFocus/Simply Wall St/Finviz/Seeking Alpha. (ג) Motley Fool/Barron's/Morningstar/Kiplinger/Forbes. 2/3 = שכבה 1."
+    },
+    {
+      "where": "index.html §tier1 @d25442d",
+      "quote_he": "הרצה זו החזירה רק 3 מניות שעומדות בקריטריון המחמיר הזה — פחות מהרגיל, בעיקר בגלל מגבלת חיפוש (ר' שקיפות ומגבלות בהמשך). לא הומצאה אף מניה כדי \"למלא\" את השכבה."
+    }
+  ],
+  "unverifiable": [
+    "webfetch prohibition (not restated in the shortened text)",
+    "listing eligibility rule"
+  ]
+}

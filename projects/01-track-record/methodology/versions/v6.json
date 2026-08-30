@@ -1,0 +1,121 @@
+{
+  "version": "v6",
+  "rule_hash": "sha256:da638e9657cc045a",
+  "published": {
+    "first_date": "2026-08-24",
+    "last_date": "2026-08-24",
+    "commits": [
+      "bc42003"
+    ]
+  },
+  "supersedes": "v5",
+  "summary_he": "אותו כלל בחירה; תמהיל המקורות שזמין בפועל השתנה שוב.",
+  "changes_from_previous": [
+    {
+      "field": "screens.A.sources",
+      "type": "degraded",
+      "substantive": false,
+      "note_he": "TipRanks הפך למקור החזק בהרצה (8 טיקרים מאומתים); MarketBeat ירד; נוספו כתבות Zacks Industry Outlook דרך Yahoo."
+    },
+    {
+      "field": "screens.C.sources",
+      "type": "degraded",
+      "substantive": false,
+      "note_he": "Motley Fool הפך למקור המכוסה ביותר בזכות מוסכמת URL שמטמיעה טיקרים; Morningstar/Kiplinger/Forbes לא הניבו אף טיקר."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": false
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "TipRanks Strong Buy/Smart Score",
+          "Zacks Industry Outlook (via Yahoo Finance)"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "סינון פונדמנטלי איכות+ערך",
+        "sources": [
+          "GuruFocus (per-ticker search)"
+        ],
+        "blocked": [
+          "Finviz",
+          "Seeking Alpha",
+          "StockAnalysis.com",
+          "Simply Wall St",
+          "Morningstar"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות",
+        "sources": [
+          "Motley Fool",
+          "Barron's (secondary quotes on X / LinkedIn)"
+        ],
+        "blocked": [
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט מוסדי אמין ומוכר",
+      "sentiment_kind": "institutional"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X",
+        "Benzinga",
+        "Forbes",
+        "24/7 Wall St."
+      ],
+      "speculative_tag_he": "מומנטום ספקולטיבי"
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G"
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @bc42003",
+      "quote_he": "מניה שהופיעה בשתיים או שלוש מתוך השלוש מסומנת \"שכבה 1\" — הרצה זו זיהתה שתי מועמדות (NVDA, KO), שיפור לעומת מועמדת אחת בהרצה הקודמת (V)."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}

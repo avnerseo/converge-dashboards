@@ -1,6 +1,12 @@
 {
   "positions": 14,
   "horizons": {},
+  "methodology_mix": {
+    "v8": 3,
+    "v9": 6,
+    "v11": 5
+  },
+  "methodology_versions_spanned": 3,
   "pick_months": 0,
   "powered": false,
   "verdict": "NO SIGNAL YET — 0 of ~250 pick-months needed before any number here means anything.",
@@ -11,7 +17,9 @@
       "entry_price": 496.37,
       "sector": "טכנולוגיה",
       "conviction": "3/3 מקורות",
-      "sha": "f354588"
+      "sha": "f354588",
+      "methodology_version": "v8",
+      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
     },
     {
       "ticker": "CMCSA",
@@ -19,7 +27,9 @@
       "entry_price": 27.2,
       "sector": "תקשורת ומדיה",
       "conviction": "2/3 מקורות",
-      "sha": "f354588"
+      "sha": "f354588",
+      "methodology_version": "v8",
+      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
     },
     {
       "ticker": "BMY",
@@ -27,7 +37,9 @@
       "entry_price": 67.57,
       "sector": "בריאות",
       "conviction": "2/3 מקורות",
-      "sha": "f354588"
+      "sha": "f354588",
+      "methodology_version": "v8",
+      "methodology_rule_hash": "sha256:1ba49cc44b7ba5e5"
     },
     {
       "ticker": "CVX",
@@ -35,7 +47,9 @@
       "entry_price": 199.77,
       "sector": "אנרגיה",
       "conviction": "2/3 מקורות: א׳+ב׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "CAT",
@@ -43,7 +57,9 @@
       "entry_price": 817.0,
       "sector": "תעשייה",
       "conviction": "2/3 מקורות: א׳+ב׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "KO",
@@ -51,7 +67,9 @@
       "entry_price": 89.06,
       "sector": "צריכה בסיסית",
       "conviction": "2/3 מקורות: א׳+ב׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "GEV",
@@ -59,7 +77,9 @@
       "entry_price": 953.83,
       "sector": "תשתיות ציבוריות",
       "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "BRK.B",
@@ -67,7 +87,9 @@
       "entry_price": 503.7,
       "sector": "פיננסים",
       "conviction": "2/3 מקורות: ב׳+ג׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "NKE",
@@ -75,7 +97,9 @@
       "entry_price": 38.44,
       "sector": "צריכה מחזורית",
       "conviction": "2/3 מקורות: ב׳+ג׳",
-      "sha": "280245e"
+      "sha": "280245e",
+      "methodology_version": "v9",
+      "methodology_rule_hash": "sha256:ccb8956d14026531"
     },
     {
       "ticker": "V",
@@ -83,7 +107,9 @@
       "entry_price": 381.6,
       "sector": "פיננסים",
       "conviction": "3/3 מקורות: א׳+ב׳+ג׳",
-      "sha": "ae95024"
+      "sha": "ae95024",
+      "methodology_version": "v11",
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
     },
     {
       "ticker": "AMZN",
@@ -91,7 +117,9 @@
       "entry_price": 266.43,
       "sector": "צריכה מחזורית",
       "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "ae95024"
+      "sha": "ae95024",
+      "methodology_version": "v11",
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
     },
     {
       "ticker": "LLY",
@@ -99,7 +127,9 @@
       "entry_price": 1174.61,
       "sector": "בריאות",
       "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "ae95024"
+      "sha": "ae95024",
+      "methodology_version": "v11",
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
     },
     {
       "ticker": "GOOGL",
@@ -107,7 +137,9 @@
       "entry_price": 346.59,
       "sector": "תקשורת ומדיה",
       "conviction": "2/3 מקורות: א׳+ג׳",
-      "sha": "ae95024"
+      "sha": "ae95024",
+      "methodology_version": "v11",
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
     },
     {
       "ticker": "JPM",
@@ -115,7 +147,9 @@
       "entry_price": 357.62,
       "sector": "פיננסים",
       "conviction": null,
-      "sha": "ae95024"
+      "sha": "ae95024",
+      "methodology_version": "v11",
+      "methodology_rule_hash": "sha256:87a34b942a22c7b9"
     }
   ]
 }

@@ -1,0 +1,135 @@
+{
+  "version": "v4",
+  "rule_hash": "sha256:8f212edcc0ba9141",
+  "published": {
+    "first_date": "2026-08-20",
+    "last_date": "2026-08-20",
+    "commits": [
+      "a7a3827"
+    ]
+  },
+  "supersedes": "v3",
+  "summary_he": "שינוי מהותי: איתות סותר מוצג עם דגל שקיפות במקום להיות מוסתר.",
+  "changes_from_previous": [
+    {
+      "field": "conflict_handling",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "המדיניות התהפכה — מהוצאה שקטה מהרשימה להצגה מפורשת עם דגל שקיפות. משנה את קבוצת המועמדים, לא רק את התצוגה."
+    },
+    {
+      "field": "screens.A.sources",
+      "type": "degraded",
+      "substantive": true,
+      "note_he": "StockTi.com נוסף כמסך Strong Buy חי; Zacks נקרא דרך סינדיקציית Yahoo Finance."
+    },
+    {
+      "field": "screens.B.sources",
+      "type": "degraded",
+      "substantive": true,
+      "note_he": "Finviz ו-Seeking Alpha Quant חסומים בהרצה זו."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": true
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "StockTi.com (live Strong Buy screen)",
+          "TipRanks",
+          "Zacks Rank #1 (via Yahoo Finance syndication)",
+          "MarketBeat (articles only)"
+        ],
+        "blocked": [
+          "MarketBeat screener (paywall)"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "סינון פונדמנטלי איכות+ערך",
+        "sources": [
+          "StockAnalysis.com",
+          "Morningstar Wide Moat (proxy: VanEck MOAT ETF)",
+          "Simply Wall St"
+        ],
+        "blocked": [
+          "Finviz",
+          "Seeking Alpha Quant Ratings",
+          "Morningstar direct pages (403)"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות מפרסומים מקצועיים",
+        "sources": [
+          "Motley Fool",
+          "Kiplinger",
+          "Forbes",
+          "Morningstar (partial)",
+          "Barron's (via Dividendology)"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט מוסדי אמין ומוכר",
+      "sentiment_kind": "institutional"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag",
+      "example_he": "פער יעד המחיר ב-MU"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "AltIndex",
+        "X"
+      ],
+      "speculative_tag_he": "מומנטום ספקולטיבי"
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G/Form 144",
+      "lookback_days": 30,
+      "reports_exits": true
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @a7a3827",
+      "quote_he": "איתותים סותרים בין מקורות (כמו פער יעד המחיר ב-MU) מוצגים במפורש עם דגל שקיפות במקום להוצא בשקט."
+    },
+    {
+      "where": "index.html §methodology @a7a3827",
+      "quote_he": "בדיקת עדות 13F/13G/Form 144 לכניסה או יציאה מוסדית ב-30 הימים האחרונים לכל אחת מ-10 המניות."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}

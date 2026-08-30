@@ -1,0 +1,126 @@
+{
+  "version": "v11",
+  "rule_hash": "sha256:87a34b942a22c7b9",
+  "published": {
+    "first_date": "2026-08-30",
+    "last_date": "2026-08-30",
+    "commits": [
+      "ae95024"
+    ]
+  },
+  "supersedes": "v10",
+  "summary_he": "כלל השימור בוטל אחרי הרצה אחת — חזרה לחישוב מלא מחדש. נוסף כלל כשירות: רישום עיקרי בארה\"ב בלבד.",
+  "changes_from_previous": [
+    {
+      "field": "carry_forward",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "המשפט שהתיר שימור בין הרצות הוסר מהמתודולוגיה. שכבה 1 חושבה מחדש במלואה. הכלל התקיים בדיוק הרצה אחת."
+    },
+    {
+      "field": "universe.listing_rule",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "הוחרגו חברות ללא רישום עיקרי בבורסות S&P500/Nasdaq האמריקאיות (BABA כ-ADR סיני, FRFHF ברישום עיקרי בטורונטו)."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "us_primary_listing_only",
+      "excluded": [
+        {
+          "ticker": "BABA",
+          "reason_he": "ADR סיני"
+        },
+        {
+          "ticker": "FRFHF",
+          "reason_he": "רישום עיקרי בטורונטו"
+        }
+      ]
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": false
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "TipRanks Smart Score",
+          "Zacks Rank",
+          "MarketBeat"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "איכות וערך פונדמנטלי",
+        "sources": [
+          "Finviz",
+          "Seeking Alpha Quant Ratings",
+          "StockAnalysis.com",
+          "Simply Wall St",
+          "Morningstar Wide Moat",
+          "GuruFocus"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות ארוכות-טווח",
+        "sources": [
+          "Motley Fool",
+          "Barron's",
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט אמין (StockTwits/Reddit/X) לתזה ארוכת-טווח",
+      "sentiment_kind": "social"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X",
+        "Bigdata.com"
+      ]
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G"
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §tier1 @ae95024",
+      "quote_he": "מניה המופיעה בשתיים (או שלוש) מתוך שלוש רשימות המתודולוגיה הראשיות (א׳ קונצנזוס אנליסטים · ב׳ איכות/ערך פונדמנטלי · ג׳ עריכתי). חושבה מחדש במלואה מהמחקר של היום."
+    },
+    {
+      "where": "index.html §transparency @ae95024",
+      "quote_he": "BABA ו-FRFHF הוצאו מטבלאות המתודולוגיה — חברות שאינן רשומות עיקרית בבורסות ה-S&P500/Nasdaq האמריקאיות (ADR סיני / רישום עיקרי בטורונטו בהתאמה)."
+    }
+  ],
+  "unverifiable": []
+}

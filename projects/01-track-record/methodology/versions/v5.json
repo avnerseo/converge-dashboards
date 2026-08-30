@@ -1,0 +1,134 @@
+{
+  "version": "v5",
+  "rule_hash": "sha256:4af7e235286295b9",
+  "published": {
+    "first_date": "2026-08-23",
+    "last_date": "2026-08-23",
+    "commits": [
+      "1f38d23"
+    ]
+  },
+  "supersedes": "v4",
+  "summary_he": "שינוי מהותי: מחקר מוגבל ל-WebSearch בלבד, ללא WebFetch. מסך ב׳ מצטמצם ל-GuruFocus.",
+  "changes_from_previous": [
+    {
+      "field": "research_access.webfetch",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "WebFetch נאסר ככלל גישה לרשת של ההרצה האוטומטית. זהו האילוץ שמסביר את קריסת רשימות המקורות מכאן והלאה — מקור נספר רק אם תוצאת החיפוש עצמה חושפת את הנתון."
+    },
+    {
+      "field": "screens.B.sources",
+      "type": "degraded",
+      "substantive": true,
+      "note_he": "מסך ב׳ מצטמצם ל-GuruFocus בלבד: כותרות Finviz/Seeking Alpha/StockAnalysis/Simply Wall St/Morningstar לא חשפו מספרים בתוצאת החיפוש."
+    },
+    {
+      "field": "screens.C.sources",
+      "type": "degraded",
+      "substantive": true,
+      "note_he": "רק Barron's Top 10 for 2026 אומתה במלואה; Fool/Forbes/Kiplinger/Morningstar ככותרות בלבד."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": false
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "MarketBeat instant-alerts",
+          "TipRanks",
+          "Daily Political / Defense World (MarketBeat mirrors)"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "סינון פונדמנטלי איכות+ערך",
+        "sources": [
+          "GuruFocus (per-ticker search)"
+        ],
+        "blocked": [
+          "Finviz",
+          "Seeking Alpha",
+          "StockAnalysis.com",
+          "Simply Wall St",
+          "Morningstar"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות",
+        "sources": [
+          "Barron's Top 10 for 2026 (via Dividendology, investinglive.com)"
+        ],
+        "blocked": [
+          "Motley Fool",
+          "Forbes",
+          "Kiplinger",
+          "Morningstar"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט מוסדי אמין ומוכר",
+      "sentiment_kind": "institutional"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X",
+        "Benzinga",
+        "24/7 Wall St.",
+        "Fast Company",
+        "Schaeffer's"
+      ],
+      "speculative_tag_he": "מומנטום ספקולטיבי"
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G",
+      "run_note_he": "עדכון חלקי: 6/10 עדכון טרי, MP ו-OKLO ללא 13F/13G עדכני, LEU ו-APLD לא נבדקו (מכסת חיפוש)."
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @1f38d23",
+      "quote_he": "שלוש מתודולוגיות מחקר עצמאיות מוצלבות ידנית מדי הרצה, אך ורק דרך כלי WebSearch (ללא WebFetch, בהתאם לכלל הגישה לרשת של ההרצה האוטומטית)"
+    },
+    {
+      "where": "index.html §methodology @1f38d23",
+      "quote_he": "הרצה זו זיהתה מועמדת אחת בלבד (Visa, V), בהשוואה ל-14 בהרצה הקודמת. ההבדל נובע ממגבלת כלי החיפוש שמפורטת בפרק השקיפות, ולא משינוי איכותי בשוק."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}

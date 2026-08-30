@@ -23,6 +23,14 @@ Design notes that matter more than the code:
     ~8%, detecting a 1%/month edge at 95% confidence needs roughly n>250
     pick-months. Below that the honest output is "no signal yet", and this
     script says so rather than printing a number that invites over-reading.
+
+  * Methodology version is part of the sample definition. Picks made under
+    different rule sets are different experiments; pooling them is how a
+    moving definition launders itself into a single track record. This script
+    does not refuse to pool — with n this small there is nothing else to do —
+    but it reports the version mix beside every aggregate, so no number can be
+    quoted without the reader seeing how many definitions it spans. A pick
+    whose commit no version claims is not scored at all.
 """
 import json, sys, os, math
 from collections import defaultdict
@@ -39,18 +47,32 @@ def load():
 
 
 def positions(rows):
-    """First appearance of each ticker = one opened position."""
-    seen, out = set(), []
+    """First appearance of each ticker = one opened position.
+
+    A carried-forward row re-publishes an earlier run's pick without new
+    research behind it, so it can never open a position. First-appearance
+    already excludes it, but a run that carried a ticker forward before its
+    own first appearance would not be an entry either — hence the explicit
+    check rather than relying on ordering.
+    """
+    seen, out, dropped = set(), [], []
     for r in sorted(rows, key=lambda r: r["date"]):
         if r["ticker"] in seen or r["price"] is None:
+            continue
+        if r.get("methodology_version") is None:
+            dropped.append(r)          # unstamped: rule set unknown, not scoreable
+            continue
+        if r.get("carried_forward"):
             continue
         seen.add(r["ticker"])
         out.append({
             "ticker": r["ticker"], "entry_date": r["date"],
             "entry_price": r["price"], "sector": r["sector"],
             "conviction": r["conviction"], "sha": r["sha"],
+            "methodology_version": r["methodology_version"],
+            "methodology_rule_hash": r.get("methodology_rule_hash"),
         })
-    return out
+    return out, dropped
 
 
 def score(pos, prices, bench):
@@ -80,6 +102,11 @@ def score(pos, prices, bench):
             "t_stat": round(mean / (sd / math.sqrt(n)), 2) if sd and sd > 0 else None,
         }
 
+    mix = defaultdict(int)
+    for p in pos:
+        mix[p["methodology_version"]] += 1
+    card["methodology_mix"] = dict(sorted(mix.items(), key=lambda kv: int(kv[0][1:])))
+    card["methodology_versions_spanned"] = len(mix)
     card["pick_months"] = round(total_pick_months, 1)
     card["powered"] = total_pick_months >= MIN_PICK_MONTHS
     card["verdict"] = (
@@ -92,7 +119,7 @@ def score(pos, prices, bench):
 
 if __name__ == "__main__":
     rows = load()
-    pos = positions(rows)
+    pos, unstamped = positions(rows)
     # Price fetching is deliberately not wired in yet: it needs a daily
     # close-price store, not ad-hoc quote calls against a rate-limited key.
     card = score(pos, prices={}, bench={})
@@ -102,4 +129,9 @@ if __name__ == "__main__":
     print(json.dumps({k: v for k, v in card.items() if k != "opened_positions"},
                      ensure_ascii=False, indent=2))
     print(f"\n{len(pos)} positions opened, earliest {pos[0]['entry_date']}, "
-          f"latest {pos[-1]['entry_date']}")
+          f"latest {pos[-1]['entry_date']}, "
+          f"spanning {card['methodology_versions_spanned']} methodology versions "
+          f"({', '.join(card['methodology_mix'])})")
+    if unstamped:
+        print(f"{len(unstamped)} row(s) not scored: no methodology version claims "
+              f"their commit.")

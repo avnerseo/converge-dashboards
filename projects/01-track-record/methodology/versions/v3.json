@@ -1,0 +1,131 @@
+{
+  "version": "v3",
+  "rule_hash": "sha256:f09f4853cbf6bf8c",
+  "published": {
+    "first_date": "2026-08-19",
+    "last_date": "2026-08-19",
+    "commits": [
+      "0473e0b"
+    ]
+  },
+  "supersedes": "v2",
+  "summary_he": "הרצה שנייה באותו יום: מקורות הוחלפו בגלל חסימות; מסך ב׳ עובר לפרוקסי MOAT ETF.",
+  "changes_from_previous": [
+    {
+      "field": "screens.B.sources",
+      "type": "degraded",
+      "substantive": true,
+      "note_he": "StockAnalysis.com ירד; Seeking Alpha Quant חסום robots.txt; Morningstar Wide Moat נמדד דרך אחזקות VanEck MOAT ETF כפרוקסי."
+    },
+    {
+      "field": "screens.A.sources",
+      "type": "degraded",
+      "substantive": false,
+      "note_he": "MarketBeat נוסף אך חסום Paywall בהרצה זו."
+    },
+    {
+      "field": "tier1_rule",
+      "type": "editorial",
+      "substantive": false,
+      "note_he": "הניסוח עבר מ\"בשתיים\" ל\"בשתיים או שלוש\" — 3/3 תמיד עמד בסף."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": true
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "TipRanks Strong Buy/Smart Score",
+          "Zacks Rank #1",
+          "MarketBeat"
+        ],
+        "blocked": [
+          "MarketBeat (paywall)"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "סינון פונדמנטלי איכות+ערך",
+        "sources": [
+          "TipRanks financials/ratios",
+          "Finviz",
+          "Morningstar Wide Moat (proxy: VanEck MOAT ETF holdings)",
+          "Simply Wall St"
+        ],
+        "blocked": [
+          "Seeking Alpha Quant Ratings (robots.txt)"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות מפרסומים מקצועיים",
+        "sources": [
+          "Motley Fool",
+          "Barron's (via Dividendology)",
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט מוסדי אמין ומוכר",
+      "sentiment_kind": "institutional"
+    },
+    "conflict_handling": {
+      "policy": "exclude",
+      "example_he": "הורדת דירוג טרייה, יעד מחיר חריג שלא אומת"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X"
+      ],
+      "speculative_tag_he": "מומנטום ספקולטיבי"
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G",
+      "run_note_he": "הרצה טרום-פתיחת שוק: רק ידיעות פרה-מרקט ועדכוני מחיר, ללא מחקר מוסדי מקיף מחדש."
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @0473e0b",
+      "quote_he": "(ב) סינון פונדמנטלי איכות+ערך — TipRanks financials/ratios, Finviz, Morningstar Wide Moat (דרך אחזקות VanEck MOAT ETF כפרוקסי חי), Seeking Alpha Quant Ratings (חסום robots.txt), Simply Wall St"
+    },
+    {
+      "where": "index.html §methodology @0473e0b",
+      "quote_he": "מניה שהופיעה בשתיים או שלוש מתוך השלוש מסומנת \"שכבה 1\"."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}

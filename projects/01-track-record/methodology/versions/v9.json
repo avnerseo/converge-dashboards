@@ -1,0 +1,114 @@
+{
+  "version": "v9",
+  "rule_hash": "sha256:ccb8956d14026531",
+  "published": {
+    "first_date": "2026-08-28",
+    "last_date": "2026-08-28",
+    "commits": [
+      "280245e"
+    ]
+  },
+  "supersedes": "v8",
+  "summary_he": "מסך ב׳ מוגדר מחדש בלי GuruFocus; איסור WebFetch מוצהר מחדש; בידוד שכבת הסנטימנט מוצהר מחדש.",
+  "changes_from_previous": [
+    {
+      "field": "screens.B.sources",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "GuruFocus הוסר מהרשימה המוצהרת; StockAnalysis.com ו-Morningstar Wide Moat נוספו. אומת: אפס אזכורי GuruFocus בכל הקובץ בקומיט הזה — ההצהרה תואמת את הפרסום."
+    },
+    {
+      "field": "research_access.webfetch",
+      "type": "deliberate",
+      "substantive": true,
+      "note_he": "איסור WebFetch מוצהר שוב במפורש, אחרי שלא הופיע בנוסח המקוצר של v8."
+    }
+  ],
+  "selection": {
+    "universe": {
+      "listing_rule": "undocumented",
+      "excluded": []
+    },
+    "research_access": {
+      "websearch": true,
+      "webfetch": false
+    },
+    "screens": {
+      "A": {
+        "label_he": "קונצנזוס אנליסטים כמותי",
+        "sources": [
+          "TipRanks Smart Score",
+          "Zacks Rank",
+          "MarketBeat"
+        ],
+        "sources_documented": true
+      },
+      "B": {
+        "label_he": "איכות וערך פונדמנטלי",
+        "sources": [
+          "Finviz",
+          "Seeking Alpha Quant Ratings",
+          "StockAnalysis.com",
+          "Simply Wall St",
+          "Morningstar Wide Moat"
+        ],
+        "sources_documented": true
+      },
+      "C": {
+        "label_he": "המלצות עריכתיות ארוכות-טווח",
+        "sources": [
+          "Motley Fool",
+          "Barron's",
+          "Morningstar",
+          "Kiplinger",
+          "Forbes"
+        ],
+        "sources_documented": true
+      }
+    },
+    "tier1_rule": {
+      "type": "count_of_independent_screens",
+      "min_screens": 2,
+      "of": 3,
+      "screens_counted": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "tier2_rule": {
+      "min_screens": 1,
+      "requires_he": "גיבוי סנטימנט אמין (StockTwits/Reddit/X) לתזה ארוכת-טווח",
+      "sentiment_kind": "social"
+    },
+    "conflict_handling": {
+      "policy": "disclose_with_flag"
+    },
+    "sentiment_layer": {
+      "affects_tier1": false,
+      "sources": [
+        "StockTwits",
+        "Reddit",
+        "X",
+        "Bigdata.com"
+      ]
+    },
+    "carry_forward": {
+      "enabled": false,
+      "documented": true
+    },
+    "high_risk_layer": {
+      "fixed_count": 10,
+      "primary_signal": "13F/13G"
+    }
+  },
+  "evidence": [
+    {
+      "where": "index.html §methodology @280245e",
+      "quote_he": "(ב) איכות וערך פונדמנטלי — Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat. ... מניה המופיעה בשתיים מתוך שלוש הרשימות מקבלת מעמד שכבה 1. שכבת סנטימנט משנית (StockTwits/Reddit/X) נבדקת בנפרד ואינה משפיעה על הציון הראשי."
+    }
+  ],
+  "unverifiable": [
+    "listing eligibility rule"
+  ]
+}
