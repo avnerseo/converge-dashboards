@@ -1512,3 +1512,48 @@ Set and confirmed by re-reading the channel.
 | 8 | Google Merchant Center: review status | Requires an interactive Merchant Center login. No connector, and `merchants.google.com` is not reachable from this container. |
 | 9 | Instagram: a Peluma account | The connected Instagram is `aifreemeditate` — a personal account, wrong brand. Publishing Peluma content there was stopped deliberately. A Peluma IG Business account has to be created and connected. |
 | 10 | Photographs of the real brush | Physical object. The two hero images on the product are generated and should be replaced by real photographs when it arrives. |
+
+## TikTok API: tested and rejected — 2026-08-30
+
+Asked to verify rather than assume, so it was verified. `COMPOSIO_MANAGE_CONNECTIONS` on
+`tiktok` returns:
+
+> Composio does not have managed auth for 'tiktok', so the user must set up their own auth
+> config before connecting.
+
+So it is worse than the earlier estimate, and for a different reason. Posting through the API
+would require, in order: a TikTok developer account, a registered app with Content Posting API
+access, client key and secret wired into a custom Composio auth config, and then a TikTok
+**audit** of that app — because until an app is audited the connector's own docs restrict it to
+`SELF_ONLY`, and a private post has no distribution at all.
+
+That is weeks of process to save the sixty seconds a manual upload takes. **Decision: TikTok
+posting stays manual.** Videos and captions get prepared here; the merchant posts them.
+
+## ffmpeg is available after all — and the Short was replaced
+
+`pip install imageio-ffmpeg` ships a static **ffmpeg 7.0.2** binary. The earlier note that this
+container has no ffmpeg was wrong, and it mattered: the first Short was written by OpenCV's
+`VideoWriter` as **mp4v**, an obsolete codec that social platforms re-encode badly.
+
+`peluma/reel-caption.py` rebuilds the reel properly:
+
+- On-screen captions per segment, over a soft bottom gradient scrim so they read on any
+  footage, fading in and out with each clip (the clips are exactly 73 frames each).
+- A closing card: logo, `pelumapets.com`, `Free US shipping`, crossfaded in and held ~1.4s.
+- Encoded **libx264, CRF 19, yuv420p, +faststart** — 1080x1920, 24fps, 10.96s.
+
+| video | state | note |
+|---|---|---|
+| `b_KEDxWF08g` | **public**, PT11S | captioned H.264 cut, live |
+| `EksxVG-38OQ` | private, PT10S | first mp4v cut, superseded |
+
+Both confirmed by re-reading after the writes. The channel-identity assertion ran again before
+this upload too.
+
+### Still no audio, and that is the right call
+
+There is no licensed music available here, and synthesising a bed would sound cheap. TikTok,
+Reels and Shorts all let the poster add a track from the platform's own licensed library at
+upload — which is free, legal, and better, since a trending sound is itself a distribution
+signal. So the file ships silent by design and the audio is chosen in-app.
