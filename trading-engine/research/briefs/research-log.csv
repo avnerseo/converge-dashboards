@@ -1,1 +1,2 @@
 date,ticker,horizon_days,direction,confidence,ref_close,bench_close,invalidation,brief_path,outcome_close,bench_outcome_close
+2026-08-30,AAPL,21,NO-EDGE,Medium,319.70,769.35,302.25-333.43,research/briefs/2026-08-30-AAPL.md,,
