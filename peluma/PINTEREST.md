@@ -693,3 +693,70 @@ OpenArt URL to `fileCreate` pulls the image into Shopify Files, from where its `
 URL is readable. Pinterest fetches image URLs the same way. The pipeline
 **generate → Shopify → Pinterest** therefore runs end to end without the container ever needing
 to reach the blocked host.
+
+## Real Pinterest search data — 2026-08-30
+
+`PINTEREST_GET_KEYWORD_TRENDS` (US) is available through the connector. Until now every line
+of Pin copy was written from intuition. This is the first time the copy has been measured
+against what people actually search.
+
+### Method note that matters
+
+By default each keyword's series is normalized **to its own peak**, so cross-keyword
+comparison is meaningless — it only shows shape. `normalize_against_group: true` normalizes
+all keywords against a shared peak, and only those numbers are comparable. The first read of
+this data was done without the flag and produced a wrong conclusion (see the correction below).
+
+### Finding 1 — the terms the current Pins target do not rank at all
+
+Queried for: `dog grooming at home`, `cat grooming at home`, `dog shedding`, `cat shedding`,
+`muddy paws`, `paw cleaner`, `dog grooming tools`, `pet grooming brush`, `dog mom gifts`.
+
+**Not one of them returned a row.** They are outside Pinterest's ranked top-50 US monthly
+trends — too little search volume to rank. `pin-6` through `pin-12` are all written around
+this vocabulary.
+
+### Finding 2 — "dog grooming" has no season (this corrects an earlier reading)
+
+Group-normalized, `dog grooming` sits at **7–11 all year**, currently 8. On the
+self-normalized series it looks like it peaks hard in late December, and that was first read
+here as "the brush's season is Dec–Jan". It is not. In comparable units the swing is 8 → 10,
+about 25% — a wiggle, not a season. No grooming spike is coming for the brush.
+
+### Finding 3 — the category's real seasonal mass is Christmas, and it is 3–10x grooming
+
+Group-normalized peaks:
+
+| keyword | annual peak | when | intent |
+|---|---|---|---|
+| `dog christmas pictures` | **100** | 17 Nov | inspiration |
+| `dog christmas photoshoot` | 28 | 15 Dec | inspiration |
+| `dog christmas card` | 27 | 22 Dec | inspiration |
+| `dog christmas` | 23 | 8 Dec | mixed |
+| `dog christmas gifts` | 18 | 8–22 Dec | **shopping** |
+| `dog gifts` | 11 | 15 Dec | **shopping** |
+| `dog grooming` | 10 | flat | mixed |
+
+The huge terms are photo-inspiration intent and will not buy. The shopping slice —
+`dog christmas gifts` and `dog gifts` — is an order of magnitude smaller than the photo terms
+but still roughly **2x the grooming baseline at peak**, and it is the only place in this
+category where demand multiplies rather than trickles.
+
+`dog gifts` runs 1–2 for ten months and hits 11 in mid-December: an **~8x** swing.
+
+### What this changes
+
+1. Grooming vocabulary is a steady trickle with no upside spike. Keep the Pins; stop
+   expecting them to break out.
+2. The one genuine demand event of the Peluma year is **10 Nov – 22 Dec**, framed as gifting,
+   not as grooming.
+3. That is ~10 weeks out, and Pinterest needs roughly 4–8 weeks to index a Pin and build
+   distribution. **Building gift-framed Pins now lands exactly on the ramp.** Building them in
+   November is too late.
+4. `pin-10` was already gift-framed and was treated as a one-off. That instinct was right and
+   should become the main axis for the next batch.
+
+### Caveat kept honest
+
+These are search-volume trends, not conversion data. They say where attention goes, not who
+buys. Nothing here has been validated against a Peluma sale, because there has not been one.

@@ -920,3 +920,18 @@ distilled-water and tank-seal instructions now live on the product page.
 
 **Method: keep. Product conclusion: not supported by its own step 3.** The roadmap is a good
 process that, when actually run, argues against the thing it recommends.
+
+## Pin copy will be rebuilt around gifting, not grooming — 2026-08-30
+
+Pinterest's own US keyword-trend data (see PINTEREST.md, 30 Aug) shows the grooming vocabulary
+every existing Pin is written for does not rank at all, and that `dog grooming` is flat 7–11
+year-round with no seasonal upside. The only term in the category that multiplies is gifting:
+`dog gifts` runs ~8x from its ten-month floor into mid-December, and `dog christmas gifts`
+peaks about 2x the grooming baseline.
+
+Decision: the next Pin batch is built on gift framing and published now, not in November,
+because Pinterest takes 4–8 weeks to index and distribute. The existing grooming Pins stay up
+as a steady trickle; they are not the bet.
+
+This is the first Peluma content decision made from measured demand rather than intuition.
+It is still demand data, not conversion data — no Peluma sale has validated it.
