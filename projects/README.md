@@ -49,6 +49,21 @@ Checked directly on 2026-08-30 — these are measured, not assumed.
   screen recording. Do not use it to encode.
 - Chromium is pre-installed (`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`).
   Never run `playwright install`.
+- **The pip `playwright` package expects `chromium-1234`; the image ships
+  `chromium-1194`**, so `p.chromium.launch()` fails out of the box. Pass an
+  explicit `executable_path`. Verified working paths (02, 2026-08-30):
+  `/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell`
+  (lighter, preferred for frame capture) and
+  `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`.
+- Do **not** pass Chromium's `--deterministic-mode`: it enables
+  begin-frame-control, so the compositor only draws when a client drives frames,
+  and every Playwright screenshot hangs until it times out.
+- Frame capture: Chromium's PNG encoder costs ~340 ms/frame and dominates
+  everything else. JPEG q95 screenshots are ~4.5x faster at 44.4 dB PSNR, and
+  the residual is chroma subsampling that yuv420p h264 applies anyway.
+- Google Fonts (`fonts.googleapis.com` / `fonts.gstatic.com`) is reachable, but
+  vendor font files rather than fetching them at render time — a render that
+  touches the network is not reproducible.
 
 ### Data
 - **Alpha Vantage MCP** — rate limited to ~1 call/second, and the daily quota
