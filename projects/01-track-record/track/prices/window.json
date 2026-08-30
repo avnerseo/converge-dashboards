@@ -1,0 +1,5 @@
+{
+  "since": "2026-08-17",
+  "why": "The first tier-1 pick in the ledger is 2026-08-18. 08-17 is the trading day before it, so every position has a close on and before its entry date. This is the floor the store guarantees, not a ceiling: symbols fetched before the window was set keep the deeper history they arrived with. The provider retains 20+ years, so widening the floor is a re-fetch with a lower --since; the append-only merge absorbs it without touching what is already stored.",
+  "set_on": "2026-08-30"
+}

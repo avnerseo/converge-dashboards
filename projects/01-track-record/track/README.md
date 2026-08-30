@@ -87,6 +87,41 @@ win the day-final tiebreak. `extract_ledger.py` now reports any commit whose
 tier-1 section holds cards it could not read — that count is zero today, and a
 non-zero one means the markup changed again.
 
+## The daily close store
+
+`store.py` and `prices/`. One row per symbol per day, append-only: a close is
+written once, and if the provider later returns a different value for a date
+already stored, the disagreement goes to `revisions.jsonl` and the stored value
+stands. A store that silently accepts restatements cannot support a track
+record, because last month's numbers stop being last month's.
+
+Alpha Vantage's adjusted endpoint is premium on this key, but `DIVIDENDS` and
+`SPLITS` are not — so total return is reconstructed from raw closes plus the
+event series rather than bought. A dividend payer scored on price return alone
+looks worse than it was.
+
+The free key allows ~25 calls/day against a 39-symbol universe (29 positions,
+SPY, 9 sector ETFs), so a full pass does not fit in one day and is not meant to.
+`store.py plan` names what to fetch next, benchmarks first: a position with no
+benchmark series cannot be scored, so fetching it first buys nothing. Network
+access lives in the MCP tool, not in the script, so a fetch is two steps — call
+`TIME_SERIES_DAILY`, pipe the CSV to `store.py ingest`.
+
+Coverage as of 2026-08-30: **17 of 39 symbols**, all ten benchmarks and the
+seven positions first picked on 08-18.
+
+### The card price is not the entry price
+
+`store.py audit` compares the price printed on each tier-1 card against the real
+close. **No card price equals the close of the day it was published.** Where the
+store has the day, the card carries the *previous* trading day's close; 08-18's
+cards are staler still, matching a close from before the stored window. Some
+cards label the staleness ("+1.68% (28.8)"), most do not.
+
+Entering positions at the card price would therefore enter every one of them at
+a price the pick was never made at. The card price stays in the ledger as what
+was published; entry comes from the store, dated to the publication date.
+
 ## Open: 12 positions have no entry price
 
 Several runs shipped tier-1 cards with no price at all — 08-20 published

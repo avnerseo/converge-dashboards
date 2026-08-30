@@ -1,0 +1,30 @@
+{
+  "_note": "Sector -> benchmark ETF. A pick is measured against the sector the dashboard published it under, so this maps the dashboard's own Hebrew labels. Edit deliberately: changing a mapping changes every excess return that uses it.",
+  "market": "SPY",
+  "sectors": {
+    "טכנולוגיה": "XLK",
+    "פיננסים": "XLF",
+    "בריאות": "XLV",
+    "אנרגיה": "XLE",
+    "תעשייה": "XLI",
+    "צריכה בסיסית": "XLP",
+    "צריכה מחזורית": "XLY",
+    "תקשורת ומדיה": "XLC",
+    "תשתיות ציבוריות": "XLU",
+    "חומרים": "XLB",
+    "נדל\"ן": "XLRE"
+  },
+  "symbol_overrides": {
+    "BRK.B": "BRK-B"
+  },
+  "unsectored": {
+    "_note": "2026-08-18 shipped its tier-1 cards with no data-sector attribute. These are the dashboard's own labels for the same tickers on later days; MELI and USB never got one, so they are classified here and the choice is recorded rather than buried.",
+    "AVGO": "טכנולוגיה",
+    "DIS": "תקשורת ומדיה",
+    "GOOGL": "תקשורת ומדיה",
+    "MSFT": "טכנולוגיה",
+    "XOM": "אנרגיה",
+    "MELI": "צריכה מחזורית",
+    "USB": "פיננסים"
+  }
+}

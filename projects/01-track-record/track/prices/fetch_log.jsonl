@@ -1,0 +1,18 @@
+{"ts": "2026-08-30T15:59:25+00:00", "symbol": "SPY", "kind": "daily", "rows_in": 100, "rows_added": 100, "revisions": 0, "total_rows": 100}
+{"ts": "2026-08-30T15:59:54+00:00", "symbol": "SPY", "kind": "daily", "since": "2026-08-17", "rows_in": 1, "rows_added": 0, "revisions": 0, "total_rows": 100}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLC", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLE", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLF", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLI", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLK", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:44+00:00", "symbol": "XLP", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:45+00:00", "symbol": "XLU", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:45+00:00", "symbol": "XLV", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:01:45+00:00", "symbol": "XLY", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "MSFT", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "AVGO", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "GOOGL", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "XOM", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "DIS", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "MELI", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
+{"ts": "2026-08-30T16:03:09+00:00", "symbol": "USB", "kind": "daily", "since": "2026-08-17", "rows_in": 10, "rows_added": 10, "revisions": 0, "total_rows": 10}
