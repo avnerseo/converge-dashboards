@@ -71,9 +71,15 @@ fails here instead of reaching `main`.
 unique tickers across tables א׳+ב׳+ג׳, tier-1 count, high-risk count. This is
 what catches silent drift after a partial run.
 
-**Freshness** — the run date is reported and flagged past three days. Any price
-that is carried over must be dated, and any price that is missing must say why.
-A page where nothing was fetched today says so out loud.
+**Staleness** — has the dashboard stopped updating? Kept as its own check
+because it is the one the daily job watches; a run date past three days fails
+it. Dashboards listed in `PAUSED` in `validate.py` are reported but never
+flagged, so one that is deliberately not being refreshed cannot turn the daily
+job red. `crypto` is paused today — remove it from that set to resume.
+
+**Freshness** — any price that is carried over must be dated, and any price
+that is missing must say why. A page where nothing was fetched today says so
+out loud. This runs on every push but does not gate the daily job.
 
 ## Price fields
 

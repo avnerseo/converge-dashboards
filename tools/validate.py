@@ -34,6 +34,11 @@ REQUIRED = {
 # out loud rather than letting the gap go unnoticed.
 EXPECTED = {"crypto": ["transparency"]}
 
+# Dashboards that are deliberately not being refreshed. Their run date is
+# reported but never flagged, so a paused dashboard cannot turn the daily job
+# red. Structure and consistency still run. Remove a name here to resume it.
+PAUSED = {"crypto"}
+
 
 class Report:
     def __init__(self, name):
@@ -154,18 +159,24 @@ def check_consistency(data, rep):
             rep.note("%d %s — matches the headline" % (actual, what))
 
 
-def check_freshness(data, rep, today):
+def check_staleness(data, rep, today):
+    """Has this dashboard stopped updating? This is the signal the daily job
+    watches, so it is kept apart from everything else about freshness."""
     as_of = data.get("as_of")
     if not as_of:
         rep.error("no run date could be read from the page")
+        return
+    age = (today - dt.date.fromisoformat(as_of)).days
+    line = "run date %s (%d day%s old)" % (as_of, age, "" if age == 1 else "s")
+    if data.get("dashboard") in PAUSED:
+        rep.note(line + " — paused, not flagged")
+    elif age > MAX_AGE_DAYS:
+        rep.warn(line + " — older than %d days" % MAX_AGE_DAYS)
     else:
-        age = (today - dt.date.fromisoformat(as_of)).days
-        line = "run date %s (%d day%s old)" % (as_of, age, "" if age == 1 else "s")
-        if age > MAX_AGE_DAYS:
-            rep.warn(line + " — older than %d days" % MAX_AGE_DAYS)
-        else:
-            rep.note(line)
+        rep.note(line)
 
+
+def check_freshness(data, rep, today):
     fresh = stale = missing = 0
     for tier in ("tier1", "tier2", "highrisk"):
         for card in (data.get(tier) or {}).get("cards", []):
@@ -185,13 +196,14 @@ def check_freshness(data, rep, today):
     if total:
         rep.note("prices: %d fresh · %d carried over · %d unavailable (of %d)"
                  % (fresh, stale, missing, total))
-        if fresh == 0:
+        if fresh == 0 and data.get("dashboard") not in PAUSED:
             rep.warn("no price on this page was fetched today")
 
 
 CHECKS = {
     "structure": lambda d, r, today: check_structure(d, r),
     "consistency": lambda d, r, today: check_consistency(d, r),
+    "staleness": check_staleness,
     "freshness": check_freshness,
 }
 
