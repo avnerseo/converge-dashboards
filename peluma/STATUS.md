@@ -1557,3 +1557,50 @@ There is no licensed music available here, and synthesising a bed would sound ch
 Reels and Shorts all let the poster add a track from the platform's own licensed library at
 upload — which is free, legal, and better, since a trending sound is itself a distribution
 signal. So the file ships silent by design and the audio is chosen in-app.
+
+## Zendrop reconnected — the cup mystery is solved, and it is a sync failure (30 Aug)
+
+`get_catalog_product(1997733)`: **`in_stock: true`**, all eight variants "In stock",
+supplier NexoraUSA (US). `get_my_product(62596298)`: `zendrop_linked: true`,
+`store_sync_status: "synced"`, all eight variants mapped to the right Shopify variant IDs.
+
+So the stock exists and the link is healthy. Zendrop simply never pushed a quantity for this
+product. The brush, imported the same way, carries 50,000 at the same location.
+
+Cross-check that settles the cost question too: the cup's catalog price `7.65` equals the
+`unitCost` on the four S variants exactly, and L reads 8.56. Catalog price is the cheapest
+variant's cost, so both figures are confirmed from two independent sources.
+
+**Two things cannot be done from here.** `Location/115449626937` reports
+`fulfillmentService.inventoryManagement: true`, so Shopify rejects manual quantity writes.
+And Zendrop's `get_my_product_inventory` returns *"Your plan does not include inventory
+access. Upgrade to Select."*
+
+**Warning worth recording:** the obvious-looking fix — "push to store" / re-import on the
+Zendrop side — would overwrite the product's content. The description, the eight de-branded
+images, the ordering and the hero shots were all hand-built in Shopify. A re-push clobbers
+them. The fix has to be an inventory sync, not a product re-import.
+
+Per-variant costs are not exposed either: `get_my_product` returns `variant_price: null` on
+all thirteen variants. The weight-derived estimates therefore stand as the best available
+figures for `MDYQJZF3J`, `ZAF7RY7XJ` and `Z75Y6C7M0`.
+
+## Payment rail: PayPal only, and the first attempt failed
+
+Order #1001, `paymentGatewayNames: ["paypal"]`, two transactions: the first `SALE` came back
+**`FAILURE`**, the second `SUCCESS`. There is no Shopify Payments and no card-on-site.
+
+This matters more for paid traffic than for the store as it stands. US cold traffic expects a
+card field or Shop Pay at checkout; PayPal-only is a known conversion drag, and a rail that
+already produced one failed attempt out of two is not one to point a budget at unexamined.
+
+## Correcting the "all images are AI" claim
+
+Not accurate as stated, and the difference matters per product:
+
+- **Brush** — 9 media, **2** generated. The other 7 are real supplier photographs, de-branded.
+- **Paw cup** — 12 media, **11** generated. Only `d328c8be…jpg` is a supplier photograph.
+
+So for the cup the claim is essentially right, and for the brush it is not. The substantive
+point stands either way: there is no footage of the real product in a real hand, and a demo,
+before/after or testimonial ad cannot be made without it.
