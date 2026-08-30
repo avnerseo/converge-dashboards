@@ -1,11 +1,17 @@
 vscan-index/
+vscan-data/
+docker/footage/
+docker/.env
+build/
+*.egg-info/
 *.mp4
 *.mkv
 *.avi
 demo.mp4
 clips/
-*.html
-!docs/*.html
+# generated reports land in the working directory; the UI's own
+# HTML lives in vscan_server/static and must stay tracked
+/*.html
 __pycache__/
 *.pyc
 .venv/

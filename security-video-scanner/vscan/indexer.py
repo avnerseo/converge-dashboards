@@ -4,6 +4,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
+from typing import Callable
 
 import cv2
 import numpy as np
@@ -75,8 +76,15 @@ class Indexer:
                 conf_threshold=opts.object_conf, labels=opts.object_labels or None,
                 allow_download=opts.allow_download)
 
-    def run(self, path: str | Path, force: bool = False,
-            progress: bool = True) -> IndexStats:
+    def run(self, path: str | Path, force: bool = False, progress: bool = True,
+            on_progress: Callable[[float, str], None] | None = None,
+            should_cancel: Callable[[], bool] | None = None) -> IndexStats:
+        """Index one video.
+
+        `on_progress(fraction, message)` is called every few seconds so a UI can
+        follow along; `should_cancel()` is polled at the same rate and stops the
+        pass cleanly, keeping whatever was indexed so far.
+        """
         opts = self.opts
         info: VideoInfo = probe(path)
         fp = fingerprint(info.path)
@@ -142,14 +150,22 @@ class Indexer:
                 if stats.frames_kept % 200 == 0:
                     self.index.commit()
                 now = time.time()
-                if progress and now - last_report > 5.0:
+                if now - last_report > 2.0:
                     done = t - opts.start
                     total = (opts.end or info.duration) - opts.start
-                    LOG.info("  %s / %s  (%.0f%%, %.1fx realtime, %d faces, %d objects)",
-                             fmt_timecode(t), fmt_timecode(opts.end or info.duration),
-                             100 * done / total if total else 0,
-                             done / (now - t0) if now > t0 else 0,
-                             stats.faces, stats.objects)
+                    fraction = (done / total) if total else 0.0
+                    speed = done / (now - t0) if now > t0 else 0
+                    if progress:
+                        LOG.info("  %s / %s  (%.0f%%, %.1fx realtime, %d faces, %d objects)",
+                                 fmt_timecode(t), fmt_timecode(opts.end or info.duration),
+                                 100 * fraction, speed, stats.faces, stats.objects)
+                    if on_progress is not None:
+                        on_progress(fraction, f"{info.name}: {fmt_timecode(t)} of "
+                                              f"{fmt_timecode(opts.end or info.duration)}, "
+                                              f"{stats.faces} faces")
+                    if should_cancel is not None and should_cancel():
+                        LOG.warning("cancelled - keeping what was indexed so far")
+                        break
                     last_report = now
                 stats.video_seconds = t - opts.start
         except KeyboardInterrupt:

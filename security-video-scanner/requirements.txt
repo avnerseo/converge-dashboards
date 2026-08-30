@@ -1,9 +1,15 @@
-# core (local, offline pipeline)
+# core engine (local, offline pipeline)
 numpy>=1.24
 opencv-python-headless>=4.8
 
-# needed only for `vscan ask` (natural-language search via the Claude API)
+# on-premise web application
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+
+# needed only for natural-language search (`vscan ask` / the Search > instruction tab)
 anthropic>=1.0
 
 # tests
 pytest>=7
+httpx>=0.27

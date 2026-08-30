@@ -15,15 +15,29 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# the on-premise web application
+server = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "python-multipart>=0.0.9",
+]
+# natural-language search through the Claude API
 ask = ["anthropic>=1.0"]
-dev = ["pytest>=7"]
+dev = ["pytest>=7", "httpx>=0.27"]
 
 [project.scripts]
 vscan = "vscan.cli:main"
+vscan-server = "vscan_server.app:main"
 
 [tool.setuptools]
-packages = ["vscan"]
+packages = ["vscan", "vscan_server"]
+
+[tool.setuptools.package-data]
+vscan_server = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-filterwarnings = ["ignore::DeprecationWarning"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]

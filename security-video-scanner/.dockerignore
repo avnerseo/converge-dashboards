@@ -1,0 +1,12 @@
+.git
+.venv
+vscan-index/
+vscan-data/
+tests/
+docker/footage/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+*.mp4
+*.mkv
+*.avi

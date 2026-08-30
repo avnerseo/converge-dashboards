@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>vscan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128065;</text></svg>">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="login" class="login-wrap">
+  <form class="card" id="login-form">
+    <div class="brand" style="margin-bottom:14px"><span class="dot"></span><span>vscan</span></div>
+    <h1 data-i18n="signIn">כניסה</h1>
+    <label class="field"><span data-i18n="username">שם משתמש</span>
+      <input type="text" id="login-user" autocomplete="username" required></label>
+    <label class="field"><span data-i18n="password">סיסמה</span>
+      <input type="password" id="login-pass" autocomplete="current-password" required></label>
+    <button class="btn" style="width:100%" type="submit" data-i18n="signIn">כניסה</button>
+    <p id="login-error" class="small hidden" style="color:var(--bad);margin-block-end:0"></p>
+    <p class="small muted" style="margin-block-end:0" data-i18n="loginNote">
+      גישה למערכת מתועדת ביומן הביקורת.</p>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="brand"><span class="dot"></span><span id="site-name">vscan</span></div>
+    <nav class="tabs" id="tabs"></nav>
+    <div class="grow"></div>
+    <button class="btn ghost small" id="lang-toggle">EN</button>
+    <span class="small muted" id="whoami"></span>
+    <button class="btn ghost small" id="logout" data-i18n="signOut">יציאה</button>
+  </header>
+  <main id="view"></main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toasts"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

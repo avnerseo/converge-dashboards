@@ -1,0 +1,39 @@
+# vscan on-premise deployment.
+#   1. put (or mount) the recordings under ./footage
+#   2. cp .env.example .env  and set VSCAN_ADMIN_PASSWORD
+#   3. docker compose up -d   ->  http://<host>:8080
+services:
+  vscan:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: vscan:0.1.0
+    container_name: vscan
+    restart: unless-stopped
+    ports:
+      - "${VSCAN_BIND:-127.0.0.1}:8080:8080"
+    environment:
+      VSCAN_FOOTAGE_DIRS: /footage
+      VSCAN_ADMIN_USER: ${VSCAN_ADMIN_USER:-admin}
+      VSCAN_ADMIN_PASSWORD: ${VSCAN_ADMIN_PASSWORD:-}
+      VSCAN_WORKERS: ${VSCAN_WORKERS:-2}
+      VSCAN_SESSION_HOURS: ${VSCAN_SESSION_HOURS:-12}
+      VSCAN_RETENTION_DAYS: ${VSCAN_RETENTION_DAYS:-0}
+      VSCAN_ASK_ENABLED: ${VSCAN_ASK_ENABLED:-false}
+      VSCAN_SECURE_COOKIE: ${VSCAN_SECURE_COOKIE:-false}
+      VSCAN_PREVIEW_CODEC: ${VSCAN_PREVIEW_CODEC:-auto}
+      # only needed when natural-language search is switched on
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      # the recordings, read-only: vscan never writes to the customer's footage
+      - ${VSCAN_FOOTAGE_PATH:-./footage}:/footage:ro
+      # index, thumbnails, exports, accounts and the audit log
+      - vscan-data:/data
+    # face and object detection are CPU-bound; cap them so the box stays usable
+    deploy:
+      resources:
+        limits:
+          cpus: "${VSCAN_CPUS:-4}"
+
+volumes:
+  vscan-data:

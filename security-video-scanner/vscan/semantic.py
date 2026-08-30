@@ -13,10 +13,10 @@ from __future__ import annotations
 import base64
 import json
 import os
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Sequence
+from typing import Callable, Sequence
 
 import cv2
 import numpy as np
@@ -227,8 +227,9 @@ def _load(ref: FrameRef, max_width: int = 0) -> np.ndarray | None:
 
 
 # ---------------------------------------------------------------- the ask
-def ask(query: str, refs: Sequence[FrameRef],
-        opts: AskOptions = AskOptions()) -> AskResult:
+def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
+        on_progress: Callable[[float, str], None] | None = None,
+        should_cancel: Callable[[], bool] | None = None) -> AskResult:
     result = AskResult(frames_examined=len(refs))
     if not refs:
         LOG.warning("no indexed frames match that filter - nothing to ask about")
@@ -243,21 +244,32 @@ def ask(query: str, refs: Sequence[FrameRef],
         return result
 
     client = _client()
-    with ThreadPoolExecutor(max_workers=max(1, opts.concurrency)) as pool:
-        batch_results = list(pool.map(
-            lambda b: _ask_batch(client, query, b[1], b[0] * opts.grid, opts),
-            list(enumerate(batches))))
-
     candidates: list[Hit] = []
-    for hits, refused in batch_results:
-        result.requests += 1
-        result.refusals += int(refused)
-        candidates.extend(hits)
+    triage_share = 0.75 if opts.confirm else 1.0     # leave room for the second pass
+    with ThreadPoolExecutor(max_workers=max(1, opts.concurrency)) as pool:
+        futures = [pool.submit(_ask_batch, client, query, batch, i * opts.grid, opts)
+                   for i, batch in enumerate(batches)]
+        for done, future in enumerate(as_completed(futures), 1):
+            hits, refused = future.result()
+            result.requests += 1
+            result.refusals += int(refused)
+            candidates.extend(hits)
+            if on_progress is not None:
+                on_progress(done / len(batches) * triage_share,
+                            f"reviewed {min(done * opts.grid, len(refs))} of "
+                            f"{len(refs)} frames")
+            if should_cancel is not None and should_cancel():
+                for pending in futures:
+                    pending.cancel()
+                LOG.warning("cancelled - returning what was found so far")
+                break
 
     candidates = [h for h in candidates if h.score >= opts.min_confidence]
     LOG.info("triage kept %d candidate frame(s)", len(candidates))
 
     if opts.confirm and candidates:
+        if on_progress is not None:
+            on_progress(0.8, f"confirming {len(candidates)} candidate frame(s)")
         with ThreadPoolExecutor(max_workers=max(1, opts.concurrency)) as pool:
             confirmed = list(pool.map(lambda h: _confirm(client, query, h, opts),
                                       candidates))

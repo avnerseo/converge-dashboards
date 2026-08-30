@@ -21,6 +21,32 @@ Everything except `ask` runs offline: no frame leaves the machine.
 
 ---
 
+## Two ways to run it
+
+**As a CLI** on your own machine — the rest of this page.
+
+**As an on-premise web application** for a team: one container, a browser UI in
+Hebrew and English, accounts with viewer/analyst/admin roles, a job queue with
+live progress, clip export, and an audit log of every search. That is the
+product a company installs:
+
+```bash
+cd docker && cp .env.example .env && $EDITOR .env
+docker compose up -d --build          # -> http://<host>:8080
+```
+
+Footage is mounted read-only, the models are baked into the image (no internet
+needed at runtime), and natural-language search is off until an admin switches
+it on. Full install, TLS, backup, retention and sizing guidance:
+**[docs/DEPLOY.md](docs/DEPLOY.md)**.
+
+![the search view](docs/screenshot-search.png)
+
+*Faces are blurred in these screenshots on purpose - this is a face-recognition
+product, and its documentation should not publish anybody's face.*
+
+---
+
 ## Install
 
 ```bash
@@ -158,6 +184,7 @@ vscan label --cluster N   name a cluster, making it searchable
 vscan ask "QUERY"         natural-language search (Claude API)
 vscan clip                cut one clip out of an indexed video
 vscan models list|fetch   manage the cached ONNX models
+vscan-server              run the web application (see docs/DEPLOY.md)
 ```
 
 `--index DIR` selects the index (default `./vscan-index`), `-v` turns on debug
@@ -172,8 +199,8 @@ vscan index demo.mp4 --fps 3
 vscan cluster --min-size 2          # two clusters, one per person
 ```
 
-Tests: `pytest` (unit tests always run; the end-to-end test needs
-`VSCAN_TEST_FACES=alice.jpg:bob.jpg`).
+Tests: `pytest` (unit tests and the API tests always run; the end-to-end
+face tests need `VSCAN_TEST_FACES=alice.jpg:bob.jpg`).
 
 ## Limitations
 
