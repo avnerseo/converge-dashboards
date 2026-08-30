@@ -1,0 +1,12 @@
+vscan-index/
+*.mp4
+*.mkv
+*.avi
+demo.mp4
+clips/
+*.html
+!docs/*.html
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

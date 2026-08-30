@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vscan"
+version = "0.1.0"
+description = "Search security-camera footage by face or by natural-language instruction"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.24",
+    "opencv-python-headless>=4.8",
+]
+
+[project.optional-dependencies]
+ask = ["anthropic>=1.0"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+vscan = "vscan.cli:main"
+
+[tool.setuptools]
+packages = ["vscan"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

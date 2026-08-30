@@ -1,0 +1,9 @@
+# core (local, offline pipeline)
+numpy>=1.24
+opencv-python-headless>=4.8
+
+# needed only for `vscan ask` (natural-language search via the Claude API)
+anthropic>=1.0
+
+# tests
+pytest>=7
