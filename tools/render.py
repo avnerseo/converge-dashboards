@@ -21,10 +21,11 @@ import domlite  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES = os.path.join(ROOT, "templates")
 
-BRAND = ('<div class="brand-lockup"><span class="brand-mark"></span>'
-         '<span class="brand-text"><span class="brand-word">Converge'
-         '<span class="brand-tm">™</span></span>'
-         '<span class="brand-tagline">Stock Intelligence</span></span></div>')
+def brand(tagline):
+    return ('<div class="brand-lockup"><span class="brand-mark"></span>'
+            '<span class="brand-text"><span class="brand-word">Converge'
+            '<span class="brand-tm">™</span></span>'
+            '<span class="brand-tagline">%s</span></span></div>' % esc(tagline or ""))
 
 esc = domlite.escape_text
 att = domlite.escape_attr
@@ -52,7 +53,8 @@ def h2(block):
     icon = block.get("icon")
     cls = "icon-badge" + (" " + block["icon_variant"] if block.get("icon_variant") else "")
     badge = tag("span", esc(icon), class_=cls) if icon else ""
-    return tag("h2", badge + esc(block.get("title") or ""))
+    gap = " " if block.get("icon_gap") else ""
+    return tag("h2", badge + gap + esc(block.get("title") or ""))
 
 
 def section_head(block):
@@ -72,34 +74,55 @@ def kpi_row(items, cls="kpi-row"):
     return tag("div", tiles, class_=cls)
 
 
-def sources_block(sources):
+def sources_block(sources, prefix=None, style=None):
     if not sources:
         return ""
-    inner = " ".join(tag("a", esc(s["name"]), href=s["url"]) for s in sources)
+    inner = " ".join(tag("a", esc(s["name"]), href=s["url"], target=s.get("target"))
+                     for s in sources)
+    if prefix:
+        inner = esc(prefix) + " " + inner
+    if style:
+        return '<div class="sources" style="%s">%s</div>' % (att(style), inner)
     return tag("div", inner, class_="sources")
 
 
 def chip_row(chips):
     if not chips:
         return ""
-    inner = " ".join(
-        tag("span", esc(c["text"]),
-            class_="chip" + (" " + c["kind"] if c.get("kind") else ""))
-        for c in chips)
+    parts = []
+    for c in chips:
+        cls = c["kind"] if c.get("bare") else "chip" + (" " + c["kind"] if c.get("kind") else "")
+        parts.append(tag("span", esc(c["text"]), class_=cls))
+    inner = " ".join(parts)
     return tag("div", inner, class_="chip-row")
 
 
-def table_block(spec, table_id=None, table_class=None):
+def sort_call(table_id, index, col, typed):
+    """Rebuild the header's sort wiring. The two dashboards call sortTable with
+    different signatures, so the caller says which one it needs."""
+    if not (col.get("sortable") and table_id):
+        return None
+    if typed:
+        return "sortTable('%s',%d,%s)" % (table_id, index,
+                                          "true" if col.get("numeric") else "false")
+    return "sortTable('%s',%d)" % (table_id, index)
+
+
+def table_block(spec, table_id=None, table_class=None, typed_sort=False):
     head = "".join(
-        tag("th", esc(col["text"]),
-            onclick=("sortTable('%s',%d)" % (table_id, i)) if col.get("sortable") and table_id else None)
+        tag("th", esc(col["text"]), class_=col.get("class"),
+            onclick=sort_call(table_id, i, col, typed_sort))
         for i, col in enumerate(spec.get("columns", [])))
     body = []
     for row in spec.get("rows", []):
-        cells = "".join(tag("td", c.get("html") or "", class_=c.get("class"))
-                        for c in row["cells"])
-        body.append(tag("tr", cells,
-                        data_ticker=row.get("ticker"), data_sector=row.get("sector")))
+        cells = "".join(
+            "<td%s>%s</td>" % ("".join(' %s="%s"' % (k, att(v))
+                                       for k, v in (c.get("attrs") or {}).items()),
+                               c.get("html") or "")
+            for c in row["cells"])
+        attrs = "".join(' %s="%s"' % (k, att(v))
+                        for k, v in (row.get("data") or {}).items())
+        body.append("<tr%s>%s</tr>" % (attrs, cells))
     return tag("div",
                tag("table", tag("thead", tag("tr", head)) + tag("tbody", "\n".join(body)),
                    id=table_id, class_=table_class),
@@ -140,10 +163,12 @@ def sectors_in(data):
         for c in (data.get(tier) or {}).get("cards", []):
             if c.get("sector"):
                 found.add(c["sector"])
-    for tab in ((data.get("tables") or {}).get("tabs") or {}).values():
+    tabs = (data.get("tables") or {}).get("tabs") or {}
+    for tab in (tabs.values() if isinstance(tabs, dict) else tabs):
         for row in tab.get("rows", []):
-            if row.get("sector"):
-                found.add(row["sector"])
+            sector = (row.get("data") or {}).get("data-sector")
+            if sector:
+                found.add(sector)
     return sorted(found)
 
 
@@ -167,7 +192,7 @@ def render_stocks(data):
     add = out.append
 
     header = tag("div",
-                 BRAND + "\n" + tag("h1", esc(data["title"] or "")) +
+                 brand(data.get("brand_tagline")) + "\n" + tag("h1", esc(data["title"] or "")) +
                  tag("div", data.get("subtitle") or "", class_="subtitle") +
                  tag("div", "".join(tag("span", esc(b), class_="badge")
                                     for b in data.get("badges", [])),
@@ -269,6 +294,111 @@ def render_stocks(data):
 
 
 # --------------------------------------------------------------------------
+# crypto
+# --------------------------------------------------------------------------
+
+def crypto_card(card):
+    head = tag("div",
+               tag("div",
+                   tag("span", esc(card.get("ticker") or ""), class_="ticker ltr") +
+                   tag("div", esc(card.get("name") or ""), class_="company-name")) +
+               tag("div", tag("div", esc(card["price"]["raw"]), class_="price ltr")),
+               class_="stock-head")
+    body = chip_row(card.get("chips"))
+    if card.get("rationale"):
+        body += tag("div", card["rationale"], class_="rationale")
+    if card.get("risk_note"):
+        body += tag("div", card["risk_note"], class_="risk-note")
+    body += sources_block(card.get("sources"), card.get("sources_prefix"))
+    cls = "tier2-card stock-card" if card.get("variant") == "tier2" else "stock-card"
+    return tag("div", head + body, class_=cls, data_q=card.get("query"))
+
+
+def render_crypto(data):
+    out = []
+    add = out.append
+
+    meta = "".join(tag("span", esc(b), class_="badge") for b in data.get("badges", []))
+    if data.get("back_link"):
+        meta += tag("a", esc(data["back_link"]["label"]),
+                    class_="back-link", href=data["back_link"]["href"])
+    header = tag("div",
+                 brand(data.get("brand_tagline")) +
+                 tag("h1", esc(data["title"] or "")) +
+                 tag("div", data.get("subtitle") or "", class_="subtitle") +
+                 tag("div", meta, class_="meta-row"))
+    header += tag("button", "🌓 מצב כהה/בהיר", class_="theme-toggle", onclick="toggleTheme()")
+    add(tag("header", header, class_="top"))
+
+    if data.get("disclaimer"):
+        add(tag("div", data["disclaimer"], class_="disclaimer"))
+
+    qn = data.get("quicknav") or {}
+    add(tag("nav",
+            tag("div",
+                '<input id="globalSearch" class="search-input" placeholder="%s" oninput="filterAll()">'
+                % att(qn.get("search_placeholder") or ""), class_="qn-row") +
+            tag("div", "".join(tag("a", esc(l["label"]), href=l["href"])
+                               for l in qn.get("links", [])), class_="qn-links"),
+            class_="quicknav", id="quicknav"))
+
+    add(tag("section", kpi_row(data.get("kpis", []))))
+
+    for key in ("tier1", "tier2"):
+        block = data[key]
+        cards = "\n".join(crypto_card(c) for c in block["cards"])
+        add(tag("section",
+                section_head(block) + tag("div", cards, class_=block.get("grid_class")),
+                id=key))
+
+    tables = data.get("tables") or {}
+    tabs = tables.get("tabs") or []
+    btns = "".join(
+        tag("button", esc(t["label"] or ""),
+            class_="tab-btn active" if i == 0 else "tab-btn",
+            data_tab=t["key"], onclick="showTab('%s')" % t["key"])
+        for i, t in enumerate(tabs))
+    inner = section_head(tables) + tag("div", tag("div", btns, class_="tabs"), class_="tabs-row")
+    for i, t in enumerate(tabs):
+        controls = tag("div",
+                       '<span class="section-sub" style="margin:0">%s</span>' % esc(t.get("caption") or "") +
+                       tag("button", esc(t.get("csv_label") or ""), class_="csv-btn",
+                           onclick="exportVisibleCSV('%s')" % t["table_id"]),
+                       class_="table-controls")
+        panel = tag("div", controls + table_block(t, table_id=t["table_id"], typed_sort=True),
+                    class_="tblwrap-outer")
+        inner += "\n" + tag("div", panel, id="panel-" + t["key"],
+                            class_="tab-panel active" if i == 0 else "tab-panel")
+    add(tag("section", inner, id="tables"))
+
+    sent = data["sentiment"]
+    fg = sent.get("fear_greed") or {}
+    dial = tag("div", tag("div", esc(fg.get("value") or ""), class_="fg-value ltr"), class_="fg-dial")
+    hist = "".join(tag("span", esc(h), class_="fg-hist-item") for h in fg.get("history", []))
+    metablock = tag("div",
+                    tag("div", esc(fg.get("label") or ""), class_="fg-label") +
+                    tag("div", esc(fg.get("scale") or ""), class_="fg-sub") +
+                    tag("div", hist, class_="fg-hist") +
+                    tag("div", fg.get("divergence_note") or "", class_="fg-divergence"),
+                    class_="fg-meta")
+    block = section_head(sent) + tag("div", dial + metablock, class_="fg-wrap")
+    block += sources_block(fg.get("sources"), fg.get("sources_prefix"), style="margin-top:10px")
+    add(tag("section", block, id="sentiment"))
+
+    meth = data["methodology"]
+    cols = "".join(
+        tag("div", tag("h3", esc(p["title"] or "")) + "".join(tag("p", x) for x in p["paragraphs"]),
+            class_="converge-col")
+        for p in meth.get("pillars", []))
+    block = section_head(meth) + tag("div", cols, class_="converge-cols")
+    block += tag("div", "".join(tag("p", p) for p in meth.get("paragraphs", [])), class_="prose")
+    add(tag("section", block, id="methodology"))
+
+    add(tag("footer", data.get("footer") or ""))
+    return document(data, "crypto", "\n".join(out))
+
+
+# --------------------------------------------------------------------------
 
 def document(data, template, body):
     title = data.get("page_title") or data.get("title") or "Converge"
@@ -282,7 +412,7 @@ def document(data, template, body):
     )
 
 
-RENDERERS = {"stocks": render_stocks}
+RENDERERS = {"stocks": render_stocks, "crypto": render_crypto}
 
 
 def render(name, data=None):

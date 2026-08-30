@@ -8,6 +8,8 @@
     "🕐 עודכן: 29 באוגוסט 2026 · 05:32 UTC",
     "🔁 עדכון יומי אוטומטי"
   ],
+  "brand_tagline": "Stock Intelligence",
+  "back_link": null,
   "as_of": "2026-08-29",
   "updated_time": "05:32 UTC",
   "run_note": "ℹ️ <b>הערת שקיפות להרצה של 29 באוגוסט 2026:</b> מכסת ה-WebSearch של הסשן (200 קריאות) ומכסת המפתח החינמי של Alpha Vantage (25 קריאות/יום) אזלו במהלך ההרצה — ראו פירוט מלא ב-§שקיפות ומגבלות בתחתית הדף. כתוצאה מכך: (1) לא התקבלו מחירים חיים חדשים היום לאף מניה — כל המחירים המוצגים מתויגים \"28.8, לא עודכן היום\" או \"לא זמין\"; (2) שכבה 1 נשמרה כפי שהייתה אתמול (לא אומתה מחדש היום); (3) טבלאות המתודולוגיה עודכנו עם 25 שורות חדשות מהרצה זו, בנוסף לשורות שאומתו בהרצות קודמות.",
@@ -355,7 +357,9 @@
             "cells": [
               {
                 "html": "MDB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "MongoDB"
@@ -370,14 +374,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "MDB",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "MDB",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "MRVL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Marvell Technology"
@@ -392,14 +400,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "MRVL",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "MRVL",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "META",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Meta Platforms"
@@ -414,14 +426,18 @@
                 "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
               }
             ],
-            "ticker": "META",
-            "sector": "תקשורת ומדיה"
+            "data": {
+              "data-ticker": "META",
+              "data-sector": "תקשורת ומדיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "AVGO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Broadcom"
@@ -436,14 +452,18 @@
                 "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
               }
             ],
-            "ticker": "AVGO",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "AVGO",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "AMAT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Applied Materials"
@@ -458,14 +478,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-applied-materials-amat-rating-160003573.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "AMAT",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "AMAT",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "UNH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "UnitedHealth Group"
@@ -480,14 +504,18 @@
                 "html": "<a href=\"https://simplywall.st/stocks/us/healthcare/nyse-unh/unitedhealth-group/news/unitedhealth-group-unh-joins-zacks-strong-buy-list-as-underv\">Simply Wall St/Zacks</a>"
               }
             ],
-            "ticker": "UNH",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "UNH",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "LLY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Eli Lilly"
@@ -502,14 +530,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/ratings/eli-lilly-co-strong-buy-rating-backed-by-robust-performance-and-growth-prospects-ratings\">TipRanks</a>"
               }
             ],
-            "ticker": "LLY",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "LLY",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "JPM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "JPMorgan Chase"
@@ -524,14 +556,18 @@
                 "html": "<a href=\"https://www.marketbeat.com/instant-alerts/jpmorgan-chase-co-nysejpm-upgraded-by-zacks-research-to-strong-buy-rating-2026-07-18/\">MarketBeat</a>"
               }
             ],
-            "ticker": "JPM",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "JPM",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "GSBC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Great Southern Bancorp"
@@ -546,14 +582,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/great-southern-bancorp-gsbc-upgraded-160004530.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "GSBC",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "GSBC",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "CZFS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Citizens Financial Services"
@@ -568,14 +608,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-citizens-financial-services-czfs-160001632.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "CZFS",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "CZFS",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "WSFS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "WSFS Financial"
@@ -590,14 +634,18 @@
                 "html": "<a href=\"https://www.zacks.com/stock/news/2883995/wsfs-wsfs-upgraded-to-strong-buy-heres-why\">Zacks</a>"
               }
             ],
-            "ticker": "WSFS",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "WSFS",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "V",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Visa"
@@ -612,14 +660,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "V",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "V",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "CVX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Chevron"
@@ -634,14 +686,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/ratings/chevrons-strategic-growth-and-shareholder-returns-drive-buy-rating\">TipRanks</a>"
               }
             ],
-            "ticker": "CVX",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "CVX",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "VLO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Valero Energy"
@@ -656,14 +712,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/know-valero-energy-vlo-rating-160003618.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "VLO",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "VLO",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CAT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Caterpillar"
@@ -678,14 +738,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/ratings/caterpillar-buy-rating-navigating-tariff-challenges-and-anticipating-2026-growth-ratings\">TipRanks</a>"
               }
             ],
-            "ticker": "CAT",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "CAT",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "VRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Vertiv Holdings"
@@ -700,14 +764,18 @@
                 "html": "<a href=\"https://www.zacks.com/stock/news/2966810/vertiv-vrt-upgraded-to-strong-buy-heres-what-you-should-know\">Zacks</a>"
               }
             ],
-            "ticker": "VRT",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "VRT",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "GEV",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "GE Vernova"
@@ -722,14 +790,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/vrt-vs-apld-vs-gev-which-strong-buy-data-center-infrastructure-stock-could-offer-the-best-upside\">TipRanks</a>"
               }
             ],
-            "ticker": "GEV",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "GEV",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "ZWS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Zurn Elkay Water Solutions"
@@ -744,14 +816,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/zurn-water-zws-upgraded-strong-160006117.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "ZWS",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "ZWS",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "UAL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "United Airlines"
@@ -766,14 +842,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/pdd-li-ual-3-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "UAL",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "UAL",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "KO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Coca-Cola"
@@ -788,14 +868,18 @@
                 "html": "<a href=\"https://www.msn.com/en-us/money/markets/meta-avgo-ko-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score/ar-AA1LEHXz\">TipRanks/MSN</a>"
               }
             ],
-            "ticker": "KO",
-            "sector": "צריכה בסיסית"
+            "data": {
+              "data-ticker": "KO",
+              "data-sector": "צריכה בסיסית"
+            }
           },
           {
             "cells": [
               {
                 "html": "WMT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Walmart"
@@ -810,14 +894,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "WMT",
-            "sector": "צריכה בסיסית"
+            "data": {
+              "data-ticker": "WMT",
+              "data-sector": "צריכה בסיסית"
+            }
           },
           {
             "cells": [
               {
                 "html": "DKNG",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "DraftKings"
@@ -832,14 +920,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/mdb-mrvl-dkng-3-strong-buy-rated-stocks-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "DKNG",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "DKNG",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "AMZN",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Amazon"
@@ -854,14 +946,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/amzn-wmt-v-3-top-rated-stocks-to-buy-now-with-a-perfect-10-smart-score\">TipRanks</a>"
               }
             ],
-            "ticker": "AMZN",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "AMZN",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "AEE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Ameren"
@@ -876,14 +972,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/ameren-aee-upgraded-buy-heres-160004619.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "AEE",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "AEE",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "QBTS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "D-Wave Quantum"
@@ -898,14 +998,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/news/tipranks-perfect-10s-unveiling-3-080000767.html\">TipRanks/Yahoo</a>"
               }
             ],
-            "ticker": "QBTS",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "QBTS",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "DY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Dycom Industries"
@@ -920,14 +1024,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes\">TipRanks</a>"
               }
             ],
-            "ticker": "DY",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "DY",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "NVDA",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Nvidia"
@@ -942,14 +1050,18 @@
                 "html": "<a href=\"https://www.tipranks.com/news/top-analysts-recommend-buying-nvidia-stock-nvda-see-strong-upside-in-2026\">TipRanks</a>"
               }
             ],
-            "ticker": "NVDA",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "NVDA",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "TER",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Teradyne"
@@ -964,14 +1076,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/news/3-zacks-strong-buy-stocks-163000467.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "TER",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "TER",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "GS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Goldman Sachs"
@@ -986,14 +1102,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/markets/stocks/articles/buy-3-top-ranked-big-124400728.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "GS",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "GS",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "BLK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "BlackRock"
@@ -1008,14 +1128,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "BLK",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "BLK",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "BK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bank of New York Mellon"
@@ -1030,14 +1154,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "BK",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "BK",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "STT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "State Street"
@@ -1052,14 +1180,18 @@
                 "html": "<a href=\"https://finance.yahoo.com/news/3-finance-stocks-buy-ahead-210800382.html\">Zacks/Yahoo</a>"
               }
             ],
-            "ticker": "STT",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "STT",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "NXRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "NexPoint Residential Trust"
@@ -1074,8 +1206,10 @@
                 "html": "<a href=\"https://www.theglobeandmail.com/investing/markets/stocks/NXRT-N/pressreleases/3714301/new-strong-buy-stocks-for-august-7th/\">Zacks/Globe and Mail</a>"
               }
             ],
-            "ticker": "NXRT",
-            "sector": "נדל\"ן"
+            "data": {
+              "data-ticker": "NXRT",
+              "data-sector": "נדל\"ן"
+            }
           }
         ],
         "notes": [
@@ -1111,7 +1245,9 @@
             "cells": [
               {
                 "html": "COP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "ConocoPhillips"
@@ -1126,14 +1262,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4904836-conocophillips-cop-stock-analysis-why-the-quant-system-says-strong-buy-2-minute-analysis\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "COP",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "COP",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CVX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Chevron"
@@ -1148,14 +1288,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4929164-chevron-top-2026-pick-for-higher-for-longer-oil-market\">Seeking Alpha/Fool</a>"
               }
             ],
-            "ticker": "CVX",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "CVX",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "XOM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Exxon Mobil"
@@ -1170,14 +1314,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4929286-exxon-mobil-continues-to-lead-over-chevron\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "XOM",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "XOM",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "WFC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Wells Fargo"
@@ -1192,14 +1340,18 @@
                 "html": "<a href=\"https://www.morningstar.com/stocks/wide-moat-wells-fargo-worth-look\">Morningstar</a>"
               }
             ],
-            "ticker": "WFC",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "WFC",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "GS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Goldman Sachs"
@@ -1214,14 +1366,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4937643-goldman-sachs-is-still-the-bank-to-buy\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "GS",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "GS",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "C",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Citigroup"
@@ -1236,14 +1392,18 @@
                 "html": "<a href=\"https://seekingalpha.com/news/4635917-citigroup-and-goldman-sachs-lead-as-most-financial-giants-earn-buy-growth-grades\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "C",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "C",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "BRK.B",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Berkshire Hathaway"
@@ -1258,14 +1418,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4934444-berkshire-hathaway-stock-getting-aggressive-reiterate-buy\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "BRK.B",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "BRK.B",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "PFE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Pfizer"
@@ -1280,14 +1444,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4886592-why-pfizer-remains-a-strong-buy-in-2026\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "PFE",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "PFE",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "JNJ",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Johnson &amp; Johnson"
@@ -1302,14 +1470,18 @@
                 "html": "<a href=\"https://stockanalysis.com/stocks/jnj/\">StockAnalysis.com</a>"
               }
             ],
-            "ticker": "JNJ",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "JNJ",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "NKE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Nike"
@@ -1324,14 +1496,18 @@
                 "html": "Morningstar"
               }
             ],
-            "ticker": "NKE",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "NKE",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "EL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Estée Lauder"
@@ -1346,14 +1522,18 @@
                 "html": "<a href=\"https://simplywall.st/stocks/us/household/nyse-el/estee-lauder-companies/news/3-stocks-possibly-trading-below-their-estimated-value-in-aug\">Simply Wall St</a>"
               }
             ],
-            "ticker": "EL",
-            "sector": "צריכה בסיסית"
+            "data": {
+              "data-ticker": "EL",
+              "data-sector": "צריכה בסיסית"
+            }
           },
           {
             "cells": [
               {
                 "html": "GPC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Genuine Parts Company"
@@ -1368,14 +1548,18 @@
                 "html": "<a href=\"https://simplywall.st/stocks/us/consumer-durables/nyse-gpc/genuine-parts/news/genuine-parts-gpc-stock-may-be-45-undervalued-as-cash-flow\">Simply Wall St</a>"
               }
             ],
-            "ticker": "GPC",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "GPC",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "HON",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Honeywell"
@@ -1390,14 +1574,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4864270-honeywell-q4-earnings-review-margin-expansion-is-just-beginning\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "HON",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "HON",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CAT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Caterpillar"
@@ -1412,14 +1600,18 @@
                 "html": "<a href=\"https://247wallst.com/investing/2026/02/19/caterpillar-honeywell-and-chevron-lead-the-dow-jones-in-2026/\">24/7 Wall St</a>"
               }
             ],
-            "ticker": "CAT",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "CAT",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "NEE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "NextEra Energy"
@@ -1434,14 +1626,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4938582-next-era-energy-stock-dip-buying-opportunity\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "NEE",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "NEE",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "DUK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Duke Energy"
@@ -1456,14 +1652,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "DUK",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "DUK",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "SO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Southern Company"
@@ -1478,14 +1678,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4933752-southern-company-and-duke-energy-utilities-with-long-term-potential\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "SO",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "SO",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "KO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Coca-Cola"
@@ -1500,14 +1704,18 @@
                 "html": "<a href=\"https://seekingalpha.com/news/4636195-coca-cola-leads-consumer-staples-growth-rankings-pg-altria-lag\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "KO",
-            "sector": "צריכה בסיסית"
+            "data": {
+              "data-ticker": "KO",
+              "data-sector": "צריכה בסיסית"
+            }
           },
           {
             "cells": [
               {
                 "html": "GOOGL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Alphabet"
@@ -1522,14 +1730,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4853715-googl-stock-a-plus-profitability-and-a-plus-momentum-2-minute-analysis\">Seeking Alpha/Simply Wall St</a>"
               }
             ],
-            "ticker": "GOOGL",
-            "sector": "תקשורת ומדיה"
+            "data": {
+              "data-ticker": "GOOGL",
+              "data-sector": "תקשורת ומדיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "FCX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Freeport-McMoRan"
@@ -1544,14 +1756,18 @@
                 "html": "<a href=\"https://seekingalpha.com/article/4909533-freeport-mcmoran-stock-robust-pipeline-significant-long-term-potential-make-it-buy\">Seeking Alpha</a>"
               }
             ],
-            "ticker": "FCX",
-            "sector": "חומרים"
+            "data": {
+              "data-ticker": "FCX",
+              "data-sector": "חומרים"
+            }
           },
           {
             "cells": [
               {
                 "html": "FSBC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Five Star Bancorp"
@@ -1566,14 +1782,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "FSBC",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "FSBC",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "RM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Regional Management Corp"
@@ -1588,14 +1808,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "RM",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "RM",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "SYM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Symbotic"
@@ -1610,14 +1834,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "SYM",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "SYM",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CSCO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cisco Systems"
@@ -1632,14 +1860,18 @@
                 "html": "<a href=\"https://simplywall.st/stocks/us/tech/nasdaq-csco/cisco-systems/news/cisco-csco-stock-still-looks-undervalued-as-its-3-year-ga\">Simply Wall St/GuruFocus</a>"
               }
             ],
-            "ticker": "CSCO",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "CSCO",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "KKR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "KKR &amp; Co."
@@ -1654,14 +1886,18 @@
                 "html": "<a href=\"https://www.gurufocus.com/term/DebtToEquity/KKR\">Simply Wall St/GuruFocus</a>"
               }
             ],
-            "ticker": "KKR",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "KKR",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "SCHW",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Charles Schwab"
@@ -1676,14 +1912,18 @@
                 "html": "Morningstar"
               }
             ],
-            "ticker": "SCHW",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "SCHW",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "BMY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bristol-Myers Squibb"
@@ -1698,14 +1938,18 @@
                 "html": "24/7 Wall St"
               }
             ],
-            "ticker": "BMY",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "BMY",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "MDLZ",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Mondelez International"
@@ -1720,14 +1964,18 @@
                 "html": "<a href=\"https://bigdata.com\">Morningstar/Bigdata.com</a>"
               }
             ],
-            "ticker": "MDLZ",
-            "sector": "צריכה בסיסית"
+            "data": {
+              "data-ticker": "MDLZ",
+              "data-sector": "צריכה בסיסית"
+            }
           },
           {
             "cells": [
               {
                 "html": "BLMN",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bloomin' Brands"
@@ -1742,14 +1990,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "BLMN",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "BLMN",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "HAE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Haemonetics"
@@ -1764,14 +2016,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "HAE",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "HAE",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "BE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bloom Energy"
@@ -1786,14 +2042,18 @@
                 "html": "Simply Wall St"
               }
             ],
-            "ticker": "BE",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "BE",
+              "data-sector": "אנרגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "UAL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "United Airlines"
@@ -1808,14 +2068,18 @@
                 "html": "TipRanks"
               }
             ],
-            "ticker": "UAL",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "UAL",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "The Cigna Group"
@@ -1830,14 +2094,18 @@
                 "html": "TipRanks/GuruFocus"
               }
             ],
-            "ticker": "CI",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "CI",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "MSTR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Strategy (MicroStrategy)"
@@ -1852,14 +2120,18 @@
                 "html": "TipRanks"
               }
             ],
-            "ticker": "MSTR",
-            "sector": "טכנולוגיה"
+            "data": {
+              "data-ticker": "MSTR",
+              "data-sector": "טכנולוגיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "SM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "SM Energy Company"
@@ -1874,8 +2146,10 @@
                 "html": "Finviz News"
               }
             ],
-            "ticker": "SM",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "SM",
+              "data-sector": "אנרגיה"
+            }
           }
         ],
         "notes": [
@@ -1911,7 +2185,9 @@
             "cells": [
               {
                 "html": "ABT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Abbott Laboratories"
@@ -1926,14 +2202,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/02/12/abbott-labs-healthcare-dividend-stock-id-hold/\">Motley Fool</a>"
               }
             ],
-            "ticker": "ABT",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "ABT",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "BMY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bristol-Myers Squibb"
@@ -1948,14 +2228,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/\">Motley Fool</a>"
               }
             ],
-            "ticker": "BMY",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "BMY",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "MDT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Medtronic"
@@ -1970,14 +2254,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/03/05/top-healthcare-dividend-stocks-buy-hold-bmy-mdt/\">Motley Fool</a>"
               }
             ],
-            "ticker": "MDT",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "MDT",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "ISRG",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Intuitive Surgical"
@@ -1992,14 +2280,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/02/16/my-1-top-ai-healthcare-stock-to-buy-and-hold-isrg/\">Motley Fool</a>"
               }
             ],
-            "ticker": "ISRG",
-            "sector": "בריאות"
+            "data": {
+              "data-ticker": "ISRG",
+              "data-sector": "בריאות"
+            }
           },
           {
             "cells": [
               {
                 "html": "GEV",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "GE Vernova"
@@ -2014,14 +2306,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/05/27/best-industrial-energy-stocks-buy-hold-gev/\">Motley Fool</a>"
               }
             ],
-            "ticker": "GEV",
-            "sector": "תשתיות ציבוריות"
+            "data": {
+              "data-ticker": "GEV",
+              "data-sector": "תשתיות ציבוריות"
+            }
           },
           {
             "cells": [
               {
                 "html": "LIN",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Linde plc"
@@ -2036,14 +2332,18 @@
                 "html": "<a href=\"https://www.fool.com/investing/2026/05/13/3-materials-stocks-to-buy-before-next-industrial/\">Motley Fool</a>"
               }
             ],
-            "ticker": "LIN",
-            "sector": "חומרים"
+            "data": {
+              "data-ticker": "LIN",
+              "data-sector": "חומרים"
+            }
           },
           {
             "cells": [
               {
                 "html": "BRK.B",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Berkshire Hathaway"
@@ -2058,14 +2358,18 @@
                 "html": "<a href=\"https://www.morningstar.com/stocks/best-companies-own-2026-edition\">Morningstar</a>"
               }
             ],
-            "ticker": "BRK.B",
-            "sector": "פיננסים"
+            "data": {
+              "data-ticker": "BRK.B",
+              "data-sector": "פיננסים"
+            }
           },
           {
             "cells": [
               {
                 "html": "NKE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Nike"
@@ -2080,14 +2384,18 @@
                 "html": "Morningstar"
               }
             ],
-            "ticker": "NKE",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "NKE",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "DIS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Walt Disney"
@@ -2102,14 +2410,18 @@
                 "html": "Morningstar/Barron's"
               }
             ],
-            "ticker": "DIS",
-            "sector": "תקשורת ומדיה"
+            "data": {
+              "data-ticker": "DIS",
+              "data-sector": "תקשורת ומדיה"
+            }
           },
           {
             "cells": [
               {
                 "html": "AMZN",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Amazon.com"
@@ -2124,14 +2436,18 @@
                 "html": "Barron's (via X/Dividend Talks)"
               }
             ],
-            "ticker": "AMZN",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "AMZN",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "DASH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "DoorDash"
@@ -2146,14 +2462,18 @@
                 "html": "Barron's (via intellectia.ai)"
               }
             ],
-            "ticker": "DASH",
-            "sector": "צריכה מחזורית"
+            "data": {
+              "data-ticker": "DASH",
+              "data-sector": "צריכה מחזורית"
+            }
           },
           {
             "cells": [
               {
                 "html": "UPS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "United Parcel Service"
@@ -2168,14 +2488,18 @@
                 "html": "Motley Fool (סינדוק Globe and Mail)"
               }
             ],
-            "ticker": "UPS",
-            "sector": "תעשייה"
+            "data": {
+              "data-ticker": "UPS",
+              "data-sector": "תעשייה"
+            }
           },
           {
             "cells": [
               {
                 "html": "CVX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Chevron"
@@ -2190,8 +2514,10 @@
                 "html": "Motley Fool"
               }
             ],
-            "ticker": "CVX",
-            "sector": "אנרגיה"
+            "data": {
+              "data-ticker": "CVX",
+              "data-sector": "אנרגיה"
+            }
           }
         ],
         "notes": [
@@ -2607,19 +2933,27 @@
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           }
         ]
       },
@@ -2630,19 +2964,27 @@
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "חלקי",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "חלקי",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           }
         ]
       },
@@ -2653,19 +2995,27 @@
           },
           {
             "html": "מושהה/מוגבל",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           }
         ]
       },
@@ -2676,19 +3026,27 @@
           },
           {
             "html": "חלקי",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "חלקי",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           }
         ]
       },
@@ -2699,19 +3057,27 @@
           },
           {
             "html": "✓ Bigdata.com",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "חלקי",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           }
         ]
       },
@@ -2722,19 +3088,27 @@
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✗",
-            "class": "check-n"
+            "attrs": {
+              "class": "check-n"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "✓",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           }
         ]
       },
@@ -2745,7 +3119,9 @@
           },
           {
             "html": "חינם",
-            "class": "check-y"
+            "attrs": {
+              "class": "check-y"
+            }
           },
           {
             "html": "$0-40"

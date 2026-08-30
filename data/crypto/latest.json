@@ -8,11 +8,41 @@
     "🗕 עודכן: 20 אוגוסט 2026",
     "🔁 פעמיים ביום 08:00+15:30"
   ],
+  "brand_tagline": "Crypto Intelligence",
+  "back_link": {
+    "href": "index.html",
+    "label": "📈 חזרה לדשבורד המניות"
+  },
   "as_of": "2026-08-20",
   "updated_time": "08:00",
   "run_note": null,
   "disclaimer": "⚠️ <b>לא ייעוץ השקעות.</b> מידע בלבד, אינו המץצה אישית. שוק הקריפטו תנודתי ביותר.",
   "footer": "<p>דשבורד זה נבנה עבור מעקב אישי בלבד, אינו ייעוץ השקעות. מתעדכן אוטומטית פעמיים ביום דרך GitHub Pages.</p>",
+  "quicknav": {
+    "search_placeholder": "🔍 חיפוש טיקר או ברוד",
+    "links": [
+      {
+        "href": "#tier1",
+        "label": "🏆 שכבה 1"
+      },
+      {
+        "href": "#tier2",
+        "label": "⭐ שכבה משנית"
+      },
+      {
+        "href": "#tables",
+        "label": "📋 טבלה מלאה"
+      },
+      {
+        "href": "#sentiment",
+        "label": "📊 סנטימנט"
+      },
+      {
+        "href": "#methodology",
+        "label": "🔬 מתודולוגיה"
+      }
+    ]
+  },
   "kpis": [
     {
       "value": "48",
@@ -35,10 +65,13 @@
     "title": "שכבה 1 — המטבעות המובילים",
     "icon": "🏆",
     "subtitle": "10 המטבעות ההדיגיטליים בעלי שווי שוק ונזילות הגבוהים ביותר, עם ניקוד קונברגנס המבוסס איחוד תובנות ממחקר מוסדי, נתוני און-צ׳יין ועיתונות קריפטו-נייטיבית.",
+    "icon_gap": true,
+    "grid_class": "tier1-grid",
     "cards": [
       {
         "ticker": "BTC",
         "name": "Bitcoin · אחסון ערך דיגיטלי",
+        "variant": null,
         "query": "btc bitcoin — ביטקוין",
         "price": {
           "raw": "$64,350.93",
@@ -60,24 +93,30 @@
           }
         ],
         "rationale": "דעות המוסדות מפוצלות בחדות: סיטי הורידה יעד ל-12 חודשים ל-82,000$ (מ-112,000$) על רקע האטה בזרימות ה-ETF, בעוד ברנשטיין שומרת על יעד 150,000$ לסוף 2026. נתוני CryptoQuant מצביעים על צבירת \"לווייתנים\" מתמשכת מעל מחיר המימוש (כ-52,900$). זרימות ה-ETF תנודתיות: שבוע חיובי של 853.5M$ (7/8) התהפך לפדיון גדול (17/8).",
+        "risk_note": "⚠️ פריצת אבטחה: כ-116-130M$ נגנבו מארנקי חומרה Coldcard (30/7–4/8) עקב באג ב-RNG בקושחה; משפיע על אמון במשמורת עצמית. גם: הצעת SEC למסגרת \"Regulation Crypto\" (18/8) עדיין בתהליך.",
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — Citi מוריד יעד",
-            "url": "https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up"
+            "url": "https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up",
+            "target": "_blank"
           },
           {
             "name": "TRM Labs — פריצת Coldcard",
-            "url": "https://www.trmlabs.com/resources/blog/the-largest-hardware-wallet-exploit-of-2026-inside-the-usd-116-million-coldcard-hack"
+            "url": "https://www.trmlabs.com/resources/blog/the-largest-hardware-wallet-exploit-of-2026-inside-the-usd-116-million-coldcard-hack",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — נתוני שרשרת",
-            "url": "https://defillama.com/chains"
+            "url": "https://defillama.com/chains",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "ETH",
         "name": "Ethereum · חוזים חכמים",
+        "variant": null,
         "query": "eth ethereum — את׳ריום",
         "price": {
           "raw": "$1,920.86",
@@ -99,24 +138,30 @@
           }
         ],
         "rationale": "את׳ריום מובילה את כל השרשראות ב-TVL (41.6B$, +0.32% ב-24 שעות) עם 562K כתובות פעילות ביום. סיטי הורידה יעד 12 חודשים ל-2,240$ (מ-3,175$), סטנדרד צ׳רטרד ל-4,000$. BlackRock השיקה שני קרנות אג\"ח ממשלתיות מטוקנזות על הרשת, ודיון EIP סוער סביב שינוי מדיניות ההנפקה מטריד מפתחי DeFi.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "DefiLlama — Ethereum TVL",
-            "url": "https://defillama.com/chain/ethereum"
+            "url": "https://defillama.com/chain/ethereum",
+            "target": "_blank"
           },
           {
             "name": "CoinDesk — סיטי מוריד יעדים",
-            "url": "https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up"
+            "url": "https://www.coindesk.com/markets/2026/07/01/citi-slashes-12-month-bitcoin-ether-targets-as-etf-flows-dry-up",
+            "target": "_blank"
           },
           {
             "name": "Bankless — דיון הנפקה חדש",
-            "url": "https://www.bankless.com/read/breaking-down-ethereums-new-issuance-debate"
+            "url": "https://www.bankless.com/read/breaking-down-ethereums-new-issuance-debate",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "SOL",
         "name": "Solana · שכבה-1 מהירה",
+        "variant": null,
         "query": "sol solana — סולנה",
         "price": {
           "raw": "$77.3000",
@@ -138,24 +183,30 @@
           }
         ],
         "rationale": "סולנה מובילה את ביטקוין ואת׳ריום מעלה נכון להיום (19/8) חרף חולשה במניות שבבים קוריאניות. הכנסות אפליקציות (8.52M$/יום) בין הגבוהות מכל השרשראות, עם עמלה ממוצעת נמוכה במיוחד (0.0041$). הצעת ממשל חדשה תעלה את שריפת ה-SOL היומית מ-47K$ ל-650K$ — מהלך דפלציוני משמעותי. סטנדרד צ׳רטרד הורידה יעד ל-135$.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — סולנה מובילה",
-            "url": "https://www.coindesk.com/markets/2026/08/19/solana-leads-bitcoin-and-ether-higher-while-korean-chip-stocks-slide-7"
+            "url": "https://www.coindesk.com/markets/2026/08/19/solana-leads-bitcoin-and-ether-higher-while-korean-chip-stocks-slide-7",
+            "target": "_blank"
           },
           {
             "name": "CoinDesk — הצעת שריפה",
-            "url": "https://www.coindesk.com/tech/2026/08/04/a-new-solana-proposal-would-take-daily-sol-burns-from-usd47-000-to-usd650-000"
+            "url": "https://www.coindesk.com/tech/2026/08/04/a-new-solana-proposal-would-take-daily-sol-burns-from-usd47-000-to-usd650-000",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Solana",
-            "url": "https://defillama.com/chain/solana"
+            "url": "https://defillama.com/chain/solana",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "XRP",
         "name": "XRP · תשלומים חוצי-גבולות",
+        "variant": null,
         "query": "xrp xrp — תשלומים חוצי-גבולות",
         "price": {
           "raw": "$1.0100",
@@ -177,24 +228,30 @@
           }
         ],
         "rationale": "XRP חצה את רף ה-1$ לראשונה מאז 2024 (13/8). סטנדרד צ׳רטרד שומרת על יעד ארוך טווח 28$ עד 2030; מנהל ההשקעות הראשי של Bitwise צופה 6.53$ עד סוף 2026 בתרחיש שורי המבוסס על טוקניזציה. עסקאות לווייתנים מעל 1M$ זינקו 280% ב-24 שעות (18/8) — איתות לצבירה שקטה.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "24/7 Wall St. — יעד סטנדרד צ׳רטרד",
-            "url": "https://247wallst.com/investing/cryptocurrency/2026/06/27/standard-chartered-says-xrp-hits-28-by-2030-but-ripples-own-stablecoin-may-have-other-plans/"
+            "url": "https://247wallst.com/investing/cryptocurrency/2026/06/27/standard-chartered-says-xrp-hits-28-by-2030-but-ripples-own-stablecoin-may-have-other-plans/",
+            "target": "_blank"
           },
           {
             "name": "TheCryptoBasic — זינוק לווייתנים",
-            "url": "https://thecryptobasic.com/2026/08/18/xrp-whales-are-back-1m-transactions-surge-280-as-price-trades-at-73-discount/"
+            "url": "https://thecryptobasic.com/2026/08/18/xrp-whales-are-back-1m-transactions-surge-280-as-price-trades-at-73-discount/",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — XRPL",
-            "url": "https://defillama.com/chain/xrpl"
+            "url": "https://defillama.com/chain/xrpl",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "AVAX",
         "name": "Avalanche · תת-רשתות",
+        "variant": null,
         "query": "avax avalanche — אבלאנץ׳",
         "price": {
           "raw": "$6.3600",
@@ -216,20 +273,25 @@
           }
         ],
         "rationale": "סטנדרד צ׳רטרד הורידה בחדות את יעד 2026 ל-18$ (מ-100$) בעדכון פברואר — אחת ההורדות החדות ביותר מבין הנכסים המכוסים. ה-TVL של אבלאנץ׳ (413-417M$) ירד כ-3.5% ב-30 יום, ופעילות הרשת (115.6K כתובות פעילות) נותרה מתונה יחסית לשכבות-1 מתחרות.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — הורדת יעדים סטנדרד צ׳רטרד",
-            "url": "https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery"
+            "url": "https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Avalanche",
-            "url": "https://defillama.com/chain/avalanche"
+            "url": "https://defillama.com/chain/avalanche",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "LINK",
         "name": "Chainlink · רשת אורקלים",
+        "variant": null,
         "query": "link chainlink — רשת אורקלים",
         "price": {
           "raw": "$9.8000",
@@ -251,20 +313,25 @@
           }
         ],
         "rationale": "סטנדרד צ׳רטרד קבעה יעד חדש ל-2030: 200$ (עדכון 10/8), הנשען על תזה טוקניזציה של 4 טריליון דולר ולקוחות מוסדיים בשמם (SWIFT, DTCC, Euroclear, JPMorgan, Mastercard). ה-TVS (ערך מאובטח כולל) של הפרוטוקול הגיע ל-33.1B$ ב-505 פרוטוקולים; CCIP עיבד 18B$ ברבעון הראשון של 2026 (+319% שנה-על-שנה).",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "Decrypt — יעד 200$ לצ׳יינלינק",
-            "url": "https://decrypt.co/375189/standard-chartered-sees-4t-tokenization-driving-chainlink-to-200-by-2030"
+            "url": "https://decrypt.co/375189/standard-chartered-sees-4t-tokenization-driving-chainlink-to-200-by-2030",
+            "target": "_blank"
           },
           {
             "name": "CoinLaw — נתוני Chainlink 2026",
-            "url": "https://coinlaw.io/chainlink-statistics/"
+            "url": "https://coinlaw.io/chainlink-statistics/",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "AAVE",
         "name": "Aave · הלוואות DeFi מובילות",
+        "variant": null,
         "query": "aave aave — פרוטוקול הלוואות defi",
         "price": {
           "raw": "$87.9500",
@@ -286,20 +353,25 @@
           }
         ],
         "rationale": "סטנדרד צ׳רטרד שבה ואישרה יעד 3,500$ עד 2030 (24/6) על רקע \"התחדשות DeFi\". ה-TVL של Aave (14.99B$, +5.6% ב-30 יום) עדיין מרוכז באת׳ריום (83.2%). הצבעת ממשל דרמטית באפריל (13/4) הכריעה מאבק ארוך על שליטה בהכנסות הפרוטוקול — סימן לבשלות ממשלית.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — יעד 3,500$",
-            "url": "https://www.coindesk.com/markets/2026/06/24/aave-could-soar-to-usd3-500-by-2030-on-defi-revival-says-stanchart"
+            "url": "https://www.coindesk.com/markets/2026/06/24/aave-could-soar-to-usd3-500-by-2030-on-defi-revival-says-stanchart",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Aave",
-            "url": "https://defillama.com/protocol/aave"
+            "url": "https://defillama.com/protocol/aave",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "SUI",
         "name": "Sui · מבוסס Move",
+        "variant": null,
         "query": "sui sui — סוואי",
         "price": {
           "raw": "$0.657800",
@@ -321,20 +393,25 @@
           }
         ],
         "rationale": "סוואי השיקה סטייבלקוין ילידי USDsui (4/3) עם הבטחה להזרים תשואת אג\"ח ממשלתיות חזרה לאקוסיסטם. ה-TVL (כ-400-403M$) נותר יציב יחסית אך ירד כ-2.7%-9.5% על פני 7-30 יום. לא נמצאו יעדי מחיר ספציפיים ממוסדות המכוסים בסקירה זו — פער מידע לתשומת לב.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — סטייבלקוין USDsui",
-            "url": "https://www.coindesk.com/business/2026/03/04/sui-s-native-stablecoin-goes-live-with-promise-of-treasury-yield-going-back-to-the-network"
+            "url": "https://www.coindesk.com/business/2026/03/04/sui-s-native-stablecoin-goes-live-with-promise-of-treasury-yield-going-back-to-the-network",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Sui",
-            "url": "https://defillama.com/chain/sui"
+            "url": "https://defillama.com/chain/sui",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "HYPE",
         "name": "Hyperliquid · בורסת נגזרים",
+        "variant": null,
         "query": "hype hyperliquid — הייפרליקוויד",
         "price": {
           "raw": "$58.3800",
@@ -356,16 +433,20 @@
           }
         ],
         "rationale": "היפרליקוויד ממשיכה לשלוט בנפח מסחר נגזרים און-צ׳יין: 6.19B$ בנפח פרפ ב-24 שעות מול 155.35M$ בלבד בנפח ספוט — יחס המדגיש את מעמדה כזירת הנגזרים המבוזרת המובילה. TVL של 1.25-1.27B$ עם הכנסות אפליקציה גבוהות יחסית (1.12M$/יום).",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "DefiLlama — Hyperliquid L1",
-            "url": "https://defillama.com/chain/hyperliquid-l1"
+            "url": "https://defillama.com/chain/hyperliquid-l1",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "BNB",
         "name": "BNB · אקוסיסטם Binance",
+        "variant": null,
         "query": "bnb bnb — אקוסיסטם binance",
         "price": {
           "raw": "$602.3300",
@@ -387,14 +468,18 @@
           }
         ],
         "rationale": "סטנדרד צ׳רטרד הורידה יעד 2026 ל-1,050$ (מ-1,755$) בעדכון פברואר. שרשרת BSC מדורגת שנייה בהכנסות און-צ׳יין (כ-755.5K$/יום) אחרי טרון, עם פעילות ענפה של 2.19M כתובות פעילות ו-18.72M עסקאות ב-24 שעות. שווי שוק סטייבלקוינים על השרשרת: 13.37B$.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — הורדת יעדים",
-            "url": "https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery"
+            "url": "https://www.coindesk.com/markets/2026/02/12/standard-chartered-sees-bitcoin-sliding-to-usd50-000-ether-to-usd1-400-before-recovery",
+            "target": "_blank"
           },
           {
             "name": "Chainspect — פיננסים",
-            "url": "https://chainspect.app/dashboard/financials"
+            "url": "https://chainspect.app/dashboard/financials",
+            "target": "_blank"
           }
         ]
       }
@@ -404,10 +489,13 @@
     "title": "שכבה משנית — מועמדים בולטים",
     "icon": "⭐",
     "subtitle": "4 מטבעות נוספים במעקב הדוק בשל מומנטום מוסדי, פעילות פרוטוקול או סיכוני ממשל בולטים.",
+    "icon_gap": true,
+    "grid_class": "tier2-grid",
     "cards": [
       {
         "ticker": "TON",
         "name": "Toncoin · אקוסיסטם Telegram",
+        "variant": "tier2",
         "query": "ton toncoin — טונקוין",
         "price": {
           "raw": "$1.3200",
@@ -422,19 +510,28 @@
           {
             "text": "TVL 54.8M$",
             "kind": null
+          },
+          {
+            "text": "שכבה משנית",
+            "kind": "tier-tag",
+            "bare": true
           }
         ],
         "rationale": "TVL קטן יחסית (54.8M$, -2.07% ב-24 שעות) אך פעילות משתמשים גבוהה: 136K כתובות פעילות ו-3.36M עסקאות ביום. שווי שוק סטייבלקוינים 815.65M$ עם דומיננטיות USDT (83.4%).",
+        "risk_note": "⚠️ מקור נתונים אחד הציג שינוי מיתוג לא מאומת ל-\"Gram\" (GRAM) — לא אושר ממקור רשמי; יש להתייחס בזהירות עד לאימות.",
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "DefiLlama — TON",
-            "url": "https://defillama.com/chain/ton"
+            "url": "https://defillama.com/chain/ton",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "ONDO",
         "name": "Ondo · נכסים מוטוקנזים (RWA)",
+        "variant": "tier2",
         "query": "ondo ondo — נכסים מוטוקנזים (rwa)",
         "price": {
           "raw": "$0.324800",
@@ -449,23 +546,33 @@
           {
             "text": "TVL 3.46B$",
             "kind": null
+          },
+          {
+            "text": "שכבה משנית",
+            "kind": "tier-tag",
+            "bare": true
           }
         ],
         "rationale": "TVL של 3.46B$ (-1.4% ב-30 יום) פרוס על פני את׳ריום (54.1%), Stellar, BSC ו-Sei — אסטרטגיית RWA רב-שרשרתית סביב חשיפה לאג\"ח ממשלתיות קצרות טווח.",
+        "risk_note": "⚠️ סיכון ממשל תאגידי גבוה: מאבק שליטה בהנהלה בעקבות פטירת המייסד (6/8); שוקלת רכישה בהיקף עד 500M$ (30/7); זנחה תוכנית בלוקצ׳יין ייעודי לטובת רשת מסחר פרטית (28/7).",
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — מאבק שליטה",
-            "url": "https://www.coindesk.com/policy/2026/08/06/power-struggle-erupts-at-ondo-finance-after-founder-s-death"
+            "url": "https://www.coindesk.com/policy/2026/08/06/power-struggle-erupts-at-ondo-finance-after-founder-s-death",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Ondo Finance",
-            "url": "https://defillama.com/protocol/ondo-finance"
+            "url": "https://defillama.com/protocol/ondo-finance",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "UNI",
         "name": "Uniswap · בורסה מבוזרת מובילה",
+        "variant": "tier2",
         "query": "uni uniswap — בורסה מבוזרת",
         "price": {
           "raw": "$3.2900",
@@ -480,23 +587,33 @@
           {
             "text": "נפח DEX 43B$/30י",
             "kind": null
+          },
+          {
+            "text": "שכבה משנית",
+            "kind": "tier-tag",
+            "bare": true
           }
         ],
         "rationale": "TVL של 2.93B$ (-7% ב-30 יום) עם נפח מסחר 43.25B$ ב-30 יום. סטנדרד צ׳רטרד קבעה יעד 100$ עד 2030. BlackRock רשמה את קרן ה-BUIDL על יוניסוואפ (11/2), צעד ה-DeFi הראשון שלה שהניע זינוק חד במחיר בזמנו.",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — BlackRock ו-BUIDL",
-            "url": "https://www.coindesk.com/markets/2026/02/11/blackrock-takes-first-defi-step-lists-buidl-on-uniswap-as-uni-jumps-25"
+            "url": "https://www.coindesk.com/markets/2026/02/11/blackrock-takes-first-defi-step-lists-buidl-on-uniswap-as-uni-jumps-25",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Uniswap",
-            "url": "https://defillama.com/protocol/uniswap"
+            "url": "https://defillama.com/protocol/uniswap",
+            "target": "_blank"
           }
         ]
       },
       {
         "ticker": "MORPHO",
         "name": "Morpho · תשתית הלוואות DeFi",
+        "variant": "tier2",
         "query": "morpho morpho — תשתית הלוואות defi",
         "price": {
           "raw": "$2.0200",
@@ -511,17 +628,26 @@
           {
             "text": "TVL +9.4%/30י",
             "kind": null
+          },
+          {
+            "text": "שכבה משנית",
+            "kind": "tier-tag",
+            "bare": true
           }
         ],
         "rationale": "TVL של 8.18B$ (+9.4% ב-30 יום), מרוכז באת׳ריום ו-Base (כ-86% ביחד). סטנדרד צ׳רטרד פתחה כיסוי (1/7) עם יעד 60$ עד 2030. Apollo (ענקית וול סטריט) העמיקה את הכניסה שלה ל-DeFi בעסקת טוקן מורפו (15/2).",
+        "risk_note": null,
+        "sources_prefix": "מקורות:",
         "sources": [
           {
             "name": "CoinDesk — יעד סטנדרד צ׳רטרד",
-            "url": "https://www.coindesk.com/markets/2026/07/01/morpho-poised-to-scale-as-defi-infrastructure-play-standard-chartered-says"
+            "url": "https://www.coindesk.com/markets/2026/07/01/morpho-poised-to-scale-as-defi-infrastructure-play-standard-chartered-says",
+            "target": "_blank"
           },
           {
             "name": "DefiLlama — Morpho",
-            "url": "https://defillama.com/protocol/morpho"
+            "url": "https://defillama.com/protocol/morpho",
+            "target": "_blank"
           }
         ]
       }
@@ -531,28 +657,41 @@
     "title": "טבלה מלאה — אוניברסיטת 48 מטבעות",
     "icon": "📋",
     "subtitle": "כל 48 המטבעות הנעקבים, מסודרים ב-7 קטגוריות. לחיצה על כותרת עמודה ממיינת; תיבת החיפוש למעלה מסננת בזמן אמת; כל טאב ניתן לייצוא כ-CSV.",
-    "groups": {
-      "all": {
+    "icon_gap": true,
+    "tabs": [
+      {
+        "key": "all",
+        "label": "הכל (48)",
+        "caption": "כל המטבעות במעקב · 48 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-all",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -564,7 +703,9 @@
             "cells": [
               {
                 "html": "BTC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bitcoin — ביטקוין"
@@ -574,22 +715,33 @@
               },
               {
                 "html": "$64,350.93",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "64350.93"
+                }
               },
               {
                 "html": "$1291.60B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1291602558417"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "btc bitcoin — ביטקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "ETH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Ethereum — את׳ריום"
@@ -599,22 +751,33 @@
               },
               {
                 "html": "$1,920.86",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1920.86"
+                }
               },
               {
                 "html": "$231.81B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "231808577840"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "eth ethereum — את׳ריום"
+            }
           },
           {
             "cells": [
               {
                 "html": "SOL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Solana — סולנה"
@@ -624,22 +787,33 @@
               },
               {
                 "html": "$77.3000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "77.3"
+                }
               },
               {
                 "html": "$45.06B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "45063481124"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sol solana — סולנה"
+            }
           },
           {
             "cells": [
               {
                 "html": "AVAX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Avalanche — אבלאנץ׳"
@@ -649,22 +823,33 @@
               },
               {
                 "html": "$6.3600",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6.36"
+                }
               },
               {
                 "html": "$2.75B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2745361210"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "avax avalanche — אבלאנץ׳"
+            }
           },
           {
             "cells": [
               {
                 "html": "SUI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Sui — סוואי"
@@ -674,22 +859,33 @@
               },
               {
                 "html": "$0.657800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.6578"
+                }
               },
               {
                 "html": "$2.68B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2680070580"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sui sui — סוואי"
+            }
           },
           {
             "cells": [
               {
                 "html": "HYPE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Hyperliquid — הייפרליקוויד"
@@ -699,22 +895,33 @@
               },
               {
                 "html": "$58.3800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "58.38"
+                }
               },
               {
                 "html": "$12.99B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "12987420045"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "hype hyperliquid — הייפרליקוויד"
+            }
           },
           {
             "cells": [
               {
                 "html": "TON",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Toncoin — טונקוין"
@@ -724,22 +931,33 @@
               },
               {
                 "html": "$1.3200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.32"
+                }
               },
               {
                 "html": "$3.64B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3635881813"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ton toncoin — טונקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "NEAR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "NEAR Protocol"
@@ -749,22 +967,33 @@
               },
               {
                 "html": "$1.6100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.61"
+                }
               },
               {
                 "html": "$2.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2093428138"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "near near protocol"
+            }
           },
           {
             "cells": [
               {
                 "html": "ADA",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cardano — קרדנו"
@@ -774,22 +1003,33 @@
               },
               {
                 "html": "$0.174200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1742"
+                }
               },
               {
                 "html": "$6.53B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6530584293"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ada cardano — קרדנו"
+            }
           },
           {
             "cells": [
               {
                 "html": "DOT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Polkadot — פולקדוט"
@@ -799,22 +1039,33 @@
               },
               {
                 "html": "$0.762900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.7629"
+                }
               },
               {
                 "html": "$1.30B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1295638249"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "dot polkadot — פולקדוט"
+            }
           },
           {
             "cells": [
               {
                 "html": "ATOM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cosmos Hub — קוסמוס"
@@ -824,22 +1075,33 @@
               },
               {
                 "html": "$1.4100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.41"
+                }
               },
               {
                 "html": "$740.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "740454208"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "atom cosmos hub — קוסמוס"
+            }
           },
           {
             "cells": [
               {
                 "html": "BCH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bitcoin Cash"
@@ -849,22 +1111,33 @@
               },
               {
                 "html": "$203.5300",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "203.53"
+                }
               },
               {
                 "html": "$4.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "4086094744"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bch bitcoin cash"
+            }
           },
           {
             "cells": [
               {
                 "html": "APT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Aptos — אפטוס"
@@ -874,22 +1147,33 @@
               },
               {
                 "html": "$0.527900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.5279"
+                }
               },
               {
                 "html": "$453.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "453475000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "apt aptos — אפטוס"
+            }
           },
           {
             "cells": [
               {
                 "html": "AAVE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Aave — פרוטוקול הלוואות DeFi"
@@ -899,22 +1183,33 @@
               },
               {
                 "html": "$87.9500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "87.95"
+                }
               },
               {
                 "html": "$1.36B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1356407951"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "aave aave — פרוטוקול הלוואות defi"
+            }
           },
           {
             "cells": [
               {
                 "html": "UNI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Uniswap — בורסה מבוזרת"
@@ -924,22 +1219,33 @@
               },
               {
                 "html": "$3.2900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3.29"
+                }
               },
               {
                 "html": "$2.05B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2054687002"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "uni uniswap — בורסה מבוזרת"
+            }
           },
           {
             "cells": [
               {
                 "html": "MORPHO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Morpho — תשתית הלוואות DeFi"
@@ -949,22 +1255,33 @@
               },
               {
                 "html": "$2.0200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.02"
+                }
               },
               {
                 "html": "$1.33B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1328112582"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "morpho morpho — תשתית הלוואות defi"
+            }
           },
           {
             "cells": [
               {
                 "html": "SKY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Sky (לשעבר MakerDAO)"
@@ -974,22 +1291,33 @@
               },
               {
                 "html": "$0.056420",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.05642"
+                }
               },
               {
                 "html": "$1.32B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1321570456"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sky sky (לשעבר makerdao)"
+            }
           },
           {
             "cells": [
               {
                 "html": "CRV",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Curve DAO Token"
@@ -999,22 +1327,33 @@
               },
               {
                 "html": "$0.241100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.2411"
+                }
               },
               {
                 "html": "$373.6M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "373564000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "crv curve dao token"
+            }
           },
           {
             "cells": [
               {
                 "html": "LDO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Lido DAO — סטייקינג נזיל"
@@ -1024,22 +1363,33 @@
               },
               {
                 "html": "$0.301700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.3017"
+                }
               },
               {
                 "html": "$252.3M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "252335000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ldo lido dao — סטייקינג נזיל"
+            }
           },
           {
             "cells": [
               {
                 "html": "PENDLE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Pendle — נגזרי תשואה"
@@ -1049,22 +1399,33 @@
               },
               {
                 "html": "$1.3400",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.34"
+                }
               },
               {
                 "html": "$230.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "230400000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "pendle pendle — נגזרי תשואה"
+            }
           },
           {
             "cells": [
               {
                 "html": "BNB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "BNB — אקוסיסטם Binance"
@@ -1074,22 +1435,33 @@
               },
               {
                 "html": "$602.3300",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "602.33"
+                }
               },
               {
                 "html": "$80.21B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "80207961614"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bnb bnb — אקוסיסטם binance"
+            }
           },
           {
             "cells": [
               {
                 "html": "OKB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "OKB — אקוסיסטם OKX"
@@ -1099,22 +1471,33 @@
               },
               {
                 "html": "$101.5100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "101.51"
+                }
               },
               {
                 "html": "$2.13B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2131345982"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "okb okb — אקוסיסטם okx"
+            }
           },
           {
             "cells": [
               {
                 "html": "CRO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cronos — אקוסיסטם Crypto.com"
@@ -1124,22 +1507,33 @@
               },
               {
                 "html": "$0.045970",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.04597"
+                }
               },
               {
                 "html": "$2.23B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2230140545"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "cro cronos — אקוסיסטם crypto.com"
+            }
           },
           {
             "cells": [
               {
                 "html": "LEO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "LEO Token — Bitfinex"
@@ -1149,22 +1543,33 @@
               },
               {
                 "html": "$9.2400",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "9.24"
+                }
               },
               {
                 "html": "$8.50B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "8500706915"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "leo leo token — bitfinex"
+            }
           },
           {
             "cells": [
               {
                 "html": "KCS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "KuCoin Token"
@@ -1174,22 +1579,33 @@
               },
               {
                 "html": "$6.5700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6.57"
+                }
               },
               {
                 "html": "$900.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "900452359"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "kcs kucoin token"
+            }
           },
           {
             "cells": [
               {
                 "html": "DOGE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Dogecoin — דוג׳קוין"
@@ -1199,22 +1615,33 @@
               },
               {
                 "html": "$0.070080",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.07008"
+                }
               },
               {
                 "html": "$10.90B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "10900802124"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "doge dogecoin — דוג׳קוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "SHIB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Shiba Inu"
@@ -1224,22 +1651,33 @@
               },
               {
                 "html": "$0.054467",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.054467"
+                }
               },
               {
                 "html": "$2.63B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2631379328"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "shib shiba inu"
+            }
           },
           {
             "cells": [
               {
                 "html": "PEPE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Pepe"
@@ -1249,22 +1687,33 @@
               },
               {
                 "html": "$0.052586",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.052586"
+                }
               },
               {
                 "html": "$1.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1086730894"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "pepe pepe"
+            }
           },
           {
             "cells": [
               {
                 "html": "WIF",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "dogwifhat"
@@ -1274,22 +1723,33 @@
               },
               {
                 "html": "$0.136200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1362"
+                }
               },
               {
                 "html": "$136.0M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "135992866"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "wif dogwifhat"
+            }
           },
           {
             "cells": [
               {
                 "html": "BONK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bonk"
@@ -1299,22 +1759,33 @@
               },
               {
                 "html": "$0.052335",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.052335"
+                }
               },
               {
                 "html": "$205.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "205426000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bonk bonk"
+            }
           },
           {
             "cells": [
               {
                 "html": "FLOKI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Floki"
@@ -1324,22 +1795,33 @@
               },
               {
                 "html": "$0.00002001",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.001e-05"
+                }
               },
               {
                 "html": "$193.0M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "192966000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "floki floki"
+            }
           },
           {
             "cells": [
               {
                 "html": "XRP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "XRP — תשלומים חוצי-גבולות"
@@ -1349,22 +1831,33 @@
               },
               {
                 "html": "$1.0100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.01"
+                }
               },
               {
                 "html": "$63.04B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "63037648382"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xrp xrp — תשלומים חוצי-גבולות"
+            }
           },
           {
             "cells": [
               {
                 "html": "ONDO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Ondo — נכסים מוטוקנזים (RWA)"
@@ -1374,22 +1867,33 @@
               },
               {
                 "html": "$0.324800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.3248"
+                }
               },
               {
                 "html": "$1.58B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1581338892"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ondo ondo — נכסים מוטוקנזים (rwa)"
+            }
           },
           {
             "cells": [
               {
                 "html": "LTC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Litecoin — לייטקוין"
@@ -1399,22 +1903,33 @@
               },
               {
                 "html": "$44.9800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "44.98"
+                }
               },
               {
                 "html": "$3.49B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3486995872"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ltc litecoin — לייטקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "XLM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Stellar — סטלר"
@@ -1424,22 +1939,33 @@
               },
               {
                 "html": "$0.156600",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1566"
+                }
               },
               {
                 "html": "$5.41B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "5410904359"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xlm stellar — סטלר"
+            }
           },
           {
             "cells": [
               {
                 "html": "LINK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Chainlink — רשת אורקלים"
@@ -1449,22 +1975,33 @@
               },
               {
                 "html": "$9.8000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "9.8"
+                }
               },
               {
                 "html": "$7.33B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "7331750597"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "link chainlink — רשת אורקלים"
+            }
           },
           {
             "cells": [
               {
                 "html": "GRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "The Graph — אינדוקס נתוני בלוקצ׳יין"
@@ -1474,22 +2011,33 @@
               },
               {
                 "html": "$0.013180",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.01318"
+                }
               },
               {
                 "html": "$144.2M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "144226000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "grt the graph — אינדוקס נתוני בלוקצ׳יין"
+            }
           },
           {
             "cells": [
               {
                 "html": "FIL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Filecoin — אחסון מבוזר"
@@ -1499,22 +2047,33 @@
               },
               {
                 "html": "$0.637500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.6375"
+                }
               },
               {
                 "html": "$522.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "522493693"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "fil filecoin — אחסון מבוזר"
+            }
           },
           {
             "cells": [
               {
                 "html": "RENDER",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Render — כוח GPU מבוזר"
@@ -1524,22 +2083,33 @@
               },
               {
                 "html": "$1.2700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.27"
+                }
               },
               {
                 "html": "$657.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "657464102"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "render render — כוח gpu מבוזר"
+            }
           },
           {
             "cells": [
               {
                 "html": "ICP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Internet Computer"
@@ -1549,22 +2119,33 @@
               },
               {
                 "html": "$2.2000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.2"
+                }
               },
               {
                 "html": "$1.22B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1222998821"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "icp internet computer"
+            }
           },
           {
             "cells": [
               {
                 "html": "ARB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Arbitrum — פתרון שכבה-2"
@@ -1574,22 +2155,33 @@
               },
               {
                 "html": "$0.077340",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.07734"
+                }
               },
               {
                 "html": "$516.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "516396045"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "arb arbitrum — פתרון שכבה-2"
+            }
           },
           {
             "cells": [
               {
                 "html": "OP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Optimism — פתרון שכבה-2"
@@ -1599,22 +2191,33 @@
               },
               {
                 "html": "$0.082340",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.08234"
+                }
               },
               {
                 "html": "$188.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "188402000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "op optimism — פתרון שכבה-2"
+            }
           },
           {
             "cells": [
               {
                 "html": "QNT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Quant — אינטרופרביליות"
@@ -1624,22 +2227,33 @@
               },
               {
                 "html": "$56.4000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "56.4"
+                }
               },
               {
                 "html": "$820.3M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "820286138"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "qnt quant — אינטרופרביליות"
+            }
           },
           {
             "cells": [
               {
                 "html": "TAO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bittensor — AI מבוזר"
@@ -1649,22 +2263,33 @@
               },
               {
                 "html": "$192.1500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "192.15"
+                }
               },
               {
                 "html": "$1.84B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1844159135"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "tao bittensor — ai מבוזר"
+            }
           },
           {
             "cells": [
               {
                 "html": "XMR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Monero — פרטיות מלאה"
@@ -1674,22 +2299,33 @@
               },
               {
                 "html": "$412.5800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "412.58"
+                }
               },
               {
                 "html": "$7.75B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "7753686514"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xmr monero — פרטיות מלאה"
+            }
           },
           {
             "cells": [
               {
                 "html": "ZEC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Zcash — פרטיות אופציונלית"
@@ -1699,22 +2335,33 @@
               },
               {
                 "html": "$508.0700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "508.07"
+                }
               },
               {
                 "html": "$8.58B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "8576857361"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "zec zcash — פרטיות אופציונלית"
+            }
           },
           {
             "cells": [
               {
                 "html": "DASH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Dash — תשלומים פרטיים"
@@ -1724,22 +2371,33 @@
               },
               {
                 "html": "$30.6000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "30.6"
+                }
               },
               {
                 "html": "$391.2M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "391244000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "dash dash — תשלומים פרטיים"
+            }
           },
           {
             "cells": [
               {
                 "html": "SCRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Secret Network — חוזים פרטיים"
@@ -1749,40 +2407,61 @@
               },
               {
                 "html": "$0.027860",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.02786"
+                }
               },
               {
                 "html": "$10.1M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "10130988"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "scrt secret network — חוזים פרטיים"
+            }
           }
         ]
       },
-      "l1": {
+      {
+        "key": "l1",
+        "label": "שכבה 1 (L1) (13)",
+        "caption": "שכבה 1 (L1) · 13 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-l1",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -1794,7 +2473,9 @@
             "cells": [
               {
                 "html": "BTC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bitcoin — ביטקוין"
@@ -1804,22 +2485,33 @@
               },
               {
                 "html": "$64,350.93",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "64350.93"
+                }
               },
               {
                 "html": "$1291.60B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1291602558417"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "btc bitcoin — ביטקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "ETH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Ethereum — את׳ריום"
@@ -1829,22 +2521,33 @@
               },
               {
                 "html": "$1,920.86",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1920.86"
+                }
               },
               {
                 "html": "$231.81B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "231808577840"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "eth ethereum — את׳ריום"
+            }
           },
           {
             "cells": [
               {
                 "html": "SOL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Solana — סולנה"
@@ -1854,22 +2557,33 @@
               },
               {
                 "html": "$77.3000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "77.3"
+                }
               },
               {
                 "html": "$45.06B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "45063481124"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sol solana — סולנה"
+            }
           },
           {
             "cells": [
               {
                 "html": "AVAX",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Avalanche — אבלאנץ׳"
@@ -1879,22 +2593,33 @@
               },
               {
                 "html": "$6.3600",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6.36"
+                }
               },
               {
                 "html": "$2.75B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2745361210"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "avax avalanche — אבלאנץ׳"
+            }
           },
           {
             "cells": [
               {
                 "html": "SUI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Sui — סוואי"
@@ -1904,22 +2629,33 @@
               },
               {
                 "html": "$0.657800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.6578"
+                }
               },
               {
                 "html": "$2.68B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2680070580"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sui sui — סוואי"
+            }
           },
           {
             "cells": [
               {
                 "html": "HYPE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Hyperliquid — הייפרליקוויד"
@@ -1929,22 +2665,33 @@
               },
               {
                 "html": "$58.3800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "58.38"
+                }
               },
               {
                 "html": "$12.99B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "12987420045"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "hype hyperliquid — הייפרליקוויד"
+            }
           },
           {
             "cells": [
               {
                 "html": "TON",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Toncoin — טונקוין"
@@ -1954,22 +2701,33 @@
               },
               {
                 "html": "$1.3200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.32"
+                }
               },
               {
                 "html": "$3.64B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3635881813"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ton toncoin — טונקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "NEAR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "NEAR Protocol"
@@ -1979,22 +2737,33 @@
               },
               {
                 "html": "$1.6100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.61"
+                }
               },
               {
                 "html": "$2.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2093428138"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "near near protocol"
+            }
           },
           {
             "cells": [
               {
                 "html": "ADA",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cardano — קרדנו"
@@ -2004,22 +2773,33 @@
               },
               {
                 "html": "$0.174200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1742"
+                }
               },
               {
                 "html": "$6.53B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6530584293"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ada cardano — קרדנו"
+            }
           },
           {
             "cells": [
               {
                 "html": "DOT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Polkadot — פולקדוט"
@@ -2029,22 +2809,33 @@
               },
               {
                 "html": "$0.762900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.7629"
+                }
               },
               {
                 "html": "$1.30B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1295638249"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "dot polkadot — פולקדוט"
+            }
           },
           {
             "cells": [
               {
                 "html": "ATOM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cosmos Hub — קוסמוס"
@@ -2054,22 +2845,33 @@
               },
               {
                 "html": "$1.4100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.41"
+                }
               },
               {
                 "html": "$740.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "740454208"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "atom cosmos hub — קוסמוס"
+            }
           },
           {
             "cells": [
               {
                 "html": "BCH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bitcoin Cash"
@@ -2079,22 +2881,33 @@
               },
               {
                 "html": "$203.5300",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "203.53"
+                }
               },
               {
                 "html": "$4.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "4086094744"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bch bitcoin cash"
+            }
           },
           {
             "cells": [
               {
                 "html": "APT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Aptos — אפטוס"
@@ -2104,40 +2917,61 @@
               },
               {
                 "html": "$0.527900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.5279"
+                }
               },
               {
                 "html": "$453.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "453475000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "apt aptos — אפטוס"
+            }
           }
         ]
       },
-      "defi": {
+      {
+        "key": "defi",
+        "label": "DeFi (7)",
+        "caption": "DeFi · 7 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-defi",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -2149,7 +2983,9 @@
             "cells": [
               {
                 "html": "AAVE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Aave — פרוטוקול הלוואות DeFi"
@@ -2159,22 +2995,33 @@
               },
               {
                 "html": "$87.9500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "87.95"
+                }
               },
               {
                 "html": "$1.36B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1356407951"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "aave aave — פרוטוקול הלוואות defi"
+            }
           },
           {
             "cells": [
               {
                 "html": "UNI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Uniswap — בורסה מבוזרת"
@@ -2184,22 +3031,33 @@
               },
               {
                 "html": "$3.2900",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3.29"
+                }
               },
               {
                 "html": "$2.05B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2054687002"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "uni uniswap — בורסה מבוזרת"
+            }
           },
           {
             "cells": [
               {
                 "html": "MORPHO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Morpho — תשתית הלוואות DeFi"
@@ -2209,22 +3067,33 @@
               },
               {
                 "html": "$2.0200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.02"
+                }
               },
               {
                 "html": "$1.33B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1328112582"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "morpho morpho — תשתית הלוואות defi"
+            }
           },
           {
             "cells": [
               {
                 "html": "SKY",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Sky (לשעבר MakerDAO)"
@@ -2234,22 +3103,33 @@
               },
               {
                 "html": "$0.056420",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.05642"
+                }
               },
               {
                 "html": "$1.32B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1321570456"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "sky sky (לשעבר makerdao)"
+            }
           },
           {
             "cells": [
               {
                 "html": "CRV",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Curve DAO Token"
@@ -2259,22 +3139,33 @@
               },
               {
                 "html": "$0.241100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.2411"
+                }
               },
               {
                 "html": "$373.6M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "373564000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "crv curve dao token"
+            }
           },
           {
             "cells": [
               {
                 "html": "LDO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Lido DAO — סטייקינג נזיל"
@@ -2284,22 +3175,33 @@
               },
               {
                 "html": "$0.301700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.3017"
+                }
               },
               {
                 "html": "$252.3M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "252335000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ldo lido dao — סטייקינג נזיל"
+            }
           },
           {
             "cells": [
               {
                 "html": "PENDLE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Pendle — נגזרי תשואה"
@@ -2309,40 +3211,61 @@
               },
               {
                 "html": "$1.3400",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.34"
+                }
               },
               {
                 "html": "$230.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "230400000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "pendle pendle — נגזרי תשואה"
+            }
           }
         ]
       },
-      "exch": {
+      {
+        "key": "exch",
+        "label": "בורסות (5)",
+        "caption": "בורסות · 5 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-exch",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -2354,7 +3277,9 @@
             "cells": [
               {
                 "html": "BNB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "BNB — אקוסיסטם Binance"
@@ -2364,22 +3289,33 @@
               },
               {
                 "html": "$602.3300",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "602.33"
+                }
               },
               {
                 "html": "$80.21B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "80207961614"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bnb bnb — אקוסיסטם binance"
+            }
           },
           {
             "cells": [
               {
                 "html": "OKB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "OKB — אקוסיסטם OKX"
@@ -2389,22 +3325,33 @@
               },
               {
                 "html": "$101.5100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "101.51"
+                }
               },
               {
                 "html": "$2.13B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2131345982"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "okb okb — אקוסיסטם okx"
+            }
           },
           {
             "cells": [
               {
                 "html": "CRO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Cronos — אקוסיסטם Crypto.com"
@@ -2414,22 +3361,33 @@
               },
               {
                 "html": "$0.045970",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.04597"
+                }
               },
               {
                 "html": "$2.23B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2230140545"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "cro cronos — אקוסיסטם crypto.com"
+            }
           },
           {
             "cells": [
               {
                 "html": "LEO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "LEO Token — Bitfinex"
@@ -2439,22 +3397,33 @@
               },
               {
                 "html": "$9.2400",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "9.24"
+                }
               },
               {
                 "html": "$8.50B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "8500706915"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "leo leo token — bitfinex"
+            }
           },
           {
             "cells": [
               {
                 "html": "KCS",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "KuCoin Token"
@@ -2464,40 +3433,61 @@
               },
               {
                 "html": "$6.5700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "6.57"
+                }
               },
               {
                 "html": "$900.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "900452359"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "kcs kucoin token"
+            }
           }
         ]
       },
-      "meme": {
+      {
+        "key": "meme",
+        "label": "Meme (6)",
+        "caption": "Meme · 6 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-meme",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -2509,7 +3499,9 @@
             "cells": [
               {
                 "html": "DOGE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Dogecoin — דוג׳קוין"
@@ -2519,22 +3511,33 @@
               },
               {
                 "html": "$0.070080",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.07008"
+                }
               },
               {
                 "html": "$10.90B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "10900802124"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "doge dogecoin — דוג׳קוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "SHIB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Shiba Inu"
@@ -2544,22 +3547,33 @@
               },
               {
                 "html": "$0.054467",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.054467"
+                }
               },
               {
                 "html": "$2.63B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2631379328"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "shib shiba inu"
+            }
           },
           {
             "cells": [
               {
                 "html": "PEPE",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Pepe"
@@ -2569,22 +3583,33 @@
               },
               {
                 "html": "$0.052586",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.052586"
+                }
               },
               {
                 "html": "$1.09B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1086730894"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "pepe pepe"
+            }
           },
           {
             "cells": [
               {
                 "html": "WIF",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "dogwifhat"
@@ -2594,22 +3619,33 @@
               },
               {
                 "html": "$0.136200",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1362"
+                }
               },
               {
                 "html": "$136.0M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "135992866"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "wif dogwifhat"
+            }
           },
           {
             "cells": [
               {
                 "html": "BONK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bonk"
@@ -2619,22 +3655,33 @@
               },
               {
                 "html": "$0.052335",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.052335"
+                }
               },
               {
                 "html": "$205.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "205426000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "bonk bonk"
+            }
           },
           {
             "cells": [
               {
                 "html": "FLOKI",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Floki"
@@ -2644,40 +3691,61 @@
               },
               {
                 "html": "$0.00002001",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.001e-05"
+                }
               },
               {
                 "html": "$193.0M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "192966000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "floki floki"
+            }
           }
         ]
       },
-      "pay": {
+      {
+        "key": "pay",
+        "label": "תשלומים (4)",
+        "caption": "תשלומים · 4 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-pay",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -2689,7 +3757,9 @@
             "cells": [
               {
                 "html": "XRP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "XRP — תשלומים חוצי-גבולות"
@@ -2699,22 +3769,33 @@
               },
               {
                 "html": "$1.0100",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.01"
+                }
               },
               {
                 "html": "$63.04B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "63037648382"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xrp xrp — תשלומים חוצי-גבולות"
+            }
           },
           {
             "cells": [
               {
                 "html": "ONDO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Ondo — נכסים מוטוקנזים (RWA)"
@@ -2724,22 +3805,33 @@
               },
               {
                 "html": "$0.324800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.3248"
+                }
               },
               {
                 "html": "$1.58B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1581338892"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">משנית</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ondo ondo — נכסים מוטוקנזים (rwa)"
+            }
           },
           {
             "cells": [
               {
                 "html": "LTC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Litecoin — לייטקוין"
@@ -2749,22 +3841,33 @@
               },
               {
                 "html": "$44.9800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "44.98"
+                }
               },
               {
                 "html": "$3.49B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "3486995872"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "ltc litecoin — לייטקוין"
+            }
           },
           {
             "cells": [
               {
                 "html": "XLM",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Stellar — סטלר"
@@ -2774,40 +3877,61 @@
               },
               {
                 "html": "$0.156600",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.1566"
+                }
               },
               {
                 "html": "$5.41B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "5410904359"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xlm stellar — סטלר"
+            }
           }
         ]
       },
-      "infra": {
+      {
+        "key": "infra",
+        "label": "תשתית (9)",
+        "caption": "תשתית · 9 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-infra",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -2819,7 +3943,9 @@
             "cells": [
               {
                 "html": "LINK",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Chainlink — רשת אורקלים"
@@ -2829,22 +3955,33 @@
               },
               {
                 "html": "$9.8000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "9.8"
+                }
               },
               {
                 "html": "$7.33B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "7331750597"
+                }
               },
               {
                 "html": "<span class=\"tier-tag\">שכבה 1</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "link chainlink — רשת אורקלים"
+            }
           },
           {
             "cells": [
               {
                 "html": "GRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "The Graph — אינדוקס נתוני בלוקצ׳יין"
@@ -2854,22 +3991,33 @@
               },
               {
                 "html": "$0.013180",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.01318"
+                }
               },
               {
                 "html": "$144.2M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "144226000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "grt the graph — אינדוקס נתוני בלוקצ׳יין"
+            }
           },
           {
             "cells": [
               {
                 "html": "FIL",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Filecoin — אחסון מבוזר"
@@ -2879,22 +4027,33 @@
               },
               {
                 "html": "$0.637500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.6375"
+                }
               },
               {
                 "html": "$522.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "522493693"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "fil filecoin — אחסון מבוזר"
+            }
           },
           {
             "cells": [
               {
                 "html": "RENDER",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Render — כוח GPU מבוזר"
@@ -2904,22 +4063,33 @@
               },
               {
                 "html": "$1.2700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1.27"
+                }
               },
               {
                 "html": "$657.5M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "657464102"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "render render — כוח gpu מבוזר"
+            }
           },
           {
             "cells": [
               {
                 "html": "ICP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Internet Computer"
@@ -2929,22 +4099,33 @@
               },
               {
                 "html": "$2.2000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "2.2"
+                }
               },
               {
                 "html": "$1.22B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1222998821"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "icp internet computer"
+            }
           },
           {
             "cells": [
               {
                 "html": "ARB",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Arbitrum — פתרון שכבה-2"
@@ -2954,22 +4135,33 @@
               },
               {
                 "html": "$0.077340",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.07734"
+                }
               },
               {
                 "html": "$516.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "516396045"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "arb arbitrum — פתרון שכבה-2"
+            }
           },
           {
             "cells": [
               {
                 "html": "OP",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Optimism — פתרון שכבה-2"
@@ -2979,22 +4171,33 @@
               },
               {
                 "html": "$0.082340",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.08234"
+                }
               },
               {
                 "html": "$188.4M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "188402000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "op optimism — פתרון שכבה-2"
+            }
           },
           {
             "cells": [
               {
                 "html": "QNT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Quant — אינטרופרביליות"
@@ -3004,22 +4207,33 @@
               },
               {
                 "html": "$56.4000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "56.4"
+                }
               },
               {
                 "html": "$820.3M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "820286138"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "qnt quant — אינטרופרביליות"
+            }
           },
           {
             "cells": [
               {
                 "html": "TAO",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Bittensor — AI מבוזר"
@@ -3029,40 +4243,61 @@
               },
               {
                 "html": "$192.1500",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "192.15"
+                }
               },
               {
                 "html": "$1.84B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "1844159135"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "tao bittensor — ai מבוזר"
+            }
           }
         ]
       },
-      "priv": {
+      {
+        "key": "priv",
+        "label": "פרטיות (4)",
+        "caption": "פרטיות · 4 מטבעות",
+        "csv_label": "⬇ ייצוא CSV",
+        "table_id": "table-priv",
         "columns": [
           {
             "text": "טיקר",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "שם",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "קטגוריה",
-            "sortable": true
+            "sortable": true,
+            "class": "sortable"
           },
           {
             "text": "מחיר",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שווי שוק",
-            "sortable": true
+            "sortable": true,
+            "numeric": true,
+            "class": "sortable"
           },
           {
             "text": "שכבה",
@@ -3074,7 +4309,9 @@
             "cells": [
               {
                 "html": "XMR",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Monero — פרטיות מלאה"
@@ -3084,22 +4321,33 @@
               },
               {
                 "html": "$412.5800",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "412.58"
+                }
               },
               {
                 "html": "$7.75B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "7753686514"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "xmr monero — פרטיות מלאה"
+            }
           },
           {
             "cells": [
               {
                 "html": "ZEC",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Zcash — פרטיות אופציונלית"
@@ -3109,22 +4357,33 @@
               },
               {
                 "html": "$508.0700",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "508.07"
+                }
               },
               {
                 "html": "$8.58B",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "8576857361"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "zec zcash — פרטיות אופציונלית"
+            }
           },
           {
             "cells": [
               {
                 "html": "DASH",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Dash — תשלומים פרטיים"
@@ -3134,22 +4393,33 @@
               },
               {
                 "html": "$30.6000",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "30.6"
+                }
               },
               {
                 "html": "$391.2M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "391244000"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "dash dash — תשלומים פרטיים"
+            }
           },
           {
             "cells": [
               {
                 "html": "SCRT",
-                "class": "tk"
+                "attrs": {
+                  "class": "tk"
+                }
               },
               {
                 "html": "Secret Network — חוזים פרטיים"
@@ -3159,25 +4429,35 @@
               },
               {
                 "html": "$0.027860",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "0.02786"
+                }
               },
               {
                 "html": "$10.1M",
-                "class": "ltr"
+                "attrs": {
+                  "class": "ltr",
+                  "data-sort": "10130988"
+                }
               },
               {
                 "html": "<span class=\"tier-tag std\">רגיל</span>"
               }
-            ]
+            ],
+            "data": {
+              "data-q": "scrt secret network — חוזים פרטיים"
+            }
           }
         ]
       }
-    }
+    ]
   },
   "sentiment": {
     "title": "סנטימנט שוק — מדד פחד ותאווה",
     "icon": "📊",
     "subtitle": "Crypto Fear &amp; Greed Index — מדד יומי אשר סינתזה רגשות וסנטימנטים ממקורות שונים, נעילות ומינוף בשוק החוזים העתידיים, כדי לגזור מספר יחיד בין 0-100, שם ערכים נמוכים משקפים פחד קיצוני וערכים גבוהים משקפים תאוותנות קיצונית.",
+    "icon_gap": true,
     "fear_greed": {
       "value": "46",
       "label": "Fear (פחד)",
@@ -3188,14 +4468,17 @@
         "חודש שעבר: 29 (Fear)"
       ],
       "divergence_note": "הערת שקיפות: מעקב חלופי (feargreedmeter.com) הציג באותו יום ערך שונה באופן מהותי — 62 (Greed), לעומת 46 (Fear) ב-Alternative.me — פערים בין ספקי מדד נובעים משיטות משקלול שונות (Alternative.me משלב נתוני שרשרת, נפח, מומנטום ו-Google Trends; ספקים אחרים עשויים להטות למדדי מסחר בלבד); הדשבורד מציג את הערך של Alternative.me כמקור העיקרי בהתאם למתודולוגיה הקבועה.",
+      "sources_prefix": "מקורות:",
       "sources": [
         {
           "name": "Alternative.me",
-          "url": "https://alternative.me/crypto/fear-and-greed-index/"
+          "url": "https://alternative.me/crypto/fear-and-greed-index/",
+          "target": "_blank"
         },
         {
           "name": "FearGreedMeter.com (השוואה)",
-          "url": "https://feargreedmeter.com/crypto-fear-and-greed-index"
+          "url": "https://feargreedmeter.com/crypto-fear-and-greed-index",
+          "target": "_blank"
         }
       ]
     },
@@ -3205,24 +4488,28 @@
     "title": "מתודולוגיה",
     "icon": "🔬",
     "subtitle": null,
+    "icon_gap": true,
     "pillars": [
       {
         "title": "1️⃣ קונצנזוס מוסדי",
-        "text": "איסוף תחזיות מחיר, שינויי דירוג וזרימות ETF מדסקים מוסדיים (Standard Chartered, VanEck, Bernstein, Citi, Bitwise). כל נתון מצוטט למקור ותאריך פרסום מקוריים."
+        "paragraphs": [
+          "איסוף תחזיות מחיר, שינויי דירוג וזרימות ETF מדסקים מוסדיים (Standard Chartered, VanEck, Bernstein, Citi, Bitwise). כל נתון מצוטט למקור ותאריך פרסום מקוריים."
+        ]
       },
       {
         "title": "2️⃣ פונדמנטלס און-צ׳יין",
-        "text": "נתוני TVL, פעילות רשת והכנסות פרוטוקולים ממקורות כמו Chainspect, DefiLlama ו-KuCoin Research, המשמשים לאימות עצמאי של הנרטיב המוסדי מול מציאות השימוש בפועל."
+        "paragraphs": [
+          "נתוני TVL, פעילות רשת והכנסות פרוטוקולים ממקורות כמו Chainspect, DefiLlama ו-KuCoin Research, המשמשים לאימות עצמאי של הנרטיב המוסדי מול מציאות השימוש בפועל."
+        ]
       },
       {
         "title": "3️⃣ עריכה קריפטו-נייטיבית",
-        "text": "סקירת כתבות ואנליזות מ-CoinDesk, Bankless, Money.com ו-Blockpit, מסווגות לפי איכות מקור (A/B), לזיהוי נרטיבים, סיכוני רגולציה ואירועי אבטחה בזמן אמת."
+        "paragraphs": [
+          "סקירת כתבות ואנליזות מ-CoinDesk, Bankless, Money.com ו-Blockpit, מסווגות לפי איכות מקור (A/B), לזיהוי נרטיבים, סיכוני רגולציה ואירועי אבטחה בזמן אמת."
+        ]
       }
     ],
     "paragraphs": [
-      "איסוף תחזיות מחיר, שינויי דירוג וזרימות ETF מדסקים מוסדיים (Standard Chartered, VanEck, Bernstein, Citi, Bitwise). כל נתון מצוטט למקור ותאריך פרסום מקוריים.",
-      "נתוני TVL, פעילות רשת והכנסות פרוטוקולים ממקורות כמו Chainspect, DefiLlama ו-KuCoin Research, המשמשים לאימות עצמאי של הנרטיב המוסדי מול מציאות השימוש בפועל.",
-      "סקירת כתבות ואנליזות מ-CoinDesk, Bankless, Money.com ו-Blockpit, מסווגות לפי איכות מקור (A/B), לזיהוי נרטיבים, סיכוני רגולציה ואירועי אבטחה בזמן אמת.",
       "דירוג \"ניקוד קונברגנס\" משקף עד כמה שלושת המתודולוגיות הללו מסכימות על כיוון/סיפור מסוים לגבי נכס נתון. ציון גבוה (⇓ ניקוד קונברגנס 1) מציין הסכמה רחבה בין המקורות; נכסים עם עדויות סותרות או חסרות מסומנים בהתאם בטקסט הרציונל של הכרטיס. נתוני מחיר ושווי שוק נשלפים מ-CoinGecko ומ-Alpha Vantage למטבעות הנתמכים. מדד הפחד והתאווה נשלף מ-Alternative.me. תהליך העדכון אוטומטי ורץ פעמיים ביום דרך GitHub Actions/Cowork.",
       "<b>מגבלות נתונים:</b> חלק מהמחירים ושווי השוק המפורטים בטבלה המלאה הם קירובים המבוססים על סריקת דפי CoinGecko בזמן איסוף הנתונים, ולא בהכרח משקפים Snapshot ברזולוציית שנייה. עבור SUI, HYPE, TON ו-ONDO לא אותרו יעדי מחיר ספציפיים מהמוסדות הנסקרים — פער זה מצוין באופן שקוף בכרטיסים הרלוונטיים. ערך TON חשוד בשינוי מיתוג לא מאומת (\"Gram\") ממקור נתונים בודד — יש להתייחס בזהירות."
     ],

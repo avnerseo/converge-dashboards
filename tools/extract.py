@@ -98,22 +98,49 @@ def rich(node):
     return " ".join(node.inner_html().split()) or None
 
 
+def sources_prefix(node):
+    """Leading label before the links, e.g. 'מקורות:' on the crypto cards."""
+    if node is None:
+        return None
+    head = node.inner_html().split("<a", 1)[0]
+    return " ".join(head.split()) or None
+
+
 def links(node):
-    return [{"name": a.clean_text(), "url": a.get("href")}
-            for a in node.find_all("a") if a.get("href")]
+    out = []
+    for a in node.find_all("a"):
+        if not a.get("href"):
+            continue
+        link = {"name": a.clean_text(), "url": a.get("href")}
+        if a.get("target"):
+            link["target"] = a.get("target")
+        out.append(link)
+    return out
 
 
 def chips(node):
+    """Chips in a chip-row, including the bare *-tag spans crypto uses."""
     out = []
-    for c in node.find_all("span", "chip"):
-        kind = [k for k in c.classes if k != "chip"]
-        out.append({"text": c.clean_text(), "kind": kind[0] if kind else None})
+    row = node.find("div", "chip-row") or node
+    for c in row.find_all("span"):
+        cls = c.classes
+        if "chip" in cls:
+            kind = [k for k in cls if k != "chip"]
+            out.append({"text": c.clean_text(), "kind": kind[0] if kind else None})
+        elif any(k.endswith("-tag") for k in cls):
+            out.append({"text": c.clean_text(), "kind": cls[0], "bare": True})
     return out
 
 
 def table_rows(table):
-    head = [{"text": th.clean_text(), "sortable": bool(th.get("onclick"))}
-            for th in table.find_all("th")]
+    head = []
+    for th in table.find_all("th"):
+        col = {"text": th.clean_text(), "sortable": bool(th.get("onclick"))}
+        if "numeric" in (th.get("onclick") or "") or ",true)" in (th.get("onclick") or ""):
+            col["numeric"] = True
+        if th.get("class"):
+            col["class"] = th.get("class")
+        head.append(col)
     rows = []
     body = table.find("tbody") or table
     for tr in body.find_all("tr"):
@@ -123,13 +150,16 @@ def table_rows(table):
         cells = []
         for td in tds:
             cell = {"html": rich(td)}
-            if td.get("class"):
-                cell["class"] = td.get("class")
+            if td.attrs:
+                # class, and the data-sort hooks the crypto tables sort on
+                cell["attrs"] = dict(td.attrs)
             cells.append(cell)
         row = {"cells": cells}
-        for attr in ("data-ticker", "data-sector"):
-            if tr.get(attr):
-                row[attr.replace("data-", "")] = tr.get(attr)
+        # Filter/search hooks vary by dashboard (data-ticker, data-q, ...),
+        # so keep whatever the row actually carries.
+        data_attrs = {k: v for k, v in tr.attrs.items() if k.startswith("data-")}
+        if data_attrs:
+            row["data"] = data_attrs
         rows.append(row)
     return {"columns": head, "rows": rows}
 
@@ -164,6 +194,9 @@ def heading(sec):
         title = title[len(icon):].strip()
     out = {"title": title, "icon": icon,
            "subtitle": rich(sec.find("div", "section-sub"))}
+    # crypto puts a space between the icon and the title, stocks does not.
+    if icon and h and re.search(r"</span>\s", h.inner_html()):
+        out["icon_gap"] = True
     if badge and "risk" in badge.classes:
         out["icon_variant"] = "risk"
     return out
@@ -182,11 +215,16 @@ def common_head(doc):
     note = doc.find("div", "today-note")
     disc = doc.find("div", "disclaimer")
     foot = doc.find("footer")
+    tagline = doc.find("span", "brand-tagline")
+    back = doc.find("a", "back-link")
     return {
         "page_title": title_el.clean_text() if title_el else None,
         "title": h1.clean_text() if h1 else None,
         "subtitle": rich(sub),
         "badges": badges,
+        "brand_tagline": tagline.clean_text() if tagline else None,
+        "back_link": ({"href": back.get("href"), "label": back.clean_text()}
+                      if back else None),
         "as_of": updated_date,
         "updated_time": updated_time,
         "run_note": rich(note),
@@ -343,10 +381,13 @@ def crypto_card(card):
     return {
         "ticker": ticker_el.clean_text() if ticker_el else None,
         "name": name_el.clean_text() if name_el else None,
+        "variant": "tier2" if "tier2-card" in card.classes else None,
         "query": card.get("data-q") or None,
         "price": parse_price(price_el.clean_text() if price_el else ""),
         "chips": chips(card),
-        "rationale": rat.clean_text() if rat else None,
+        "rationale": rich(rat),
+        "risk_note": rich(card.find("div", "risk-note")),
+        "sources_prefix": sources_prefix(src),
         "sources": links(src) if src else [],
     }
 
@@ -356,23 +397,48 @@ def extract_crypto(html):
     data = {"schema_version": SCHEMA_VERSION, "dashboard": "crypto"}
     data.update(common_head(doc))
 
+    nav = doc.find("nav", "quicknav")
+    if nav:
+        inp = nav.find("input")
+        data["quicknav"] = {
+            "search_placeholder": inp.get("placeholder") if inp else None,
+            "links": [{"href": a.get("href"), "label": a.clean_text()}
+                      for a in nav.find_all("a")],
+        }
+
     top_kpi = doc.find("div", "kpi-row")
     data["kpis"] = kpis(top_kpi) if top_kpi else []
 
-    for key in ("tier1", "tier2"):
+    for key, grid in (("tier1", "tier1-grid"), ("tier2", "tier2-grid")):
         sec = section(doc, key)
         data[key] = {
             **heading(sec),
+            "grid_class": grid,
             "cards": [crypto_card(c) for c in sec.find_all("div", "stock-card")] if sec else [],
         }
 
+    # One tab per category; order is meaningful, so keep it a list.
     tables_sec = section(doc, "tables")
-    tabs = {}
+    tabs = []
     if tables_sec:
-        for t in tables_sec.find_all("table"):
-            tid = t.get("id") or "table"
-            tabs[tid.replace("table-", "")] = table_rows(t)
-    data["tables"] = {**heading(tables_sec), "groups": tabs}
+        labels = {b.get("data-tab"): b.clean_text()
+                  for b in tables_sec.find_all("button", "tab-btn")}
+        for panel in tables_sec.find_all("div", "tab-panel"):
+            key = (panel.get("id") or "").replace("panel-", "")
+            t = panel.find("table")
+            if not t:
+                continue
+            cap = panel.find("span", "section-sub")
+            btn = panel.find("button", "csv-btn")
+            tabs.append({
+                "key": key,
+                "label": labels.get(key),
+                "caption": cap.clean_text() if cap else None,
+                "csv_label": btn.clean_text() if btn else None,
+                "table_id": t.get("id"),
+                **table_rows(t),
+            })
+    data["tables"] = {**heading(tables_sec), "tabs": tabs}
 
     # The crypto sentiment section is a Fear & Greed dial, not a table.
     sent = section(doc, "sentiment")
@@ -388,6 +454,7 @@ def extract_crypto(html):
             "scale": sub.clean_text() if sub else None,
             "history": [h.clean_text() for h in sent.find_all("span", "fg-hist-item")],
             "divergence_note": div.clean_text() if div else None,
+            "sources_prefix": sources_prefix(sent.find("div", "sources")),
             "sources": links(sent.find("div", "sources")) if sent.find("div", "sources") else [],
         }
     data["sentiment"] = {**heading(sent), "fear_greed": fg,
@@ -399,10 +466,11 @@ def extract_crypto(html):
         for col in meth.find_all("div", "converge-col"):
             h3 = col.find("h3")
             pillars.append({"title": h3.clean_text() if h3 else None,
-                            "text": " ".join(p.clean_text() for p in col.find_all("p"))})
+                            "paragraphs": [rich(p) for p in col.find_all("p")]})
+    prose = meth.find("div", "prose") if meth else None
     data["methodology"] = {**heading(meth), "pillars": pillars,
-                           "paragraphs": prose_paragraphs(meth),
-                           "sources": links(meth) if meth else []}
+                           "paragraphs": prose_paragraphs(prose),
+                           "sources": links(prose) if prose else []}
 
     trans = section(doc, "transparency")
     data["transparency"] = {**heading(trans), "items": list_items(trans)} if trans else None

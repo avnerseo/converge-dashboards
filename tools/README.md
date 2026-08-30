@@ -12,16 +12,54 @@ install, which matters when this runs unattended.
 | script | what it does |
 | --- | --- |
 | `extract.py` | parses the HTML into `data/<dashboard>/<as_of>.json` (+ `latest.json`) |
+| `render.py` | builds the HTML back from that JSON, with CSS/JS from `templates/` |
 | `validate.py` | refuses a dashboard that is truncated, inconsistent, or silently stale |
+| `roundtrip.py` | proves the renderer reproduces the page that is live today |
 | `selftest.py` | damages today's dashboard seven ways and asserts the validator catches each |
-| `domlite.py` | ~90-line tolerant HTML reader the other scripts share |
+| `domlite.py` | small tolerant HTML reader the other scripts share |
 
 ```sh
 python3 tools/extract.py            # write the data layer
+python3 tools/render.py stocks      # build the page from it (stdout)
 python3 tools/validate.py           # check both dashboards, exit 1 on error
 python3 tools/validate.py --strict  # warnings fail too
+python3 tools/roundtrip.py          # renderer still matches the live pages
 python3 tools/selftest.py           # regression test for the checks themselves
 ```
+
+## The renderer
+
+`render.py` is the half that removes the failure class rather than catching it:
+the run produces data, and the page is assembled from it deterministically. CSS
+and JS live in `templates/` and stop being rewritten on every run, so a partial
+write cannot corrupt them.
+
+`roundtrip.py` is its acceptance test, and it is deliberately two-sided —
+either check alone can pass while something is quietly lost:
+
+```
+extract(render(data)) == data     nothing is dropped in transit
+render(extract(page)) == page     the live page is reproducible
+```
+
+The page comparison re-parses both sides and re-serialises them with sorted
+attributes, so attribute order, entity spelling and whitespace between tags
+cannot cause a false failure — and a failure that does appear is real. One
+difference is declared intentional: `crypto.html` carries two adjacent
+`<style>` blocks and the renderer emits one.
+
+Both dashboards pass both checks today. **Neither HTML file has been switched
+over yet** — the pages in the repo are still the hand-written ones. Flipping
+one is:
+
+```sh
+python3 tools/render.py stocks -o index.html
+python3 tools/render.py crypto -o crypto.html
+```
+
+Until that happens, `roundtrip.py` running in CI is what keeps the renderer
+honest: if a hand-written page grows a pattern the renderer cannot reproduce,
+the check fails and says exactly where.
 
 ## What validation catches
 

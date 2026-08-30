@@ -17,22 +17,38 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import domlite  # noqa: E402
 import extract  # noqa: E402
 import render   # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Semantically identical spellings that neither browsers nor readers can tell
-# apart; comparing them would only chase our own escaping choices.
-EQUIVALENT = {"&#x27;": "'", "&#39;": "'", "&quot;": '"', "&apos;": "'"}
-
-
 def normalise(html):
-    html = re.sub(r">\s+<", "><", html)
-    html = re.sub(r"\s+", " ", html)
-    for a, b in EQUIVALENT.items():
-        html = html.replace(a, b)
-    return html.strip()
+    """Reduce a page to what a browser actually sees.
+
+    Re-parsing and re-serialising with sorted attributes absorbs the
+    differences that are not differences at all -- attribute order, entity
+    spelling, whitespace between tags -- so a failure here is a real one.
+    """
+    doc = domlite.parse(html)
+    out = _canon(doc)
+    # crypto.html carries two adjacent <style> blocks; the renderer emits one.
+    # Same rules in the same order, so collapse the seam before comparing.
+    out = out.replace("</style><style>", " ")
+    return re.sub(r"\s+", " ", out).strip()
+
+
+def _canon(node):
+    if isinstance(node, str):
+        return domlite.escape_text(" ".join(node.split()))
+    attrs = "".join(' %s="%s"' % (k, domlite.escape_attr(v))
+                    for k, v in sorted(node.attrs.items()))
+    inner = "".join(_canon(c) for c in node.children)
+    if node.tag == "#root":
+        return inner
+    if node.tag in domlite.VOID:
+        return "<%s%s>" % (node.tag, attrs)
+    return "<%s%s>%s</%s>" % (node.tag, attrs, inner, node.tag)
 
 
 def walk(a, b, path=""):
