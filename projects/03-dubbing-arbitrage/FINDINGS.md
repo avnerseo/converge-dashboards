@@ -5,6 +5,11 @@
 **Recommendation: abandon this as a standalone direction.** Keep one narrow piece of it
 as a free feature of projects 01/02. Reasoning in §7.
 
+> **Second pass, same day.** Two open unknowns from the first pass were closed (§3B, §3C).
+> Both closed against the project. The RPM premise the whole direction rests on turns out to
+> be **backwards** for Spanish and Portuguese. The recommendation is now firmer, and — see
+> §7 — it no longer depends on the pricing-page verification that was blocked.
+
 ---
 
 ## 1. What I could not do, and why — read this first
@@ -32,6 +37,13 @@ it verification, because substituting summaries is the exact failure the brief w
 The Wikipedia control confirms this is a blanket egress policy, not a vendor-specific block.
 Per the proxy documentation this is an organization policy denial that must be reported, not
 routed around.
+
+**A local Hebrew-ASR measurement was also attempted and is not possible.** PyPI *is*
+reachable (`faster-whisper` installs fine), but every source of model weights or Hebrew
+speech data is blocked: `huggingface.co`, `hf-mirror.com`,
+`openaipublic.azureedge.net` (Whisper's own weight CDN) and `commonvoice.mozilla.org` all
+return 403 at the tunnel. So even the one risk that could have been measured without a
+vendor account — §5's Hebrew word error rate — cannot be measured here.
 
 **There are also no credentials.** No `ELEVENLABS_*`, `HEYGEN_*`, `RASK_*` or any other
 dubbing-service key exists in the environment. Even with egress open, tasks 2–4 need paid
@@ -112,12 +124,12 @@ So the exact mechanic this project was built to sell — take a Hebrew video, ge
 audio track on it — is a free platform feature on the platform this project targets. There is
 no arbitrage to capture where the platform has already zeroed the price.
 
-Two caveats that keep a narrow opening (both **unverified — see §8**):
+Two caveats that looked like a narrow opening:
 
 1. **Topology.** "29 source languages → English" and "English → 20 languages" reads as
-   hub-and-spoke through English. If so, **Hebrew → Spanish/Portuguese is not directly
-   covered**, and those are precisely the large, higher-RPM finance audiences the brief
-   targets. This single fact is the most decision-relevant unknown in the whole project.
+   hub-and-spoke through English — if so, Hebrew → Spanish/Portuguese is not covered.
+   **Resolved in the second pass: confirmed hub-and-spoke (§3B). But §3C shows the uncovered
+   routes are the ones not worth buying.**
 2. **Quality.** YouTube's "Expressive Speech" — the mode that carries pitch, intonation and
    energy — covers 8 languages: English, French, German, Hindi, Indonesian, Italian,
    Portuguese, Spanish. **Hebrew is not among them.** The free Hebrew→English dub is
@@ -127,6 +139,81 @@ Two caveats that keep a narrow opening (both **unverified — see §8**):
 **Policy note, which is favourable:** auto-dubbing is YouTube's own first-party feature
 applied to your own original upload. It sits on the safe side of the inauthentic-content line
 by construction. Nothing in §3 creates strike risk.
+
+---
+
+## 3B. Finding 2b — the free/paid split falls exactly on the wrong side
+
+Second pass closed the topology question from §3. YouTube's published language lists:
+
+- **Into English, from 29 source languages** — Chinese, Dutch, French, German, **Hebrew**,
+  Hindi, Indonesian, Italian, Japanese, Korean, Malayalam, Polish, Portuguese, Punjabi,
+  Romanian, Russian, Spanish, Swahili, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu,
+  Vietnamese, …
+- **From English, into 20 languages** — Arabic, Bengali, Dutch, French, German, **Hebrew**,
+  Hindi, Indonesian, Italian, Japanese, Korean, Malayalam, Polish, Portuguese, Punjabi,
+  Russian, Spanish, Tamil, Telugu, Ukrainian.
+
+The topology is **hub-and-spoke through English**, as suspected. So:
+
+| Route | Free on YouTube? |
+|---|---|
+| Hebrew → English | ✅ Yes |
+| English → Hebrew | ✅ Yes |
+| **Hebrew → Spanish** | ❌ **No** |
+| **Hebrew → Portuguese** | ❌ **No** |
+
+This is what a first pass would call the opening: Spanish and Portuguese are not covered, so
+a paid tool has a job. **§3C shows that job is not worth doing.**
+
+---
+
+## 3C. Finding 2c — the RPM premise is backwards
+
+The brief's economic engine: *"Hebrew is ~9M speakers; English, Spanish and Portuguese
+finance audiences are orders of magnitude larger with **materially higher RPM**."*
+
+The second half is false for two of the three languages. CPM by market, two independent
+secondary sources agreeing:
+
+| Market | CPM | vs. Israel |
+|---|---|---|
+| United States (English) | $32.75 | **2.3× higher** |
+| **Israel (Hebrew) — the starting point** | **$14.08** | — |
+| Spain (Spanish) | $14.22 | ≈ parity |
+| Portugal (Portuguese) | $10.32 | 0.7× |
+| Mexico (Spanish) | $2–8 | 0.1–0.6× |
+| Brazil (Portuguese) | $1.64–2.00 | **0.1× — 7–9× lower** |
+| *Blended Spanish* | ≈$3.00 | **0.2×** |
+| *Blended Portuguese* | ≈$2.00 | **0.14×** |
+
+**Israel is a high-CPM market** — $14.08, top of tier 1-2, on par with Spain and ahead of
+Portugal, driven by domestic tech/B2B/SaaS advertiser demand. The brief treated Hebrew as the
+low-value origin to escape from. It is not.
+
+And the blended figures are the ones that matter, because **you select a language, not a
+country.** Dubbing to Spanish delivers you mostly to Latin America, not Spain; dubbing to
+Portuguese delivers you to Brazil, which is ~95% of Portuguese-language YouTube volume at
+$1.64 CPM. The high-CPM European tail is not addressable separately.
+
+Put §3B and §3C together and the result is stark:
+
+> **The one export route that pays more than the home market — English, 2.3× — is the exact
+> route YouTube dubs for free. Every route you would have to pay a vendor for delivers into
+> markets whose CPM is 5–9× *below* the Hebrew market you started in.**
+
+The arbitrage is inverted. You would be paying money to move content from a $14 market into a
+$2 market.
+
+**The honest counter-argument, and why it does not rescue the project:** revenue is views ×
+CPM, and Spanish has ~55× more speakers than Hebrew at ~0.21× the CPM — a theoretical ~11×
+ceiling *if penetration were equal*. It will not be. In Hebrew finance you would be a
+domestic voice in a thin, underserved niche. In Spanish finance you would be an unknown
+channel with a synthetic voice competing against native creators in one of the most saturated
+content markets on earth, unable to read your own comments. The thesis quietly changes from
+"same content, higher RPM" to "same content, far lower RPM, betting on volume in the hardest
+competitive market available." That is not the bet the brief described, and it is a much
+worse one.
 
 ---
 
@@ -208,46 +295,57 @@ the same lawyer conversation project 01 already needs, and should not be discove
 
 ## 7. Recommendation
 
-**Abandon "dubbing arbitrage" as a standalone project.** The specific thesis — *a billing
-loophole makes five languages cost the same as one, and that gap is the business* — does not
-survive contact with the evidence:
+**Abandon "dubbing arbitrage" as a standalone direction. Buy nothing.** The thesis — *a
+billing loophole makes five languages cost the same as one, and that gap is the business* —
+fails at four independent points, any one of which is sufficient:
 
-1. The loophole appears not to exist at the named tools (§2).
-2. Where the mechanic does exist, YouTube provides it **free**, first-party, and
-   policy-safe (§3).
-3. Even if the loophole were real, its value is ≈$22 per ten-minute video — too small to be a
-   business (§4).
-4. The pipeline's real risk is Hebrew ASR quality, which is a known weak point, sits upstream
-   of everything else, and is untested (§5).
+1. **The loophole does not exist** at the named tools. HeyGen and Rask both bill per target
+   language, with explicit arithmetic (§2).
+2. **Where the mechanic does exist, YouTube gives it away** — free, first-party,
+   policy-safe, Hebrew supported as a source language (§3).
+3. **The free/paid split falls exactly wrong.** The only route that pays more than the home
+   market (→English, 2.3×) is the free one. Every payable route (→Spanish, →Portuguese)
+   lands in markets with 5–9× *lower* CPM than Israel's $14.08 (§3B, §3C). **The arbitrage
+   runs backwards.**
+4. **Even if all of the above were favourable**, the loophole is worth ≈$22 per ten-minute
+   video (§4) — too small to be a business — and the pipeline's real risk is Hebrew ASR
+   quality, a documented low-resource weak point sitting upstream of everything (§5).
 
-**What to keep instead — as a feature, not a project:**
+Point 3 is the one that ends it. Points 1, 2 and 4 make the project small; point 3 makes it
+value-destroying.
 
-Produce in Hebrew (projects 01/02), publish to YouTube, and **enable the free auto-dubbed
-English track.** Cost: zero. Policy risk: zero, it is YouTube's own feature on your own
-original content. Review each generated track before approving it — the approval gate is
-exactly where Finding 5's number-mangling risk gets caught, and it is a human creative
-judgement, which also keeps the output on the right side of the inauthenticity line.
+**What to keep — a checkbox, not a project:**
 
-Spend on a paid tool only if a specific measured need appears — most likely Hebrew→Spanish
-or Hebrew→Portuguese, *if* §8's topology check confirms YouTube does not cover it. That is a
-per-video purchase decision at ~$0.55–$5.50 per video, not a business model.
+When project 01/02 ships its first Hebrew video, upload it and **enable the free auto-dubbed
+English track**, then review the track before approving it. Cost: $0. Policy risk: none — it
+is YouTube's own feature on your own original content, and the manual approval step is both
+the quality gate for §5's number-mangling risk and the human creative judgement that keeps
+the output clear of the inauthenticity line. That single checkbox captures essentially all
+the realizable value this project was chartered to find.
 
-**Do not reallocate effort here from 01 or 02.** This project's stated dependency was that it
-has "the least to say until there is content worth exporting." That remains true, and the
-export step turns out to be free. The bottleneck was always the content, not the dubbing.
+**What to do about Spanish and Portuguese: nothing, for now.** Revisit only if the Hebrew
+channel is already working and the English track is measurably pulling non-Israeli watch
+time. At that point the question is no longer "is dubbing cheap" but "can we win in a
+saturated market we cannot read," which is a different decision requiring different evidence.
 
----
+**Do not reallocate effort here from 01 or 02.** The brief called this "the fastest path to
+revenue." It is not — it is a $0 feature of whatever 01 and 02 produce. The bottleneck was
+always the content, and it still is. If anything, §3C argues the *opposite* of the brief's
+framing: Israel at $14.08 CPM against a finance niche paying $15–50 is a market worth serving
+directly in Hebrew, not one to escape.
 
 ## 8. What would actually close the verification (if the direction is revisited)
 
-Ordered by how much each would change the recommendation. **Item 1 alone could reopen the
-project**; nothing else here can.
+**Important: none of this is now worth doing.** The recommendation in §7 rests on §3B and
+§3C, which are about YouTube's language topology and market CPMs — *not* about vendor
+pricing. Perfect primary-source pricing data would not change the conclusion. Unblocking
+egress and buying an account to complete brief tasks 1–4 would buy precision on a question
+that no longer decides anything. This section is recorded so the work is reproducible if the
+direction is ever revisited on new evidence.
 
-1. **Read `support.google.com/youtube/answer/15569972` directly.** Confirm the source/target
-   topology. If Hebrew → Spanish/Portuguese is directly supported and free, this project is
-   dead as a paid direction but the *outcome it wanted* is fully achieved at zero cost. If it
-   is hub-and-spoke through English only, a narrow paid use case for those two languages
-   survives. **This is one page and it decides the question.**
+~~Item 1 (YouTube topology)~~ — **done in the second pass, see §3B.** Answer: hub-and-spoke
+through English; Hebrew → Spanish/Portuguese is not free.
+
 2. **Read the four vendor pricing pages directly** (elevenlabs.io/pricing,
    heygen.com/pricing, rask.ai/pricing, veed.io/pricing) plus each one's billing/FAQ doc.
    Look specifically for the phrase distinguishing *"billed by source duration"* from
@@ -308,6 +406,23 @@ snippets only, full pages not fetchable.
 **On monetization of dubbed tracks:**
 - [Can Multi-Audio Tracks Change YouTube RPM and CPM? — MilX](https://milx.app/en/cases/can-adding-new-language-reset-a-youtube-monetization-algorithm)
 - [A Creator's Guide to YouTube's Multi-Language Audio Feature — RWS](https://www.rws.com/blog/youtube-multi-language-audio-guide/)
+
+**On the YouTube language topology (§3B):**
+- [Break down language barriers with auto dubbing on YouTube — YouTube Blog](https://blog.youtube/news-and-events/auto-dubbing-on-youtube/)
+- [Unlocking a global audience with auto dubbing (Expressive Speech) — YouTube Blog](https://blog.youtube/news-and-events/youtube-auto-dubbing-expressive-speech/)
+- [YouTube auto dubbing: what it is, on or off — TimedSubs](https://timedsubs.com/en/guides/youtube-auto-dubbing)
+
+**On market CPM (§3C) — two independent sets, in agreement on Israel and Brazil:**
+- [YouTube CPM by Country 2026: Top 20 Markets Ranked — Upgrowth](https://upgrowth.in/youtube-cpm-by-country-global-comparison-2026/)
+- [YouTube CPM Overview 2026: Highest Paying Niches — Upgrowth](https://upgrowth.in/youtube-cpm-overview-highest-paying-niches/)
+- [YouTube CPM Rates 2026: $0.50-$50 by Country & Niche — NoteLM](https://www.notelm.ai/blog/youtube-cpm-rates-2026)
+- [Countries with the highest YouTube CPM in 2026 — MilX](https://milx.app/en/cases/in-what-countries-cpm-are-the-highest)
+- [YouTube Earnings by Country 2026 — fluxnote](https://fluxnote.io/guides/youtube-earnings-by-country-comparison)
+- [How much does YouTube pay in different languages — MilX](https://milx.app/en/trends/how-much-does-youtube-pay-in-different-languages)
+
+⚠️ CPM figures are aggregator estimates from SEO-driven sites, not audited data. They agree
+across sources on the ordering and the rough magnitudes, which is what §3C's argument
+depends on; do not treat any individual dollar figure as precise.
 
 **On Hebrew ASR:**
 - [Building an Accurate Open-Source Hebrew ASR System through Crowdsourcing — Interspeech 2025 (PDF)](https://www.isca-archive.org/interspeech_2025/marmor25_interspeech.pdf)
