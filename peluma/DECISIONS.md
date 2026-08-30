@@ -935,3 +935,88 @@ as a steady trickle; they are not the bet.
 
 This is the first Peluma content decision made from measured demand rather than intuition.
 It is still demand data, not conversion data — no Peluma sale has validated it.
+
+## Reconciling session 04's economics against primary sources — 2026-08-30
+
+Session 04 wrote to the live store and produced `HANDOFF.md` on branch
+`claude/video-creation-capability-433k8w`. Both were checked against Shopify and against this
+project's own records. Three findings, in order of importance.
+
+### 1. The Paw Wash Cup cannot be bought. Storefront-verified.
+
+The Admin API reports `availableForSale: true` on all eight variants. The live cart disagrees:
+
+    POST /cart/add.js  {"id":54400049185081,"quantity":1}
+    422 — "The product 'Peluma 2-in-1 Paw Wash Cup - Navy Blue / L' is already sold out."
+
+Root cause, from `inventoryLevels`: every cup variant is stocked only at the **Zendrop**
+fulfilment-service location with `available: 0`. The brush sits at the same location with
+`available: 50000` and adds to cart fine. `tracked: false` and `inventoryPolicy: DENY` are
+identical on both, so the tracked flag is not what decides this — the quantity at the
+fulfilment-service location is.
+
+**This is my error, and it is worth naming precisely.** On import I set
+`inventoryItemUpdate(tracked:false)` across the cup's eight items and then verified the
+*product feed* read `in stock` on all 13 items. The feed was the wrong signal. A feed listing
+is not a purchase. Nothing was ever added to a cart.
+
+Everything built on this product since — the description, the eight de-branded images, the two
+hero shots, Pins 11, 12, 15, the carousel, the homepage placement, the BXGY bundle — has been
+pointing at a product no one could buy.
+
+`HANDOFF.md`'s unverified item 2 was therefore **correct**, and my own read of
+`availableForSale` would have concluded the opposite. Storefront behaviour beats Admin fields.
+
+### 2. `unitCost` is the wrong source for the brush, and HANDOFF is built on it
+
+`HANDOFF.md` derives landed cost ≈ $21.70 from the single order's Shopify gross profit.
+Shopify computes gross profit from `inventoryItem.unitCost`, which for the ordered variant
+(`PE17TFL2V`) reads **$22.20**.
+
+This project already recorded, on 28 Aug, Zendrop's own per-SKU figures for that exact SKU:
+product $7.50 + shipping $9.92 = **$17.42 landed**. It also recorded that `unitCost` is
+trustworthy on a *fresh* import and **not** on the legacy brush import. HANDOFF used the
+unreliable field.
+
+The gap is $4.78 per order, and it changes the conclusion rather than refining it.
+
+### 3. Verified costs, and the ones still missing
+
+| SKU | variant | price | landed | source | trust |
+|---|---|---|---|---|---|
+| PE17TFL2V | Porcelain White Set | 29.90 | **17.42** | Zendrop page, 28 Aug | verified |
+| 1O3NPE8 | Milk Brown Set | 39.90 | **17.42** | Zendrop page, 28 Aug | verified |
+| MDYQJZF3J | Porcelain White Brush | 29.90 | — | — | **unknown** |
+| ZAF7RY7XJ | Purple Brush | 29.90 | — | — | **unknown** |
+| Z75Y6C7M0 | Set | 29.90 | — | — | **unknown** |
+| CJGY…S ×4 | Paw Cup, S | 16.90 | **7.65** | `unitCost`, fresh import | verified |
+| CJGY…L ×4 | Paw Cup, L | 16.90 | **8.56** | `unitCost`, fresh import | verified |
+
+The cup figures are landed because NexoraUSA ships **$0 to the US**, recorded twice and
+re-confirmed against order #1001's fulfilment. The three unknown brush SKUs need Zendrop, and
+**the Zendrop MCP server is disconnected in this session**, so they could not be pulled. The
+$8.82 landed figure in the 28 Aug table is SKU `FORC9Q8LH`, a brush this store does not sell —
+it must not be substituted for the two it does.
+
+### Contribution on verified numbers only
+
+Payment fee 2.9% + $0.30.
+
+| line | Porcelain White Set $29.90 | Milk Brown Set $39.90 | Set + Cup L bundle $52.90 |
+|---|---|---|---|
+| landed | −17.42 | −17.42 | −25.98 |
+| fee | −1.17 | −1.46 | −1.83 |
+| **contribution** | **11.31** | **21.02** | **25.09** |
+| margin | 37.8% | 52.7% | 47.4% |
+| break-even CPA | $11.31 | $21.02 | $25.09 |
+
+HANDOFF put today's contribution at $7.03 / 23.5%. On verified costs it is **$11.31 / 37.8%**.
+Its direction was right — $29.90 does not support paid acquisition — but the $39.90 variant
+that already exists **clears the ~$17 gate on its own**, at $21.02.
+
+### The demand risk that must not be forgotten
+
+This project already tried repricing the Sets to $39.90 and reverted, because eBay sells the
+same generic product at $8.99–$16.94. Margin is not the binding constraint at $39.90; price
+acceptance is. Raising the price fixes the spreadsheet and may cost the conversion. That is a
+merchant decision, and no price was changed here.
