@@ -1,0 +1,23 @@
+{"date": "2026-08-27", "sha": "f354588", "ticker": "MSFT", "name": "Microsoft", "sector": "טכנולוגיה", "price": 496.37, "chg": "+0.95%", "conviction": "3/3 מקורות"}
+{"date": "2026-08-27", "sha": "f354588", "ticker": "CMCSA", "name": "Comcast", "sector": "תקשורת ומדיה", "price": 27.2, "chg": "+0.37%", "conviction": "2/3 מקורות"}
+{"date": "2026-08-27", "sha": "f354588", "ticker": "BMY", "name": "Bristol-Myers Squibb", "sector": "בריאות", "price": 67.57, "chg": "-0.52%", "conviction": "2/3 מקורות"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "CVX", "name": "Chevron", "sector": "אנרגיה", "price": 199.77, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "CAT", "name": "Caterpillar", "sector": "תעשייה", "price": 817.0, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "KO", "name": "Coca-Cola", "sector": "צריכה בסיסית", "price": 89.06, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "GEV", "name": "GE Vernova", "sector": "תשתיות ציבוריות", "price": 953.83, "chg": "+0.08%", "conviction": "2/3 מקורות: א׳+ג׳"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "BRK.B", "name": "Berkshire Hathaway", "sector": "פיננסים", "price": 503.7, "chg": null, "conviction": "2/3 מקורות: ב׳+ג׳"}
+{"date": "2026-08-28", "sha": "280245e", "ticker": "NKE", "name": "Nike", "sector": "צריכה מחזורית", "price": 38.44, "chg": null, "conviction": "2/3 מקורות: ב׳+ג׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "CVX", "name": "Chevron", "sector": "אנרגיה", "price": 199.77, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "CAT", "name": "Caterpillar", "sector": "תעשייה", "price": 817.0, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "KO", "name": "Coca-Cola", "sector": "צריכה בסיסית", "price": 89.06, "chg": null, "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "GEV", "name": "GE Vernova", "sector": "תשתיות ציבוריות", "price": 953.83, "chg": "+0.08%", "conviction": "2/3 מקורות: א׳+ג׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "BRK.B", "name": "Berkshire Hathaway", "sector": "פיננסים", "price": 503.7, "chg": null, "conviction": "2/3 מקורות: ב׳+ג׳"}
+{"date": "2026-08-29", "sha": "489b9f2", "ticker": "NKE", "name": "Nike", "sector": "צריכה מחזורית", "price": 38.44, "chg": null, "conviction": "2/3 מקורות: ב׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "V", "name": "Visa", "sector": "פיננסים", "price": 381.6, "chg": "+0.51%", "conviction": "3/3 מקורות: א׳+ב׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "MSFT", "name": "Microsoft", "sector": "טכנולוגיה", "price": 513.53, "chg": "+1.68%", "conviction": "3/3 מקורות: א׳+ב׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "AMZN", "name": "Amazon.com", "sector": "צריכה מחזורית", "price": 266.43, "chg": "+3.97%", "conviction": "2/3 מקורות: א׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "CVX", "name": "Chevron", "sector": "אנרגיה", "price": 201.86, "chg": "+1.05%", "conviction": "2/3 מקורות: ב׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "LLY", "name": "Eli Lilly", "sector": "בריאות", "price": 1174.61, "chg": null, "conviction": "2/3 מקורות: א׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "KO", "name": "Coca-Cola", "sector": "צריכה בסיסית", "price": 89.66, "chg": "+0.67%", "conviction": "2/3 מקורות: א׳+ב׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "GOOGL", "name": "Alphabet", "sector": "תקשורת ומדיה", "price": 346.59, "chg": "+1.74%", "conviction": "2/3 מקורות: א׳+ג׳"}
+{"date": "2026-08-30", "sha": "ae95024", "ticker": "JPM", "name": "JPMorgan Chase", "sector": "פיננסים", "price": 357.62, "chg": "+0.96%", "conviction": null}

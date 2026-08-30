@@ -1,0 +1,121 @@
+{
+  "positions": 14,
+  "horizons": {},
+  "pick_months": 0,
+  "powered": false,
+  "verdict": "NO SIGNAL YET — 0 of ~250 pick-months needed before any number here means anything.",
+  "opened_positions": [
+    {
+      "ticker": "MSFT",
+      "entry_date": "2026-08-27",
+      "entry_price": 496.37,
+      "sector": "טכנולוגיה",
+      "conviction": "3/3 מקורות",
+      "sha": "f354588"
+    },
+    {
+      "ticker": "CMCSA",
+      "entry_date": "2026-08-27",
+      "entry_price": 27.2,
+      "sector": "תקשורת ומדיה",
+      "conviction": "2/3 מקורות",
+      "sha": "f354588"
+    },
+    {
+      "ticker": "BMY",
+      "entry_date": "2026-08-27",
+      "entry_price": 67.57,
+      "sector": "בריאות",
+      "conviction": "2/3 מקורות",
+      "sha": "f354588"
+    },
+    {
+      "ticker": "CVX",
+      "entry_date": "2026-08-28",
+      "entry_price": 199.77,
+      "sector": "אנרגיה",
+      "conviction": "2/3 מקורות: א׳+ב׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "CAT",
+      "entry_date": "2026-08-28",
+      "entry_price": 817.0,
+      "sector": "תעשייה",
+      "conviction": "2/3 מקורות: א׳+ב׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "KO",
+      "entry_date": "2026-08-28",
+      "entry_price": 89.06,
+      "sector": "צריכה בסיסית",
+      "conviction": "2/3 מקורות: א׳+ב׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "GEV",
+      "entry_date": "2026-08-28",
+      "entry_price": 953.83,
+      "sector": "תשתיות ציבוריות",
+      "conviction": "2/3 מקורות: א׳+ג׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "BRK.B",
+      "entry_date": "2026-08-28",
+      "entry_price": 503.7,
+      "sector": "פיננסים",
+      "conviction": "2/3 מקורות: ב׳+ג׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "NKE",
+      "entry_date": "2026-08-28",
+      "entry_price": 38.44,
+      "sector": "צריכה מחזורית",
+      "conviction": "2/3 מקורות: ב׳+ג׳",
+      "sha": "280245e"
+    },
+    {
+      "ticker": "V",
+      "entry_date": "2026-08-30",
+      "entry_price": 381.6,
+      "sector": "פיננסים",
+      "conviction": "3/3 מקורות: א׳+ב׳+ג׳",
+      "sha": "ae95024"
+    },
+    {
+      "ticker": "AMZN",
+      "entry_date": "2026-08-30",
+      "entry_price": 266.43,
+      "sector": "צריכה מחזורית",
+      "conviction": "2/3 מקורות: א׳+ג׳",
+      "sha": "ae95024"
+    },
+    {
+      "ticker": "LLY",
+      "entry_date": "2026-08-30",
+      "entry_price": 1174.61,
+      "sector": "בריאות",
+      "conviction": "2/3 מקורות: א׳+ג׳",
+      "sha": "ae95024"
+    },
+    {
+      "ticker": "GOOGL",
+      "entry_date": "2026-08-30",
+      "entry_price": 346.59,
+      "sector": "תקשורת ומדיה",
+      "conviction": "2/3 מקורות: א׳+ג׳",
+      "sha": "ae95024"
+    },
+    {
+      "ticker": "JPM",
+      "entry_date": "2026-08-30",
+      "entry_price": 357.62,
+      "sector": "פיננסים",
+      "conviction": null,
+      "sha": "ae95024"
+    }
+  ]
+}
