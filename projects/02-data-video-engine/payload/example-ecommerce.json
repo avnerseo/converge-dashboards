@@ -1,0 +1,23 @@
+{
+  "schema": "converge.video.v1",
+  "date": "2026-08-30",
+  "brand": { "name": "Peluma", "tagline": "Pet Care", "accent": "#3d7bff" },
+  "title": "המוצרים של היום",
+  "subtitle": "מלאי, מחירים ותנועה — מתוך הפיד של החנות",
+  "updated_label": "עודכן: 30 באוגוסט 2026",
+  "kpi": { "tier1_count": 2, "risk_count": 1, "universe": 12 },
+  "featured": [
+    { "ticker": "MIST-01", "name": "Mist Grooming Brush", "sector": "טיפוח",
+      "tier": "tier1", "price": 29.90, "change_pct": 0.0,
+      "chip": "המוצר המוביל", "rationale": "" },
+    { "ticker": "PAW-02", "name": "Paw Wash Cup", "sector": "רחצה",
+      "tier": "tier1", "price": 16.90, "change_pct": -2.4,
+      "chip": "ירידת מחיר", "rationale": "" }
+  ],
+  "movers": [
+    { "ticker": "PAW-02", "change_pct": -2.4 },
+    { "ticker": "MIST-01", "change_pct": 0.0 },
+    { "ticker": "BUND-03", "change_pct": 5.1 }
+  ],
+  "disclaimer": "מחירים ומלאי נכון למועד ההפקה."
+}
