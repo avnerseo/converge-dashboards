@@ -510,7 +510,7 @@ def cmd_similar(args, index: Index) -> int:
                 query=f"appearance match >= {threshold:.3f}")
 
 
-def cmd_doctor(args, index: Index) -> int:
+def cmd_doctor(args, index: Index | None) -> int:
     import json as _json
 
     from .doctor import examine, render
@@ -539,7 +539,7 @@ def cmd_clip(args, index: Index) -> int:
     return 0
 
 
-def cmd_models(args, index: Index) -> int:
+def cmd_models(args, index: Index | None) -> int:
     from . import modelzoo
 
     if args.action == "fetch":
@@ -563,18 +563,25 @@ COMMANDS = {
 }
 
 
+# These inspect files or the model cache; they must not create an index
+# directory as a side effect of being run.
+NO_INDEX = {"doctor", "models"}
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     setup_logging(args.verbose)
-    with Index(args.index) as index:
-        try:
+    try:
+        if args.command in NO_INDEX:
+            return COMMANDS[args.command](args, None)
+        with Index(args.index) as index:
             return COMMANDS[args.command](args, index)
-        except KeyboardInterrupt:
-            LOG.warning("interrupted")
-            return 130
-        except (RuntimeError, ValueError, FileNotFoundError) as exc:
-            LOG.error("%s", exc)
-            return 2
+    except KeyboardInterrupt:
+        LOG.warning("interrupted")
+        return 130
+    except (RuntimeError, ValueError, FileNotFoundError) as exc:
+        LOG.error("%s", exc)
+        return 2
 
 
 if __name__ == "__main__":

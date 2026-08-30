@@ -22,6 +22,9 @@ Everything except `ask` runs offline: no frame leaves the machine.
 
 ---
 
+> A step-by-step install guide (macOS, Windows, Linux, Docker) lives in
+> [docs/QUICKSTART.he.md](docs/QUICKSTART.he.md) — written in Hebrew.
+
 ## Two ways to run it
 
 **As a CLI** on your own machine — the rest of this page.
