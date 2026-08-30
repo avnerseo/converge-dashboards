@@ -1,97 +1,142 @@
 ---
 name: daily-research-brief
-description: Produce a structured, multi-role research brief on a stock/ETF/crypto ticker using Alpha Vantage (data layer) and Bigdata.com (news/sentiment layer). Use when the user asks to "research", "analyze", or "brief" a ticker, or invokes /daily-research-brief <TICKER>. Never used to recommend or execute real-money trades — research and paper-trading only.
+description: Produce a structured, multi-role research brief on a US-listed stock or ETF using Alpha Vantage (data layer) and Bigdata.com (news/sentiment layer), ending in a mechanical, scoreable prediction that is logged before the outcome is known. Use when the user asks to "research", "analyze", or "brief" a ticker, or invokes /daily-research-brief <TICKER>. Research and paper-trading only — never a real-money recommendation.
 ---
 
 # Daily Research Brief
 
-Produces a one-page research memo on a ticker by running three analyst "roles" in
-sequence, grounded entirely in data pulled live from Alpha Vantage and Bigdata.com —
-never from memory or assumption.
+A one-page memo on a ticker, produced by three analyst roles, grounded only in data
+pulled live in this session — never from memory.
+
+**What makes this version different from a generic research prompt:** it ends in a
+*falsifiable prediction*, logged with a reference price *before* the outcome exists,
+and it is scored later by a script rather than by the model that wrote it.
+
+## Why the prediction block is mandatory
+
+A brief with a bull case, a bear case and a confidence rating cannot be wrong. Every
+loss becomes "the thesis changed" and every win becomes "as expected". That shape was
+rejected in `research/BORA_PROMPT_REVIEW_2026-08-29.md`, and the same standard applies
+here: **a confidence number graded by the model that produced the analysis is a mood,
+not a measurement — unless something outside the model scores it later.**
+
+`research/tools/score_briefs.py` is that outside thing.
 
 ## Hard rules
 
-- Never skip the data-pull step. If a tool call fails, say so explicitly in the brief
-  rather than filling in the gap from memory.
-- Never recommend a real-money trade or give position sizing. This produces research
-  output only, for paper-trading evaluation.
-- Every claim in the brief must trace back to a specific data point or headline pulled
-  in this session.
-- Log every brief (see "Logging" below) so results can be checked against outcomes later.
+- **Never skip the data pull.** If a tool call fails, say so in the brief. Do not fill
+  the gap from memory.
+- **Validate the instrument before trusting a field.** Before using any data field,
+  state what it actually measures. Precedent: in `INSIDER_CLUSTER_CHECK_2026-08-29.md`,
+  13 of 13 records flagged "acquisition" were board grants at price 0.0 — the field did
+  not mean what its name said.
+- **Every claim traces to a data point pulled in this session.** No unsourced numbers.
+- **No real-money recommendation, no position sizing.**
+- **Mandate scope:** US-listed common stock and equity ETFs, daily bars, holding period
+  in days. No crypto (separate track), no options, no leverage.
+- **The log is append-only.** Never edit a logged row. A record that can be edited is
+  not a record.
 
 ## Workflow
 
-### Step 0: Get the ticker and horizon
-If not given, ask: which ticker, and what time horizon (day trade / swing / long-term
-thesis) — the bull/bear case differs a lot by horizon.
+### Step 0 — Ticker and horizon
+If not given, ask for the ticker and the horizon in **trading days** (the default is 21).
+The bull/bear case differs by horizon, and the horizon is what gets scored.
 
-### Step 1: Data pull (context layer — Alpha Vantage)
-Pull, at minimum:
-- `GLOBAL_QUOTE` or `TIME_SERIES_DAILY_ADJUSTED` — current price, recent trend
-- `EARNINGS` and/or `EARNINGS_CALENDAR` — last reported results, next date
-- `COMPANY_OVERVIEW` — fundamentals (P/E, margins, sector)
-- Relevant technicals if the horizon is short-term (e.g. `RSI`, `SMA`/`EMA`, `MACD`)
+### Step 1 — Data pull (Alpha Vantage)
+At minimum:
+- `TIME_SERIES_DAILY_ADJUSTED` — the reference close, and recent trend
+- `EARNINGS` / `EARNINGS_CALENDAR` — last result, next date
+- `COMPANY_OVERVIEW` — sector, valuation, margins
+- Technicals only if they will be cited as evidence (`RSI`, `SMA`/`EMA`, `MACD`)
 
-### Step 2: News & sentiment pull (Bigdata.com)
-- `bigdata_search` or `bigdata_sentiment_tearsheet` for the ticker — recent news,
-  analyst sentiment shifts, notable events in the last 1–4 weeks
-- `bigdata_company_tearsheet` if a fuller picture is needed
+Also pull `TIME_SERIES_DAILY_ADJUSTED` for **SPY** — the benchmark reference close is
+part of the logged row and cannot be reconstructed later.
 
-### Step 3: Three-role analysis (analyst layer)
-Using ONLY the data gathered above, reason through three roles explicitly, in order:
+*Budget note:* the cloud key is free tier, 25 requests per day, total. Plan the calls.
 
-1. **Macro analyst** — sector/macro backdrop: rates, sector rotation, relevant
-   macro releases (CPI, Fed, etc. via Alpha Vantage economic indicators if relevant).
-2. **Company analyst** — company-specific: earnings quality, growth, valuation vs.
-   peers, recent news/catalysts.
-3. **Risk reviewer** — actively looks for reasons the bull case could be wrong:
-   what would invalidate the thesis, what's the key risk, what data point to watch.
+### Step 2 — News and sentiment (Bigdata.com)
+- `bigdata_search` or `bigdata_sentiment_tearsheet` — recent news, sentiment shifts
+- `bigdata_company_tearsheet` for a fuller picture
 
-Do not let one role's conclusion bleed into another uncritically — the risk reviewer's
-job is specifically to challenge the first two.
+### Step 3 — Three roles, in order
+Using **only** what Steps 1–2 returned:
 
-### Step 4: Produce the brief
-Output in exactly this format:
+1. **Macro analyst** — rates, sector rotation, macro releases.
+2. **Company analyst** — earnings quality, growth, valuation, catalysts.
+3. **Risk reviewer** — argues actively against the first two. What would invalidate
+   the thesis? Which single data point would settle it?
+
+The risk reviewer's job is to challenge, not to summarise. If it agrees with the first
+two roles, it has not done its job — say what evidence would have changed its mind.
+
+### Step 4 — The brief
 
 ```
-# Research Brief: <TICKER> — <DATE>
-Horizon: <day/swing/long-term>
+# Research Brief: <TICKER> — <YYYY-MM-DD>
+Horizon: <N> trading days
 
 ## Current market context
-...
-
 ## Recent earnings / news
-...
-
 ## Bull case
-...
-
 ## Bear case
-...
-
 ## Key risks
-...
-
 ## What would change the thesis
-...
 
-## Confidence rating: <Low/Medium/High> — <one-line reason>
+## Prediction — mechanical, scored later
+Direction:        UP | DOWN | NO-EDGE
+Horizon:          <N> trading days
+Reference close:  <ticker close on brief date>
+Benchmark close:  <SPY close on brief date>
+Invalidation:     <price level that ends the thesis>
+Confidence:       Low | Medium | High
 
 ## Data sources used this session
-- Alpha Vantage: <which endpoints>
-- Bigdata.com: <which endpoints>
+- Alpha Vantage: <endpoints>
+- Bigdata.com: <endpoints>
+- Failed calls: <list, or "none">
 
-⚠️ Research/paper-trading use only. Not financial advice. No trade recommendation.
+Research / paper-trading only. Not financial advice. No trade recommendation.
 ```
 
-### Step 5: Logging
-Append the brief (or a link to it) plus date and ticker to `research-log.md` in the
-project directory, so it can later be compared against what actually happened. If that
-file doesn't exist yet, create it with a simple table: Date | Ticker | Horizon |
-Confidence | Outcome (fill in later).
+**NO-EDGE is a real answer and is scored like any other.** It is correct when the
+ticker moves with the benchmark inside the cost band. Refusing to act is a prediction
+here, not an abstention — which is the point.
 
-## What this skill deliberately does NOT do
+### Step 5 — Log it, then commit it
+Append one row to `trading-engine/research/briefs/research-log.csv`:
+
+```
+date,ticker,horizon_days,direction,confidence,ref_close,bench_close,invalidation,brief_path,outcome_close,bench_outcome_close
+```
+
+Leave the two outcome columns empty — they are filled only after the horizon elapses.
+Write the full brief to `trading-engine/research/briefs/<DATE>-<TICKER>.md`.
+
+**Then commit and push, in the same session.** The git timestamp is what makes the
+reference price a pre-registration rather than a claim.
+
+## Scoring — the rule, fixed now, before any brief exists
+
+`research/tools/score_briefs.py` scores a row as correct when the ticker's excess
+return over the benchmark, across the horizon, exceeds the measured round-trip cost in
+the predicted direction. NO-EDGE is correct when the excess return stays inside the
+cost band.
+
+**Scoring requires the measured round-trip cost**, which the shakedown produces from
+2026-09-01. Until that number exists, briefs are **logged but not scored** — the script
+refuses rather than substituting a guess. Nothing is lost by starting to log today.
+
+### The pre-registered decision on the confidence field
+
+> After **30 scored briefs**, if the hit rate of *High* confidence does not exceed the
+> hit rate of *Low* confidence by at least **15 percentage points**, the confidence
+> field is removed from this skill.
+
+Written 2026-08-30, before the first brief. Not to be revised after seeing the numbers.
+
+## What this skill deliberately does not do
 
 - No broker connection, no order placement, no position sizing.
-- No blending of Webull or Kepler (per current project scope).
-- No treating this as investment advice for the user or anyone else.
+- No crypto, options, leverage, or non-US listings.
+- No investment advice, for the user or anyone else.
