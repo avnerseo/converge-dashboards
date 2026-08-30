@@ -1409,3 +1409,38 @@ in-use photographs built on the real product shots. They depict documented use a
 outcome, but they are not photographs of the item in someone's hands. Real photographs replace
 them the day the merchant takes them, and any Pin built from them should carry Pinterest's
 `AI_MODIFIED` disclosure.
+
+## 30 Aug — Brand accounts: Google, YouTube, TikTok
+
+**Gmail `pelumapets@gmail.com` — connected and readable.**
+Mailbox is 4 messages, all Google/TikTok setup notices. No spam, no customer enquiries.
+Reason there are none: the store still points at a personal address (below).
+
+What the connection can and cannot do, tested:
+- Read / search / label / spam-move: works.
+- `GMAIL_PATCH_SEND_AS` (display name + signature): **403 ACCESS_TOKEN_SCOPE_INSUFFICIENT**.
+  The connector never requested `gmail.settings.basic`, so the brand display name and
+  signature have to be set by hand in Gmail settings. Merchant step.
+- Two older unnamed Gmail connections (`gmail_bult-treen`, `gmail_howler-adieu`) are dead —
+  both 403 on `GMAIL_GET_PROFILE`. Checked before asking for a new connection.
+
+**Store contact email is `avnerseo@gmail.com`.**
+`shop.email` and `shop.contactEmail` both read `avnerseo@gmail.com`. That address is the
+reply-to on every order confirmation a customer receives, and where the contact form lands.
+There is **no `shopUpdate` mutation** in the Admin API (enumerated the full Mutation type to
+confirm) — this can only be changed in admin Settings → Store details. Merchant step, and it
+is the one that makes the Peluma mailbox actually receive anything.
+
+**YouTube `pelumapets@gmail.com` — connected, but no channel.**
+`YOUTUBE_GET_CHANNEL_STATISTICS(mine)` returns `pageInfo.totalResults: 0`. OAuth succeeded on
+an account that has no channel, so uploads would fail. The channel has to be created once in
+the YouTube UI; the existing connection then works without re-auth.
+
+**TikTok `@pelumapets`** — created, signed in with the Peluma Google account (confirmed by the
+Google sign-in receipt in the mailbox, 30 Aug 17:43). Still personal, no avatar, no bio, no link.
+Business switch is required: only a Business account gets the website field at 0 followers;
+personal needs 1,000.
+
+`peluma/peluma-avatar.png` — 800x800 profile picture built from the real storefront logo
+(`Peluma-Logo.png`, icon cropped at x 70-655, trimmed, 20% padding on white). For TikTok,
+YouTube and any other brand profile, so the mark is identical everywhere.
