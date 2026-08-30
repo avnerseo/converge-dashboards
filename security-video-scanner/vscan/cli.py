@@ -29,6 +29,8 @@ def build_parser() -> argparse.ArgumentParser:
   vscan cluster --report faces.html          # who appears at all?
   vscan label --cluster 0 --name "Courier"
   vscan ask "someone carrying a large box to the front door" --report box.html
+  vscan doctor gate.mp4                      # can this camera even be searched?
+  vscan similar --video gate --at 00:03:12   # who else looks like that person?
 """)
     p.add_argument("--version", action="version", version=f"vscan {__version__}")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -51,6 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--labels", nargs="*", default=["person"],
                    help="object labels to keep (default: person; 'all' for everything)")
     s.add_argument("--object-conf", type=float, default=0.4)
+    s.add_argument("--appearance", action="store_true",
+                   help="also store appearance (re-id) vectors for each person, so "
+                        "they can be found when their face is not visible")
+    s.add_argument("--appearance-every", type=float, default=1.5, metavar="SEC",
+                   help="seconds between appearance vectors of the same person")
     s.add_argument("--no-thumbs", action="store_true",
                    help="do not store frame thumbnails (disables 'ask' and reports)")
     s.add_argument("--thumb-width", type=int, default=480)
@@ -87,6 +94,9 @@ def build_parser() -> argparse.ArgumentParser:
                    help="cosine similarity to accept (default: 0.363)")
     s.add_argument("--min-sharpness", type=float, default=0.0,
                    help="drop blurry faces below this Laplacian variance")
+    s.add_argument("--by", choices=["face", "appearance"], default="face",
+                   help="match on the face, or on overall appearance (needs an "
+                        "index built with --appearance)")
     _add_range_args(s)
     _add_group_args(s)
     _add_output_args(s)
@@ -128,6 +138,36 @@ def build_parser() -> argparse.ArgumentParser:
     _add_range_args(s)
     _add_group_args(s)
     _add_output_args(s)
+
+    # ---- similar
+    s = sub.add_parser("similar",
+                       help="find everyone who looks like the person at this moment")
+    s.add_argument("--video", required=True, help="indexed video (id, path or name)")
+    s.add_argument("--at", required=True, metavar="TC", help="moment to take them from")
+    s.add_argument("--box", default=None, metavar="X,Y,W,H",
+                   help="crop to use, in analysis pixels; omitted = the person "
+                        "already indexed nearest that moment")
+    s.add_argument("--threshold", type=float, default=None,
+                   help="appearance cosine to accept (default: 0.60)")
+    s.add_argument("--enroll", default=None, metavar="NAME",
+                   help="also save this appearance as a reference for NAME")
+    s.add_argument("--only", nargs="*", default=None, dest="videos",
+                   help="search only these videos (default: the whole index)")
+    s.add_argument("--from", dest="start", default="0", metavar="TC")
+    s.add_argument("--to", dest="end", default=None, metavar="TC")
+    _add_group_args(s)
+    _add_output_args(s)
+
+    # ---- doctor
+    s = sub.add_parser("doctor",
+                       help="is this footage searchable? measure before you index")
+    s.add_argument("paths", nargs="+", help="video files to examine")
+    s.add_argument("--samples", type=int, default=60,
+                   help="frames to sample across the file (default: 60)")
+    s.add_argument("--width", type=int, default=1280)
+    s.add_argument("--from", dest="start", default="0", metavar="TC")
+    s.add_argument("--to", dest="end", default=None, metavar="TC")
+    s.add_argument("--json", default=None, metavar="FILE")
 
     # ---- clip
     s = sub.add_parser("clip", help="cut one clip out of an indexed video")
@@ -245,6 +285,8 @@ def cmd_index(args, index: Index) -> int:
         detect_objects=args.objects,
         object_labels=labels,
         object_conf=args.object_conf,
+        detect_appearance=args.appearance,
+        appearance_every=args.appearance_every,
         thumbs=not args.no_thumbs,
         thumb_width=args.thumb_width,
         start=parse_timecode(args.start),
@@ -263,9 +305,12 @@ def cmd_index(args, index: Index) -> int:
                                    (parse_datetime(args.start_time).isoformat(),
                                     row["id"]))
                 index.commit()
+    from .vectors import clear_caches
+    clear_caches(index.root)
     st = index.stats()
     print(f"indexed {len(files)} file(s); index now holds {st['frames']} frames, "
-          f"{st['faces']} faces, {st['objects']} objects")
+          f"{st['faces']} faces, {st['appearances']} appearance vectors, "
+          f"{st['objects']} objects")
     return 0
 
 
@@ -330,19 +375,28 @@ def cmd_forget(args, index: Index) -> int:
 
 
 def cmd_find(args, index: Index) -> int:
+    from .appearance import DEFAULT_APPEARANCE_THRESHOLD
     from .faces import DEFAULT_MATCH_THRESHOLD
-    from .search import find_person, started_at_map
+    from .search import find_person, find_person_appearance, started_at_map
 
-    threshold = args.threshold if args.threshold is not None else DEFAULT_MATCH_THRESHOLD
-    hits = find_person(
-        index, args.person, threshold, _video_ids(index, args.videos),
-        args.min_sharpness, parse_timecode(args.start),
-        parse_timecode(args.end) if args.end else None)
+    by_face = args.by == "face"
+    default = DEFAULT_MATCH_THRESHOLD if by_face else DEFAULT_APPEARANCE_THRESHOLD
+    threshold = args.threshold if args.threshold is not None else default
+    start = parse_timecode(args.start)
+    end = parse_timecode(args.end) if args.end else None
+    if by_face:
+        hits = find_person(index, args.person, threshold,
+                           _video_ids(index, args.videos), args.min_sharpness,
+                           start, end)
+    else:
+        hits = find_person_appearance(index, args.person, threshold,
+                                      _video_ids(index, args.videos), start, end)
     events = group_hits(hits, args.person, args.gap, args.min_hits, started_at_map(index))
     if args.arrivals:
         events = arrivals(events, args.absence)
     title = f"{args.person} - {'arrivals' if args.arrivals else 'appearances'}"
-    return emit(index, args, events, title, query=f"face match >= {threshold:.3f}")
+    return emit(index, args, events, title,
+                query=f"{args.by} match >= {threshold:.3f}")
 
 
 def cmd_objects(args, index: Index) -> int:
@@ -422,6 +476,59 @@ def cmd_ask(args, index: Index) -> int:
     return emit(index, args, events, f"Search: {args.query}", query=args.query)
 
 
+def cmd_similar(args, index: Index) -> int:
+    from .appearance import DEFAULT_APPEARANCE_THRESHOLD
+    from .search import (appearance_at, enroll_appearance, search_vectors,
+                         started_at_map)
+
+    video = index.resolve_videos([args.video])[0]
+    at = parse_timecode(args.at)
+    box = [float(v) for v in args.box.split(",")] if args.box else None
+    taken = appearance_at(index, int(video["id"]), at, box)
+    if taken is None:
+        raise SystemExit("could not take an appearance vector from that moment")
+    emb, used_box = taken
+    LOG.info("taking appearance from %s at %s, box %s", Path(video["path"]).name,
+             fmt_timecode(at), [round(v) for v in used_box])
+
+    if args.enroll:
+        enroll_appearance(index, args.enroll, emb,
+                          f"video:{video['path']}@{fmt_timecode(at, ms=True)}")
+        print(f"saved as an appearance reference for {args.enroll}")
+
+    threshold = args.threshold if args.threshold is not None \
+        else DEFAULT_APPEARANCE_THRESHOLD
+    hits = search_vectors(index, "appearances", emb, threshold,
+                          _video_ids(index, args.videos), 0.0,
+                          parse_timecode(args.start),
+                          parse_timecode(args.end) if args.end else None)
+    label = f"looks like {Path(video['path']).name}@{fmt_timecode(at)}"
+    events = group_hits(hits, label, args.gap, args.min_hits, started_at_map(index))
+    if args.arrivals:
+        events = arrivals(events, args.absence)
+    return emit(index, args, events, label,
+                query=f"appearance match >= {threshold:.3f}")
+
+
+def cmd_doctor(args, index: Index) -> int:
+    import json as _json
+
+    from .doctor import examine, render
+
+    reports = []
+    for raw in collect_videos(args.paths, recursive=False):
+        report = examine(raw, args.samples, args.width, parse_timecode(args.start),
+                         parse_timecode(args.end) if args.end else None)
+        print(render(report))
+        print()
+        reports.append(report.to_dict())
+    if args.json:
+        Path(args.json).write_text(_json.dumps(reports, ensure_ascii=False, indent=2),
+                                   encoding="utf-8")
+        LOG.info("json written to %s", args.json)
+    return 0
+
+
 def cmd_clip(args, index: Index) -> int:
     from .video import extract_clip
 
@@ -451,7 +558,8 @@ COMMANDS = {
     "index": cmd_index, "videos": cmd_videos, "enroll": cmd_enroll,
     "persons": cmd_persons, "forget": cmd_forget, "find": cmd_find,
     "objects": cmd_objects, "cluster": cmd_cluster, "label": cmd_label,
-    "ask": cmd_ask, "clip": cmd_clip, "models": cmd_models,
+    "ask": cmd_ask, "similar": cmd_similar, "doctor": cmd_doctor,
+    "clip": cmd_clip, "models": cmd_models,
 }
 
 

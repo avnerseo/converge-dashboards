@@ -21,8 +21,8 @@ from vscan.db import Index                          # noqa: E402
 from vscan.events import group_hits                 # noqa: E402
 from vscan.faces import FaceEngine                  # noqa: E402
 from vscan.indexer import IndexOptions, Indexer     # noqa: E402
-from vscan.search import (cluster_faces, enroll_from_faces, enroll_images,
-                          find_person)              # noqa: E402
+from vscan.search import (appearance_at, cluster_faces, enroll_from_faces,
+                          enroll_images, find_person, search_vectors)  # noqa: E402
 
 FACES = [Path(p) for p in os.environ.get("VSCAN_TEST_FACES", "").split(":") if p]
 
@@ -47,7 +47,8 @@ def demo(tmp_path_factory) -> tuple[Path, list]:
 def indexed(demo, tmp_path_factory) -> tuple[Index, Path, list]:
     video, windows = demo
     index = Index(tmp_path_factory.mktemp("index"))
-    Indexer(index, IndexOptions(sample_fps=3.0)).run(video)
+    Indexer(index, IndexOptions(sample_fps=3.0, detect_objects=True,
+                                detect_appearance=True)).run(video)
     return index, video, windows
 
 
@@ -85,3 +86,31 @@ def test_enroll_from_still_photo_matches_the_same_person(indexed):
     assert len(events) == 1, "a still photo should match exactly one appearance"
     _, t0, t1 = windows[0]
     assert t0 - 1 <= events[0].start and events[0].end <= t1 + 1
+
+
+def test_appearance_vectors_are_stored_once_per_track(indexed):
+    index, _, _ = indexed
+    stats = index.stats()
+    assert stats["appearances"] > 0, "no appearance vectors were written"
+    assert stats["appearances"] < stats["objects"], \
+        "the tracker should embed far fewer crops than there are person boxes"
+    tracks = {r["track"] for r in index.conn.execute(
+        "SELECT DISTINCT track FROM appearances")}
+    assert len(tracks) >= 2, "the two people should not share one track"
+
+
+def test_similar_search_finds_the_right_window(indexed):
+    index, _, windows = indexed
+    video_id = int(index.videos()[0]["id"])
+    _, first_start, first_end = windows[0]
+    midpoint = (first_start + first_end) / 2
+
+    taken = appearance_at(index, video_id, midpoint)
+    assert taken is not None, "could not read an appearance at that moment"
+    emb, _box = taken
+
+    hits = search_vectors(index, "appearances", emb, threshold=0.6)
+    assert hits, "the person should at least match themselves"
+    for hit in hits:
+        assert first_start - 2 <= hit.t <= first_end + 2, (
+            "appearance search leaked into the other person's window")

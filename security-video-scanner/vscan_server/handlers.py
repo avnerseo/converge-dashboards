@@ -27,6 +27,8 @@ def index_options(settings: Settings, raw: dict) -> IndexOptions:
         detect_objects=bool(raw.get("objects", False)),
         object_labels=labels,
         object_conf=float(raw.get("object_conf", 0.4)),
+        detect_appearance=bool(raw.get("appearance", False)),
+        appearance_every=float(raw.get("appearance_every", 1.5)),
         thumbs=bool(raw.get("thumbs", True)),
         thumb_width=int(raw.get("thumb_width", 480)),
         start=float(raw.get("start", 0.0)),
@@ -42,6 +44,8 @@ def make_index_handler(settings: Settings):
         started_override = params.get("start_time")
 
         summary = []
+        from vscan.vectors import clear_caches
+
         with INDEX_WRITE_LOCK, open_index(settings) as index:
             indexer = Indexer(index, opts)
             for i, path in enumerate(paths):
@@ -66,12 +70,14 @@ def make_index_handler(settings: Settings):
                     "frames": stats.frames_kept,
                     "faces": stats.faces,
                     "objects": stats.objects,
+                    "appearances": stats.appearances,
                     "seconds": round(stats.seconds, 1),
                 })
                 ctx.check_cancel()
+            clear_caches(index.root)          # new vectors, stale search matrix
         return {"videos": summary,
                 "totals": {k: sum(v[k] for v in summary)
-                           for k in ("frames", "faces", "objects")}}
+                           for k in ("frames", "faces", "objects", "appearances")}}
 
     return handle
 

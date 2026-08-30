@@ -21,7 +21,8 @@ const STR = {
     sampleFps: 'פריימים לשנייה', width: 'רוחב ניתוח', motion: 'סף תנועה',
     detectObjects: 'זיהוי אובייקטים', force: 'לאנדקס מחדש', startTime: 'שעת התחלה',
     searchMode: 'סוג חיפוש', byPerson: 'לפי אדם', byObject: 'לפי אובייקט',
-    byInstruction: 'לפי הוראה חופשית', person: 'אדם', threshold: 'סף התאמה',
+    byInstruction: 'לפי הוראה חופשית', byAppearance: 'לפי מראה',
+    person: 'אדם', threshold: 'סף התאמה',
     onlyArrivals: 'רק הגעות', absence: 'היעדרות (שניות)', gap: 'מרווח איחוד (שניות)',
     from: 'מ', to: 'עד', allVideos: 'כל הסרטונים', run: 'חפש', labels: 'תוויות',
     minScore: 'ציון מינימלי', query: 'מה לחפש', maxFrames: 'מקסימום פריימים',
@@ -45,6 +46,11 @@ const STR = {
     jobStarted: 'המשימה התחילה', saved: 'נשמר', deleted: 'נמחק',
     videoUnavailable: 'קובץ המקור אינו זמין בשרת', hits: 'זיהויים',
     score: 'ציון', note: 'הערה', clip: 'קטע', download: 'הורדה',
+    findSimilar: 'מי עוד נראה ככה', similarTo: 'דומים ל',
+    appearanceRefs: 'תמונות מראה', addAppearance: 'רישום מראה מתוך סרטון',
+    appearanceHint: 'מראה = בגדים ומבנה גוף. עובד גם כשלא רואים פנים, אבל חלש יותר מזיהוי פנים ומשתנה בין ימים.',
+    noAppearance: 'הסרטון לא אונדקס עם מראה. הוסיפו --appearance / סמנו את התיבה באינדוקס.',
+    detectAppearance: 'וקטורי מראה (Re-ID)',
   },
   en: {
     overview: 'Overview', footage: 'Footage', search: 'Search', people: 'People',
@@ -59,7 +65,8 @@ const STR = {
     sampleFps: 'Frames per second', width: 'Analysis width', motion: 'Motion threshold',
     detectObjects: 'Detect objects', force: 'Re-index', startTime: 'Wall-clock start',
     searchMode: 'Search type', byPerson: 'By person', byObject: 'By object',
-    byInstruction: 'By instruction', person: 'Person', threshold: 'Match threshold',
+    byInstruction: 'By instruction', byAppearance: 'By appearance',
+    person: 'Person', threshold: 'Match threshold',
     onlyArrivals: 'Arrivals only', absence: 'Absence (seconds)',
     gap: 'Merge gap (seconds)', from: 'From', to: 'To', allVideos: 'All videos',
     run: 'Search', labels: 'Labels', minScore: 'Min score', query: 'What to look for',
@@ -83,6 +90,11 @@ const STR = {
     jobStarted: 'Job started', saved: 'Saved', deleted: 'Deleted',
     videoUnavailable: 'The source file is not reachable from the server',
     hits: 'detections', score: 'Score', note: 'Note', clip: 'Clip', download: 'Download',
+    findSimilar: 'Who else looks like this', similarTo: 'Similar to',
+    appearanceRefs: 'Appearance references', addAppearance: 'Add appearance from a video',
+    appearanceHint: 'Appearance means clothing and build. It works when no face is visible, but it is weaker than a face match and changes between days.',
+    noAppearance: 'This video was indexed without appearance vectors. Re-index with the appearance option.',
+    detectAppearance: 'Appearance vectors (re-id)',
   },
 };
 const t = (k) => (STR[S.lang] && STR[S.lang][k]) || STR.en[k] || k;
@@ -266,6 +278,7 @@ VIEWS.overview = async () => {
   const tiles = [
     [t('videos'), stats.index.videos], [t('hours'), stats.footage_hours],
     [t('frames'), stats.index.frames], [t('facesFound'), stats.index.faces],
+    [t('byAppearance'), stats.index.appearances ?? 0],
     [t('objects'), stats.index.objects], [t('persons'), stats.index.persons],
     [t('running'), stats.jobs.running], [t('queued'), stats.jobs.queued],
   ];
@@ -347,6 +360,7 @@ async function footageImportCard() {
   const motion = el('input', { type: 'number', value: '0.004', step: '0.001', min: '0' });
   const startTime = el('input', { type: 'text', placeholder: '2026-08-30 14:00:00' });
   const objectsBox = checkbox('opt-objects', t('detectObjects'), false);
+  const appearanceBox = checkbox('opt-appearance', t('detectAppearance'), false);
   const forceBox = checkbox('opt-force', t('force'), false);
 
   const card = el('div', { class: 'card' },
@@ -363,7 +377,7 @@ async function footageImportCard() {
       el('div', { style: 'min-width:150px' }, field(t('width'), width)),
       el('div', { style: 'min-width:150px' }, field(t('motion'), motion)),
       el('div', { style: 'min-width:210px' }, field(t('startTime'), startTime)),
-      objectsBox, forceBox),
+      objectsBox, appearanceBox, forceBox),
     el('button', { class: 'btn', onclick: guard(async () => {
       if (!selected.size) { toast(t('selected') + ': 0', 'bad'); return; }
       const response = await api('/api/videos/index', { method: 'POST', body: {
@@ -374,6 +388,7 @@ async function footageImportCard() {
           sample_fps: Number(fps.value), width: Number(width.value),
           motion: Number(motion.value),
           objects: objectsBox.querySelector('input').checked,
+          appearance: appearanceBox.querySelector('input').checked,
         },
       } });
       toast(`${t('jobStarted')} #${response.job_id}`, 'ok');
@@ -390,6 +405,7 @@ VIEWS.search = async () => {
   const wrap = el('div');
   const mode = el('select', {},
     el('option', { value: 'person' }, t('byPerson')),
+    el('option', { value: 'appearance' }, t('byAppearance')),
     el('option', { value: 'objects' }, t('byObject')),
     S.caps.ask && can('analyst') ? el('option', { value: 'ask' }, t('byInstruction')) : null);
   const specific = el('div');
@@ -416,11 +432,14 @@ VIEWS.search = async () => {
 
   function renderSpecific() {
     clear(specific);
-    if (mode.value === 'person') {
+    if (mode.value === 'person' || mode.value === 'appearance') {
+      const byFace = mode.value === 'person';
+      threshold.value = byFace ? '0.363' : '0.60';
       specific.append(el('div', { class: 'row' },
         el('div', { style: 'min-width:220px' }, field(t('person'), personPick)),
         el('div', { style: 'min-width:150px' }, field(t('threshold'), threshold))));
       if (!S.persons.length) specific.append(el('p', { class: 'muted' }, t('noPersons')));
+      if (!byFace) specific.append(el('p', { class: 'small muted' }, t('appearanceHint')));
     } else if (mode.value === 'objects') {
       specific.append(el('div', { class: 'row' },
         el('div', { style: 'min-width:260px' }, field(t('labels'), labels)),
@@ -445,10 +464,13 @@ VIEWS.search = async () => {
         gap: Number(gap.value), arrivals: arrivalsBox.querySelector('input').checked,
         absence: Number(absence.value),
       };
-      if (mode.value === 'person') {
+      if (mode.value === 'person' || mode.value === 'appearance') {
         if (!personPick.value) { toast(t('noPersons'), 'bad'); return; }
-        const data = await api('/api/search/person', { method: 'POST', body: {
-          ...common, person_id: Number(personPick.value), threshold: Number(threshold.value) } });
+        const path = mode.value === 'person'
+          ? '/api/search/person' : '/api/search/appearance';
+        const data = await api(path, { method: 'POST', body: {
+          ...common, person_id: Number(personPick.value),
+          threshold: Number(threshold.value) } });
         showResults(resultsBox, data.events,
           personPick.options[personPick.selectedIndex].text);
       } else if (mode.value === 'objects') {
@@ -529,6 +551,21 @@ function showResults(container, events, label) {
     S.results.length ? grid : el('p', { class: 'muted' }, t('noResults'))));
 }
 
+async function findSimilar(event) {
+  // A face hit carries a face box, which is the wrong crop for appearance
+  // search - let the server pick the person box indexed nearest that moment.
+  const box = event.meta && event.meta.table === 'appearances' ? event.meta.box : null;
+  const data = await api('/api/search/similar', { method: 'POST', body: {
+    video_id: event.video_id, t: event.best_t, box, gap: 5 } });
+  S.tab = 'search'; renderTabs();
+  await renderTab();
+  const host = document.querySelector('#view > div');
+  const box2 = el('div');
+  host.append(box2);
+  showResults(box2, data.events, `${t('similarTo')} ${tc(event.best_t)}`);
+  toast(`${data.events.length} ${t('results')}`, data.events.length ? 'ok' : '');
+}
+
 function resultCard(event) {
   const thumb = event.best_thumb
     ? `/api/media/thumb?path=${encodeURIComponent(event.best_thumb)}`
@@ -542,7 +579,11 @@ function resultCard(event) {
       el('div', { class: 'small muted' },
         bdi(event.video_path.split('/').pop()), ' · ',
         bdi(event.hits), ` ${t('hits')} · ${t('score')} `, bdi(Number(event.best_score).toFixed(2))),
-      event.meta && event.meta.note ? el('div', { class: 'small', dir: 'auto' }, event.meta.note) : null));
+      event.meta && event.meta.note ? el('div', { class: 'small', dir: 'auto' }, event.meta.note) : null,
+      el('button', {
+        class: 'btn ghost small', style: 'margin-top:8px',
+        onclick: guard(async (e) => { e.stopPropagation(); await findSimilar(event); }),
+      }, t('findSimilar'))));
 }
 
 const PREVIEW_PAD = 3;
@@ -573,10 +614,13 @@ function openEvent(event) {
     el('tr', {}, el('th', {}, t('videos')),
       el('td', { class: 'small' }, bdi(event.video_path)))));
 
-  modal(`${event.label || ''} ${tc(event.start)}`, video, status, details,
+  const box = modal(`${event.label || ''} ${tc(event.start)}`, video, status, details,
     el('div', { class: 'row', style: 'margin-top:10px' },
       el('a', { class: 'small', href: `/api/media/video/${event.video_id}`,
         target: '_blank', rel: 'noopener' }, t('open')),
+      el('button', { class: 'btn ghost small', onclick: guard(async () => {
+        box.remove(); await findSimilar(event);
+      }) }, t('findSimilar')),
       can('analyst') ? el('button', { class: 'btn ghost small', onclick: guard(async () => {
         const started = await api('/api/export/clips', { method: 'POST', body: {
           events: [event], pad: PREVIEW_PAD } });
@@ -606,7 +650,10 @@ VIEWS.people = async () => {
       : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>', alt: '' }),
     el('div', { class: 'body' },
       el('div', { style: 'font-weight:600' }, person.name),
-      el('div', { class: 'small muted' }, `${person.references} ${t('references')}`),
+      el('div', { class: 'small muted' },
+        `${person.face_references ?? person.references} ${t('references')}`
+        + (person.appearance_references
+            ? ` · ${person.appearance_references} ${t('appearanceRefs')}` : '')),
       el('div', { class: 'row', style: 'justify-content:center;margin-top:6px' },
         el('button', { class: 'btn ghost small', onclick: () => {
           S.tab = 'search'; renderTabs(); renderTab().then(() => {
@@ -626,6 +673,9 @@ function personModal(person) {
   const fileInput = el('input', { type: 'file', accept: 'image/*', multiple: true });
   const videoPick = el('select', {}, ...S.videos.map((v) => el('option', { value: v.id }, v.name)));
   const at = el('input', { type: 'text', placeholder: '00:03:12' });
+  const appearanceVideo = el('select', {},
+    ...S.videos.map((v) => el('option', { value: v.id }, v.name)));
+  const appearanceAt = el('input', { type: 'text', placeholder: '00:03:12' });
   const box = modal(person.name,
     el('h3', {}, t('uploadPhotos')),
     fileInput,
@@ -639,6 +689,18 @@ function personModal(person) {
       (result.skipped || []).forEach((s) => toast(s, 'bad'));
       await refreshCore(); box.remove(); renderTab();
     }) }, t('uploadPhotos')),
+    el('h3', { style: 'margin-top:18px' }, t('addAppearance')),
+    el('p', { class: 'small muted', style: 'margin-top:0' }, t('appearanceHint')),
+    el('div', { class: 'row' },
+      el('div', { style: 'min-width:220px' }, field(t('videos'), appearanceVideo)),
+      el('div', { style: 'min-width:150px' }, field(t('atTimecode'), appearanceAt)),
+      el('button', { class: 'btn small', onclick: guard(async () => {
+        const result = await api(`/api/persons/${person.id}/appearance`,
+          { method: 'POST', body: { video_id: Number(appearanceVideo.value),
+            t: parseTc(appearanceAt.value) } });
+        toast(`+1 ${t('appearanceRefs')} (${result.appearance_references})`, 'ok');
+        await refreshCore(); box.remove(); renderTab();
+      }) }, t('save'))),
     el('h3', { style: 'margin-top:18px' }, t('enrollFromVideo')),
     el('div', { class: 'row' },
       el('div', { style: 'min-width:220px' }, field(t('videos'), videoPick)),

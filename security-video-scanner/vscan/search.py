@@ -1,4 +1,4 @@
-"""Face gallery: enrol people, find them in the index, cluster unknown faces."""
+"""Search: enrol people, find them by face or by appearance, cluster faces."""
 from __future__ import annotations
 
 import datetime as dt
@@ -9,10 +9,13 @@ from typing import Iterable, Sequence
 import cv2
 import numpy as np
 
+from .appearance import (DEFAULT_APPEARANCE_THRESHOLD, AppearanceEngine,
+                         crop_person)
 from .db import Index, blob_to_emb
 from .events import Hit
 from .faces import DEFAULT_MATCH_THRESHOLD, FaceEngine, l2norm
 from .util import LOG, fmt_timecode, parse_datetime
+from .vectors import VectorSet
 
 
 # ---------------------------------------------------------------- enrolment
@@ -93,40 +96,164 @@ def _save_reference_crop(index: Index, person_id: int, img, face) -> str | None:
 
 # ------------------------------------------------------------------ search
 def gallery_matrix(index: Index, person_id: int) -> np.ndarray:
-    rows = index.person_embeddings(person_id)
+    """Backwards-compatible alias for the face gallery."""
+    return gallery_for(index, person_id, "face")
+
+
+def gallery_for(index: Index, person_id: int, kind: str = "face") -> np.ndarray:
+    rows = index.person_embeddings(person_id, kind)
     if not rows:
-        return np.empty((0, 128), dtype=np.float32)
+        return np.empty((0, 0), dtype=np.float32)
     return np.stack([l2norm(blob_to_emb(r["emb"])) for r in rows])
+
+
+def _hits_from_matches(index: Index, table: str, matches: list[tuple[int, float]],
+                       start: float, end: float | None, min_sharpness: float,
+                       video_ids: Sequence[int] | None) -> list[Hit]:
+    """Turn (row id, score) pairs from a vector search into events-ready hits."""
+    if not matches:
+        return []
+    rows = index.rows_by_id(table, [m[0] for m in matches])
+    wanted = set(int(v) for v in video_ids) if video_ids else None
+    hits: list[Hit] = []
+    for row_id, score in matches:
+        row = rows.get(row_id)
+        if row is None:
+            continue
+        if wanted is not None and int(row["video_id"]) not in wanted:
+            continue
+        t = float(row["t"])
+        if t < start or (end is not None and t > end):
+            continue
+        if min_sharpness and (row["sharpness"] or 0) < min_sharpness:
+            continue
+        meta = {"row_id": row_id, "table": table,
+                "box": [row["x"], row["y"], row["w"], row["h"]]}
+        if table == "appearances":
+            meta["track"] = row["track"]
+        hits.append(Hit(video_id=int(row["video_id"]), video_path=row["video_path"],
+                        t=t, score=score, thumb=row["crop"], meta=meta))
+    hits.sort(key=lambda h: (h.video_path, h.t))
+    return hits
+
+
+def search_vectors(index: Index, table: str, queries: np.ndarray, threshold: float,
+                   video_ids: Sequence[int] | None = None, min_sharpness: float = 0.0,
+                   start: float = 0.0, end: float | None = None,
+                   limit: int = 0) -> list[Hit]:
+    """One matrix product against every stored vector of `table`."""
+    if queries is None or queries.size == 0:
+        return []
+    matches = VectorSet(index, table).search(queries, threshold, limit)
+    return _hits_from_matches(index, table, matches, start, end, min_sharpness,
+                              video_ids)
 
 
 def find_person(index: Index, name: str, threshold: float = DEFAULT_MATCH_THRESHOLD,
                 video_ids: Sequence[int] | None = None, min_sharpness: float = 0.0,
                 start: float = 0.0, end: float | None = None) -> list[Hit]:
+    """When does this enrolled person's face appear?"""
     person = index.person_by_name(name)
     if person is None:
         raise SystemExit(f"unknown person {name!r} - enrol them first (vscan enroll)")
-    gallery = gallery_matrix(index, int(person["id"]))
+    gallery = gallery_for(index, int(person["id"]), "face")
     if gallery.size == 0:
         raise SystemExit(f"{name!r} has no reference faces yet")
-
-    hits: list[Hit] = []
-    for row in index.faces_with_emb(video_ids):
-        if row["t"] < start or (end is not None and row["t"] > end):
-            continue
-        if row["sharpness"] is not None and row["sharpness"] < min_sharpness:
-            continue
-        emb = blob_to_emb(row["emb"])
-        sims = gallery @ l2norm(emb)
-        score = float(sims.max())
-        if score >= threshold:
-            hits.append(Hit(
-                video_id=int(row["video_id"]), video_path=row["video_path"],
-                t=float(row["t"]), score=score, thumb=row["crop"],
-                meta={"face_id": int(row["id"]), "box": [row["x"], row["y"],
-                                                        row["w"], row["h"]]},
-            ))
-    LOG.info("%d face detections matched %s at cosine >= %.3f", len(hits), name, threshold)
+    hits = search_vectors(index, "faces", gallery, threshold, video_ids,
+                          min_sharpness, start, end)
+    LOG.info("%d face detections matched %s at cosine >= %.3f", len(hits), name,
+             threshold)
     return hits
+
+
+def find_person_appearance(index: Index, name: str,
+                           threshold: float = DEFAULT_APPEARANCE_THRESHOLD,
+                           video_ids: Sequence[int] | None = None,
+                           start: float = 0.0, end: float | None = None
+                           ) -> list[Hit]:
+    """When does someone who looks like this person appear - face or no face?"""
+    person = index.person_by_name(name)
+    if person is None:
+        raise SystemExit(f"unknown person {name!r}")
+    gallery = gallery_for(index, int(person["id"]), "appearance")
+    if gallery.size == 0:
+        raise SystemExit(
+            f"{name!r} has no appearance references - add one with "
+            f"'vscan similar --enroll \"{name}\"'")
+    hits = search_vectors(index, "appearances", gallery, threshold, video_ids,
+                          0.0, start, end)
+    LOG.info("%d appearance detections matched %s at cosine >= %.3f", len(hits),
+             name, threshold)
+    return hits
+
+
+def appearance_at(index: Index, video_id: int, t: float,
+                  box: Sequence[float] | None = None, engine=None,
+                  allow_download: bool = True) -> tuple[np.ndarray, list[float]] | None:
+    """Take an appearance vector from a moment in an indexed video.
+
+    With a box, the crop is used as given ("this person, right here"). Without
+    one, the largest person already indexed near that moment is used, and
+    failing that the frame's own detection.
+    """
+    from .video import grab_frame
+
+    video = index.get_video(video_id)
+    if video is None:
+        raise SystemExit(f"no video {video_id} in the index")
+    if box is None:
+        row = index.conn.execute(
+            "SELECT x, y, w, h FROM appearances WHERE video_id = ?"
+            " ORDER BY ABS(t - ?) LIMIT 1", (video_id, t)).fetchone()
+        if row is not None:
+            box = [row["x"], row["y"], row["w"], row["h"]]
+
+    frame = grab_frame(video["path"], t)          # full resolution
+    if frame is None:
+        LOG.warning("could not decode %s at %s", video["path"], fmt_timecode(t))
+        return None
+
+    engine = engine or AppearanceEngine(allow_download=allow_download)
+    if box is None:
+        from .objects import ObjectEngine
+        detector = ObjectEngine(labels=("person",), allow_download=allow_download)
+        people = [d for d in detector.detect(frame) if engine.usable(d.box)]
+        if not people:
+            LOG.warning("no person found at %s - pass an explicit box",
+                        fmt_timecode(t))
+            return None
+        box = list(max(people, key=lambda d: d.box[2] * d.box[3]).box)
+
+    scale = _frame_scale(index, video_id, frame)
+    scaled = [float(v) * scale for v in box]
+    emb = engine.embed(crop_person(frame, scaled))
+    if emb is None:
+        return None
+    return emb, list(box)
+
+
+def _frame_scale(index: Index, video_id: int, frame) -> float:
+    """Indexed boxes are in analysis pixels; a fresh full-res frame is bigger."""
+    video = index.get_video(video_id)
+    settings = video["settings"] if video else None
+    analysed_width = None
+    if settings:
+        try:
+            analysed_width = int(json.loads(settings).get("max_width") or 0)
+        except (json.JSONDecodeError, TypeError, ValueError):
+            analysed_width = None
+    source_width = int(video["width"] or 0) if video else 0
+    if not analysed_width or not source_width:
+        return 1.0
+    used = min(analysed_width, source_width) or source_width
+    return frame.shape[1] / used if used else 1.0
+
+
+def enroll_appearance(index: Index, name: str, emb: np.ndarray, source: str,
+                      crop_rel: str | None = None) -> int:
+    person_id = index.get_or_create_person(name)
+    index.add_person_embedding(person_id, emb, source, crop_rel, kind="appearance")
+    return person_id
 
 
 def find_objects(index: Index, labels: Sequence[str], min_score: float = 0.4,

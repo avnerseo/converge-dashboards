@@ -9,10 +9,12 @@ from typing import Callable
 import cv2
 import numpy as np
 
+from .appearance import AppearanceEngine, crop_person
 from .db import Index
-from .faces import FaceEngine, crop_face
+from .faces import FaceEngine, crop_face, sharpness
 from .motion import MotionGate
 from .objects import ObjectEngine
+from .tracking import IoUTracker
 from .util import LOG, fingerprint, fmt_timecode
 from .video import VideoInfo, iter_frames, probe
 
@@ -26,6 +28,9 @@ class IndexOptions:
     detect_objects: bool = False
     object_labels: tuple[str, ...] = ("person",)
     object_conf: float = 0.4
+    detect_appearance: bool = False       # person re-identification vectors
+    appearance_every: float = 1.5         # seconds between vectors of one track
+    min_person_height: int = 64
     face_score: float = 0.6
     min_face: int = 20
     thumbs: bool = True
@@ -51,6 +56,8 @@ class IndexStats:
     faces: int = 0
     embedded: int = 0
     objects: int = 0
+    appearances: int = 0
+    tracks: int = 0
     seconds: float = 0.0
     video_seconds: float = 0.0
 
@@ -67,6 +74,13 @@ class Indexer:
         self.opts = opts
         self.face_engine: FaceEngine | None = None
         self.object_engine: ObjectEngine | None = None
+        self.appearance_engine: AppearanceEngine | None = None
+        if opts.detect_appearance and not opts.detect_objects:
+            # appearance vectors are cut out of person boxes, so the detector
+            # they come from is not optional
+            opts.detect_objects = True
+            if opts.object_labels and "person" not in opts.object_labels:
+                opts.object_labels = tuple(opts.object_labels) + ("person",)
         if opts.detect_faces:
             self.face_engine = FaceEngine(
                 score_threshold=opts.face_score, min_face=opts.min_face,
@@ -75,6 +89,9 @@ class Indexer:
             self.object_engine = ObjectEngine(
                 conf_threshold=opts.object_conf, labels=opts.object_labels or None,
                 allow_download=opts.allow_download)
+        if opts.detect_appearance:
+            self.appearance_engine = AppearanceEngine(
+                allow_download=opts.allow_download, min_height=opts.min_person_height)
 
     def run(self, path: str | Path, force: bool = False, progress: bool = True,
             on_progress: Callable[[float, str], None] | None = None,
@@ -105,6 +122,7 @@ class Indexer:
         crop_dir.mkdir(parents=True, exist_ok=True)
 
         gate = MotionGate(threshold=opts.motion_threshold)
+        tracker = IoUTracker()
         stats = IndexStats(video=str(info.path))
         t0 = time.time()
         last_report = t0
@@ -147,6 +165,11 @@ class Indexer:
                     self.index.add_object(video_id, frame_id, t, o.label, o.score, o.box)
                     stats.objects += 1
 
+                if self.appearance_engine is not None:
+                    stats.appearances += self._appearances(
+                        video_id, frame_id, t, frame, objects, tracker, crop_dir)
+                    stats.tracks = max(stats.tracks, len(tracker.tracks))
+
                 if stats.frames_kept % 200 == 0:
                     self.index.commit()
                 now = time.time()
@@ -175,11 +198,55 @@ class Indexer:
             self.index.commit()
 
         stats.seconds = time.time() - t0
-        LOG.info("%s: %d frames read, %d kept, %d faces (%d embeddable), %d objects "
-                 "in %.1fs (%.1fx realtime)", info.name, stats.frames_read,
-                 stats.frames_kept, stats.faces, stats.embedded, stats.objects,
-                 stats.seconds, stats.speed)
+        LOG.info("%s: %d frames read, %d kept, %d faces (%d embeddable), %d objects, "
+                 "%d appearance vectors in %.1fs (%.1fx realtime)", info.name,
+                 stats.frames_read, stats.frames_kept, stats.faces, stats.embedded,
+                 stats.objects, stats.appearances, stats.seconds, stats.speed)
         return stats
+
+    def _appearances(self, video_id: int, frame_id: int, t: float, frame,
+                     objects, tracker: IoUTracker, crop_dir: Path) -> int:
+        """One appearance vector per track every `appearance_every` seconds.
+
+        Embedding every person box in every frame would cost ~35 ms each and
+        fill the index with near-duplicates; one vector per track per second
+        and a half carries the same information.
+        """
+        engine = self.appearance_engine
+        assert engine is not None
+        people = [o for o in objects if o.label == "person" and engine.usable(o.box)]
+        if not people:
+            return 0
+
+        written = 0
+        for det, track in zip(people, tracker.update(t, [o.box for o in people])):
+            if track.embedded_at is not None and \
+                    t - track.embedded_at < self.opts.appearance_every:
+                continue
+            crop = crop_person(frame, det.box)
+            emb = engine.embed(crop)
+            if emb is None:
+                continue
+            track.embedded_at = t
+            crop_rel = None
+            if self.opts.save_crops:
+                crop_rel = self._write_person_crop(crop_dir, t, track.id, crop)
+            self.index.add_appearance(video_id, frame_id, t, track.id, det.box,
+                                      det.score, sharpness(crop), crop_rel, emb)
+            written += 1
+        return written
+
+    def _write_person_crop(self, out_dir: Path, t: float, track: int, crop) -> str | None:
+        if crop.size == 0:
+            return None
+        target_w = max(64, self.opts.crop_width // 2)
+        if crop.shape[1] > target_w:
+            scale = target_w / crop.shape[1]
+            crop = cv2.resize(crop, (target_w, max(1, int(crop.shape[0] * scale))),
+                              interpolation=cv2.INTER_AREA)
+        path = out_dir / f"p{track:05d}_{int(round(t * 1000)):09d}.jpg"
+        cv2.imwrite(str(path), crop, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        return self.index.rel(path)
 
     # -- helpers -----------------------------------------------------------
     def _write_thumb(self, out_dir: Path, t: float, frame: np.ndarray) -> str:

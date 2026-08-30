@@ -13,10 +13,13 @@ from fastapi import (APIRouter, Depends, File, HTTPException, Query, Request,
                      Response, UploadFile, status)
 from pydantic import BaseModel, Field
 
+from vscan.appearance import DEFAULT_APPEARANCE_THRESHOLD
 from vscan.events import arrivals, group_hits
 from vscan.faces import DEFAULT_MATCH_THRESHOLD
-from vscan.search import (enroll_from_faces, enroll_from_video, find_objects,
-                          find_person, load_clusters, started_at_map)
+from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
+                          enroll_from_video, find_objects, find_person,
+                          find_person_appearance, load_clusters, search_vectors,
+                          started_at_map)
 from vscan.util import fmt_timecode
 from vscan.video import grab_frame, probe
 
@@ -289,8 +292,9 @@ def list_videos(_: sqlite3.Row = Depends(require_viewer),
         for row in index.videos():
             counts = index.conn.execute(
                 "SELECT (SELECT COUNT(*) FROM faces WHERE video_id=?) AS faces,"
-                " (SELECT COUNT(*) FROM objects WHERE video_id=?) AS objects",
-                (row["id"], row["id"])).fetchone()
+                " (SELECT COUNT(*) FROM objects WHERE video_id=?) AS objects,"
+                " (SELECT COUNT(*) FROM appearances WHERE video_id=?) AS appearances",
+                (row["id"], row["id"], row["id"])).fetchone()
             out.append({
                 "id": int(row["id"]), "path": row["path"], "name": Path(row["path"]).name,
                 "duration": row["duration"], "duration_tc": fmt_timecode(row["duration"] or 0),
@@ -298,6 +302,7 @@ def list_videos(_: sqlite3.Row = Depends(require_viewer),
                 "started_at": row["started_at"], "sample_fps": row["sample_fps"],
                 "frames": row["frames_kept"], "indexed_at": row["indexed_at"],
                 "faces": counts["faces"], "objects": counts["objects"],
+                "appearances": counts["appearances"],
                 "available": Path(row["path"]).exists(),
             })
     return {"videos": out}
@@ -359,10 +364,14 @@ def list_persons(_: sqlite3.Row = Depends(require_viewer),
     with open_index(settings) as index:
         out = []
         for row in index.persons():
-            crops = [r["crop"] for r in index.person_embeddings(int(row["id"]))
-                     if r["crop"]]
+            refs = index.person_embeddings(int(row["id"]))
+            crops = [r["crop"] for r in refs if r["crop"]]
+            appearance = sum(1 for r in refs if r["kind"] == "appearance")
             out.append({"id": int(row["id"]), "name": row["name"],
-                        "references": int(row["n_emb"]), "created_at": row["created_at"],
+                        "references": int(row["n_emb"]),
+                        "face_references": int(row["n_emb"]) - appearance,
+                        "appearance_references": appearance,
+                        "created_at": row["created_at"],
                         "thumb": crops[0] if crops else None})
     return {"persons": out}
 
@@ -500,6 +509,39 @@ def enroll_from_cluster(person_id: int, body: FromClusterBody, request: Request,
     return {"added": added, "references": total}
 
 
+class AppearanceRefBody(BaseModel):
+    video_id: int
+    t: float
+    box: list[float] | None = None
+
+
+@router.post("/persons/{person_id}/appearance")
+def enroll_appearance_endpoint(person_id: int, body: AppearanceRefBody, request: Request,
+                               user: sqlite3.Row = Depends(require_analyst),
+                               store: Store = Depends(get_store),
+                               settings: Settings = Depends(settings_dep)) -> dict:
+    """Save 'this is what they look like' from a moment in an indexed video."""
+    with open_index(settings) as index:
+        person = index.conn.execute("SELECT * FROM persons WHERE id = ?",
+                                    (person_id,)).fetchone()
+        if person is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such person")
+        taken = appearance_at(index, body.video_id, body.t, body.box)
+        if taken is None:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                "no person could be read from that moment")
+        emb, box = taken
+        video = index.get_video(body.video_id)
+        enroll_appearance(index, person["name"], emb,
+                          f"video:{video['path']}@{fmt_timecode(body.t, ms=True)}")
+        name = person["name"]
+        total = len(index.person_embeddings(person_id, "appearance"))
+    store.audit("person.enrolled", user=user,
+                detail={"name": name, "source": "appearance", "t": body.t},
+                ip=client_ip(request))
+    return {"added": 1, "appearance_references": total, "box": box}
+
+
 @router.get("/persons/{person_id}/faces")
 def person_faces(person_id: int, _: sqlite3.Row = Depends(require_viewer),
                  settings: Settings = Depends(settings_dep)) -> dict:
@@ -582,6 +624,87 @@ def search_objects(body: ObjectSearch, request: Request,
                 detail={"labels": body.labels, "results": len(events)},
                 ip=client_ip(request))
     return _events_payload(events)
+
+
+class AppearanceSearch(BaseModel):
+    person_id: int
+    threshold: float = DEFAULT_APPEARANCE_THRESHOLD
+    video_ids: list[int] | None = None
+    start: float = 0.0
+    end: float | None = None
+    gap: float = 5.0
+    min_hits: int = 1
+    arrivals: bool = False
+    absence: float = 300.0
+
+
+@router.post("/search/appearance")
+def search_appearance(body: AppearanceSearch, request: Request,
+                      user: sqlite3.Row = Depends(require_viewer),
+                      store: Store = Depends(get_store),
+                      settings: Settings = Depends(settings_dep)) -> dict:
+    """Find someone by how they look, for the frames where no face is visible."""
+    with open_index(settings) as index:
+        person = index.conn.execute("SELECT * FROM persons WHERE id = ?",
+                                    (body.person_id,)).fetchone()
+        if person is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such person")
+        try:
+            hits = find_person_appearance(index, person["name"], body.threshold,
+                                          body.video_ids, body.start, body.end)
+        except SystemExit as exc:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        events = group_hits(hits, person["name"], body.gap, body.min_hits,
+                            started_at_map(index))
+        name = person["name"]
+    if body.arrivals:
+        events = arrivals(events, body.absence)
+    store.audit("search.appearance", user=user,
+                detail={"person": name, "threshold": body.threshold,
+                        "results": len(events)}, ip=client_ip(request))
+    return _events_payload(events)
+
+
+class SimilarSearch(BaseModel):
+    video_id: int
+    t: float
+    box: list[float] | None = None
+    threshold: float = DEFAULT_APPEARANCE_THRESHOLD
+    video_ids: list[int] | None = None
+    start: float = 0.0
+    end: float | None = None
+    gap: float = 5.0
+    min_hits: int = 1
+    arrivals: bool = False
+    absence: float = 300.0
+
+
+@router.post("/search/similar")
+def search_similar(body: SimilarSearch, request: Request,
+                   user: sqlite3.Row = Depends(require_viewer),
+                   store: Store = Depends(get_store),
+                   settings: Settings = Depends(settings_dep)) -> dict:
+    """"Who else looks like this?" - starting from any moment in the footage."""
+    with open_index(settings) as index:
+        taken = appearance_at(index, body.video_id, body.t, body.box)
+        if taken is None:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                "no person could be read from that moment - "
+                                "index this video with appearance vectors first")
+        emb, box = taken
+        hits = search_vectors(index, "appearances", emb, body.threshold,
+                              body.video_ids, 0.0, body.start, body.end)
+        label = f"looks like {fmt_timecode(body.t)}"
+        events = group_hits(hits, label, body.gap, body.min_hits,
+                            started_at_map(index))
+    if body.arrivals:
+        events = arrivals(events, body.absence)
+    store.audit("search.similar", user=user,
+                detail={"video_id": body.video_id, "t": body.t,
+                        "results": len(events)}, ip=client_ip(request))
+    payload = _events_payload(events)
+    payload["box"] = box
+    return payload
 
 
 class AskBody(BaseModel):

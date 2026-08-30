@@ -53,6 +53,14 @@ MODELS: dict[str, ModelSpec] = {
         approx_bytes=38_696_353,
         note="SFace 128-d face embeddings",
     ),
+    "appearance": ModelSpec(
+        key="appearance",
+        filename="person_reid_youtu_2021nov_int8bq.onnx",
+        subdir="person_reid_youtureid",
+        sha256="2b88597426335e6cd625119bdda090f9d3497bc80ba5b8a8910f65b8ccc09471",
+        approx_bytes=29_203_236,
+        note="Youtu ReID, 768-d appearance vectors (clothing/body, no face needed)",
+    ),
     "objects": ModelSpec(
         key="objects",
         filename="object_detection_yolox_2022nov.onnx",

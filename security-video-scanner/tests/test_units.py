@@ -9,6 +9,7 @@ import pytest
 
 from vscan.events import Hit, arrivals, group_hits
 from vscan.motion import MotionGate
+from vscan.tracking import IoUTracker, iou
 from vscan.util import (fmt_timecode, parse_datetime, parse_timecode,
                         start_time_from_name)
 
@@ -86,3 +87,28 @@ def test_motion_gate_ignores_static_scene():
     moved = still.copy()
     moved[30:90, 40:120] = 255
     assert gate.is_active(gate.score(moved))
+
+
+# ------------------------------------------------------------------ tracking
+def test_iou_of_identical_and_disjoint_boxes():
+    assert iou((0, 0, 10, 10), (0, 0, 10, 10)) == pytest.approx(1.0)
+    assert iou((0, 0, 10, 10), (50, 50, 10, 10)) == 0.0
+    assert iou((0, 0, 10, 10), (5, 0, 10, 10)) == pytest.approx(1 / 3)
+
+
+def test_tracker_follows_one_person_across_frames():
+    tracker = IoUTracker()
+    ids = []
+    for step in range(5):
+        (track,) = tracker.update(step * 0.5, [(10 + step * 4, 20, 40, 90)])
+        ids.append(track.id)
+    assert len(set(ids)) == 1, "a person drifting slowly is one track"
+    assert tracker.tracks[ids[0]].hits == 5
+
+
+def test_tracker_separates_two_people_and_forgets_stale_ones():
+    tracker = IoUTracker(max_gap=1.0)
+    first = tracker.update(0.0, [(0, 0, 40, 90), (300, 0, 40, 90)])
+    assert len({t.id for t in first}) == 2
+    later = tracker.update(5.0, [(0, 0, 40, 90)])          # long after the gap
+    assert later[0].id not in {t.id for t in first}, "a stale track is not reused"

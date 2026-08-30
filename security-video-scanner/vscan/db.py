@@ -11,7 +11,7 @@ import numpy as np
 
 from .util import ensure_dir
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
@@ -66,6 +66,21 @@ CREATE TABLE IF NOT EXISTS objects (
 );
 CREATE INDEX IF NOT EXISTS idx_objects_vtl ON objects(video_id, t, label);
 
+CREATE TABLE IF NOT EXISTS appearances (
+    id        INTEGER PRIMARY KEY,
+    video_id  INTEGER NOT NULL REFERENCES videos(id) ON DELETE CASCADE,
+    frame_id  INTEGER NOT NULL REFERENCES frames(id) ON DELETE CASCADE,
+    t         REAL NOT NULL,
+    track     INTEGER,          -- boxes linked across frames by the IoU tracker
+    x REAL, y REAL, w REAL, h REAL,
+    score     REAL,
+    sharpness REAL,
+    crop      TEXT,
+    emb       BLOB
+);
+CREATE INDEX IF NOT EXISTS idx_appearances_vt ON appearances(video_id, t);
+CREATE INDEX IF NOT EXISTS idx_appearances_track ON appearances(video_id, track);
+
 CREATE TABLE IF NOT EXISTS persons (
     id         INTEGER PRIMARY KEY,
     name       TEXT UNIQUE NOT NULL,
@@ -77,6 +92,7 @@ CREATE TABLE IF NOT EXISTS person_embeddings (
     id        INTEGER PRIMARY KEY,
     person_id INTEGER NOT NULL REFERENCES persons(id) ON DELETE CASCADE,
     emb       BLOB NOT NULL,
+    kind      TEXT NOT NULL DEFAULT 'face',   -- 'face' | 'appearance'
     source    TEXT,
     crop      TEXT
 );
@@ -114,10 +130,21 @@ class Index:
         self.conn.execute("PRAGMA busy_timeout=15000")
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.executescript(SCHEMA)
+        self._migrate()
         self.conn.execute(
-            "INSERT OR IGNORE INTO meta(key, value) VALUES ('schema_version', ?)",
+            "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
             (str(SCHEMA_VERSION),),
         )
+        self.conn.commit()
+
+    def _migrate(self) -> None:
+        """Bring an index written by an older version up to the current schema."""
+        columns = {r["name"] for r in
+                   self.conn.execute("PRAGMA table_info(person_embeddings)")}
+        if columns and "kind" not in columns:
+            self.conn.execute(
+                "ALTER TABLE person_embeddings ADD COLUMN kind TEXT NOT NULL"
+                " DEFAULT 'face'")
         self.conn.commit()
 
     # -- lifecycle ---------------------------------------------------------
@@ -168,7 +195,7 @@ class Index:
         return int(cur.lastrowid)
 
     def clear_video_data(self, video_id: int) -> None:
-        for tbl in ("objects", "faces", "frames"):
+        for tbl in ("objects", "appearances", "faces", "frames"):
             self.conn.execute(f"DELETE FROM {tbl} WHERE video_id = ?", (video_id,))
         self.conn.commit()
 
@@ -211,6 +238,17 @@ class Index:
             "INSERT INTO faces(video_id, frame_id, t, x, y, w, h, score, sharpness, crop, emb)"
             " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (video_id, frame_id, round(t, 3), *[float(v) for v in box],
+             float(score), float(sharpness), crop,
+             emb_to_blob(emb) if emb is not None else None))
+        return int(cur.lastrowid)
+
+    def add_appearance(self, video_id: int, frame_id: int, t: float, track: int,
+                       box: Sequence[float], score: float, sharpness: float,
+                       crop: str | None, emb: np.ndarray | None) -> int:
+        cur = self.conn.execute(
+            "INSERT INTO appearances(video_id, frame_id, t, track, x, y, w, h,"
+            " score, sharpness, crop, emb) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            (video_id, frame_id, round(t, 3), track, *[float(v) for v in box],
              float(score), float(sharpness), crop,
              emb_to_blob(emb) if emb is not None else None))
         return int(cur.lastrowid)
@@ -279,16 +317,21 @@ class Index:
             " AS n_emb FROM persons p ORDER BY p.name"))
 
     def add_person_embedding(self, person_id: int, emb: np.ndarray, source: str,
-                             crop: str | None = None) -> int:
+                             crop: str | None = None, kind: str = "face") -> int:
         cur = self.conn.execute(
-            "INSERT INTO person_embeddings(person_id, emb, source, crop) VALUES (?,?,?,?)",
-            (person_id, emb_to_blob(emb), source, crop))
+            "INSERT INTO person_embeddings(person_id, emb, kind, source, crop)"
+            " VALUES (?,?,?,?,?)", (person_id, emb_to_blob(emb), kind, source, crop))
         self.conn.commit()
         return int(cur.lastrowid)
 
-    def person_embeddings(self, person_id: int) -> list[sqlite3.Row]:
-        return list(self.conn.execute(
-            "SELECT * FROM person_embeddings WHERE person_id = ?", (person_id,)))
+    def person_embeddings(self, person_id: int,
+                          kind: str | None = None) -> list[sqlite3.Row]:
+        sql = "SELECT * FROM person_embeddings WHERE person_id = ?"
+        params: list[Any] = [person_id]
+        if kind:
+            sql += " AND kind = ?"
+            params.append(kind)
+        return list(self.conn.execute(sql, params))
 
     def delete_person(self, name: str) -> bool:
         row = self.person_by_name(name)
@@ -303,6 +346,21 @@ class Index:
             "INSERT OR REPLACE INTO face_labels(face_id, person_id, score, source)"
             " VALUES (?,?,?,?)", (face_id, person_id, score, source))
 
+    def rows_by_id(self, table: str, ids: Sequence[int]) -> dict[int, sqlite3.Row]:
+        """Fetch detection rows for the ids a vector search returned."""
+        if table not in ("faces", "appearances"):
+            raise ValueError(f"unsupported table {table!r}")
+        out: dict[int, sqlite3.Row] = {}
+        ids = list(ids)
+        for start in range(0, len(ids), 900):        # SQLite parameter limit
+            chunk = ids[start:start + 900]
+            sql = (f"SELECT d.*, v.path AS video_path, v.started_at AS video_started_at"
+                   f" FROM {table} d JOIN videos v ON v.id = d.video_id"
+                   f" WHERE d.id IN ({','.join('?' * len(chunk))})")
+            for row in self.conn.execute(sql, chunk):
+                out[int(row["id"])] = row
+        return out
+
     def commit(self) -> None:
         self.conn.commit()
 
@@ -312,6 +370,7 @@ class Index:
             "videos": q("SELECT COUNT(*) FROM videos"),
             "frames": q("SELECT COUNT(*) FROM frames"),
             "faces": q("SELECT COUNT(*) FROM faces"),
+            "appearances": q("SELECT COUNT(*) FROM appearances"),
             "objects": q("SELECT COUNT(*) FROM objects"),
             "persons": q("SELECT COUNT(*) FROM persons"),
         }

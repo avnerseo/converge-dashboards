@@ -19,7 +19,9 @@ explicitly switched on.
 
 Rough indexing throughput per worker, measured on 4 cores with 1080p input at
 2 sampled frames per second: **~13× realtime** with face detection only,
-**~3× realtime** with object detection as well. The motion gate skips frames
+**~3× realtime** with object detection as well, and roughly **~2×** with
+appearance vectors on top (one re-id vector costs ~35 ms, but the tracker only
+computes one per person every 1.5 s rather than one per box per frame). The motion gate skips frames
 where nothing changed, so real CCTV usually runs far faster than that. One
 `VSCAN_WORKERS` slot needs roughly one core.
 
@@ -167,10 +169,17 @@ and migrated on start; the data volume is not touched.
 | `/data/index/index.db` | frame times, face boxes, face vectors, object boxes | purge, or removing a video |
 | `/data/index/thumbs`, `crops` | frame thumbnails and face crops (JPEG) | same |
 | `/data/index/clusters.json` | face grouping results | overwritten on each grouping run |
+| `/data/index/vectors-*.npy` | the search matrices (a copy of the vectors above) | rebuilt on demand; deleted with the rows |
 | `/data/app.db` | accounts, sessions, jobs, audit log | account deletion; the audit log is kept |
 | `/data/previews`, `exports` | transcoded playback windows, exported clips | previews self-prune; exports are manual |
 
 ## 9. Troubleshooting
+
+Before sizing anything, run `vscan doctor` on a representative file from each
+camera - it reports whether faces are even large enough to match on that view,
+whether appearance search will work, and what indexing an hour will cost in
+CPU seconds and disk. It is the honest answer to "will this work on our
+cameras", and it takes under a minute per file.
 
 | Symptom | Cause and fix |
 |---|---|
@@ -178,7 +187,9 @@ and migrated on start; the data volume is not touched.
 | Video shows "the source file is not reachable" | the `/footage` mount changed or the file moved; re-index |
 | Preview fails to transcode | this ffmpeg build lacks the encoder; set `VSCAN_PREVIEW_CODEC=vp9` |
 | Indexing is slow | lower **Frames per second**, turn off object detection, raise `VSCAN_WORKERS` if cores allow |
-| No faces are ever found | the camera is too far or too high; faces need to be ~24 px wide. Use object search instead |
+| No faces are ever found | the camera is too far or too high; faces need to be ~24 px wide. Run `vscan doctor` to confirm, then index with `--appearance` and search by appearance instead |
+| Appearance search returns nothing | that video was indexed without `--appearance`; re-index it with the option on |
+| A search feels slow the first time | the vector matrix is rebuilt after each indexing run; later searches use the memory-mapped cache |
 | Instruction search returns 403 | it is switched off, or the user is not an analyst |
 
 Server logs: `docker compose logs -f vscan`. Every user action worth reviewing

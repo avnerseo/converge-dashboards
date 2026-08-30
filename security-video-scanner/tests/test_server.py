@@ -182,11 +182,12 @@ def test_full_flow_index_cluster_enroll_search(client, footage):
     login(client)
     start = client.post("/api/videos/index", json={
         "paths": [str(footage / "cam1.mp4")],
-        "options": {"sample_fps": 3, "objects": True}})
+        "options": {"sample_fps": 3, "objects": True, "appearance": True}})
     assert start.status_code == 202, start.text
     job = wait_for_job(client, start.json()["job_id"])
     assert job["status"] == "done", job
     assert job["result"]["totals"]["faces"] > 0
+    assert job["result"]["totals"]["appearances"] > 0
 
     videos = client.get("/api/videos").json()["videos"]
     assert len(videos) == 1 and videos[0]["frames"] > 0
@@ -247,6 +248,45 @@ def test_enroll_from_uploaded_photo(client):
     assert response.json()["added"] == 1
     assert client.post("/api/search/person",
                        json={"person_id": person_id}).json()["count"] == 1
+
+
+@pytest.mark.skipif(not (HAS_FACES and HAS_FFMPEG), reason="needs the indexed flow")
+def test_appearance_search_and_enrolment(client):
+    login(client)
+    videos = client.get("/api/videos").json()["videos"]
+    video_id = videos[0]["id"]
+    assert videos[0]["appearances"] > 0
+
+    # "who else looks like the person at 00:00:04"
+    similar = client.post("/api/search/similar",
+                          json={"video_id": video_id, "t": 4.0})
+    assert similar.status_code == 200, similar.text
+    body = similar.json()
+    assert body["count"] >= 1 and len(body["box"]) == 4
+
+    # the same appearance saved as a reference, then searched by person
+    person_id = client.post("/api/persons",
+                            json={"name": "By Appearance"}).json()["person"]["id"]
+    saved = client.post(f"/api/persons/{person_id}/appearance",
+                        json={"video_id": video_id, "t": 4.0})
+    assert saved.status_code == 200, saved.text
+    assert saved.json()["appearance_references"] == 1
+
+    found = client.post("/api/search/appearance", json={"person_id": person_id})
+    assert found.status_code == 200 and found.json()["count"] >= 1
+
+    listed = next(p for p in client.get("/api/persons").json()["persons"]
+                  if p["id"] == person_id)
+    assert listed["appearance_references"] == 1 and listed["face_references"] == 0
+
+
+def test_appearance_search_without_references_is_a_clear_error(client):
+    login(client)
+    person_id = client.post("/api/persons",
+                            json={"name": "No Refs"}).json()["person"]["id"]
+    response = client.post("/api/search/appearance", json={"person_id": person_id})
+    assert response.status_code == 400
+    assert "appearance" in response.json()["detail"].lower()
 
 
 # ------------------------------------------------------------------ admin
