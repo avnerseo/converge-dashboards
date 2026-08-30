@@ -122,10 +122,12 @@
   "evidence": [
     {
       "where": "index.html §methodology @a7a3827",
+      "kind": "rule",
       "quote_he": "איתותים סותרים בין מקורות (כמו פער יעד המחיר ב-MU) מוצגים במפורש עם דגל שקיפות במקום להוצא בשקט."
     },
     {
       "where": "index.html §methodology @a7a3827",
+      "kind": "rule",
       "quote_he": "בדיקת עדות 13F/13G/Form 144 לכניסה או יציאה מוסדית ב-30 הימים האחרונים לכל אחת מ-10 המניות."
     }
   ],

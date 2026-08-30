@@ -112,6 +112,12 @@
   "evidence": [
     {
       "where": "index.html §methodology @bc42003",
+      "kind": "rule",
+      "quote_he": "מניה שהופיעה בשתיים או שלוש מתוך השלוש מסומנת \"שכבה 1\""
+    },
+    {
+      "where": "index.html §methodology @bc42003",
+      "kind": "run_context",
       "quote_he": "מניה שהופיעה בשתיים או שלוש מתוך השלוש מסומנת \"שכבה 1\" — הרצה זו זיהתה שתי מועמדות (NVDA, KO), שיפור לעומת מועמדת אחת בהרצה הקודמת (V)."
     }
   ],

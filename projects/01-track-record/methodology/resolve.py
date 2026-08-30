@@ -136,8 +136,12 @@ def verify(vs=None):
         # every quoted rule must still be findable in the file it is cited from
         for ev in v.get("evidence", []):
             q = ev["quote_he"]
-            if q.startswith("[") or "..." in q:
-                continue  # elided or an explicit statement of absence
+            if ev.get("kind") == "absence":
+                continue  # records that a section was missing, not that it said something
+            if "..." in q and ev.get("kind") == "rule":
+                errs.append(f"{vid}: rule quote is elided and so can never be matched "
+                            f"as a substring — split it into verbatim clauses: {q[:50]}…")
+                continue
             m = re.search(r"@([0-9a-f]{7,40})", ev["where"])
             if not m:
                 warns.append(f"{vid}: evidence has no commit anchor: {ev['where']}")

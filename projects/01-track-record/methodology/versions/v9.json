@@ -105,7 +105,13 @@
   "evidence": [
     {
       "where": "index.html §methodology @280245e",
-      "quote_he": "(ב) איכות וערך פונדמנטלי — Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat. ... מניה המופיעה בשתיים מתוך שלוש הרשימות מקבלת מעמד שכבה 1. שכבת סנטימנט משנית (StockTwits/Reddit/X) נבדקת בנפרד ואינה משפיעה על הציון הראשי."
+      "kind": "rule",
+      "quote_he": "(ב) איכות וערך פונדמנטלי — Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat."
+    },
+    {
+      "where": "index.html §methodology @280245e",
+      "kind": "rule",
+      "quote_he": "מניה המופיעה בשתיים מתוך שלוש הרשימות מקבלת מעמד שכבה 1. שכבת סנטימנט משנית (StockTwits/Reddit/X) נבדקת בנפרד ואינה משפיעה על הציון הראשי."
     }
   ],
   "unverifiable": [

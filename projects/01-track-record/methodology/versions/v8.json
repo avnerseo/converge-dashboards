@@ -111,10 +111,12 @@
   "evidence": [
     {
       "where": "index.html §methodology @f354588",
+      "kind": "rule",
       "quote_he": "שלוש מתודולוגיות: (א) TipRanks/Zacks/MarketBeat. (ב) GuruFocus/Simply Wall St/Finviz/Seeking Alpha. (ג) Motley Fool/Barron's/Morningstar/Kiplinger/Forbes. 2/3 = שכבה 1."
     },
     {
       "where": "index.html §tier1 @d25442d",
+      "kind": "run_context",
       "quote_he": "הרצה זו החזירה רק 3 מניות שעומדות בקריטריון המחמיר הזה — פחות מהרגיל, בעיקר בגלל מגבלת חיפוש (ר' שקיפות ומגבלות בהמשך). לא הומצאה אף מניה כדי \"למלא\" את השכבה."
     }
   ],

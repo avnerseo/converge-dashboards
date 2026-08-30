@@ -86,6 +86,8 @@ retroactive rewrite the whole track record is built to make impossible.
 
 ```
 python3 resolve.py --verify
+python3 drift.py                       did the rules change under us?
+python3 test_drift.py                  the detector's own tests
 ```
 
 Checks that every version's `rule_hash` matches its `selection` block, that no
@@ -98,6 +100,53 @@ against the hash-chained history, not just asserted.
 Three transcription errors were caught by this check while the versions were
 being written, and fixed against the committed HTML.
 
+## Keeping it from rotting
+
+Everything above is a record of what already happened. Left alone it decays: the
+dashboard rewrites `index.html` every day, and tomorrow's run publishes under
+some rule set nobody registered. Its picks land in the ledger with a null stamp,
+or — worse — under a version whose rules never produced them.
+
+`drift.py` runs after the daily update and answers one question: does the commit
+that was just published still carry the rules of the newest registered version?
+
+The detector is the evidence itself. Each version quotes the clauses that
+establish its rules; a quote that has gone missing **is** the rule change, and
+the script names it and diffs the rule text. Quotes tagged `run_context` are
+excluded — "this run found two candidates" is not a rule and never recurs
+verbatim. Two further checks exist because both have already gone wrong once:
+whether the extractor can still read a ticker off the cards (markup moved from
+`data-q` to `data-ticker` on 08-27 and six publication days silently left the
+ledger), and whether carry-forward is on (it appeared unannounced on 08-29 and
+lasted a day).
+
+```
+0  every publishing commit is claimed, rules verified
+1  unclaimed commit, rules unchanged -> add the commit to the newest version
+2  the rules changed -> write the next version before scoring anything
+```
+
+`../check.py` chains it with verification, extraction and scoring — the thing to
+run after every daily update.
+
+### The detector has its own tests
+
+`test_drift.py`, 28 assertions against real commits. They are not ceremony:
+writing them found two bugs that made `drift.py` report "no drift" for the wrong
+reason — a `\b` after a quote character that made every section extract as
+empty, and a section regex that returned nothing for the last section on the
+page. A detector that goes green because its own parsing silently failed is
+worse than no detector, since it is the one check standing between a rule change
+and a ledger that absorbs it in silence.
+
+The fixture is 2026-08-30, which really did remove the carry-forward rule that
+08-29 introduced — an honest test that a substantive change is caught, rather
+than a synthetic one.
+
+`--verify` now also rejects a `rule` quote containing an elision. An elided
+quote can never be matched as a substring, so it could never gate drift; v9's
+was split into two verbatim clauses.
+
 ## Commands
 
 ```
@@ -105,4 +154,6 @@ python3 resolve.py --list              # versions, dates, commits, hashes
 python3 resolve.py --commit 489b9f2    # -> v10
 python3 resolve.py --diff v9 v10       # what changed, and whether it matters
 python3 resolve.py --verify
+python3 drift.py                       did the rules change under us?
+python3 test_drift.py                  the detector's own tests
 ```

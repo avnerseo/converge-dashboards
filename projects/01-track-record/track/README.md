@@ -19,6 +19,17 @@ mentioned again. CAT, GEV, BRK.B and NKE lasted two. An engine whose output is
 never scored can never be wrong — which means it can never be shown to be right
 either. That is the asset being destroyed daily.
 
+## Run this after every daily update
+
+```
+python3 ../check.py
+```
+
+Verifies the frozen rule sets, checks whether the new commit published under an
+unregistered methodology, rebuilds the ledger, runs the power gate, and reports
+close-store coverage. Exit 2 means the methodology changed and nothing should be
+scored until the next version is written.
+
 ## Files
 
 - `extract_ledger.py` — replays every commit touching `index.html`, parses the
