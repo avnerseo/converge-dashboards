@@ -1,0 +1,170 @@
+# Free Claude Code (FCC) - isolated launcher for Windows PowerShell.
+#
+# Runs the FCC proxy (https://github.com/Alishahryar1/free-claude-code) and points
+# a SEPARATE Claude Code profile at it. Your existing Claude Code install, login and
+# settings are never touched: everything lives under $FccHome and the proxied
+# Claude Code runs with its own CLAUDE_CONFIG_DIR.
+#
+# Usage:  .\fcc.ps1 setup | start | claude | status | stop | uninstall
+# If PowerShell blocks the script:  Set-ExecutionPolicy -Scope Process Bypass
+
+param(
+    [Parameter(Position = 0)]
+    [ValidateSet('setup', 'start', 'claude', 'status', 'stop', 'uninstall')]
+    [string]$Command = 'status',
+
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$Rest
+)
+
+$ErrorActionPreference = 'Stop'
+
+$FccHome  = if ($env:FCC_HOME) { $env:FCC_HOME } else { Join-Path $HOME '.free-claude-code' }
+$FccPort  = if ($env:FCC_PORT) { [int]$env:FCC_PORT } else { 8082 }
+$AppDir    = Join-Path $FccHome 'app'
+$EnvFile   = Join-Path $AppDir  '.env'
+$ConfigDir = Join-Path $FccHome 'claude-config'
+$LogFile   = Join-Path $FccHome 'server.log'
+$PidFile   = Join-Path $FccHome 'server.pid'
+$RepoUrl   = 'https://github.com/Alishahryar1/free-claude-code.git'
+
+function Write-Info { param($m) Write-Host "==> $m" -ForegroundColor Cyan }
+function Write-Warn { param($m) Write-Host "warn: $m" -ForegroundColor Yellow }
+function Die       { param($m) Write-Host "error: $m" -ForegroundColor Red; exit 1 }
+function Have      { param($c) [bool](Get-Command $c -ErrorAction SilentlyContinue) }
+
+function Test-PortOpen {
+    try {
+        $c = [System.Net.Sockets.TcpClient]::new()
+        $ok = $c.ConnectAsync('127.0.0.1', $FccPort).Wait(700)
+        $c.Close()
+        return $ok
+    } catch { return $false }
+}
+
+function Invoke-Setup {
+    if (-not (Have git))  { Die 'git is required (https://git-scm.com/download/win)' }
+    if (-not (Have uv))   { Die 'uv is not installed. Install it first (see README, step 1) and re-run.' }
+    if (-not (Have claude)) { Write-Warn "the 'claude' command was not found - install Claude Code before using '.\fcc.ps1 claude'" }
+
+    New-Item -ItemType Directory -Force -Path $FccHome, $ConfigDir | Out-Null
+
+    if (Test-Path (Join-Path $AppDir '.git')) {
+        Write-Info "updating existing checkout in $AppDir"
+        git -C $AppDir pull --ff-only
+    } else {
+        Write-Info "cloning FCC into $AppDir"
+        git clone --depth 1 $RepoUrl $AppDir
+    }
+
+    Write-Info 'resolving python dependencies (uv sync)'
+    Push-Location $AppDir; try { uv sync } finally { Pop-Location }
+
+    if (Test-Path $EnvFile) {
+        Write-Info ".env already exists - leaving it as is (edit $EnvFile to change provider)"
+    } else {
+        $example = Join-Path $AppDir '.env.example'
+        if (Test-Path $example) { Copy-Item $example $EnvFile } else { New-Item -ItemType File -Path $EnvFile | Out-Null }
+
+        Write-Host ''
+        Write-Host 'Which provider should the proxy use?'
+        Write-Host '  1) OpenRouter   (recommended: you can opt out of training in account settings)'
+        Write-Host '  2) NVIDIA NIM   (bigger free quota, but free-tier inputs are used for training)'
+        Write-Host '  3) Local only   (LM Studio / Ollama - nothing leaves your machine)'
+        $choice = Read-Host 'choice [1]'
+        $keyVar = switch ($choice) { '2' { 'NVIDIA_NIM_API_KEY' } '3' { '' } default { 'OPENROUTER_API_KEY' } }
+
+        if ($keyVar) {
+            $secure = Read-Host "$keyVar (input hidden)" -AsSecureString
+            $plain  = [System.Net.NetworkCredential]::new('', $secure).Password
+            if (-not $plain) { Die 'no key entered' }
+            $lines = @()
+            if (Test-Path $EnvFile) { $lines = Get-Content $EnvFile | Where-Object { $_ -notmatch "^$keyVar=" } }
+            $lines += "$keyVar=$plain"
+            Set-Content -Path $EnvFile -Value $lines -Encoding utf8
+            Write-Info "wrote $keyVar to $EnvFile"
+        } else {
+            Write-Info 'no cloud key stored - configure your local endpoint in the admin UI'
+        }
+    }
+
+    Write-Host ''
+    Write-Info 'setup complete.'
+    Write-Host '    next:  .\fcc.ps1 start     # boot the proxy'
+    Write-Host '           .\fcc.ps1 claude    # open Claude Code against it'
+}
+
+function Invoke-Start {
+    if (-not (Test-Path $AppDir)) { Die "not set up yet - run '.\fcc.ps1 setup' first" }
+    if (Test-PortOpen) { Write-Info "proxy already listening on port $FccPort"; return }
+    Write-Info "starting fcc-server on port $FccPort (log: $LogFile)"
+    $p = Start-Process -FilePath 'uv' -ArgumentList 'run', 'fcc-server' -WorkingDirectory $AppDir `
+                       -RedirectStandardOutput $LogFile -RedirectStandardError "$LogFile.err" `
+                       -WindowStyle Hidden -PassThru
+    Set-Content -Path $PidFile -Value $p.Id
+    foreach ($i in 1..40) {
+        if (Test-PortOpen) {
+            Write-Info "proxy is up   ->  admin UI: http://127.0.0.1:$FccPort"
+            Write-Host '    pick your model there, then run: .\fcc.ps1 claude'
+            return
+        }
+        Start-Sleep -Milliseconds 500
+    }
+    Write-Warn "server did not open port $FccPort within 20s - last log lines:"
+    if (Test-Path $LogFile) { Get-Content $LogFile -Tail 25 }
+    if (Test-Path "$LogFile.err") { Get-Content "$LogFile.err" -Tail 25 }
+    exit 1
+}
+
+function Invoke-Claude {
+    if (-not (Have claude)) { Die "the 'claude' command is not installed" }
+    if (-not (Test-PortOpen)) { Die "proxy is not running - run '.\fcc.ps1 start' first" }
+    New-Item -ItemType Directory -Force -Path $ConfigDir | Out-Null
+    Write-Info "launching Claude Code against the local proxy (isolated profile: $ConfigDir)"
+    # These three vars are the whole trick: a separate config dir keeps your paid
+    # login untouched, and the base URL sends traffic to the local proxy instead.
+    # They are set for THIS PowerShell session only.
+    $env:CLAUDE_CONFIG_DIR   = $ConfigDir
+    $env:ANTHROPIC_BASE_URL  = "http://127.0.0.1:$FccPort"
+    $env:ANTHROPIC_AUTH_TOKEN = 'freecc'
+    try { & claude @Rest } finally {
+        Remove-Item Env:CLAUDE_CONFIG_DIR, Env:ANTHROPIC_BASE_URL, Env:ANTHROPIC_AUTH_TOKEN -ErrorAction SilentlyContinue
+    }
+}
+
+function Invoke-Status {
+    Write-Host "FCC_HOME : $FccHome"
+    Write-Host ("app      : " + $(if (Test-Path $AppDir) { 'present' } else { 'missing (run setup)' }))
+    Write-Host ("env file : " + $(if (Test-Path $EnvFile) { $EnvFile } else { 'missing' }))
+    Write-Host ("port     : $FccPort " + $(if (Test-PortOpen) { '(listening)' } else { '(closed)' }))
+    if (Test-Path $PidFile) { Write-Host ("pid      : " + (Get-Content $PidFile)) }
+    Write-Host "profile  : $ConfigDir   # proxied Claude Code config, separate from your main one"
+}
+
+function Invoke-Stop {
+    if (Test-Path $PidFile) {
+        $procId = [int](Get-Content $PidFile)
+        $proc = Get-Process -Id $procId -ErrorAction SilentlyContinue
+        if ($proc) { Stop-Process -Id $procId -Force; Write-Info "stopped pid $procId" }
+        else { Write-Warn "process $procId is not running" }
+        Remove-Item $PidFile -Force
+    } else { Write-Warn "no running server recorded in $PidFile" }
+}
+
+function Invoke-Uninstall {
+    Invoke-Stop
+    $a = Read-Host "delete $FccHome and everything in it? [y/N]"
+    if ($a -match '^[yY]') {
+        Remove-Item -Recurse -Force $FccHome
+        Write-Info "removed $FccHome - your main Claude Code config was never modified"
+    } else { Write-Info 'cancelled' }
+}
+
+switch ($Command) {
+    'setup'     { Invoke-Setup }
+    'start'     { Invoke-Start }
+    'claude'    { Invoke-Claude }
+    'status'    { Invoke-Status }
+    'stop'      { Invoke-Stop }
+    'uninstall' { Invoke-Uninstall }
+}
