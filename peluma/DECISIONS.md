@@ -1020,3 +1020,65 @@ This project already tried repricing the Sets to $39.90 and reverted, because eB
 same generic product at $8.99–$16.94. Margin is not the binding constraint at $39.90; price
 acceptance is. Raising the price fixes the spreadsheet and may cost the conversion. That is a
 merchant decision, and no price was changed here.
+
+### Correction to the section above — the gaps were smaller than stated (30 Aug)
+
+Three things were already in this repo and were not checked before writing the section above.
+Same failure the 28 Aug table records: inference while a check was available.
+
+**1. `HANDOFF.md` re-proposes a change this project already made and reverted.**
+It recommends raising to $39.90 as "a field edit rather than a strategic leap". On 28 Aug all
+three Set variants *were* moved to $39.90 and verified live, then two were reverted, because
+eBay sells the same generic product at $8.99–$16.94. Shopify confirms the reverted state today:
+Porcelain White Set $29.90, Set $29.90, Milk Brown Set $39.90. The recommendation is not new
+and its counter-evidence is already on file.
+
+**2. The three "unknown" SKUs are not unknown — packed weights pin them.**
+Zendrop's weight quotes, written to Shopify and verified on 28 Aug:
+
+| SKU | variant | weight | reasoning | landed |
+|---|---|---|---|---|
+| MDYQJZF3J | Porcelain White Brush | 0.173 kg | identical to `FORC9Q8LH`, quoted at 0.173 kg and $8.82 landed — same item, different colour | **≈ 8.82** |
+| ZAF7RY7XJ | Purple Brush | 0.125 kg | lighter than the above, so shipping is no higher | **≤ 8.82** |
+| Z75Y6C7M0 | Set | 0.307 kg | identical to both confirmed Sets at 0.307 kg | **≈ 17.42** |
+
+Estimates, not quotes — but grounded in measured weights from the supplier, not in a ratio.
+Calling them "unknown" overstated the gap.
+
+**3. The Paw Cup cannot be fixed from Shopify at all.**
+`Location/115449626937` (Zendrop) returns `fulfillmentService.inventoryManagement: true`. The
+fulfilment service owns quantities at that location and Shopify rejects manual writes to it.
+Asking for permission to run `inventorySetQuantities` was the wrong ask: the action does not
+exist on this side. Stock has to come from Zendrop pushing it.
+
+### Contribution per variant at today's live prices
+
+Payment fee 2.9% + $0.30. Landed costs above; cup costs are `unitCost` on a fresh NexoraUSA
+import that ships $0 to the US.
+
+| variant | price | landed | fee | **contribution** | margin | clears $17 gate |
+|---|---|---|---|---|---|---|
+| Purple Brush | 29.90 | ≤8.82 | 1.17 | **≥19.91** | ≥66.6% | **yes** |
+| Porcelain White Brush | 29.90 | ≈8.82 | 1.17 | **≈19.91** | 66.6% | **yes** |
+| Milk Brown Set | 39.90 | 17.42 | 1.46 | **21.02** | 52.7% | **yes** |
+| Porcelain White Set | 29.90 | 17.42 | 1.17 | **11.31** | 37.8% | no |
+| Set | 29.90 | ≈17.42 | 1.17 | **≈11.31** | 37.8% | no |
+| Paw Cup, S | 16.90 | 7.65 | 0.79 | **8.46** | 50.1% | n/a |
+| Paw Cup, L | 16.90 | 8.56 | 0.79 | **7.55** | 44.7% | n/a |
+
+### What this changes about the gate
+
+`HANDOFF.md` frames the store as uniformly unable to support paid acquisition. It is not
+uniform. **Three of the five brush variants already clear ~$17 contribution at today's prices,
+with no change at all.** Two do not, and one of those two is the variant order #1001 actually
+bought.
+
+The binding problem is therefore **mix, not price level**: five variants sit at essentially one
+price while landed cost ranges $8.82 → $17.42, so contribution ranges $11.31 → $19.91 for the
+same $29.90. This repo already named that on 28 Aug — "the pricing was steering customers to
+the worst variant" — and the reprice that was meant to fix it was reverted on market-price
+grounds, leaving the anomaly in place.
+
+Two ways out, and they are the merchant's call, not an inference to be made here:
+steer the mix toward the single brushes (featured variant, default selection, imagery), or
+make the Sets carry their own cost. No price or variant order was changed.
