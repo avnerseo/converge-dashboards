@@ -1,0 +1,252 @@
+{
+  "clip_id": "converge-he-market-update-v1",
+  "language": "he",
+  "target_duration_sec": 87.55,
+  "note": "Figures are illustrative test-fixture values, not real market data.",
+  "segments": [
+    {
+      "id": 1,
+      "start": 0.0,
+      "end": 10.1,
+      "text_he": "שלום, כאן העדכון היומי של קונברג' לשלושים באוגוסט אלפיים עשרים ושש. שלוש מניות הזיזו את השוק, ואחת מהן הפתיעה."
+    },
+    {
+      "id": 2,
+      "start": 10.45,
+      "end": 28.15,
+      "text_he": "אנבידיה, סימול אן־וי־די־איי, עלתה שלושה אחוז ושבע עשיריות ונסגרה על מאה שמונים ותשעה דולר ועשרים וארבעה סנט. שווי השוק — ארבעה טריליון דולר."
+    },
+    {
+      "id": 3,
+      "start": 28.5,
+      "end": 44.1,
+      "text_he": "מנגד, טסלה, סימול טי־אס־אל־איי, ירדה שני אחוז וחצי. שתי סיבות: מכירות חלשות באירופה, ושתי הורדות דירוג."
+    },
+    {
+      "id": 4,
+      "start": 44.45,
+      "end": 60.35,
+      "text_he": "אפל, סימול איי־איי־פי־אל, כמעט לא זזה — שמונה עשיריות האחוז. אבל הודיעה על רכישה עצמית בהיקף מאה ועשרה מיליארד דולר."
+    },
+    {
+      "id": 5,
+      "start": 60.7,
+      "end": 73.1,
+      "text_he": "בתל אביב, מדד תל אביב שלושים וחמש עלה אחוז ושתי עשיריות. לאומי פלוס אחוז ושמונה, פועלים פלוס אחוז ושלוש. הדולר על שלושה שקלים ושבעים ואחת אגורות."
+    },
+    {
+      "id": 6,
+      "start": 73.45,
+      "end": 87.55,
+      "text_he": "לסיכום: שוק חזק, אבל התנודתיות עלתה. מדד הפחד וי־איי־אקס טיפס לשמונה עשרה נקודות ושש. שיהיה יום מסחר טוב."
+    }
+  ],
+  "critical_tokens": {
+    "_comment": "Any error on ANY of these fails the tool outright - see RUBRIC.md kill rule. 'accept' lists renderings that count as correct in the target language.",
+    "tickers": [
+      {
+        "id": "NVDA",
+        "segment": 2,
+        "spoken_he": "אן־וי־די־איי",
+        "accept": [
+          "NVDA",
+          "N V D A",
+          "Nvidia",
+          "NVIDIA"
+        ]
+      },
+      {
+        "id": "TSLA",
+        "segment": 3,
+        "spoken_he": "טי־אס־אל־איי",
+        "accept": [
+          "TSLA",
+          "T S L A",
+          "Tesla"
+        ]
+      },
+      {
+        "id": "AAPL",
+        "segment": 4,
+        "spoken_he": "איי־איי־פי־אל",
+        "accept": [
+          "AAPL",
+          "A A P L",
+          "Apple"
+        ]
+      },
+      {
+        "id": "VIX",
+        "segment": 6,
+        "spoken_he": "וי־איי־אקס",
+        "accept": [
+          "VIX",
+          "V I X"
+        ]
+      }
+    ],
+    "numbers": [
+      {
+        "value": 3.7,
+        "segment": 2,
+        "kind": "percent",
+        "spoken_he": "שלושה אחוז ושבע עשיריות",
+        "accept": [
+          "3.7%",
+          "3,7%",
+          "3.7 percent",
+          "3.7 por ciento"
+        ]
+      },
+      {
+        "value": 189.24,
+        "segment": 2,
+        "kind": "usd",
+        "spoken_he": "מאה שמונים ותשעה דולר ועשרים וארבעה סנט",
+        "accept": [
+          "$189.24",
+          "189.24",
+          "189,24"
+        ]
+      },
+      {
+        "value": 4000000000000,
+        "segment": 2,
+        "kind": "scale",
+        "spoken_he": "ארבעה טריליון דולר",
+        "accept": [
+          "$4 trillion",
+          "4 trillion",
+          "4 billones",
+          "4 trilhoes"
+        ],
+        "trap": "Hebrew טריליון = 10^12 = US 'trillion'. In es-ES the true equivalent is 'billones', NOT 'trillones'. A literal 'trillones' is a 10^6 error and is a FAIL."
+      },
+      {
+        "value": 2.5,
+        "segment": 3,
+        "kind": "percent",
+        "spoken_he": "שני אחוז וחצי",
+        "accept": [
+          "2.5%",
+          "2,5%"
+        ]
+      },
+      {
+        "value": 0.8,
+        "segment": 4,
+        "kind": "percent",
+        "spoken_he": "שמונה עשיריות האחוז",
+        "accept": [
+          "0.8%",
+          "0,8%"
+        ]
+      },
+      {
+        "value": 110000000000,
+        "segment": 4,
+        "kind": "scale",
+        "spoken_he": "מאה ועשרה מיליארד דולר",
+        "accept": [
+          "$110 billion",
+          "110 billion",
+          "110 mil millones",
+          "110 bilhoes"
+        ],
+        "trap": "Hebrew מיליארד = 10^9 = US 'billion'. In es-ES 'billon' is 10^12 - rendering this as '110 billones' is a 1000x error and is a FAIL."
+      },
+      {
+        "value": 35,
+        "segment": 5,
+        "kind": "index",
+        "spoken_he": "תל אביב שלושים וחמש",
+        "accept": [
+          "TA-35",
+          "TA 35",
+          "Tel Aviv 35"
+        ]
+      },
+      {
+        "value": 1.2,
+        "segment": 5,
+        "kind": "percent",
+        "spoken_he": "אחוז ושתי עשיריות",
+        "accept": [
+          "1.2%",
+          "1,2%"
+        ]
+      },
+      {
+        "value": 1.8,
+        "segment": 5,
+        "kind": "percent",
+        "spoken_he": "אחוז ושמונה",
+        "accept": [
+          "1.8%",
+          "1,8%"
+        ]
+      },
+      {
+        "value": 1.3,
+        "segment": 5,
+        "kind": "percent",
+        "spoken_he": "אחוז ושלוש",
+        "accept": [
+          "1.3%",
+          "1,3%"
+        ]
+      },
+      {
+        "value": 3.71,
+        "segment": 5,
+        "kind": "ils",
+        "spoken_he": "שלושה שקלים ושבעים ואחת אגורות",
+        "accept": [
+          "3.71",
+          "3,71",
+          "ILS 3.71"
+        ]
+      },
+      {
+        "value": 18.6,
+        "segment": 6,
+        "kind": "points",
+        "spoken_he": "שמונה עשרה נקודות ושש",
+        "accept": [
+          "18.6",
+          "18,6"
+        ]
+      }
+    ],
+    "gender_agreement": [
+      {
+        "segment": 1,
+        "phrase": "שלוש מניות",
+        "gender": "f",
+        "note": "מניה is feminine - שלוש, not שלושה"
+      },
+      {
+        "segment": 3,
+        "phrase": "שתי סיבות",
+        "gender": "f"
+      },
+      {
+        "segment": 3,
+        "phrase": "שתי הורדות",
+        "gender": "f"
+      },
+      {
+        "segment": 2,
+        "phrase": "שלושה אחוז",
+        "gender": "m",
+        "note": "אחוז is masculine - contrasts with the feminine forms in the same clip"
+      }
+    ]
+  },
+  "scoring": {
+    "wer_threshold": 0.1,
+    "critical_token_errors_allowed": 0,
+    "timing_drift_ms_at_60s": 300
+  },
+  "timing_note": "Boundaries measured from espeak-ng at 145 wpm, an UPPER bound on a human read. Re-derive from the human recording before scoring timing drift."
+}
