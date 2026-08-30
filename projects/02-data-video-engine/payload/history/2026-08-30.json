@@ -1,0 +1,102 @@
+{
+  "schema": "converge.video.v1",
+  "date": "2026-08-30",
+  "brand": {
+    "name": "Converge",
+    "tagline": "Stock Intelligence",
+    "accent": "#3d7bff"
+  },
+  "title": "מניות שכבה 1",
+  "subtitle": "התכנסות בין שלוש מתודולוגיות עצמאיות",
+  "updated_label": "עודכן: 30 באוגוסט 2026 · 05:35 UTC",
+  "kpi": {
+    "tier1_count": 8,
+    "risk_count": 10,
+    "universe": 19
+  },
+  "featured": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "sector": "טכנולוגיה",
+      "tier": "tier1",
+      "price": 513.53,
+      "change_pct": 1.68,
+      "chip": "3/3 מקורות: א׳+ב׳+ג׳",
+      "rationale": "TipRanks Perfect-10 Smart Score ברשימת \"META MSFT NVDA\" (א׳); GuruFocus — \"10.7% Undervalued on GF Value\", D/E נמוך במיוחד של 0.13 (69% מתחת לחציון) (ב׳); Morningstar — מוזכרת כמניית wide-moat מובילה במאמר השוואה \"Alphabet vs. Microsoft\" (ג׳). סנטימנט Bigdata.com חיובי מתון (0.045 מול בסיס 0.011, מומנטום +0.034) אך תשומת לב תקשורתית יורדת (-49%) — מתח בין צמיחת ענן/AI חזקה (הכנסות Cloud +27% שנתי, Azure +43%) לבין תקלות עדכון Windows 11 חוזרות ומחלוקות רגולציה/מרכזי נתונים."
+    },
+    {
+      "ticker": "V",
+      "name": "Visa",
+      "sector": "פיננסים",
+      "tier": "tier1",
+      "price": 381.6,
+      "change_pct": 0.51,
+      "chip": "3/3 מקורות: א׳+ב׳+ג׳",
+      "rationale": "TipRanks Perfect-10 Smart Score ברשימת \"AMZN WMT V\" (א׳); GuruFocus — ROE 63.56% (85% מעל החציון), D/E 0.68 (28% מעל החציון) (ב׳); Barron's \"Top 10 Stocks for 2026\" — מונופול תשלומים, \"compounder\" יציב (ג׳). סנטימנט Bigdata.com חיובי ומתחזק (0.235 מול בסיס 0.144, מומנטום +0.091), תשומת לב תקשורתית קופצת בחדות (z-score 2.6/4.3) — רכישת BioCatch ב-$2.4B, שותפות סטייבלקוין/AI עם Dunamu, יעד מחיר הועלה ל-$460 (Wolfe Research). סיכון: Hims & Hers הוכנסה לתוכנית מעקב סוחרים של Visa בעקבות מחלוקות חיוב; דיווח על תוכנית פיטורים של כ-2,600 עובדים."
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com",
+      "sector": "צריכה מחזורית",
+      "tier": "tier1",
+      "price": 266.43,
+      "change_pct": 3.97,
+      "chip": "2/3 מקורות: א׳+ג׳",
+      "rationale": "TipRanks Perfect-10 ברשימת \"AMZN WMT V\", ובנפרד \"בעלת ה-Smart Score הטוב ביותר בין מניות ה-Large Cap\" (א׳, שתי כתבות עצמאיות); Barron's \"Top 10 Stocks for 2026\" — \"עדיין בונה אימפריה בזמן שהמניה לא זזה\", AWS/מציאה בקנה מידה ענק (ג׳). סנטימנט Bigdata.com שלילי כרגע (-0.132 מול בסיס -0.072, מומנטום -0.061) חרף חדשות AI-Capex חיוביות (AWS מתחייבת ל-2 מיליון GPU נוספים של Nvidia, Capex הוגדל ל-כ-$220B, Evercore ISI העלתה יעד ל-$355) — עקב תביעת תמחור-מחירים, חיכוך רגולטורי בתיוג AI וכותרות בטיחות צרכנים. קפיצת מחיר חדה של כ-4% היום."
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron",
+      "sector": "אנרגיה",
+      "tier": "tier1",
+      "price": 201.86,
+      "change_pct": 1.05,
+      "chip": "2/3 מקורות: ב׳+ג׳",
+      "rationale": "GuruFocus — PE TTM 19.73 (17% מעל החציון); שני עמודי GuruFocus חלוקים על אחוז ההפרזה בשווי (30.5% מול 26.7% — חוסר עקביות קל בין תאריכי נתונים, מצוין לשקיפות) (ב׳); Barron's Top 10 for 2026 וגם Motley Fool — \"3 Dividend Stocks to Buy and Hold for the Next Decade, Starting With Chevron\" (24.8.2026, ג׳). זו ההרצה השנייה ברציפות שבה CVX מאשרת מעמד שכבה 1 — איתות המשכיות."
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "sector": "תקשורת ומדיה",
+      "tier": "tier1",
+      "price": 346.59,
+      "change_pct": 1.74,
+      "chip": "2/3 מקורות: א׳+ג׳",
+      "rationale": "TipRanks — \"Alphabet and Alibaba Are Among the Top-Scoring Stocks\" (א׳); Morningstar — מוזכרת כמניית wide-moat מובילה במאמר השוואה \"Alphabet vs. Microsoft\" (ג׳, מאמר השוואתי ולא רשימת \"לקנות\" ייעודית — איתות מעט חלש יותר משאר הכרטיסים). סנטימנט Bigdata.com שלילי בבירור (-0.348 מול בסיס -0.299, מומנטום -0.049, z-score -1.5) — לחץ רגולטורי/משפטי דומיננטי: פרס שכ\"ט עו\"ד של $147M בתביעת פרטיות, שינוי מדיניות ספאם באירופה למניעת קנס אנטי-טראסט, חקירת FTC ל-YouTube. סיכון ממשי מול היסודות."
+    }
+  ],
+  "movers": [
+    {
+      "ticker": "LEU",
+      "name": "LEU",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 175.78,
+      "change_pct": -9.75,
+      "chip": "קטליסט: גרעין",
+      "rationale": "⚠️ לא נבדק מחדש היום"
+    },
+    {
+      "ticker": "APLD",
+      "name": "APLD",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 25.34,
+      "change_pct": -7.65,
+      "chip": "קטליסט: AI תשתיות",
+      "rationale": "⚠️ לא נבדק מחדש היום"
+    },
+    {
+      "ticker": "CRCL",
+      "name": "CRCL",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 87.14,
+      "change_pct": -7.53,
+      "chip": "IPO 2025",
+      "rationale": "Handelsbanken Fonder רכשה 108,635 מניות (15.8, בתוך חלון 30 הימים) — קנייה מוסדית. במקביל ממשיכה מכירת פנים: דירקטור מכר 20,000 מניות, CEO מכר 62,264 מניות במסגרת תוכנית מסחר. ירידת מחיר חדה של 7.53% היום — ראויה למעקב, לא אומתה עדות מוסדית טרייה נוספת בהרצה זו."
+    }
+  ],
+  "disclaimer": "לא ייעוץ השקעות. למחקר בלבד."
+}

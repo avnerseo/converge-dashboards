@@ -1,0 +1,102 @@
+{
+  "schema": "converge.video.v1",
+  "date": "2026-08-28",
+  "brand": {
+    "name": "Converge",
+    "tagline": "Stock Intelligence",
+    "accent": "#3d7bff"
+  },
+  "title": "מניות שכבה 1",
+  "subtitle": "התכנסות בין שלוש מתודולוגיות עצמאיות",
+  "updated_label": "עודכן: 28 באוגוסט 2026 · 05:22 UTC",
+  "kpi": {
+    "tier1_count": 6,
+    "risk_count": 5,
+    "universe": 11
+  },
+  "featured": [
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway",
+      "sector": "פיננסים",
+      "tier": "tier1",
+      "price": 503.7,
+      "change_pct": -0.24,
+      "chip": "2/3 מקורות: ב׳+ג׳",
+      "rationale": "Seeking Alpha — \"Getting Aggressive, Reiterate Buy\" (ב׳); Morningstar \"Best Companies to Own: 2026 Edition\" (ג׳). אחזקה מגוונת, מאזן חזק. סנטימנט Bigdata.com לא נבדק בהרצה זו (מוקד ב-5 מניות שכבה 1 מתוך 6 עקב מגבלת זמן)."
+    },
+    {
+      "ticker": "CAT",
+      "name": "Caterpillar",
+      "sector": "תעשייה",
+      "tier": "tier1",
+      "price": 817.0,
+      "change_pct": -0.6,
+      "chip": "2/3 מקורות: א׳+ב׳",
+      "rationale": "TipRanks Buy Rating (א׳); מובילת מדד דאו-ג'ונס 2026 לפי 24/7 Wall St (ב׳, איתות חלש יחסית). רבעון שיא, הגדלת דיבידנד, רכישת Skycatch. סנטימנט Bigdata.com חיובי מאוד (+0.542, momentum +0.221) — יעדי מחיר שהועלו ל-$1,225 (Truist) ו-$897 (RBC)."
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron",
+      "sector": "אנרגיה",
+      "tier": "tier1",
+      "price": 199.77,
+      "change_pct": -0.22,
+      "chip": "2/3 מקורות: א׳+ב׳",
+      "rationale": "TipRanks Buy Rating (א׳); Seeking Alpha \"Top 2026 Pick\" + Motley Fool דיבידנד לעשור (ב׳). תגלית נפט באנגולה, שיא רווח רבעוני, הסכם חשמל 20 שנה עם Microsoft. סנטימנט Bigdata.com שלילי (-0.234) בשל כותרות משפטיות/רגולטוריות (זיהום מזקקת Richmond, מחלוקת Gorgon) — מתח בין יסודות חיוביים לסיכון ליטיגציה."
+    },
+    {
+      "ticker": "GEV",
+      "name": "GE Vernova",
+      "sector": "תשתיות ציבוריות",
+      "tier": "tier1",
+      "price": 953.83,
+      "change_pct": 0.08,
+      "chip": "2/3 מקורות: א׳+ג׳",
+      "rationale": "TipRanks Strong Buy בהשוואת מניות תשתית AI (א׳); Motley Fool — \"3 מניות אנרגיה תעשייתית להחזקה לעשורים\" (ג׳). מיזם משותף HVDC עם LS Electric בקוריאה, חוזה שדרוג רשת חשמל בבריטניה. סנטימנט Bigdata.com נייטרלי עם מומנטום שלילי (-0.229, z-score חריג -2.0) — עזיבת CFO ל-Rivian מסיטה תשומת לב תקשורתית."
+    },
+    {
+      "ticker": "KO",
+      "name": "Coca-Cola",
+      "sector": "צריכה בסיסית",
+      "tier": "tier1",
+      "price": 89.06,
+      "change_pct": -1.13,
+      "chip": "2/3 מקורות: א׳+ב׳",
+      "rationale": "TipRanks \"Perfect 10\" Smart Score (א׳); מובילת דירוגי צמיחה בצריכה בסיסית לפי Seeking Alpha, אחזקת ליבה של ברקשייר האת'וויי (ב׳). Zacks שדרגה ל-Buy, עקפה תחזיות EPS. סנטימנט Bigdata.com כמעט נייטרלי (-0.009) — סיכון שביתת הפצה בבריטניה מול חדשות מותג חיוביות (PSG)."
+    }
+  ],
+  "movers": [
+    {
+      "ticker": "CRCL",
+      "name": "CRCL",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 94.24,
+      "change_pct": 4.82,
+      "chip": "IPO 2025",
+      "rationale": "Handelsbanken Fonder קנתה 108,635 מניות (15.8) — קנייה מוסדית. במקביל: CFO מכר 8,476 מניות ו-CEO מכר 62,264 מניות במסגרת תוכנית 10b5-1 — מכירת פנים, לא מוסדית. קטליסט: אישור OCC כבנק נאמנות, פטנט blockchain של IBM, +41% ב-30 יום."
+    },
+    {
+      "ticker": "ALAB",
+      "name": "ALAB",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 304.09,
+      "change_pct": 4.75,
+      "chip": "IPO 2024",
+      "rationale": "Legal & General Group השקיעה $311.47M (26.8) — כניסה מוסדית משמעותית. קטליסט: ביקוש קישוריות AI לקראת דוח רבעוני."
+    },
+    {
+      "ticker": "APLD",
+      "name": "APLD",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 27.44,
+      "change_pct": 2.12,
+      "chip": "קטליסט: AI תשתיות",
+      "rationale": "מכירה: NewEdge Advisors מכרה מניות (17.8). קנייה: Whitaker Myers Wealth Managers קנתה 49,354 מניות (9.8). קטליסט: שדרוג דירוג ב-Wall Street Zen, חדשות פיתוח מרכז נתוני AI הניעו עלייה של 7.3%."
+    }
+  ],
+  "disclaimer": "לא ייעוץ השקעות. למחקר בלבד."
+}

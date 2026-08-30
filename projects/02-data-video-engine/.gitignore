@@ -1,7 +1,9 @@
 __pycache__/
-# renders are reproducible from the payload, so only the two proof artifacts
-# named below are tracked
+# Daily renders are NOT archived — the payload plus the pinned toolchain
+# regenerates them byte for byte (see README, "Daily operation"). Tracked here:
+# the ledger, and two sample videos kept purely as demo artifacts.
 out/*
+!out/ledger.jsonl
 !out/converge-2026-08-30.mp4
 !out/converge-2026-08-30.manifest.json
 !out/example-ecommerce.mp4

@@ -1,0 +1,7 @@
+# Plain-VM alternative to the GitHub Actions workflow.
+# One render is ~80 s of CPU on 4 vCPU; 06:30 UTC sits after the dashboard's
+# 05:35 run. daily.py is idempotent, so a double fire costs nothing.
+
+30 6 * * *  cd /srv/converge-dashboards && git pull --quiet && \
+            python3 projects/02-data-video-engine/scripts/daily.py --keep-video \
+            >> /var/log/converge-video.log 2>&1

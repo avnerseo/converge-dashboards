@@ -1,0 +1,83 @@
+# Daily video render for project 02.
+#
+# NOT INSTALLED. This file lives here because everything project 02 produces
+# stays inside its own folder, and three sessions are working in parallel — a
+# file dropped in .github/workflows/ would collide on merge. To adopt it, on the
+# branch that will carry it:
+#
+#     mkdir -p .github/workflows
+#     cp projects/02-data-video-engine/ci/daily-video.yml .github/workflows/
+#
+# Trigger: the dashboard's own daily commit to index.html, plus a scheduled
+# safety net in case the dashboard job runs without touching the file.
+#
+# Note on determinism: this pins its own Chromium through a pinned Playwright
+# version, which is NOT the same build as the dev container's
+# chromium_headless_shell-1194. Byte-exactness holds within a toolchain, not
+# across two — the build is recorded in every ledger row, so a mismatch is
+# visible rather than silent. See notes/determinism.md.
+
+name: daily video
+
+on:
+  push:
+    branches: [main, claude/video-creation-capability-433k8w]
+    paths: ['index.html']
+  schedule:
+    - cron: '30 6 * * *'      # 06:30 UTC, after the dashboard's 05:35 run
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-video
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: projects/02-data-video-engine
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install
+        run: |
+          pip install --quiet 'playwright==1.49.1' imageio-ffmpeg
+          python -m playwright install --with-deps chromium
+
+      - name: Point the harness at this runner's Chromium
+        run: |
+          echo "CONVERGE_CHROME=$(python -c '
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p: print(p.chromium.executable_path)')" >> "$GITHUB_ENV"
+
+      - name: Render
+        run: python3 scripts/daily.py --keep-video
+
+      - name: Upload the video
+        uses: actions/upload-artifact@v4
+        with:
+          name: converge-daily-video
+          path: projects/02-data-video-engine/out/*.mp4
+          retention-days: 30
+
+      # The payload and the ledger are committed; the mp4 is not. A deterministic
+      # render means the payload IS the video — 3 KB regenerates 1.75 MB exactly.
+      - name: Commit payload + ledger
+        run: |
+          rm -f out/*.mp4
+          git config user.name  'converge-video-bot'
+          git config user.email 'converge-video-bot@users.noreply.github.com'
+          git add payload/history out/ledger.jsonl
+          git diff --cached --quiet && echo 'nothing new' && exit 0
+          git commit -m "02: daily render $(date -u +%F)"
+          git push

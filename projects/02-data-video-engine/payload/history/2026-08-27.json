@@ -1,0 +1,82 @@
+{
+  "schema": "converge.video.v1",
+  "date": "2026-08-27",
+  "brand": {
+    "name": "Converge",
+    "tagline": "Stock Intelligence",
+    "accent": "#3d7bff"
+  },
+  "title": "מניות שכבה 1",
+  "subtitle": "התכנסות בין שלוש מתודולוגיות עצמאיות",
+  "updated_label": "עודכן: 27 באוגוסט 2026 · 05:16 UTC",
+  "kpi": {
+    "tier1_count": 3,
+    "risk_count": 10,
+    "universe": 14
+  },
+  "featured": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "sector": "טכנולוגיה",
+      "tier": "tier1",
+      "price": 496.37,
+      "change_pct": 0.95,
+      "chip": "3/3 מקורות",
+      "rationale": "TipRanks Perfect 10; GuruFocus ROE 31.57%; Motley Fool #1 Mag7 pick."
+    },
+    {
+      "ticker": "BMY",
+      "name": "Bristol-Myers Squibb",
+      "sector": "בריאות",
+      "tier": "tier1",
+      "price": 67.57,
+      "change_pct": -0.52,
+      "chip": "2/3 מקורות",
+      "rationale": "GF Score 71 overvalued vs Simply Wall St reasonable — דגל סתירה."
+    },
+    {
+      "ticker": "CMCSA",
+      "name": "Comcast",
+      "sector": "תקשורת ומדיה",
+      "tier": "tier1",
+      "price": 27.2,
+      "change_pct": 0.37,
+      "chip": "2/3 מקורות",
+      "rationale": "GuruFocus ROE 13.75%; Barron's Top 10."
+    }
+  ],
+  "movers": [
+    {
+      "ticker": "APLD",
+      "name": "APLD",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 26.87,
+      "change_pct": -6.86,
+      "chip": "Tiger Global — לא ברור",
+      "rationale": "Tiger Global backs $36B AI data center lease, stock -6.4%; $112.5M AI partnership funding."
+    },
+    {
+      "ticker": "OKLO",
+      "name": "OKLO",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 41.6,
+      "change_pct": -6.03,
+      "chip": "Insider selling",
+      "rationale": "Insider sale -6.3% 26.8; Meta 1.2GW nuclear deal, Switch 12GW agreement."
+    },
+    {
+      "ticker": "LEU",
+      "name": "LEU",
+      "sector": "",
+      "tier": "highrisk",
+      "price": 187.63,
+      "change_pct": -2.98,
+      "chip": "",
+      "rationale": "אין עדות מוסדית חדשה; $900M DOE HALEU contract, X-energy supply deal, +8.9% 25.8."
+    }
+  ],
+  "disclaimer": "לא ייעוץ השקעות. למחקר בלבד."
+}
