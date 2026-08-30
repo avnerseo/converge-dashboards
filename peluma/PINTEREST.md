@@ -760,3 +760,44 @@ category where demand multiplies rather than trickles.
 
 These are search-volume trends, not conversion data. They say where attention goes, not who
 buys. Nothing here has been validated against a Peluma sale, because there has not been one.
+
+## Batch 4 — the gift Pins, and a timing correction — 2026-08-30
+
+Three Pins built on the gift axis the keyword data pointed at, published to two new boards
+named after the terms that actually rank. Board names are indexed by Pinterest, so the board
+is itself a keyword asset:
+
+| board | id |
+|---|---|
+| Gifts for Dog Lovers | `916553030354942957` |
+| Gifts for Cat Lovers | `916553030354942958` |
+
+| Pin | board | pin id | link |
+|---|---|---|---|
+| `pin-14` A gift for the dog lover on your list | Gifts for Dog Lovers | `916552961685403185` | brush |
+| `pin-15` For the friend who walks the dog in the rain | Gifts for Dog Lovers | `916552961685403187` | paw cup |
+| `pin-16` A gift for the cat lover on your list | Gifts for Cat Lovers | `916552961685403186` | brush |
+
+All three carry `ai_disclosure_values: ["AI_MODIFIED"]` — the hero images are generated, and
+Pinterest was told so. Confirmed present in every create response.
+
+### Timing correction on my own recommendation
+
+The earlier note said "build gift-framed Pins now". That is right, but it needed one
+distinction it did not make: **gift-framed is not the same as Christmas-framed.**
+
+Pinterest's own guidance is to publish seasonal content 30–45 days ahead of the peak. Christmas
+peaks mid-December, so explicitly Christmas Pins belong in **late October / early November**.
+Publishing them on 30 August is 15 weeks early — they would collect no engagement now, which
+is a weak signal to start a Pin's life on.
+
+So Batch 4 is deliberately **evergreen gift framing** ("on your list", "for the friend
+who…") with no Christmas imagery or wording. It works year-round, starts indexing today, and
+has authority built by the time the November ramp arrives. The explicitly Christmas Pins are a
+separate batch, to be built in late October.
+
+### Copy discipline held
+
+Every claim traces to a verified product fact: rechargeable over USB, water mist built into
+the handle, soft silicone bristles, two sizes, free US shipping. No percentages, no health
+claims, no invented reviews.
