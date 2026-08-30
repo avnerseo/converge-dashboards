@@ -1491,3 +1491,24 @@ recorded defect was "the paw is not inside the cup". On a downscaled contact she
 looked wrong. At full resolution the front rim clearly occludes the paw at 0.0s, 1.5s, 2.08s
 and 3.0s — the shot is correct. Second time the small-preview trap has been hit; the rule
 holds: judge images at actual size.
+
+## What only the merchant can do — verified list, 2026-08-30
+
+Each line states what was actually tested, not what was assumed.
+
+**Done by API today, so it is NOT on the list:** YouTube channel description, keywords,
+country and default language — `YOUTUBE_UPDATE_CHANNEL` does expose `brandingSettings.channel`.
+Set and confirmed by re-reading the channel.
+
+| # | Task | Why I cannot do it — what was checked |
+|---|---|---|
+| 1 | TikTok: switch to Business, set avatar/bio/website | The TikTok connector exposes upload, publish, status, stats and list only. **There is no profile-editing tool at all** — no avatar, bio or link endpoint. |
+| 2 | TikTok: posting the videos | `tiktok` is a Composio toolkit but has no active connection. Even connected, the connector documents `unaudited_client_can_only_post_to_private_accounts` and "for unaudited apps only SELF_ONLY is permitted". A SELF_ONLY post has zero distribution, so connecting it would not achieve the goal. |
+| 3 | YouTube: channel avatar and banner | The YouTube Data API has no avatar or banner upload. `YOUTUBE_UPDATE_CHANNEL` accepts only title, description, keywords, country, defaultLanguage, unsubscribedTrailer and analytics id — no image fields. |
+| 4 | Gmail: sender display name + signature | `GMAIL_PATCH_SEND_AS` → **403 ACCESS_TOKEN_SCOPE_INSUFFICIENT**. The connector never requested `gmail.settings.basic`. |
+| 5 | Shopify: email template logo + accent colour | Not exposed in the Admin API. The full `Mutation` type was enumerated — no shop-branding mutation exists. |
+| 6 | Shopify: Notifications → Sender email | Same: no API surface. `shop.contactEmail` was settable and is done; the notification sender is a separate setting. |
+| 7 | Pinterest: video Pins | Video Pins need a `media_id` from a media-registration endpoint the connector does not expose. Verified twice, on two separate days. |
+| 8 | Google Merchant Center: review status | Requires an interactive Merchant Center login. No connector, and `merchants.google.com` is not reachable from this container. |
+| 9 | Instagram: a Peluma account | The connected Instagram is `aifreemeditate` — a personal account, wrong brand. Publishing Peluma content there was stopped deliberately. A Peluma IG Business account has to be created and connected. |
+| 10 | Photographs of the real brush | Physical object. The two hero images on the product are generated and should be replaced by real photographs when it arrives. |
