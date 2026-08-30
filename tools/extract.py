@@ -1,0 +1,416 @@
+#!/usr/bin/env python3
+"""Extract the Converge dashboards into a versioned JSON data layer.
+
+Until now every number lived inside the HTML, so a partially written file lost
+data outright and "carried forward from yesterday" survived only as a sentence
+in a commit message. This turns each dashboard into data + presentation, and
+makes staleness an explicit field instead of prose.
+
+    python3 tools/extract.py                  # -> data/stocks/<as_of>.json, data/crypto/<as_of>.json
+    python3 tools/extract.py --stdout stocks  # print one to stdout
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import domlite  # noqa: E402
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SCHEMA_VERSION = 1
+
+# Month names appear with and without the "ב" prefix across the two dashboards.
+HE_MONTHS = {
+    "ינואר": 1, "פברואר": 2, "מרץ": 3, "אפריל": 4, "מאי": 5, "יוני": 6,
+    "יולי": 7, "אוגוסט": 8, "ספטמבר": 9, "אוקטובר": 10, "נובמבר": 11,
+    "דצמבר": 12,
+}
+
+# The dashboards use a real minus sign in price deltas.
+MINUS = "−"
+
+
+# --------------------------------------------------------------------------
+# value parsing
+# --------------------------------------------------------------------------
+
+def parse_price(raw):
+    """Turn a free-text price line into a structured, honest reading.
+
+    Recognises the three shapes the dashboards actually produce:
+      "$199.77 -0.22% (28.8, לא עודכן היום)"   -> a stale quote, dated
+      "מחיר: לא זמין היום (מכסת Alpha Vantage)" -> no quote, with a reason
+      "$64,350.93"                              -> a fresh quote
+    """
+    raw = " ".join((raw or "").split())
+    price = {"raw": raw, "available": False, "stale": False,
+             "value": None, "change_pct": None, "as_of": None, "note": None}
+    if not raw:
+        return price
+
+    if "לא זמין" in raw:
+        reason = re.search(r"\(([^)]*)\)", raw)
+        price["note"] = reason.group(1) if reason else "לא זמין"
+        return price
+
+    m = re.search(r"\$([\d,]+(?:\.\d+)?)", raw)
+    if m:
+        price["available"] = True
+        price["value"] = float(m.group(1).replace(",", ""))
+
+    m = re.search(r"([+\-" + MINUS + r"])\s*([\d.]+)\s*%", raw)
+    if m:
+        sign = -1 if m.group(1) in ("-", MINUS) else 1
+        price["change_pct"] = sign * float(m.group(2))
+
+    paren = re.search(r"\(([^)]*)\)", raw)
+    if paren:
+        inner = paren.group(1)
+        d = re.match(r"\s*(\d{1,2}\.\d{1,2})\s*(?:,\s*(.*))?$", inner)
+        if d:
+            price["as_of"] = d.group(1)
+            price["note"] = (d.group(2) or "").strip() or None
+        else:
+            price["note"] = inner.strip()
+        # "not updated today" is the dashboard's own words for stale.
+        price["stale"] = "לא עודכן" in inner or price["as_of"] is not None
+
+    return price
+
+
+def parse_updated(badge_text):
+    """'🕐 עודכן: 29 באוגוסט 2026 · 05:32 UTC' -> ('2026-08-29', '05:32 UTC')."""
+    m = re.search(r"(\d{1,2})\s+ב?([א-ת]+)\s+(\d{4})", badge_text or "")
+    date = None
+    if m and m.group(2) in HE_MONTHS:
+        date = "%s-%02d-%02d" % (m.group(3), HE_MONTHS[m.group(2)], int(m.group(1)))
+    t = re.search(r"(\d{1,2}:\d{2}\s*\w*)", badge_text or "")
+    return date, (t.group(1).strip() if t else None)
+
+
+def links(node):
+    return [{"name": a.clean_text(), "url": a.get("href")}
+            for a in node.find_all("a") if a.get("href")]
+
+
+def chips(node):
+    out = []
+    for c in node.find_all("span", "chip"):
+        kind = [k for k in c.classes if k != "chip"]
+        out.append({"text": c.clean_text(), "kind": kind[0] if kind else None})
+    return out
+
+
+def table_rows(table):
+    head = [th.clean_text() for th in table.find_all("th")]
+    rows = []
+    body = table.find("tbody") or table
+    for tr in body.find_all("tr"):
+        tds = tr.find_all("td")
+        if not tds:
+            continue
+        cells = []
+        for td in tds:
+            cell = {"text": td.clean_text()}
+            ls = links(td)
+            if ls:
+                cell["links"] = ls
+            tags = [s.clean_text() for s in td.find_all("span")
+                    if any(c.endswith("-tag") for c in s.classes)]
+            if tags:
+                cell["tags"] = tags
+            cells.append(cell)
+        row = {"cells": cells}
+        for attr in ("data-ticker", "data-sector"):
+            if tr.get(attr):
+                row[attr.replace("data-", "")] = tr.get(attr)
+        rows.append(row)
+    return {"columns": head, "rows": rows}
+
+
+def kpis(container):
+    out = []
+    for tile in container.find_all("div", "kpi-tile"):
+        v = tile.find("div", "kpi-value")
+        l = tile.find("div", "kpi-label")
+        out.append({"value": v.clean_text() if v else None,
+                    "label": l.clean_text() if l else None})
+    return out
+
+
+def section(doc, sid):
+    for s in doc.find_all("section"):
+        if s.get("id") == sid:
+            return s
+    return None
+
+
+def heading(sec):
+    h = sec.find("h2") if sec else None
+    sub = sec.find("div", "section-sub") if sec else None
+    return ({"title": h.clean_text() if h else None,
+             "subtitle": sub.clean_text() if sub else None})
+
+
+# --------------------------------------------------------------------------
+# shared pieces
+# --------------------------------------------------------------------------
+
+def common_head(doc):
+    h1 = doc.find("h1")
+    sub = doc.find("div", "subtitle")
+    badges = [b.clean_text() for b in doc.find_all("span", "badge")]
+    updated_date, updated_time = parse_updated(" ".join(badges))
+    note = doc.find("div", "today-note")
+    disc = doc.find("div", "disclaimer")
+    return {
+        "title": h1.clean_text() if h1 else None,
+        "subtitle": sub.clean_text() if sub else None,
+        "badges": badges,
+        "as_of": updated_date,
+        "updated_time": updated_time,
+        "run_note": note.clean_text() if note else None,
+        "disclaimer": disc.clean_text() if disc else None,
+    }
+
+
+def prose_paragraphs(sec):
+    if not sec:
+        return []
+    return [p.clean_text() for p in sec.find_all("p") if p.clean_text()]
+
+
+def list_items(sec, cls=None):
+    if not sec:
+        return []
+    ul = sec.find("ul", cls) if cls else sec.find("ul")
+    if not ul:
+        return []
+    return [li.clean_text() for li in ul.find_all("li") if li.clean_text()]
+
+
+# --------------------------------------------------------------------------
+# stocks
+# --------------------------------------------------------------------------
+
+def stock_card(card):
+    price_el = card.find("span", "price") or card.find("div", "price")
+    rat = card.find("div", "rationale")
+    risk = card.find("div", "risk-note")
+    badge = card.find("span", "risk-badge")
+    src = card.find("div", "sources")
+    ticker_el = card.find("span", "ticker")
+    name_el = card.find("div", "company-name")
+
+    out = {
+        "ticker": card.get("data-ticker") or (ticker_el.clean_text() if ticker_el else None),
+        "name": card.get("data-name") or (name_el.clean_text() if name_el else None),
+        "sector": card.get("data-sector") or None,
+        "price": parse_price(price_el.clean_text() if price_el else ""),
+        "chips": chips(card),
+        "rationale": rat.clean_text() if rat else None,
+    }
+    if badge:
+        out["risk_badge"] = badge.clean_text()
+    if risk:
+        out["risk_note"] = risk.clean_text()
+    out["sources"] = links(src) if src else []
+    return out
+
+
+def extract_stocks(html):
+    doc = domlite.parse(html)
+    data = {"schema_version": SCHEMA_VERSION, "dashboard": "stocks"}
+    data.update(common_head(doc))
+
+    top_kpi = doc.find("div", "kpi-row")
+    data["kpis"] = kpis(top_kpi) if top_kpi else []
+
+    for key in ("tier1", "tier2"):
+        sec = section(doc, key)
+        data[key] = {
+            **heading(sec),
+            "cards": [stock_card(c) for c in sec.find_all("div", "stock-card")] if sec else [],
+        }
+
+    tables_sec = section(doc, "tables")
+    tabs = {}
+    if tables_sec:
+        labels = [b.clean_text() for b in tables_sec.find_all("button", "tab-btn")]
+        for i, tid in enumerate(("tableA", "tableB", "tableC")):
+            t = next((x for x in tables_sec.find_all("table") if x.get("id") == tid), None)
+            if t:
+                tabs[tid[-1]] = {"label": labels[i] if i < len(labels) else tid,
+                                 **table_rows(t)}
+        excluded = [b.clean_text() for b in tables_sec.find_all("div", "excluded-box")]
+        if excluded:
+            tabs["excluded"] = excluded
+    data["tables"] = tabs
+
+    hr = section(doc, "highrisk")
+    banner = hr.find("div", "highrisk-banner") if hr else None
+    data["highrisk"] = {
+        **heading(hr),
+        "banner": banner.clean_text() if banner else None,
+        "kpis": kpis(hr.find("div", "risk-kpi-row")) if hr and hr.find("div", "risk-kpi-row") else [],
+        "cards": [stock_card(c) for c in hr.find_all("div", "risk-card")] if hr else [],
+    }
+
+    sent = section(doc, "sentiment")
+    rows = []
+    if sent:
+        t = sent.find("table", "sent-table")
+        if t:
+            for tr in (t.find("tbody") or t).find_all("tr"):
+                tds = tr.find_all("td")
+                if len(tds) < 3:
+                    continue
+                direction = next((c.split("-")[1] for c in tds[2].classes
+                                  if c.startswith("dir-")), None)
+                rows.append({"ticker": tds[0].clean_text(),
+                             "note": tds[1].clean_text(),
+                             "classification": tds[2].clean_text(),
+                             "direction": direction})
+    data["sentiment"] = {**heading(sent), "rows": rows}
+
+    chart = section(doc, "sectorchart")
+    legend = chart.find("div", "chart-legend") if chart else None
+    data["sector_chart"] = {**heading(chart), "legend": legend.clean_text() if legend else None}
+
+    cmp_sec = section(doc, "compare")
+    cmp_tbl = cmp_sec.find("table", "compare-table") if cmp_sec else None
+    data["compare"] = {**heading(cmp_sec), **(table_rows(cmp_tbl) if cmp_tbl else {})}
+
+    meth = section(doc, "methodology")
+    data["methodology"] = {**heading(meth), "paragraphs": prose_paragraphs(meth),
+                           "sources": links(meth) if meth else []}
+
+    trans = section(doc, "transparency")
+    data["transparency"] = {**heading(trans), "items": list_items(trans, "transparency-list")}
+    return data
+
+
+# --------------------------------------------------------------------------
+# crypto
+# --------------------------------------------------------------------------
+
+def crypto_card(card):
+    ticker_el = card.find("span", "ticker")
+    name_el = card.find("div", "company-name")
+    price_el = card.find("div", "price") or card.find("span", "price")
+    rat = card.find("div", "rationale")
+    src = card.find("div", "sources")
+    return {
+        "ticker": ticker_el.clean_text() if ticker_el else None,
+        "name": name_el.clean_text() if name_el else None,
+        "query": card.get("data-q") or None,
+        "price": parse_price(price_el.clean_text() if price_el else ""),
+        "chips": chips(card),
+        "rationale": rat.clean_text() if rat else None,
+        "sources": links(src) if src else [],
+    }
+
+
+def extract_crypto(html):
+    doc = domlite.parse(html)
+    data = {"schema_version": SCHEMA_VERSION, "dashboard": "crypto"}
+    data.update(common_head(doc))
+
+    top_kpi = doc.find("div", "kpi-row")
+    data["kpis"] = kpis(top_kpi) if top_kpi else []
+
+    for key in ("tier1", "tier2"):
+        sec = section(doc, key)
+        data[key] = {
+            **heading(sec),
+            "cards": [crypto_card(c) for c in sec.find_all("div", "stock-card")] if sec else [],
+        }
+
+    tables_sec = section(doc, "tables")
+    tabs = {}
+    if tables_sec:
+        for t in tables_sec.find_all("table"):
+            tid = t.get("id") or "table"
+            tabs[tid.replace("table-", "")] = table_rows(t)
+    data["tables"] = {**heading(tables_sec), "groups": tabs}
+
+    # The crypto sentiment section is a Fear & Greed dial, not a table.
+    sent = section(doc, "sentiment")
+    fg = {}
+    if sent:
+        val = sent.find("div", "fg-value")
+        lbl = sent.find("div", "fg-label")
+        sub = sent.find("div", "fg-sub")
+        div = sent.find("div", "fg-divergence")
+        fg = {
+            "value": val.clean_text() if val else None,
+            "label": lbl.clean_text() if lbl else None,
+            "scale": sub.clean_text() if sub else None,
+            "history": [h.clean_text() for h in sent.find_all("span", "fg-hist-item")],
+            "divergence_note": div.clean_text() if div else None,
+            "sources": links(sent.find("div", "sources")) if sent.find("div", "sources") else [],
+        }
+    data["sentiment"] = {**heading(sent), "fear_greed": fg,
+                         "paragraphs": prose_paragraphs(sent)}
+
+    meth = section(doc, "methodology")
+    pillars = []
+    if meth:
+        for col in meth.find_all("div", "converge-col"):
+            h3 = col.find("h3")
+            pillars.append({"title": h3.clean_text() if h3 else None,
+                            "text": " ".join(p.clean_text() for p in col.find_all("p"))})
+    data["methodology"] = {**heading(meth), "pillars": pillars,
+                           "paragraphs": prose_paragraphs(meth),
+                           "sources": links(meth) if meth else []}
+
+    trans = section(doc, "transparency")
+    data["transparency"] = {**heading(trans), "items": list_items(trans)} if trans else None
+    return data
+
+
+# --------------------------------------------------------------------------
+
+DASHBOARDS = {
+    "stocks": ("index.html", extract_stocks),
+    "crypto": ("crypto.html", extract_crypto),
+}
+
+
+def build(name):
+    src, fn = DASHBOARDS[name]
+    with open(os.path.join(ROOT, src), encoding="utf-8") as fh:
+        data = fn(fh.read())
+    data["source_file"] = src
+    return data
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--stdout", choices=sorted(DASHBOARDS), help="print one dashboard instead of writing files")
+    ap.add_argument("--outdir", default=os.path.join(ROOT, "data"))
+    args = ap.parse_args()
+
+    if args.stdout:
+        json.dump(build(args.stdout), sys.stdout, ensure_ascii=False, indent=2)
+        print()
+        return 0
+
+    for name in sorted(DASHBOARDS):
+        data = build(name)
+        as_of = data.get("as_of") or "undated"
+        d = os.path.join(args.outdir, name)
+        os.makedirs(d, exist_ok=True)
+        for path in (os.path.join(d, as_of + ".json"), os.path.join(d, "latest.json")):
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(data, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
+        print("%-7s as_of=%s  ->  data/%s/%s.json (+ latest.json)" % (name, as_of, name, as_of))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
