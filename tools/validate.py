@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import extract  # noqa: E402
 
-MAX_AGE_DAYS = 3
+MAX_AGE_DAYS = int(os.environ.get("CONVERGE_MAX_AGE_DAYS", "3"))
 
 # Sections that must be present and populated, per dashboard.
 REQUIRED = {
@@ -186,15 +186,21 @@ def check_freshness(data, rep, today):
             rep.warn("no price on this page was fetched today")
 
 
-def validate_data(data, today, label=None):
+CHECKS = {
+    "structure": lambda d, r, today: check_structure(d, r),
+    "consistency": lambda d, r, today: check_consistency(d, r),
+    "freshness": check_freshness,
+}
+
+
+def validate_data(data, today, label=None, only=None):
     rep = Report(label or data.get("dashboard", "dashboard"))
-    check_structure(data, rep)
-    check_consistency(data, rep)
-    check_freshness(data, rep, today)
+    for name in (only or CHECKS):
+        CHECKS[name](data, rep, today)
     return rep
 
 
-def validate(name, today):
+def validate(name, today, only=None):
     label = "%s (%s)" % (name, extract.DASHBOARDS[name][0])
     try:
         data = extract.build(name)
@@ -202,7 +208,7 @@ def validate(name, today):
         rep = Report(label)
         rep.error("could not read the dashboard: %s" % exc)
         return rep
-    return validate_data(data, today, label)
+    return validate_data(data, today, label, only)
 
 
 def main():
@@ -211,6 +217,8 @@ def main():
     ap.add_argument("dashboards", nargs="*", metavar="DASHBOARD",
                     help="one or more of: %s (default: all)" % ", ".join(sorted(extract.DASHBOARDS)))
     ap.add_argument("--strict", action="store_true", help="treat warnings as failures")
+    ap.add_argument("--only", action="append", choices=sorted(CHECKS), metavar="CHECK",
+                    help="run only these checks (%s); repeatable" % ", ".join(sorted(CHECKS)))
     ap.add_argument("--today", help="override today's date (YYYY-MM-DD), for testing")
     args = ap.parse_args()
 
@@ -219,7 +227,7 @@ def main():
     unknown = [n for n in names if n not in extract.DASHBOARDS]
     if unknown:
         ap.error("unknown dashboard(s): %s" % ", ".join(unknown))
-    reports = [validate(n, today) for n in names]
+    reports = [validate(n, today, args.only) for n in names]
     for rep in reports:
         rep.print()
 

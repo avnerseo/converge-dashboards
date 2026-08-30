@@ -1,0 +1,33 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The tools are standard-library only on purpose: the daily run must not
+      # depend on a package index being reachable.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regression-test the checks themselves
+        run: python3 tools/selftest.py
+
+      - name: Validate both dashboards
+        run: python3 tools/validate.py
+
+      - name: Data layer is in sync with the HTML
+        run: |
+          python3 tools/extract.py
+          if ! git diff --quiet -- data/; then
+            echo "::error::data/ is stale — run 'python3 tools/extract.py' and commit the result"
+            git --no-pager diff --stat -- data/
+            exit 1
+          fi

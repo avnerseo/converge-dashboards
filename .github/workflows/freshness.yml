@@ -1,0 +1,20 @@
+name: freshness
+
+# The dashboards are only useful if they are current. This fails loudly when a
+# run date falls behind, which is the signal that the daily refresh stopped —
+# crypto.html sat 10 days stale before anyone noticed.
+on:
+  schedule:
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail if a dashboard has gone stale
+        run: python3 tools/validate.py --only freshness --strict
