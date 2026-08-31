@@ -94,7 +94,11 @@ const STR = {
     modeZone: 'לפי אזור', whyZone: 'אזור במעקב — משווים את הפינה הזו לאיך שהיא נראית בדרך כלל',
     framesExamined: 'פריימים נבדקו', zoneNoVideos: 'צריך לאנדקס הקלטה אחת לפחות כדי לסמן אזור.',
     zoneScanning: 'סורק את האזור', zoneChanged: 'שינוי באזור',
-    inYourFootage: 'מה שיש בהקלטות שלך', noFacesButPeople: 'לא נמצאו פנים ברורות בהקלטה הזאת — אפשר עדיין לחפש אנשים לפי מראה ולפי צבע בגדים',
+    inYourFootage: 'מה שיש בהקלטות שלך',
+    noSuchObject: 'לא נמצא דבר כזה בהקלטות שאונדקסו. מה שכן נמצא בהן:',
+    noSuchColour: 'לא נמצא בצבע הזה. הצבעים שנמצאו בפועל:',
+    noColourData: 'ההקלטות האלה אונדקסו לפני שהמערכת מדדה צבעים. כדי לחפש לפי צבע צריך לאנדקס אותן מחדש (לשונית הקלטות ← לסמן "לאנדקס מחדש").',
+    noSuchMotion: 'לא נמצא במצב התנועה הזה. אפשר לחפש בלי התנאי:', noFacesButPeople: 'לא נמצאו פנים ברורות בהקלטה הזאת — אפשר עדיין לחפש אנשים לפי מראה ולפי צבע בגדים',
     whatNow: 'מה עכשיו', goSearch: 'למסך החיפוש',
   },
   en: {
@@ -186,7 +190,11 @@ const STR = {
     modeZone: 'by zone', whyZone: 'is a watched zone - this compares that corner against how it usually looks',
     framesExamined: 'frames examined', zoneNoVideos: 'Index at least one recording before marking a zone.',
     zoneScanning: 'Scanning the zone', zoneChanged: 'Changed by',
-    inYourFootage: 'In your footage', noFacesButPeople: 'no face was clear enough in this recording - people can still be found by appearance and by clothing colour',
+    inYourFootage: 'In your footage',
+    noSuchObject: 'nothing like that in the indexed footage. What is in it:',
+    noSuchColour: 'nothing in that colour. The colours actually found:',
+    noColourData: 'this footage was indexed before colours were measured. Re-index it to search by colour (Footage tab, tick "Re-index").',
+    noSuchMotion: 'nothing moving that way. Search without that condition:', noFacesButPeople: 'no face was clear enough in this recording - people can still be found by appearance and by clothing colour',
     whatNow: 'What now', goSearch: 'Go to search',
   },
 };
@@ -671,6 +679,13 @@ VIEWS.search = async () => {
     absence: Number(absence.value), max_frames: Number(maxFrames.value),
   });
 
+  /* Suggestions taken from the index itself. An empty search box in front of
+     twelve hours of footage is a riddle; "person in a red shirt (15)" is an
+     answer you can click, and every chip here is known to return something. */
+  const chip = (text, count) => el('button', {
+    class: 'btn ghost small', onclick: () => { box.value = text; runButton.click(); },
+  }, text, count ? el('span', { class: 'muted' }, ' ', bdi(count)) : null);
+
   async function run(forceMode) {
     const query = box.value.trim();
     if (!query) return;
@@ -688,7 +703,52 @@ VIEWS.search = async () => {
       resultsBox.append(missingCard(data));
     } else {
       showResults(resultsBox, data.events, query);
+      if (!data.count) {
+        const note = emptyNote(data.intent || {});
+        if (note) resultsBox.append(note);
+      }
     }
+  }
+
+  /* A zero is not an answer. We know exactly what is in the index, so when a
+     local search finds nothing, say what is there instead - "no white shirts;
+     there are 15 red ones" - with each alternative one click away. */
+  function emptyNote(intent) {
+    if (intent.mode !== 'objects') return null;
+    const contents = (S.stats && S.stats.contents) || {};
+    const labels = contents.labels || [];
+    const combos = contents.combos || [];
+    if (!labels.length) return null;
+
+    const wanted = intent.labels || [];
+    const present = labels.filter((l) => wanted.includes(l.label));
+    if (wanted.length && !present.length) {
+      return el('div', { class: 'card' },
+        el('p', {}, t('noSuchObject')),
+        el('div', { class: 'row' },
+          ...labels.slice(0, 8).map((l) => chip(contentPhrase(l.label, null), l.count))));
+    }
+    if ((intent.colours || []).length) {
+      const alternatives = combos.filter((c) => wanted.includes(c.label));
+      if (!combos.length) {
+        // Indexed by a version that did not measure colour yet.
+        return el('div', { class: 'card' }, el('p', { class: 'legal' }, t('noColourData')));
+      }
+      if (alternatives.length) {
+        return el('div', { class: 'card' },
+          el('p', {}, t('noSuchColour')),
+          el('div', { class: 'row' },
+            ...alternatives.slice(0, 8).map((c) =>
+              chip(contentPhrase(c.label, c.colour), c.count))));
+      }
+    }
+    if (intent.moving !== null && intent.moving !== undefined && present.length) {
+      return el('div', { class: 'card' },
+        el('p', {}, t('noSuchMotion')),
+        el('div', { class: 'row' },
+          ...present.slice(0, 8).map((l) => chip(contentPhrase(l.label, null), l.count))));
+    }
+    return null;
   }
 
   function reasonText(intent) {
@@ -751,13 +811,6 @@ VIEWS.search = async () => {
     try { await run(null); } finally { runButton.disabled = false; }
   }) }, t('run'));
   box.addEventListener('keydown', (e) => { if (e.key === 'Enter') runButton.click(); });
-
-  /* Suggestions taken from the index itself. An empty search box in front of
-     twelve hours of footage is a riddle; "person in a red shirt (15)" is an
-     answer you can click, and every chip here is known to return something. */
-  const chip = (text, count) => el('button', {
-    class: 'btn ghost small', onclick: () => { box.value = text; runButton.click(); },
-  }, text, count ? el('span', { class: 'muted' }, ' ', bdi(count)) : null);
 
   const contents = (S.stats && S.stats.contents) || {};
   const seen = new Set();
