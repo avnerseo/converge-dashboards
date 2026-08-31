@@ -106,7 +106,15 @@ function Invoke-Start {
     if (-not (Test-Path $AppDir)) { Die "not set up yet - run '.\fcc.ps1 setup' first" }
     if (Test-PortOpen) { Write-Info "proxy already listening on port $FccPort"; return }
     Write-Info "starting fcc-server on port $FccPort (log: $LogFile)"
-    $p = Start-Process -FilePath 'uv' -ArgumentList 'run', 'fcc-server' -WorkingDirectory $AppDir `
+    # Call the entry point through python rather than the generated fcc-server.exe:
+    # Windows Application Control / Smart App Control blocks that unsigned shim
+    # ("os error 4551"), while the signed python.exe runs the same code fine.
+    $runner = Join-Path $AppDir '_run_server.py'
+    Set-Content -Path $runner -Encoding utf8 -Value @(
+        'from free_claude_code.cli.entrypoints import serve'
+        'serve()'
+    )
+    $p = Start-Process -FilePath 'uv' -ArgumentList 'run', 'python', '_run_server.py' -WorkingDirectory $AppDir `
                        -RedirectStandardOutput $LogFile -RedirectStandardError "$LogFile.err" `
                        -WindowStyle Hidden -PassThru
     Set-Content -Path $PidFile -Value $p.Id

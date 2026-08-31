@@ -106,7 +106,11 @@ cmd_start() {
   if port_open; then info "proxy already listening on port $FCC_PORT"; return; fi
   ensure_uv
   info "starting fcc-server on port $FCC_PORT (log: $LOG_FILE)"
-  ( cd "$APP_DIR" && nohup uv run fcc-server >"$LOG_FILE" 2>&1 & echo $! > "$PID_FILE" )
+  # Call the entry point through python rather than the generated fcc-server
+  # shim: on Windows that shim is blocked by Application Control, and going
+  # through python keeps both platforms on the same code path.
+  printf 'from free_claude_code.cli.entrypoints import serve\nserve()\n' > "$APP_DIR/_run_server.py"
+  ( cd "$APP_DIR" && nohup uv run python _run_server.py >"$LOG_FILE" 2>&1 & echo $! > "$PID_FILE" )
   for _ in $(seq 1 40); do
     if port_open; then
       info "proxy is up   ->  admin UI: http://127.0.0.1:$FCC_PORT"
