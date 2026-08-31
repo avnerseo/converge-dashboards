@@ -825,3 +825,30 @@ northern autumn starts.
 Pin count on the account goes from 8 to 11. That is still small — competitors in this niche run
 into the hundreds — but the boards now cover the two terms that actually rank (`gifts for dog
 lovers`, `gifts for cat lovers`) plus paw care during its peak.
+
+## Batch 6 — filling the gift boards, 2026-08-31
+
+`Gifts for Dog Lovers` held two Pins and `Gifts for Cat Lovers` held one. A board with one Pin
+carries no authority, and both boards are the ones the November demand will land on, so they
+were filled before anything else was attempted.
+
+| Pin | board | id | AI disclosure |
+|---|---|---|---|
+| `pin-20` For the sofa that is always covered in fur | Gifts for Dog Lovers | `916552961685434236` | none — real photo |
+| `pin-21` Under $20, used on every single walk | Gifts for Dog Lovers | `916552961685434238` | AI_MODIFIED |
+| `pin-22` For the cat who hides from the brush | Gifts for Cat Lovers | `916552961685434239` | none — real photo |
+| `pin-23` A gift that gets used every week | Gifts for Cat Lovers | `916552961685434237` | none — real photo |
+
+Three of the four use **supplier photographs**, not generated images — `b5` (the rolling lint
+remover), `b2` (a cat being brushed) and `b3` (the purple brush front and back). They were
+sitting unused in the product's media the whole time. Disclosure flags are set per image, not
+per batch: only `pin-21` carries `AI_MODIFIED`.
+
+`pin-20` is doing a second job. It shows the rolling lint remover on its own, which is the
+physical second item that justifies today's $39.90 two-item price. The pricing change and the
+content now argue the same thing.
+
+`pin-21` names the price — `$16.90`, verified live — because gift shoppers filter by price and
+"under $20" is a search behaviour, not a claim.
+
+**Board totals: Gifts for Dog Lovers 4, Gifts for Cat Lovers 3.** Account total 8 → 15 today.
