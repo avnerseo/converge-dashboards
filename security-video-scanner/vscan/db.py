@@ -11,8 +11,12 @@ import numpy as np
 
 from .util import ensure_dir
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
+# Tables first, then the migration that adds columns older indexes lack, and
+# only then the indexes - some of which name those columns, so creating them
+# against a database written by an older version would fail before the
+# migration had a chance to run.
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 
@@ -40,7 +44,6 @@ CREATE TABLE IF NOT EXISTS frames (
     thumb     TEXT,
     UNIQUE (video_id, t)
 );
-CREATE INDEX IF NOT EXISTS idx_frames_vt ON frames(video_id, t);
 
 CREATE TABLE IF NOT EXISTS faces (
     id        INTEGER PRIMARY KEY,
@@ -53,7 +56,6 @@ CREATE TABLE IF NOT EXISTS faces (
     crop      TEXT,
     emb       BLOB
 );
-CREATE INDEX IF NOT EXISTS idx_faces_vt ON faces(video_id, t);
 
 CREATE TABLE IF NOT EXISTS objects (
     id        INTEGER PRIMARY KEY,
@@ -67,8 +69,6 @@ CREATE TABLE IF NOT EXISTS objects (
     track     INTEGER,
     motion    REAL              -- box displacement relative to its own size
 );
-CREATE INDEX IF NOT EXISTS idx_objects_colour ON objects(video_id, label, colour);
-CREATE INDEX IF NOT EXISTS idx_objects_vtl ON objects(video_id, t, label);
 
 CREATE TABLE IF NOT EXISTS appearances (
     id        INTEGER PRIMARY KEY,
@@ -82,8 +82,6 @@ CREATE TABLE IF NOT EXISTS appearances (
     crop      TEXT,
     emb       BLOB
 );
-CREATE INDEX IF NOT EXISTS idx_appearances_vt ON appearances(video_id, t);
-CREATE INDEX IF NOT EXISTS idx_appearances_track ON appearances(video_id, track);
 
 CREATE TABLE IF NOT EXISTS persons (
     id         INTEGER PRIMARY KEY,
@@ -100,7 +98,16 @@ CREATE TABLE IF NOT EXISTS person_embeddings (
     source    TEXT,
     crop      TEXT
 );
-CREATE INDEX IF NOT EXISTS idx_pemb_person ON person_embeddings(person_id);
+
+CREATE TABLE IF NOT EXISTS zones (
+    id          INTEGER PRIMARY KEY,
+    video_id    INTEGER REFERENCES videos(id) ON DELETE CASCADE,  -- NULL: every video
+    name        TEXT NOT NULL,
+    x REAL, y REAL, w REAL, h REAL,     -- fractions of the frame, so any resolution fits
+    mode        TEXT NOT NULL DEFAULT 'change',
+    sensitivity REAL NOT NULL DEFAULT 0.15,
+    created_at  TEXT
+);
 
 CREATE TABLE IF NOT EXISTS face_labels (
     face_id   INTEGER PRIMARY KEY REFERENCES faces(id) ON DELETE CASCADE,
@@ -108,6 +115,18 @@ CREATE TABLE IF NOT EXISTS face_labels (
     score     REAL,
     source    TEXT
 );
+"""
+
+
+INDEXES = """
+CREATE INDEX IF NOT EXISTS idx_frames_vt ON frames(video_id, t);
+CREATE INDEX IF NOT EXISTS idx_faces_vt ON faces(video_id, t);
+CREATE INDEX IF NOT EXISTS idx_objects_colour ON objects(video_id, label, colour);
+CREATE INDEX IF NOT EXISTS idx_objects_vtl ON objects(video_id, t, label);
+CREATE INDEX IF NOT EXISTS idx_appearances_vt ON appearances(video_id, t);
+CREATE INDEX IF NOT EXISTS idx_appearances_track ON appearances(video_id, track);
+CREATE INDEX IF NOT EXISTS idx_pemb_person ON person_embeddings(person_id);
+CREATE INDEX IF NOT EXISTS idx_zones_video ON zones(video_id);
 """
 
 
@@ -135,6 +154,7 @@ class Index:
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.executescript(SCHEMA)
         self._migrate()
+        self.conn.executescript(INDEXES)
         self.conn.execute(
             "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
             (str(SCHEMA_VERSION),),
@@ -320,6 +340,54 @@ class Index:
         sql += " ORDER BY t"
         return list(self.conn.execute(sql, params))
 
+    # -- zones -------------------------------------------------------------
+    def add_zone(self, name: str, box: Sequence[float], video_id: int | None = None,
+                 mode: str = "change", sensitivity: float = 0.15) -> int:
+        """A named rectangle an operator wants watched ('front door', 'till')."""
+        if self.zone_by_name(name, video_id) is not None:
+            raise ValueError(f"a zone called {name!r} already exists here")
+        cur = self.conn.execute(
+            "INSERT INTO zones(video_id, name, x, y, w, h, mode, sensitivity,"
+            " created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+            (video_id, name.strip(), *[float(v) for v in box], mode,
+             float(sensitivity), dt.datetime.now().isoformat(timespec="seconds")))
+        self.conn.commit()
+        return int(cur.lastrowid)
+
+    def zones(self, video_id: int | None = None) -> list[sqlite3.Row]:
+        """Zones drawn on this video, plus the ones that apply everywhere."""
+        if video_id is None:
+            return list(self.conn.execute("SELECT * FROM zones ORDER BY name"))
+        return list(self.conn.execute(
+            "SELECT * FROM zones WHERE video_id = ? OR video_id IS NULL"
+            " ORDER BY name", (video_id,)))
+
+    def zone_by_name(self, name: str, video_id: int | None = None
+                     ) -> sqlite3.Row | None:
+        return self.conn.execute(
+            "SELECT * FROM zones WHERE name = ? AND (video_id IS ? OR video_id IS NULL)"
+            " ORDER BY video_id IS NULL LIMIT 1", (name.strip(), video_id)).fetchone()
+
+    def get_zone(self, zone_id: int) -> sqlite3.Row | None:
+        return self.conn.execute("SELECT * FROM zones WHERE id = ?",
+                                 (zone_id,)).fetchone()
+
+    def update_zone(self, zone_id: int, **fields) -> bool:
+        allowed = {"name", "x", "y", "w", "h", "mode", "sensitivity", "video_id"}
+        sets = {k: v for k, v in fields.items() if k in allowed and v is not None}
+        if not sets:
+            return False
+        assignments = ", ".join(f"{k} = ?" for k in sets)
+        cur = self.conn.execute(f"UPDATE zones SET {assignments} WHERE id = ?",
+                                (*sets.values(), zone_id))
+        self.conn.commit()
+        return cur.rowcount > 0
+
+    def delete_zone(self, zone_id: int) -> bool:
+        cur = self.conn.execute("DELETE FROM zones WHERE id = ?", (zone_id,))
+        self.conn.commit()
+        return cur.rowcount > 0
+
     # -- persons -----------------------------------------------------------
     def get_or_create_person(self, name: str, notes: str | None = None) -> int:
         row = self.conn.execute("SELECT id FROM persons WHERE name = ?", (name,)).fetchone()
@@ -397,4 +465,5 @@ class Index:
             "objects": q("SELECT COUNT(*) FROM objects"),
             "coloured": q("SELECT COUNT(*) FROM objects WHERE colour IS NOT NULL"),
             "persons": q("SELECT COUNT(*) FROM persons"),
+            "zones": q("SELECT COUNT(*) FROM zones"),
         }

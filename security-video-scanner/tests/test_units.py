@@ -112,3 +112,42 @@ def test_tracker_separates_two_people_and_forgets_stale_ones():
     assert len({t.id for t in first}) == 2
     later = tracker.update(5.0, [(0, 0, 40, 90)])          # long after the gap
     assert later[0].id not in {t.id for t in first}, "a stale track is not reused"
+
+
+def test_an_index_written_by_an_older_version_still_opens(tmp_path):
+    """Upgrading must never strand a customer's index.
+
+    Older releases wrote `objects` without the colour, track and motion
+    columns. The migration adds them - but only if opening the database gets
+    that far, which it does not if an index that names those columns is created
+    first.
+    """
+    import sqlite3
+
+    from vscan.db import Index
+
+    root = tmp_path / "old-index"
+    root.mkdir()
+    old = sqlite3.connect(root / "index.db")
+    old.executescript("""
+        CREATE TABLE videos (id INTEGER PRIMARY KEY, path TEXT UNIQUE NOT NULL,
+                             frames_kept INTEGER DEFAULT 0);
+        CREATE TABLE frames (id INTEGER PRIMARY KEY, video_id INTEGER, t REAL);
+        CREATE TABLE objects (id INTEGER PRIMARY KEY, video_id INTEGER,
+                              frame_id INTEGER, t REAL, label TEXT, score REAL,
+                              x REAL, y REAL, w REAL, h REAL);
+        CREATE TABLE person_embeddings (id INTEGER PRIMARY KEY, person_id INTEGER,
+                                        emb BLOB NOT NULL, source TEXT, crop TEXT);
+        INSERT INTO objects(video_id, frame_id, t, label, score, x, y, w, h)
+        VALUES (1, 1, 3.0, 'car', 0.9, 0, 0, 10, 10);
+    """)
+    old.commit()
+    old.close()
+
+    with Index(root) as index:
+        columns = {r["name"] for r in index.conn.execute("PRAGMA table_info(objects)")}
+        assert {"colour", "track", "motion"} <= columns
+        assert {"kind"} <= {r["name"] for r in
+                            index.conn.execute("PRAGMA table_info(person_embeddings)")}
+        assert index.conn.execute("SELECT COUNT(*) FROM objects").fetchone()[0] == 1
+        assert index.zones() == []              # new tables arrive with the upgrade

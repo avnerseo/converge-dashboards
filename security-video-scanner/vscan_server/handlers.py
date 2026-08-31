@@ -23,6 +23,7 @@ def index_options(settings: Settings, raw: dict) -> IndexOptions:
         sample_fps=float(raw.get("sample_fps", 2.0)),
         max_width=int(raw.get("width", 1280)),
         motion_threshold=float(raw.get("motion", 0.004)),
+        keyframe_every=float(raw.get("keyframe", 10.0)),
         detect_faces=bool(raw.get("faces", True)),
         detect_objects=bool(raw.get("objects", False)),
         object_labels=labels,
@@ -119,6 +120,26 @@ def make_cluster_handler(settings: Settings):
     return handle
 
 
+def make_zone_handler(settings: Settings):
+    """A watched rectangle over a long recording: minutes of local CPU, no API."""
+    def handle(ctx: JobContext, params: dict) -> dict:
+        from vscan.zones import ZonePlan, run as run_zone
+
+        plan = ZonePlan.from_dict(params)
+        with open_index(settings) as index:
+            events, examined = run_zone(
+                index, plan,
+                on_progress=lambda f, m: ctx.progress(f, m),
+                should_cancel=lambda: ctx.cancelled)
+        return {"events": [e.to_dict() for e in events],
+                "frames_examined": examined,
+                "zone": {"label": plan.label, "mode": plan.mode,
+                         "sensitivity": plan.sensitivity,
+                         "box": list(plan.box.as_tuple())}}
+
+    return handle
+
+
 def make_ask_handler(settings: Settings):
     def handle(ctx: JobContext, params: dict) -> dict:
         from vscan.semantic import AskOptions, ask, select_frames
@@ -205,5 +226,6 @@ def make_export_handler(settings: Settings):
 def register_all(runner, settings: Settings) -> None:
     runner.register("index", make_index_handler(settings))
     runner.register("cluster", make_cluster_handler(settings))
+    runner.register("zone", make_zone_handler(settings))
     runner.register("ask", make_ask_handler(settings))
     runner.register("export", make_export_handler(settings))

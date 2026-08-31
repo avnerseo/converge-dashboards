@@ -5,6 +5,7 @@ Someone investigating an incident types "when did the white car move" or
 choosing between them is our job, not theirs:
 
   * a name we have enrolled            -> face and appearance search, local
+  * the name of a watched zone         -> zone change detection, local
   * nothing but object words           -> object search, local
   * anything with a colour, an action,
     a relationship, a description      -> instruction search, via the model
@@ -152,10 +153,12 @@ class Intent:
     `reason_word` are what a localised interface renders, so an operator
     working in Hebrew is not handed an English sentence.
     """
-    mode: str                                   # 'person' | 'objects' | 'ask'
+    mode: str                          # 'person' | 'zone' | 'objects' | 'ask'
     query: str
     person_id: int | None = None
     person_name: str | None = None
+    zone_id: int | None = None
+    zone_name: str | None = None
     labels: list[str] = field(default_factory=list)
     colours: list[str] = field(default_factory=list)
     moving: bool | None = None
@@ -166,7 +169,8 @@ class Intent:
 
     def to_dict(self) -> dict:
         data = {"mode": self.mode, "query": self.query, "person_id": self.person_id,
-                "person_name": self.person_name, "labels": self.labels,
+                "person_name": self.person_name, "zone_id": self.zone_id,
+                "zone_name": self.zone_name, "labels": self.labels,
                 "colours": self.colours, "moving": self.moving,
                 "reason": self.reason, "reason_code": self.reason_code,
                 "reason_word": self.reason_word}
@@ -202,9 +206,33 @@ def match_person(query: str, persons: list[tuple[int, str]]) -> tuple[int, str] 
     return best
 
 
-def resolve(query: str, persons: list[tuple[int, str]] | None = None) -> Intent:
+def match_zone(query: str, zones: list[tuple[int, str]]) -> tuple[int, str] | None:
+    """A watched zone named in the query ("when did the door open").
+
+    Zone names are ordinary words - "door", "till", "gate" - so unlike an
+    enrolled name they have to survive Hebrew's glued-on article: whoever named
+    a zone /delet/ still types /ha-delet/.
+    """
+    text = _normalise(query)
+    words = _TOKEN.findall(text)
+    best: tuple[int, str] | None = None
+    for zone_id, name in zones:
+        clean = _normalise(name)
+        if len(clean) < 2:
+            continue
+        if " " in clean or len(clean.split()) > 1:
+            found = clean in text
+        else:
+            found = any(clean in strip_prefix(word) for word in words)
+        if found and (best is None or len(clean) > len(_normalise(best[1]))):
+            best = (zone_id, name)
+    return best
+
+
+def resolve(query: str, persons: list[tuple[int, str]] | None = None,
+            zones: list[tuple[int, str]] | None = None) -> Intent:
     """Turn a sentence into the search that actually answers it."""
-    persons = persons or []
+    persons, zones = persons or [], zones or []
     text = _normalise(query)
     if not text:
         return Intent("ask", query, reason="empty query")
@@ -214,6 +242,13 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None) -> Intent:
         return Intent("person", query, person_id=person[0], person_name=person[1],
                       reason=f"{person[1]} is enrolled, so this is a face search",
                       reason_code="person_enrolled", reason_word=person[1])
+
+    zone = match_zone(query, zones)
+    if zone is not None:
+        return Intent("zone", query, zone_id=zone[0], zone_name=zone[1],
+                      reason=f"{zone[1]} is a watched zone, so this compares that "
+                             f"corner of the picture against how it usually looks",
+                      reason_code="zone_watched", reason_word=zone[1])
 
     words = tokens_of(query)
     labels: list[str] = []

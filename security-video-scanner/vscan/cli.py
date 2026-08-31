@@ -8,6 +8,7 @@ from pathlib import Path
 from . import __version__
 from .db import Index
 from .events import Event, arrivals, group_hits
+from .zones import MODES as ZONE_MODES
 from .util import LOG, fmt_timecode, human_size, parse_datetime, parse_timecode, setup_logging
 
 VIDEO_SUFFIXES = {".mp4", ".mkv", ".avi", ".mov", ".m4v", ".mpg", ".mpeg",
@@ -31,6 +32,8 @@ def build_parser() -> argparse.ArgumentParser:
   vscan ask "someone carrying a large box to the front door" --report box.html
   vscan doctor gate.mp4                      # can this camera even be searched?
   vscan similar --video gate --at 00:03:12   # who else looks like that person?
+  vscan zone add --video gate --name "front door" --box 0.42,0.30,0.14,0.38
+  vscan zone scan --name "front door"        # when did that door open?
 """)
     p.add_argument("--version", action="version", version=f"vscan {__version__}")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -47,6 +50,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--motion", type=float, default=0.004, dest="motion_threshold",
                    help="fraction of pixels that must change to call a frame active; "
                         "0 disables the motion gate")
+    s.add_argument("--keyframe", type=float, default=10.0, dest="keyframe_every",
+                   metavar="SEC",
+                   help="keep a frame this often even when nothing moved, so the "
+                        "state of the scene is on record for zone searches "
+                        "(default: 10; 0 disables)")
     s.add_argument("--no-faces", action="store_true", help="skip face detection")
     s.add_argument("--objects", action="store_true",
                    help="also run object detection (YOLOX, 80 COCO classes)")
@@ -108,6 +116,40 @@ def build_parser() -> argparse.ArgumentParser:
     _add_range_args(s)
     _add_group_args(s)
     _add_output_args(s)
+
+    # ---- zones
+    s = sub.add_parser("zone", help="watch one rectangle of the picture "
+                                    "(a door, a till, a parking bay)")
+    zsub = s.add_subparsers(dest="zone_command", required=True)
+
+    z = zsub.add_parser("add", help="save a rectangle to watch")
+    z.add_argument("--name", required=True, help='e.g. "front door"')
+    z.add_argument("--box", required=True, metavar="X,Y,W,H",
+                   help="rectangle as fractions of the frame, e.g. 0.42,0.30,0.14,0.38")
+    z.add_argument("--video", default=None,
+                   help="the video it was drawn on; omit to watch every video")
+    z.add_argument("--mode", choices=list(ZONE_MODES), default="change",
+                   help="change: differs from how it usually looks (a door left "
+                        "open); motion: differs from the frame before (the moment "
+                        "it swung)")
+    z.add_argument("--sensitivity", type=float, default=0.15,
+                   help="fraction of the rectangle that must differ (0-1)")
+
+    zsub.add_parser("list", help="show the saved zones")
+
+    z = zsub.add_parser("remove", help="delete a saved zone")
+    z.add_argument("--name", required=True)
+    z.add_argument("--video", default=None)
+
+    z = zsub.add_parser("scan", help="find every moment a zone was not itself")
+    z.add_argument("--name", default=None, help="a saved zone")
+    z.add_argument("--box", default=None, metavar="X,Y,W,H",
+                   help="or a rectangle given here, without saving it")
+    z.add_argument("--mode", choices=list(ZONE_MODES), default=None)
+    z.add_argument("--sensitivity", type=float, default=None)
+    _add_range_args(z)                       # --video lives here
+    _add_group_args(z)
+    _add_output_args(z)
 
     # ---- cluster / label
     s = sub.add_parser("cluster", help="group unknown faces - who appears at all?")
@@ -281,6 +323,7 @@ def cmd_index(args, index: Index) -> int:
         sample_fps=args.sample_fps,
         max_width=args.width,
         motion_threshold=args.motion_threshold,
+        keyframe_every=args.keyframe_every,
         detect_faces=not args.no_faces,
         detect_objects=args.objects,
         object_labels=labels,
@@ -410,6 +453,91 @@ def cmd_objects(args, index: Index) -> int:
     if args.arrivals:
         events = arrivals(events, args.absence)
     return emit(index, args, events, f"{label} detections", query=label)
+
+
+def _zone_video_id(index: Index, selector: str | None) -> int | None:
+    if not selector:
+        return None
+    return int(index.resolve_videos([selector])[0]["id"])
+
+
+def cmd_zone(args, index: Index) -> int:
+    from .search import started_at_map
+    from .zones import Box, DEFAULT_SENSITIVITY, scan
+
+    if args.zone_command == "add":
+        video_id = _zone_video_id(index, args.video)
+        box = Box.parse(args.box)
+        zone_id = index.add_zone(args.name, box.as_tuple(), video_id, args.mode,
+                                 args.sensitivity)
+        scope = Path(index.get_video(video_id)["path"]).name if video_id else "every video"
+        print(f"zone {zone_id}: {args.name!r} on {scope} "
+              f"({args.mode}, sensitivity {args.sensitivity:.2f})")
+        return 0
+
+    if args.zone_command == "list":
+        rows = index.zones()
+        if not rows:
+            print("no zones yet - add one with 'vscan zone add'.")
+            return 1
+        for r in rows:
+            video = index.get_video(r["video_id"]) if r["video_id"] else None
+            scope = Path(video["path"]).name if video else "all videos"
+            print(f"{r['id']:3d}. {r['name']:<24} {scope:<28} "
+                  f"box {r['x']:.3f},{r['y']:.3f},{r['w']:.3f},{r['h']:.3f}  "
+                  f"{r['mode']} >= {r['sensitivity']:.2f}")
+        return 0
+
+    if args.zone_command == "remove":
+        row = index.zone_by_name(args.name, _zone_video_id(index, args.video))
+        if row is None or not index.delete_zone(int(row["id"])):
+            LOG.error("no zone called %r", args.name)
+            return 1
+        print(f"deleted zone {args.name!r}")
+        return 0
+
+    # ---- scan
+    if not args.name and not args.box:
+        LOG.error("give --name of a saved zone, or --box x,y,w,h")
+        return 2
+    zone = index.zone_by_name(args.name) if args.name else None
+    if args.name and zone is None:
+        LOG.error("no zone called %r - 'vscan zone list' shows the saved ones",
+                  args.name)
+        return 1
+
+    box = Box.parse(args.box) if args.box else \
+        Box(zone["x"], zone["y"], zone["w"], zone["h"])
+    mode = args.mode or (zone["mode"] if zone else "change")
+    sensitivity = args.sensitivity if args.sensitivity is not None else \
+        (zone["sensitivity"] if zone else DEFAULT_SENSITIVITY)
+    label = args.name or "zone"
+
+    selectors = args.videos
+    if not selectors and zone is not None and zone["video_id"]:
+        selectors = [str(zone["video_id"])]
+    video_ids = _video_ids(index, selectors) or [int(v["id"]) for v in index.videos()]
+    if not video_ids:
+        LOG.error("nothing indexed yet")
+        return 1
+
+    start = parse_timecode(args.start)
+    end = parse_timecode(args.end) if args.end else None
+    hits, examined = [], 0
+    for video_id in video_ids:
+        try:
+            result = scan(index, video_id, box, mode, sensitivity, start, end, label)
+        except SystemExit as exc:                 # one unindexed video is not fatal
+            LOG.warning("%s", exc)
+            continue
+        hits.extend(result.hits)
+        examined += result.frames_examined
+    LOG.info("%d of %d stored frames matched", len(hits), examined)
+
+    events = group_hits(hits, label, args.gap, args.min_hits, started_at_map(index))
+    if args.arrivals:
+        events = arrivals(events, args.absence)
+    return emit(index, args, events, f"{label} - {mode}", query=label)
 
 
 def cmd_cluster(args, index: Index) -> int:
@@ -559,6 +687,7 @@ COMMANDS = {
     "persons": cmd_persons, "forget": cmd_forget, "find": cmd_find,
     "objects": cmd_objects, "cluster": cmd_cluster, "label": cmd_label,
     "ask": cmd_ask, "similar": cmd_similar, "doctor": cmd_doctor,
+    "zone": cmd_zone,
     "clip": cmd_clip, "models": cmd_models,
 }
 

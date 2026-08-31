@@ -9,13 +9,14 @@ vscan find  --person "David" --arrivals --report david.html
 vscan ask   "someone carrying a large box to the front door" --report box.html
 ```
 
-Four search engines share one index:
+Five search engines share one index:
 
 | | what it answers | where it runs |
 |---|---|---|
 | **Face search** | "when does *this person* appear", "when did they arrive" | fully local (OpenCV YuNet + SFace, CPU) |
 | **Appearance search** | "who else looks like this" — works with no face visible | fully local (Youtu ReID, CPU) |
-| **Object search** | "when was anyone/a car/a bag on camera" | fully local (YOLOX-S, 80 COCO classes) |
+| **Object search** | "when was anyone/a white car/a bag on camera" | fully local (YOLOX-S, 80 COCO classes) |
+| **Zone search** | "when did the door open", "when was the gate left open" | fully local (thumbnail arithmetic) |
 | **`ask` — instruction search** | anything you can describe in a sentence | frames are sent to the Claude API |
 
 Everything except `ask` runs offline: no frame leaves the machine.
@@ -159,6 +160,9 @@ vscan find --person "David" --arrivals             # only arrivals (see below)
 vscan find --person "David" --from 20:00 --to 23:00 --clips ./clips
 vscan objects --labels person car --arrivals       # motion-free "someone was here"
 vscan ask "a delivery van stopping at the gate"    # anything describable
+
+vscan zone add --video gate --name "front door" --box 0.42,0.30,0.14,0.38
+vscan zone scan --name "front door" --report door.html   # when did it open?
 ```
 
 Output looks like this, with an HTML timeline and JSON on request:
@@ -176,6 +180,51 @@ they get to the building" question.
 `--clips DIR` cuts an mp4 per event with ffmpeg, `--report FILE` writes a
 self-contained HTML page (thumbnails embedded, so it can be mailed as one
 file), `--json FILE` writes machine-readable events.
+
+## Zones — "when did the door open"
+
+A door is not an object. No detector has a class for it, and none ever will:
+every camera watches a different door, till, gate or parking bay. What those
+all have in common is that they are *a rectangle that sometimes stops looking
+like itself*.
+
+So the rectangle is drawn once — in the web UI by dragging across a frame, on
+the command line as fractions of the picture — and from then on it can be
+asked about:
+
+```bash
+vscan zone add  --video gate --name "front door" --box 0.42,0.30,0.14,0.38
+vscan zone list
+vscan zone scan --name "front door" --arrivals --report door.html
+vscan zone scan --box 0.42,0.30,0.14,0.38 --mode motion    # unsaved, one-off
+```
+
+Two modes, because there are two questions:
+
+| mode | compares each frame against | answers |
+|---|---|---|
+| `change` (default) | how that rectangle *usually* looks | "the door stood open from 02:14 to 02:31", "the box by the wall is gone" |
+| `motion` | the frame before it | "the door swung at 02:14 and again at 02:31" |
+
+The scan reads the thumbnails written during indexing, so it never decodes the
+video again and never calls a model. Measured on four cores: 30,000 stored
+frames — what a twelve-hour recording of a reasonably busy camera leaves behind
+— in nine seconds. Repeatable as often as an investigation needs, at no
+per-search cost. (In the web UI anything past a few thousand frames becomes a
+background job with a progress bar rather than a request left hanging.)
+
+Two details make it work on real footage. The "usual" state is a per-pixel
+median sampled **evenly in time**, not evenly in stored frames — indexing keeps
+frames where something moved, so counting them equally would let one busy
+minute outvote eleven still hours. And indexing keeps a heartbeat frame every
+`--keyframe` seconds (default 10) whether or not anything moved, because a door
+standing open is a state, and without a periodic record of the scene there is
+nothing to compare it against.
+
+In the web UI a saved zone's **name becomes a search term**: with a zone called
+`front door`, typing "when did the front door open" into the one search box
+routes to the zone scan — locally, for nothing. Without that zone the same
+sentence has no local answer and goes to the model.
 
 ## `ask` — the instruction search
 
@@ -243,6 +292,8 @@ vscan objects --labels    when objects appear (index with --objects first)
 vscan cluster             group unknown faces: who appears at all
 vscan label --cluster N   name a cluster, making it searchable
 vscan similar             who else looks like the person at this moment
+vscan zone add|list|remove|scan
+                          watch one rectangle: a door, a till, a parking bay
 vscan doctor              is this footage searchable? measure before indexing
 vscan ask "QUERY"         natural-language search (Claude API)
 vscan clip                cut one clip out of an indexed video

@@ -27,6 +27,8 @@ from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
 from vscan.util import fmt_timecode
 from vscan.vectors import clear_caches
 from vscan.video import grab_frame, probe
+from vscan.zones import (Box, DEFAULT_SENSITIVITY as ZONE_SENSITIVITY,
+                         ZonePlan, preview as zone_preview, run as run_zone)
 
 from .config import Settings, get_settings
 from .engines import face_engine
@@ -671,6 +673,131 @@ def person_faces(person_id: int, _: sqlite3.Row = Depends(require_viewer),
                       for r in rows]}
 
 
+# ================================================================== zones
+# A zone is a rectangle an operator drew on the picture: the front door, the
+# till, a parking bay. Object detection cannot answer "when did the door open",
+# because a door is not an object in anybody's detector - but a rectangle that
+# stops looking like itself is exactly that question, and answering it is local
+# arithmetic over thumbnails we already wrote.
+
+class ZoneBody(BaseModel):
+    name: str
+    box: list[float] = Field(min_length=4, max_length=4)
+    video_id: int | None = None            # None: watch this rectangle everywhere
+    mode: Literal["change", "motion"] = "change"
+    sensitivity: float = Field(default=ZONE_SENSITIVITY, ge=0.01, le=1.0)
+
+
+class ZonePatch(BaseModel):
+    name: str | None = None
+    box: list[float] | None = None
+    mode: Literal["change", "motion"] | None = None
+    sensitivity: float | None = Field(default=None, ge=0.01, le=1.0)
+
+
+def _zone_dict(row: sqlite3.Row) -> dict:
+    return {"id": int(row["id"]), "name": row["name"],
+            "video_id": row["video_id"], "box": [row["x"], row["y"], row["w"], row["h"]],
+            "mode": row["mode"], "sensitivity": row["sensitivity"],
+            "created_at": row["created_at"]}
+
+
+@router.get("/zones")
+def list_zones(video_id: int | None = Query(None),
+               _: sqlite3.Row = Depends(require_viewer),
+               settings: Settings = Depends(settings_dep)) -> dict:
+    with open_index(settings) as index:
+        rows = index.zones(video_id)
+    return {"zones": [_zone_dict(r) for r in rows]}
+
+
+@router.post("/zones", status_code=status.HTTP_201_CREATED)
+def create_zone(body: ZoneBody, request: Request,
+                user: sqlite3.Row = Depends(require_analyst),
+                store: Store = Depends(get_store),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    if not body.name.strip():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "a zone needs a name")
+    try:
+        box = Box.parse(body.box)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    with open_index(settings) as index:
+        if body.video_id is not None and index.get_video(body.video_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such video")
+        try:
+            zone_id = index.add_zone(body.name, box.as_tuple(), body.video_id,
+                                     body.mode, body.sensitivity)
+        except ValueError as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        row = index.get_zone(zone_id)
+    store.audit("zone.create", user=user,
+                detail={"name": body.name, "video_id": body.video_id,
+                        "mode": body.mode}, ip=client_ip(request))
+    return {"zone": _zone_dict(row)}
+
+
+@router.patch("/zones/{zone_id}")
+def patch_zone(zone_id: int, body: ZonePatch, request: Request,
+               user: sqlite3.Row = Depends(require_analyst),
+               store: Store = Depends(get_store),
+               settings: Settings = Depends(settings_dep)) -> dict:
+    fields: dict[str, Any] = {"name": body.name, "mode": body.mode,
+                              "sensitivity": body.sensitivity}
+    if body.box is not None:
+        try:
+            box = Box.parse(body.box)
+        except ValueError as exc:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        fields.update(zip("xywh", box.as_tuple()))
+    with open_index(settings) as index:
+        if index.get_zone(zone_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such zone")
+        index.update_zone(zone_id, **fields)
+        row = index.get_zone(zone_id)
+    store.audit("zone.update", user=user, detail={"zone_id": zone_id},
+                ip=client_ip(request))
+    return {"zone": _zone_dict(row)}
+
+
+@router.delete("/zones/{zone_id}")
+def delete_zone(zone_id: int, request: Request,
+                user: sqlite3.Row = Depends(require_analyst),
+                store: Store = Depends(get_store),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    with open_index(settings) as index:
+        row = index.get_zone(zone_id)
+        if row is None or not index.delete_zone(zone_id):
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such zone")
+        name = row["name"]
+    store.audit("zone.delete", user=user, detail={"zone": name},
+                ip=client_ip(request))
+    return {"deleted": zone_id}
+
+
+class ZonePreview(BaseModel):
+    video_id: int
+    box: list[float] = Field(min_length=4, max_length=4)
+
+
+@router.post("/zones/preview")
+def preview_zone(body: ZonePreview, _: sqlite3.Row = Depends(require_viewer),
+                 settings: Settings = Depends(settings_dep)) -> dict:
+    """How much this rectangle normally changes - shown while it is drawn.
+
+    It tells the operator two useful things before they save anything: that
+    they framed something that does change, and what sensitivity to start at.
+    """
+    try:
+        box = Box.parse(body.box)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    with open_index(settings) as index:
+        if index.get_video(body.video_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such video")
+        return zone_preview(index, body.video_id, box)
+
+
 # ================================================================= search
 class PersonSearch(BaseModel):
     person_id: int
@@ -831,6 +958,91 @@ def search_similar(body: SimilarSearch, request: Request,
     return payload
 
 
+class ZoneSearch(BaseModel):
+    zone_id: int | None = None
+    box: list[float] | None = None          # or a rectangle used once, unsaved
+    mode: Literal["change", "motion"] | None = None
+    sensitivity: float | None = Field(default=None, ge=0.01, le=1.0)
+    video_ids: list[int] | None = None
+    start: float = 0.0
+    end: float | None = None
+    gap: float = 5.0
+    min_hits: int = 1
+    arrivals: bool = False
+    absence: float = 300.0
+
+
+# Past this many stored frames the scan takes long enough that a request should
+# not be left hanging on it; it becomes a job with a progress bar instead.
+ZONE_SYNC_LIMIT = 5000
+
+
+def _zone_plan(index, body: ZoneSearch) -> ZonePlan:
+    """Resolve a zone request into the exact rectangle, mode and videos to scan."""
+    row = index.get_zone(body.zone_id) if body.zone_id else None
+    if body.zone_id and row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "no such zone")
+    raw = body.box if body.box is not None else \
+        ([row["x"], row["y"], row["w"], row["h"]] if row else None)
+    if raw is None:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                            "give a saved zone or a rectangle to watch")
+    try:
+        box = Box.parse(raw)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+
+    video_ids = body.video_ids
+    if not video_ids and row is not None and row["video_id"]:
+        video_ids = [int(row["video_id"])]
+    if not video_ids:
+        video_ids = [int(v["id"]) for v in index.videos()]
+    return ZonePlan(
+        box=box,
+        mode=body.mode or (row["mode"] if row else "change"),
+        sensitivity=(body.sensitivity if body.sensitivity is not None
+                     else (float(row["sensitivity"]) if row else ZONE_SENSITIVITY)),
+        label=row["name"] if row else "zone",
+        video_ids=[int(v) for v in video_ids],
+        start=body.start, end=body.end, gap=body.gap, min_hits=body.min_hits,
+        arrivals=body.arrivals, absence=body.absence)
+
+
+@router.post("/search/zone")
+def search_zone(body: ZoneSearch, request: Request,
+                user: sqlite3.Row = Depends(require_viewer),
+                store: Store = Depends(get_store),
+                runner: JobRunner = Depends(runner_dep),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    """Every moment a watched rectangle stopped looking like itself."""
+    with open_index(settings) as index:
+        plan = _zone_plan(index, body)
+        marks = ",".join("?" * len(plan.video_ids))
+        frames = int(index.conn.execute(
+            f"SELECT COUNT(*) FROM frames WHERE thumb IS NOT NULL"
+            f" AND video_id IN ({marks or 'NULL'})", plan.video_ids).fetchone()[0])
+        if frames > ZONE_SYNC_LIMIT:
+            job_id = runner.submit("zone", f"Zone: {plan.label}", plan.to_dict(),
+                                   int(user["id"]))
+            store.audit("search.zone", user=user,
+                        detail={"zone": plan.label, "frames": frames,
+                                "job_id": job_id}, ip=client_ip(request))
+            return {"job_id": job_id, "frames": frames,
+                    "zone": _zone_summary(plan)}
+        events, examined = run_zone(index, plan)
+    store.audit("search.zone", user=user,
+                detail={"zone": plan.label, "mode": plan.mode,
+                        "frames": examined, "results": len(events)},
+                ip=client_ip(request))
+    return {**_events_payload(events), "frames_examined": examined,
+            "zone": _zone_summary(plan)}
+
+
+def _zone_summary(plan: ZonePlan) -> dict:
+    return {"box": list(plan.box.as_tuple()), "mode": plan.mode,
+            "sensitivity": plan.sensitivity, "label": plan.label}
+
+
 class AskBody(BaseModel):
     query: str
     video_ids: list[int] | None = None
@@ -882,7 +1094,7 @@ class AutoSearch(BaseModel):
     arrivals: bool = False
     absence: float = 300.0
     max_frames: int = 400
-    force_mode: Literal["person", "objects", "ask"] | None = None
+    force_mode: Literal["person", "zone", "objects", "ask"] | None = None
 
 
 @router.post("/search")
@@ -897,10 +1109,12 @@ def search_auto(body: AutoSearch, request: Request,
 
     with open_index(settings) as index:
         people = [(int(p["id"]), p["name"]) for p in index.persons()]
-    intent = resolve_query(body.query, people)
+        watched = [(int(z["id"]), z["name"]) for z in index.zones()]
+    intent = resolve_query(body.query, people, watched)
     if body.force_mode and body.force_mode != intent.mode:
         intent = Intent(body.force_mode, body.query, person_id=intent.person_id,
-                        person_name=intent.person_name,
+                        person_name=intent.person_name, zone_id=intent.zone_id,
+                        zone_name=intent.zone_name,
                         labels=intent.labels or (intent.fallback.labels
                                                  if intent.fallback else ["person"]),
                         colours=intent.colours, moving=intent.moving,
@@ -923,6 +1137,15 @@ def search_auto(body: AutoSearch, request: Request,
                     AppearanceSearch(person_id=intent.person_id, **common),
                     request, user, store, settings)
                 intent.reason += " - no face matched, so this is by appearance"
+        return {**payload, "intent": intent.to_dict()}
+
+    if intent.mode == "zone" and intent.zone_id:
+        payload = search_zone(
+            ZoneSearch(zone_id=intent.zone_id, video_ids=body.video_ids,
+                       start=body.start, end=body.end, gap=body.gap,
+                       min_hits=body.min_hits, arrivals=body.arrivals,
+                       absence=body.absence),
+            request, user, store, runner, settings)
         return {**payload, "intent": intent.to_dict()}
 
     if intent.mode == "objects":

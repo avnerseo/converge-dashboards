@@ -147,3 +147,20 @@ tbody tr:hover { background: var(--bg); }
 .filebrowser div.entry:hover { background: var(--bg); }
 .legal { border-inline-start: 3px solid var(--warn); padding-inline-start: 12px;
          color: var(--muted); font-size: 12.5px; }
+
+/* ----------------------------------------------------------------- zones */
+.zone-canvas {
+  position: relative; display: inline-block; max-width: 100%;
+  touch-action: none; cursor: crosshair; user-select: none;
+}
+/* Capped so the picture, the readout and the form all fit on one screen -
+   an operator marking a zone should not have to scroll to name it. */
+.zone-canvas img {
+  display: block; max-width: 100%; max-height: 46vh; width: auto;
+  border-radius: 8px; background: #000;
+}
+.zone-rect {
+  position: absolute; border: 2px solid var(--accent); border-radius: 3px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  pointer-events: none;
+}

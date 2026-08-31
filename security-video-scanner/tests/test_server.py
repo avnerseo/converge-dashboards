@@ -367,6 +367,69 @@ def test_one_search_box_routes_to_the_right_engine(client):
     assert described["count"] == 0
 
 
+@pytest.mark.skipif(not (HAS_FACES and HAS_FFMPEG), reason="needs the indexed flow")
+def test_zones_are_drawn_saved_and_searched(client):
+    """The 'when did the door open' path: a rectangle, a name, then a search
+    that runs entirely on the thumbnails written during indexing."""
+    login(client)
+    video_id = client.get("/api/videos").json()["videos"][0]["id"]
+
+    measured = client.post("/api/zones/preview", json={
+        "video_id": video_id, "box": [0.6, 0.2, 0.2, 0.5]})
+    assert measured.status_code == 200, measured.text
+    assert 0.01 <= measured.json()["suggested_sensitivity"] <= 0.35
+
+    created = client.post("/api/zones", json={
+        "name": "doorway", "box": [0.6, 0.2, 0.2, 0.5], "video_id": video_id,
+        "mode": "change", "sensitivity": 0.12})
+    assert created.status_code == 201, created.text
+    zone = created.json()["zone"]
+    assert zone["box"] == [0.6, 0.2, 0.2, 0.5]
+
+    assert client.post("/api/zones", json={
+        "name": "doorway", "box": [0.1, 0.1, 0.2, 0.2],
+        "video_id": video_id}).status_code == 409
+
+    listed = client.get("/api/zones").json()["zones"]
+    assert [z["name"] for z in listed] == ["doorway"]
+
+    found = client.post("/api/search/zone", json={"zone_id": zone["id"]}).json()
+    assert "job_id" not in found                    # short clip: answered inline
+    assert found["frames_examined"] > 0
+    assert found["zone"]["label"] == "doorway"
+    assert found["zone"]["sensitivity"] == 0.12
+
+    # the name is now a search term, and the search stays local
+    routed = client.post("/api/search", json={"query": "מתי הדלת doorway נפתחת"}).json()
+    assert routed["intent"]["mode"] == "zone"
+    assert routed["intent"]["zone_id"] == zone["id"]
+    assert "needs" not in routed
+
+    patched = client.patch(f"/api/zones/{zone['id']}", json={"sensitivity": 0.3})
+    assert patched.json()["zone"]["sensitivity"] == 0.3
+    assert client.delete(f"/api/zones/{zone['id']}").status_code == 200
+    assert client.get("/api/zones").json()["zones"] == []
+
+
+def test_a_zone_search_needs_a_zone_or_a_rectangle(client):
+    login(client)
+    assert client.post("/api/search/zone", json={}).status_code == 400
+    assert client.post("/api/search/zone", json={"zone_id": 9999}).status_code == 404
+    assert client.post("/api/zones", json={
+        "name": "", "box": [0.1, 0.1, 0.2, 0.2]}).status_code == 400
+
+
+def test_drawing_a_zone_needs_the_analyst_role(client):
+    login(client)
+    client.post("/api/users", json={"username": "zoe", "role": "viewer",
+                                    "password": "a-good-password"})
+    login(client, "zoe", "a-good-password")
+    assert client.get("/api/zones").status_code == 200
+    assert client.post("/api/zones", json={
+        "name": "no", "box": [0.1, 0.1, 0.2, 0.2]}).status_code == 403
+    login(client)
+
+
 def test_search_box_rejects_an_empty_query(client):
     login(client)
     assert client.post("/api/search", json={"query": "  "}).status_code == 400

@@ -3,7 +3,7 @@
 
 const S = {
   user: null, caps: {}, lang: localStorage.getItem('vscan.lang') || 'he',
-  tab: 'overview', videos: [], persons: [], clusters: [], settings: {},
+  tab: 'overview', videos: [], persons: [], zones: [], clusters: [], settings: {},
   results: [], resultsLabel: '', jobs: [], pollTimer: null,
 };
 
@@ -79,6 +79,21 @@ const STR = {
     whyDescriptive: 'מתאר מראה או תנועה, לא עצם שהגלאי מזהה',
     whyUnknown: 'לא משהו שהגלאי המקומי מכיר',
     whyNotMeasurable: 'מתאר משהו שהגלאים המקומיים לא יודעים למדוד',
+    zones: 'אזורים', zoneNew: 'סימון אזור חדש', zoneName: 'שם האזור',
+    zoneNamePh: 'למשל: דלת כניסה', zoneMode: 'מה לחפש', sensitivity: 'רגישות',
+    zoneModeChange: 'שונה מהרגיל — דלת שנפתחה, חפץ שנעלם, רכב שחנה',
+    zoneModeMotion: 'רגע השינוי — הדלת נעה, מישהו חצה את האזור',
+    zoneDraw: 'גררו עם העכבר על התמונה כדי לסמן אזור',
+    zoneSave: 'שמירת האזור', zoneNone: 'עדיין לא סומנו אזורים.',
+    zoneEveryVideo: 'לעקוב אחרי המלבן הזה בכל הסרטונים (מצלמה קבועה)',
+    zoneScope: 'תחולה', zoneSearch: 'חיפוש באזור', zoneDeleteConfirm: 'למחוק את האזור?',
+    zoneUsualChange: 'שינוי רגיל באזור', zoneSuggested: 'רגישות מומלצת',
+    zoneFlat: 'האזור הזה כמעט לא משתנה לאורך ההקלטה — ודאו שסימנתם את המקום הנכון.',
+    zoneHint: 'דלת אינה "עצם" שגלאי מזהה, ולכן אי אפשר לחפש אותה כמו רכב. במקום זה מסמנים פעם אחת את המלבן שבו הדלת נמצאת, ומאז אפשר לשאול מתי הוא לא נראה כרגיל. הבדיקה רצה על התמונות הממוזערות שנשמרו באינדוקס — מקומית, בלי עלות, גם על הקלטה של 12 שעות.',
+    zoneAtMoment: 'פריים מתוך הסרטון', zoneNamedAlready: 'כבר קיים אזור בשם הזה',
+    modeZone: 'לפי אזור', whyZone: 'אזור במעקב — משווים את הפינה הזו לאיך שהיא נראית בדרך כלל',
+    framesExamined: 'פריימים נבדקו', zoneNoVideos: 'צריך לאנדקס הקלטה אחת לפחות כדי לסמן אזור.',
+    zoneScanning: 'סורק את האזור', zoneChanged: 'שינוי באזור',
   },
   en: {
     overview: 'Overview', footage: 'Footage', search: 'Search', people: 'People',
@@ -152,6 +167,23 @@ const STR = {
     apiKey: 'Claude API key', apiKeySet: 'a key is configured', apiKeyNone: 'no key configured',
     apiKeyHint: 'Stored on your own server and used only for instruction search. It is never shown again after saving.',
     askExample: 'e.g. someone leaving a bag by the entrance and walking away',
+    zones: 'Zones', zoneNew: 'Mark a new zone', zoneName: 'Zone name',
+    zoneNamePh: 'e.g. front door', zoneMode: 'What to look for',
+    sensitivity: 'Sensitivity',
+    zoneModeChange: 'Different from usual - a door left open, something gone, a car parked',
+    zoneModeMotion: 'The moment it changed - the door swinging, someone crossing',
+    zoneDraw: 'Drag across the picture to mark an area',
+    zoneSave: 'Save zone', zoneNone: 'No zones marked yet.',
+    zoneEveryVideo: 'Watch this rectangle in every video (fixed camera)',
+    zoneScope: 'Applies to', zoneSearch: 'Search this zone',
+    zoneDeleteConfirm: 'Delete this zone?', zoneUsualChange: 'Everyday change here',
+    zoneSuggested: 'Suggested sensitivity',
+    zoneFlat: 'This area barely changes across the recording - check you framed the right spot.',
+    zoneHint: 'A door is not an object any detector knows, so it cannot be searched for like a car. Mark the rectangle it sits in once, and from then on you can ask when that rectangle stopped looking like itself. The scan runs over the thumbnails written during indexing - locally, at no cost, even across twelve hours.',
+    zoneAtMoment: 'Frame from the video', zoneNamedAlready: 'a zone with that name already exists',
+    modeZone: 'by zone', whyZone: 'is a watched zone - this compares that corner against how it usually looks',
+    framesExamined: 'frames examined', zoneNoVideos: 'Index at least one recording before marking a zone.',
+    zoneScanning: 'Scanning the zone', zoneChanged: 'Changed by',
   },
 };
 const t = (k) => (STR[S.lang] && STR[S.lang][k]) || STR.en[k] || k;
@@ -330,7 +362,7 @@ async function showApp() {
 
 const TABS = [
   ['overview', 'viewer'], ['footage', 'viewer'], ['search', 'viewer'],
-  ['people', 'viewer'], ['faces', 'viewer'], ['jobs', 'viewer'],
+  ['people', 'viewer'], ['zones', 'viewer'], ['faces', 'viewer'], ['jobs', 'viewer'],
   ['audit', 'admin'], ['settings', 'viewer'],
 ];
 const RANK = { viewer: 0, analyst: 1, admin: 2 };
@@ -348,11 +380,12 @@ function renderTabs() {
 }
 
 async function refreshCore() {
-  const [videos, persons] = await Promise.all([
+  const [videos, persons, zones] = await Promise.all([
     api('/api/videos').catch(() => ({ videos: [] })),
     api('/api/persons').catch(() => ({ persons: [] })),
+    api('/api/zones').catch(() => ({ zones: [] })),
   ]);
-  S.videos = videos.videos; S.persons = persons.persons;
+  S.videos = videos.videos; S.persons = persons.persons; S.zones = zones.zones;
 }
 
 const VIEWS = {};
@@ -621,8 +654,10 @@ VIEWS.search = async () => {
       body: { query, ...filters(), force_mode: forceMode || null } });
     showInterpretation(data);
     if (data.job_id) {
+      const zone = (data.intent || {}).mode === 'zone';
       S.lastAskFrames = filters().max_frames;
-      resultsBox.append(askProgress(data.job_id, resultsBox, query));
+      resultsBox.append(jobProgress(data.job_id, resultsBox, query,
+        zone ? { estimate: false, title: t('zoneScanning') } : { estimate: true }));
     } else if (data.needs) {
       resultsBox.append(missingCard(data));
     } else {
@@ -632,7 +667,8 @@ VIEWS.search = async () => {
 
   function reasonText(intent) {
     const key = { person_enrolled: 'whyPerson', objects_known: 'whyObjects',
-                  descriptive_word: 'whyDescriptive', unknown_word: 'whyUnknown',
+                  zone_watched: 'whyZone', descriptive_word: 'whyDescriptive',
+                  unknown_word: 'whyUnknown',
                   not_measurable: 'whyNotMeasurable' }[intent.reason_code];
     if (!key) return intent.reason || '';
     const word = intent.reason_code === 'objects_known'
@@ -642,8 +678,8 @@ VIEWS.search = async () => {
 
   function showInterpretation(data) {
     const intent = data.intent || {};
-    const label = { person: t('modePerson'), objects: t('modeObjects'),
-                    ask: t('modeAsk') }[intent.mode] || '';
+    const label = { person: t('modePerson'), zone: t('modeZone'),
+                    objects: t('modeObjects'), ask: t('modeAsk') }[intent.mode] || '';
     const why = reasonText(intent);
     clear(interpretation).append(
       el('span', {}, `${t('searchedAs')}: `),
@@ -651,13 +687,14 @@ VIEWS.search = async () => {
       why ? el('span', {}, ' — ') : null,
       why ? el('span', { dir: 'auto' }, why) : null);
     // let the operator overrule us in one click
-    const others = ['person', 'objects', 'ask'].filter((m) => m !== intent.mode
-      && (m !== 'person' || S.persons.length));
+    const others = ['person', 'zone', 'objects', 'ask'].filter((m) => m !== intent.mode
+      && (m !== 'person' || S.persons.length)
+      && (m !== 'zone' || intent.zone_id));
     for (const mode of others) {
       interpretation.append(' ', el('button', {
         class: 'btn ghost small', onclick: guard(() => run(mode)),
-      }, { person: t('modePerson'), objects: t('modeObjects'),
-           ask: t('modeAsk') }[mode]));
+      }, { person: t('modePerson'), zone: t('modeZone'),
+           objects: t('modeObjects'), ask: t('modeAsk') }[mode]));
     }
   }
 
@@ -700,7 +737,10 @@ VIEWS.search = async () => {
       } }, text)),
     ...S.persons.slice(0, 3).map((person) => el('button', {
       class: 'btn ghost small', onclick: () => { box.value = person.name; runButton.click(); },
-    }, person.name)));
+    }, person.name)),
+    ...S.zones.slice(0, 3).map((zone) => el('button', {
+      class: 'btn ghost small', onclick: () => { box.value = zone.name; runButton.click(); },
+    }, zone.name)));
 
   wrap.append(el('div', { class: 'card' },
     el('div', { class: 'row' }, el('div', { class: 'grow' }, box), runButton,
@@ -723,14 +763,21 @@ function estimateCost(frames) {
 }
 
 function askProgress(jobId, container, label) {
+  return jobProgress(jobId, container, label, { estimate: true });
+}
+
+/* One progress card for every search that runs as a job. Only the ones that
+   spend money get a price on them. */
+function jobProgress(jobId, container, label, opts = {}) {
   const bar = el('i', { style: 'width:2%' });
   const message = el('div', { class: 'small muted' }, '…');
-  const estimate = estimateCost(Number(S.lastAskFrames || 400));
+  const estimate = opts.estimate ? estimateCost(Number(S.lastAskFrames || 400)) : null;
   const card = el('div', { class: 'card' },
-    el('h3', {}, `${t('modeAsk')} #${jobId}`),
+    el('h3', {}, `${opts.title || t('modeAsk')} #${jobId}`),
     el('div', { class: 'bar' }, bar), message,
-    el('div', { class: 'small muted' },
-      `${t('estimate')}: ~${estimate.requests} ${t('requests')} · ~$${estimate.usd.toFixed(2)}`));
+    estimate ? el('div', { class: 'small muted' },
+      `${t('estimate')}: ~${estimate.requests} ${t('requests')} · ~$${estimate.usd.toFixed(2)}`)
+      : null);
   const timer = setInterval(async () => {
     try {
       const { job } = await api(`/api/jobs/${jobId}`);
@@ -742,8 +789,10 @@ function askProgress(jobId, container, label) {
           showResults(container, job.result.events, label);
           const spent = job.result.cost_usd
             ? ` · ${t('cost')} $${Number(job.result.cost_usd).toFixed(2)}` : '';
-          toast(`${job.result.events.length} ${t('results')} · `
-            + `${job.result.requests} ${t('requests')}${spent}`, 'ok');
+          const work = job.result.requests !== undefined
+            ? `${job.result.requests} ${t('requests')}`
+            : `${job.result.frames_examined || 0} ${t('framesExamined')}`;
+          toast(`${job.result.events.length} ${t('results')} · ${work}${spent}`, 'ok');
         } else {
           message.textContent = job.error || job.status;
         }
@@ -795,6 +844,7 @@ async function findSimilar(event) {
 }
 
 function resultCard(event) {
+  const zoneHit = !!(event.meta && event.meta.zone);
   const thumb = event.best_thumb
     ? `/api/media/thumb?path=${encodeURIComponent(event.best_thumb)}`
     : `/api/media/frame/${event.video_id}?t=${event.best_t}&width=480`;
@@ -808,7 +858,11 @@ function resultCard(event) {
         bdi(event.video_path.split('/').pop()), ' · ',
         bdi(event.hits), ` ${t('hits')} · ${t('score')} `, bdi(Number(event.best_score).toFixed(2))),
       event.meta && event.meta.note ? el('div', { class: 'small', dir: 'auto' }, event.meta.note) : null,
-      el('button', {
+      zoneHit ? el('div', { class: 'small muted' },
+        `${t('zoneChanged')}: `, bdi(`${Math.round(event.meta.changed * 100)}%`)) : null,
+      // "who else looks like this" reads an appearance vector out of a person
+      // box; a rectangle on a wall has none, so it is not offered there.
+      zoneHit ? null : el('button', {
         class: 'btn ghost small', style: 'margin-top:8px',
         onclick: guard(async (e) => { e.stopPropagation(); await findSimilar(event); }),
       }, t('findSimilar'))));
@@ -854,6 +908,183 @@ function openEvent(event) {
           events: [event], pad: PREVIEW_PAD } });
         toast(`${t('jobStarted')} #${started.job_id}`, 'ok');
       }) }, t('exportClips')) : null));
+}
+
+/* ----------------------------------------------------------------- zones
+   A door is not an object, so it cannot be detected. It is a rectangle that
+   sometimes stops looking like itself - which the operator has to point at
+   once, and can then ask about for ever, locally and for nothing. */
+VIEWS.zones = async () => {
+  const wrap = el('div');
+  if (!S.videos.length) {
+    return el('div', { class: 'card' }, el('p', {}, t('zoneNoVideos')),
+      el('button', { class: 'btn', onclick: () => { S.tab = 'footage'; renderTabs(); renderTab(); } },
+        t('addFootage')));
+  }
+  if (can('analyst')) wrap.append(zoneEditor());
+  wrap.append(await zoneList());
+  return wrap;
+};
+
+function zoneEditor() {
+  let drawn = null;                       // {x,y,w,h} in fractions of the frame
+  const videoPick = el('select', {}, ...S.videos.map((v) =>
+    el('option', { value: v.id }, v.name)));
+  const at = el('input', { type: 'range', min: '0', max: '100', value: '35',
+    style: 'width:100%' });
+  const img = el('img', { alt: '', draggable: false });
+  const rect = el('div', { class: 'zone-rect hidden' });
+  const canvas = el('div', { class: 'zone-canvas' }, img, rect);
+  const readout = el('div', { class: 'small muted', style: 'margin-top:6px' },
+    t('zoneDraw'));
+
+  const video = () => S.videos.find((v) => String(v.id) === videoPick.value) || S.videos[0];
+  function loadFrame() {
+    const v = video();
+    const seconds = (Number(at.value) / 100) * (v.duration || 0);
+    img.src = `/api/media/frame/${v.id}?t=${seconds.toFixed(2)}&width=960`;
+  }
+  videoPick.addEventListener('change', () => { drawn = null; paint(); loadFrame(); });
+  at.addEventListener('change', loadFrame);
+  loadFrame();
+
+  function paint() {
+    if (!drawn) { rect.classList.add('hidden'); return; }
+    rect.classList.remove('hidden');
+    rect.style.insetInlineStart = '';
+    rect.style.left = `${drawn.x * 100}%`;
+    rect.style.top = `${drawn.y * 100}%`;
+    rect.style.width = `${drawn.w * 100}%`;
+    rect.style.height = `${drawn.h * 100}%`;
+  }
+
+  /* Drag to draw. Coordinates are kept as fractions of the picture, so the
+     same rectangle fits a 4CIF camera and a 4K one. */
+  let origin = null;
+  const point = (event) => {
+    const area = img.getBoundingClientRect();
+    return { x: Math.min(1, Math.max(0, (event.clientX - area.left) / area.width)),
+             y: Math.min(1, Math.max(0, (event.clientY - area.top) / area.height)) };
+  };
+  canvas.addEventListener('pointerdown', (event) => {
+    origin = point(event); drawn = null; paint();
+    canvas.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!origin) return;
+    const now = point(event);
+    drawn = { x: Math.min(origin.x, now.x), y: Math.min(origin.y, now.y),
+              w: Math.abs(now.x - origin.x), h: Math.abs(now.y - origin.y) };
+    paint();
+  });
+  canvas.addEventListener('pointerup', () => {
+    origin = null;
+    if (!drawn || drawn.w < 0.01 || drawn.h < 0.01) { drawn = null; paint(); return; }
+    measure().catch(() => {});
+  });
+
+  const sensitivity = el('input', { type: 'number', value: '0.15', min: '0.01',
+    max: '1', step: '0.01' });
+  async function measure() {
+    readout.textContent = '…';
+    const stats = await api('/api/zones/preview', { method: 'POST',
+      body: { video_id: video().id, box: [drawn.x, drawn.y, drawn.w, drawn.h] } });
+    sensitivity.value = stats.suggested_sensitivity || 0.15;
+    clear(readout).append(
+      el('span', {}, `${t('zoneUsualChange')}: `),
+      bdi(`${Math.round((stats.median_change || 0) * 100)}%`),
+      el('span', {}, ` · ${t('zoneSuggested')}: `),
+      bdi(stats.suggested_sensitivity),
+      el('span', {}, ` · ${stats.sampled || 0} ${t('frames')}`));
+    if ((stats.max_change || 0) < 0.05) {
+      readout.append(el('div', { class: 'legal', style: 'margin-top:6px' }, t('zoneFlat')));
+    }
+  }
+
+  const name = el('input', { type: 'text', dir: 'auto', placeholder: t('zoneNamePh') });
+  const mode = el('select', {},
+    el('option', { value: 'change' }, t('zoneModeChange')),
+    el('option', { value: 'motion' }, t('zoneModeMotion')));
+  const everywhere = checkbox('z-all', t('zoneEveryVideo'), false);
+
+  const save = el('button', { class: 'btn', onclick: guard(async () => {
+    if (!drawn) { toast(t('zoneDraw'), 'bad'); return; }
+    if (!name.value.trim()) { toast(t('zoneName'), 'bad'); return; }
+    await api('/api/zones', { method: 'POST', body: {
+      name: name.value.trim(), box: [drawn.x, drawn.y, drawn.w, drawn.h],
+      video_id: everywhere.querySelector('input').checked ? null : video().id,
+      mode: mode.value, sensitivity: Number(sensitivity.value) } });
+    toast(t('saved'), 'ok');
+    name.value = ''; drawn = null; paint();
+    await refreshCore(); await renderTab();
+  }) }, t('zoneSave'));
+
+  return el('div', { class: 'card' },
+    el('h2', {}, t('zoneNew')),
+    el('p', { class: 'legal' }, t('zoneHint')),
+    el('div', { class: 'row' },
+      el('div', { style: 'min-width:240px' }, field(t('videos'), videoPick)),
+      el('div', { class: 'grow', style: 'min-width:220px' }, field(t('zoneAtMoment'), at))),
+    canvas, readout,
+    el('div', { class: 'row', style: 'margin-top:12px' },
+      el('div', { style: 'min-width:220px' }, field(t('zoneName'), name)),
+      el('div', { style: 'min-width:280px' }, field(t('zoneMode'), mode)),
+      el('div', { style: 'min-width:120px' }, field(t('sensitivity'), sensitivity)),
+      everywhere, save));
+}
+
+async function zoneList() {
+  const card = el('div', { class: 'card' }, el('h2', {}, t('zones')));
+  if (!S.zones.length) {
+    card.append(el('p', { class: 'muted' }, t('zoneNone')));
+    return card;
+  }
+  const rows = S.zones.map((zone) => {
+    const video = S.videos.find((v) => v.id === zone.video_id);
+    return el('tr', {},
+      el('td', { dir: 'auto' }, el('b', {}, zone.name)),
+      el('td', { class: 'small' }, video ? bdi(video.name) : t('allVideos')),
+      el('td', { class: 'small' },
+        zone.mode === 'motion' ? t('zoneModeMotion') : t('zoneModeChange')),
+      el('td', { class: 'mono small' }, bdi(Number(zone.sensitivity).toFixed(2))),
+      el('td', {},
+        el('div', { class: 'row' },
+          el('button', { class: 'btn small', onclick: guard(() => searchZone(zone)) },
+            t('zoneSearch')),
+          can('analyst') ? el('button', { class: 'btn ghost small danger',
+            onclick: guard(async () => {
+              if (!confirm(t('zoneDeleteConfirm'))) return;
+              await api(`/api/zones/${zone.id}`, { method: 'DELETE' });
+              toast(t('deleted'), 'ok');
+              await refreshCore(); await renderTab();
+            }) }, t('remove')) : null)));
+  });
+  card.append(el('table', {},
+    el('thead', {}, el('tr', {}, el('th', {}, t('name')), el('th', {}, t('zoneScope')),
+      el('th', {}, t('zoneMode')), el('th', {}, t('sensitivity')), el('th', {}, ''))),
+    el('tbody', {}, ...rows)));
+  return card;
+}
+
+/* Searching a zone from the Zones tab lands on the Search tab, so results,
+   clips and exports all live in one place. */
+async function searchZone(zone) {
+  const data = await api('/api/search/zone', { method: 'POST',
+    body: { zone_id: zone.id, gap: 5 } });
+  S.tab = 'search'; renderTabs();
+  await renderTab();
+  const host = document.querySelector('#view > div');
+  const box = el('div');
+  host.append(box);
+  if (data.job_id) {
+    box.append(jobProgress(data.job_id, box, zone.name, { estimate: false,
+      title: `${t('zoneScanning')}: ${zone.name}` }));
+  } else {
+    showResults(box, data.events, zone.name);
+    toast(`${data.count} ${t('results')} · ${data.frames_examined} ${t('framesExamined')}`,
+      data.count ? 'ok' : '');
+  }
 }
 
 /* ---------------------------------------------------------------- people */

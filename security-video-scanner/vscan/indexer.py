@@ -25,6 +25,7 @@ class IndexOptions:
     sample_fps: float = 2.0
     max_width: int = 1280
     motion_threshold: float = 0.004
+    keyframe_every: float = 10.0          # keep a frame this often even if nothing moved
     detect_faces: bool = True
     detect_objects: bool = False
     object_labels: tuple[str, ...] = ("person",)
@@ -129,6 +130,7 @@ class Indexer:
         # be handed the car's track just because the boxes overlap.
         label_trackers: dict[str, IoUTracker] = {}
         stats = IndexStats(video=str(info.path))
+        last_kept: float | None = None
         t0 = time.time()
         last_report = t0
         LOG.info("indexing %s (%s, %dx%d, %.1f fps source, sampling %.2f fps)",
@@ -140,7 +142,14 @@ class Indexer:
                                         opts.start, opts.end):
                 stats.frames_read += 1
                 activity = gate.score(frame)
-                active = gate.is_active(activity)
+                # A heartbeat frame every so often, whether or not anything
+                # moved. Frame-to-frame motion records changes; a door standing
+                # open, a bag left on the floor, a car parked all night are
+                # states, and without a periodic record of the scene there is
+                # nothing to compare them against later.
+                heartbeat = (opts.keyframe_every > 0 and
+                             (last_kept is None or t - last_kept >= opts.keyframe_every))
+                active = gate.is_active(activity) or heartbeat
 
                 faces = []
                 objects = []
@@ -157,6 +166,7 @@ class Indexer:
                     thumb_rel = self._write_thumb(thumb_dir, t, frame)
                 frame_id = self.index.add_frame(video_id, t, activity, thumb_rel)
                 stats.frames_kept += 1
+                last_kept = t
 
                 for f in faces:
                     crop_rel = None
