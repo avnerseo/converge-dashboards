@@ -1185,3 +1185,36 @@ course-correction, and it is worth more than the badge.
 
 The brush was always the stronger product and this makes it explicit: contribution $19.91–21.02
 against the cup's $7.55–8.46, and it is the only thing that has ever sold.
+
+## The SEO description was making claims the product page refuses to make — 2026-08-31
+
+Went looking at where the Pins actually land, rather than making more Pins. The brush's SEO
+metadata — the text Google shows in search results, and a likely source for feed fields — read:
+
+> "Self-cleaning mist grooming brush that traps loose fur, **soothes skin** and keeps your home
+> cleaner."
+
+Tags included `deshedding brush` and `self-cleaning`.
+
+The live product description, written deliberately, says the opposite in two places: *"Helps
+collect loose fur"* — hedged — and, explicitly, *"This is an everyday grooming brush **rather
+than a deshedding tool** — it works on the coat rather than stripping out a deep undercoat."*
+
+So the most public copy on the store contradicted the page it pointed at, and `soothes skin` is
+a health claim with nothing behind it. It had been sitting there since the product was created.
+
+Replaced with copy that matches the page:
+
+> "An everyday grooming brush for cats and dogs, with soft silicone bristles and a fine water
+> mist built into the handle. Rechargeable over USB. Free US shipping."
+
+Tags `deshedding brush` and `self-cleaning` removed. Verified on the live page: the new text
+appears, `soothes skin` returns zero. The two remaining hits for "deshedding" are the
+disclaimer sentence itself, which is the honest use.
+
+**The Paw Cup's SEO was checked at the same time and is clean** — accurate, and consistent with
+its description. This was the brush only.
+
+Method note: the finding came from asking *where does the traffic land* instead of *how do I
+make more traffic*. Sixteen Pins pointing at a page whose search snippet makes an unsupported
+health claim is worse than fifteen Pins.
