@@ -852,3 +852,22 @@ content now argue the same thing.
 "under $20" is a search behaviour, not a claim.
 
 **Board totals: Gifts for Dog Lovers 4, Gifts for Cat Lovers 3.** Account total 8 → 15 today.
+
+## Scheduled `pin-8` posted — 2026-08-31 16:02 UTC
+
+Routine `trig_012pf3GSFSvZHt8YPSSZJRsC` fired on schedule. Pin `916552961685435856` on the
+**Peluma** board. Verified by reading the Pin back.
+
+Two deviations from the Routine's own text, both deliberate:
+
+1. **Alt text rewritten.** The Routine said *"with its USB charging cable"*. The image contains
+   no cable — it is the white brush alone on a plain background. Alt text describes the frame,
+   not the headline, so it was corrected to match. The headline "No batteries, just a USB cable"
+   is copy and stays.
+2. **No AI disclosure, correctly.** The source is a supplier photograph, not a generated image.
+
+**`is_product: true`** on the read-back. Pinterest has matched this Pin's URL against the
+catalog feed, so it carries product data rather than being a plain image Pin. That is the first
+confirmation that the merchant feed ingestion is actually working end to end.
+
+Account total: 16 Pins.
