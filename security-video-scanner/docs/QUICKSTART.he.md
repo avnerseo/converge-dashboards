@@ -126,8 +126,15 @@ py -m venv .venv
 ```
 
 הסקריפט בודק שההתקנה תקינה, מחפש קבצי וידאו במחשב (Videos, Desktop, Downloads,
-Documents), מציג אותם ברשימה ממוספרת עם הנתיב המלא — ואתה בוחר מספר. אם
-הסרטונים בכונן אחר: `.\scripts\check.ps1 -Path "D:\cctv"`.
+Documents), מציג אותם ברשימה ממוספרת עם הנתיב המלא — ואתה בוחר מספר.
+
+אם ההקלטות במקום אחר:
+
+```powershell
+.\scripts\check.ps1 -Deep                     # לחפש בכל הכוננים המקומיים
+.\scripts\check.ps1 -Path "D:\cctv"           # תיקייה שאתה מכיר
+.\scripts\check.ps1 -Path "\\NAS\recordings"   # תיקיית רשת / NAS
+```
 
 **או ידנית, אם אתה כבר יודע את הנתיב:**
 

@@ -14,7 +14,12 @@
 
 .PARAMETER Path
     Look for videos in this folder instead of the usual places
-    (Videos, Desktop, Downloads, Documents).
+    (Videos, Desktop, Downloads, Documents). A network share works too:
+    -Path "\\NAS\cctv"
+
+.PARAMETER Deep
+    Search every local drive instead. Slower - a minute or two - but it finds
+    recordings sitting on D:, an external disk, or anywhere else.
 
 .PARAMETER Samples
     How many frames the report samples. 60 is the default; 120 is slower but
@@ -23,6 +28,7 @@
 [CmdletBinding()]
 param(
     [string]$Path,
+    [switch]$Deep,
     [int]$Samples = 60
 )
 
@@ -71,10 +77,21 @@ if ($problems -gt 0) {
 Write-Head "Looking for video files"
 $extensions = @('*.mp4', '*.mkv', '*.avi', '*.mov', '*.m4v', '*.mpg', '*.mpeg',
                 '*.ts', '*.wmv', '*.asf', '*.dav', '*.webm')
-$searchRoots = if ($Path) { @($Path) } else {
-    @("$HOME\Videos", "$HOME\Desktop", "$HOME\Downloads", "$HOME\Documents",
-      "$HOME\OneDrive\Videos", "$HOME\OneDrive\Desktop") |
-        Where-Object { Test-Path $_ }
+$depth = 3
+if ($Path) {
+    $searchRoots = @($Path)
+    $depth = 6
+} elseif ($Deep) {
+    $searchRoots = Get-PSDrive -PSProvider FileSystem |
+                   Where-Object { $_.Free -ne $null } |
+                   Select-Object -ExpandProperty Root
+    $depth = 6
+    Write-Host "  scanning every local drive - this can take a minute" -ForegroundColor DarkGray
+} else {
+    $searchRoots = @("$HOME\Videos", "$HOME\Desktop", "$HOME\Downloads",
+                     "$HOME\Documents", "$HOME\OneDrive\Videos",
+                     "$HOME\OneDrive\Desktop") |
+                   Where-Object { Test-Path $_ }
 }
 if (-not $searchRoots) {
     Write-Host "  no folders to search - pass one, e.g.  .\scripts\check.ps1 -Path 'D:\cctv'" -ForegroundColor Yellow
@@ -82,17 +99,24 @@ if (-not $searchRoots) {
 }
 foreach ($r in $searchRoots) { Write-Host "  searching $r" -ForegroundColor DarkGray }
 
+$skip = '\\Windows\\|\\Program Files|\\AppData\\|\\\$Recycle|\\node_modules\\'
 $files = @()
 foreach ($r in $searchRoots) {
-    $files += Get-ChildItem -LiteralPath $r -Include $extensions -File -Recurse -Depth 3 `
-                            -ErrorAction SilentlyContinue
+    $files += Get-ChildItem -LiteralPath $r -Include $extensions -File -Recurse -Depth $depth `
+                            -ErrorAction SilentlyContinue |
+              Where-Object { $_.FullName -notmatch $skip }
 }
 $files = $files | Sort-Object -Property FullName -Unique | Sort-Object -Property Length -Descending
 
 if ($files.Count -eq 0) {
     Write-Host "`nNo video files found in those folders." -ForegroundColor Yellow
-    Write-Host "Point the script at the right folder, for example:" -ForegroundColor Yellow
-    Write-Host "    .\scripts\check.ps1 -Path 'D:\cctv-exports'"
+    Write-Host "Try one of these:" -ForegroundColor Yellow
+    Write-Host "    .\scripts\check.ps1 -Deep                    # search every local drive"
+    Write-Host "    .\scripts\check.ps1 -Path 'D:\cctv'          # a folder you know"
+    Write-Host "    .\scripts\check.ps1 -Path '\\NAS\recordings'  # a network share"
+    Write-Host "`nDrives on this machine:" -ForegroundColor Yellow
+    Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Free -ne $null } |
+        Format-Table Name, Root, @{n = 'Free GB'; e = { [math]::Round($_.Free / 1GB) } } -AutoSize
     exit 1
 }
 
@@ -105,6 +129,12 @@ for ($i = 0; $i -lt $shown.Count; $i++) {
 }
 if ($files.Count -gt $shown.Count) {
     Write-Host "  ... and $($files.Count - $shown.Count) more" -ForegroundColor DarkGray
+}
+if (-not $Path -and -not $Deep) {
+    Write-Host "`n  Not the recordings you meant? Search wider:" -ForegroundColor DarkGray
+    Write-Host "      .\scripts\check.ps1 -Deep                    # every local drive" -ForegroundColor DarkGray
+    Write-Host "      .\scripts\check.ps1 -Path 'D:\cctv'          # a folder you know" -ForegroundColor DarkGray
+    Write-Host "      .\scripts\check.ps1 -Path '\\NAS\recordings'  # a network share" -ForegroundColor DarkGray
 }
 
 # ------------------------------------------------------------------ report
