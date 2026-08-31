@@ -65,6 +65,31 @@ if ($missing) {
     exit 1
 }
 
+# Starting it twice is the commonest mistake there is, and the error it
+# produces - "only one usage of each socket address" - explains nothing to
+# somebody who just wants their server back. Ours we stop; anything else we
+# name, and suggest another port.
+try {
+    $busy = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Stop
+} catch {
+    $busy = $null
+}
+if ($busy) {
+    $ownerId = ($busy | Select-Object -First 1).OwningProcess
+    $owner = Get-Process -Id $ownerId -ErrorAction SilentlyContinue
+    if ($owner -and $owner.ProcessName -like 'vscan-server*') {
+        Write-Host "A vscan server is already running on port $Port - stopping it." -ForegroundColor Yellow
+        $owner | Stop-Process -Force
+        Start-Sleep -Seconds 2
+    } else {
+        $what = if ($owner) { $owner.ProcessName } else { "another program" }
+        Write-Host "Port $Port is already taken by $what." -ForegroundColor Yellow
+        Write-Host "Either close it, or run this on a different port:"
+        Write-Host "    .\scripts\start-server.cmd -Port 8090"
+        exit 1
+    }
+}
+
 # The admin account is created once, on the first run. Announcing a freshly
 # generated password on later runs would be a lie: it is ignored, and the
 # operator would be left trying a password that never existed.
