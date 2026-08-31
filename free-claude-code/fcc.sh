@@ -127,7 +127,10 @@ cmd_claude() {
   mkdir -p "$CONFIG_DIR"
   # These three vars are the whole trick: a separate config dir keeps your paid
   # login untouched, and the base URL sends traffic to the local proxy instead.
-  env CLAUDE_CONFIG_DIR="$CONFIG_DIR" \
+  # ANTHROPIC_API_KEY is unset deliberately: if the shell exports one, it would
+  # otherwise be handed to a third-party proxy along with the request.
+  env -u ANTHROPIC_API_KEY \
+      CLAUDE_CONFIG_DIR="$CONFIG_DIR" \
       ANTHROPIC_BASE_URL="http://127.0.0.1:$FCC_PORT" \
       ANTHROPIC_AUTH_TOKEN="freecc" \
       claude "$@"
@@ -150,10 +153,13 @@ cmd_api() {
   fi
   mkdir -p "$API_CONFIG_DIR"
   info "launching Claude Code on your API key — billed per token, separate from your subscription"
-  # No ANTHROPIC_BASE_URL here: this talks to Anthropic directly, not to the proxy.
-  # Its own config dir keeps this profile apart from both the subscription login
-  # and the proxied profile.
-  env CLAUDE_CONFIG_DIR="$API_CONFIG_DIR" ANTHROPIC_API_KEY="$key" claude "$@"
+  # BASE_URL and AUTH_TOKEN are actively cleared, not just left unset: an
+  # inherited value (a corporate gateway, or a leftover from proxy mode) would
+  # silently send this traffic somewhere other than Anthropic.
+  env -u ANTHROPIC_BASE_URL -u ANTHROPIC_AUTH_TOKEN \
+      CLAUDE_CONFIG_DIR="$API_CONFIG_DIR" \
+      ANTHROPIC_API_KEY="$key" \
+      claude "$@"
 }
 
 cmd_status() {

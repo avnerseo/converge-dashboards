@@ -124,27 +124,47 @@ function Invoke-Start {
     exit 1
 }
 
+# Runs `claude` with exactly the Anthropic-related variables given, and nothing
+# else: any of the four the caller omits is CLEARED for the child, not inherited.
+# That matters in both directions - an inherited ANTHROPIC_BASE_URL would send api
+# mode somewhere other than Anthropic, and an inherited ANTHROPIC_API_KEY would be
+# handed to a third-party proxy in proxy mode. The shell's own values are restored
+# afterwards.
+function Invoke-ClaudeWith {
+    param([hashtable]$Vars)
+    $names = @('CLAUDE_CONFIG_DIR', 'ANTHROPIC_BASE_URL', 'ANTHROPIC_AUTH_TOKEN', 'ANTHROPIC_API_KEY')
+    $saved = @{}
+    foreach ($n in $names) { $saved[$n] = [Environment]::GetEnvironmentVariable($n) }
+    try {
+        foreach ($n in $names) {
+            if ($Vars[$n]) { Set-Item -Path "Env:$n" -Value $Vars[$n] }
+            else { Remove-Item -Path "Env:$n" -ErrorAction SilentlyContinue }
+        }
+        & claude @Rest
+    } finally {
+        foreach ($n in $names) {
+            if ($saved[$n]) { Set-Item -Path "Env:$n" -Value $saved[$n] }
+            else { Remove-Item -Path "Env:$n" -ErrorAction SilentlyContinue }
+        }
+    }
+}
+
 function Invoke-Claude {
     if (-not (Have claude)) { Die "the 'claude' command is not installed" }
     if (-not (Test-PortOpen)) { Die "proxy is not running - run '.\fcc.ps1 start' first" }
     New-Item -ItemType Directory -Force -Path $ConfigDir | Out-Null
     Write-Info "launching Claude Code against the local proxy (isolated profile: $ConfigDir)"
-    # These three vars are the whole trick: a separate config dir keeps your paid
-    # login untouched, and the base URL sends traffic to the local proxy instead.
-    # They are set for THIS PowerShell session only.
-    $env:CLAUDE_CONFIG_DIR   = $ConfigDir
-    $env:ANTHROPIC_BASE_URL  = "http://127.0.0.1:$FccPort"
-    $env:ANTHROPIC_AUTH_TOKEN = 'freecc'
-    try { & claude @Rest } finally {
-        Remove-Item Env:CLAUDE_CONFIG_DIR, Env:ANTHROPIC_BASE_URL, Env:ANTHROPIC_AUTH_TOKEN -ErrorAction SilentlyContinue
+    Invoke-ClaudeWith @{
+        CLAUDE_CONFIG_DIR    = $ConfigDir
+        ANTHROPIC_BASE_URL   = "http://127.0.0.1:$FccPort"
+        ANTHROPIC_AUTH_TOKEN = 'freecc'
     }
 }
 
 function Invoke-Api {
     if (-not (Have claude)) { Die "the 'claude' command is not installed" }
     # Key precedence: an already-set env var wins, then the saved file, then ask.
-    $preExistingKey = $env:ANTHROPIC_API_KEY
-    $key = $preExistingKey
+    $key = $env:ANTHROPIC_API_KEY
     if (-not $key -and (Test-Path $KeyFile)) { $key = (Get-Content $KeyFile -Raw).Trim() }
     if (-not $key) {
         Write-Host 'No API key found. Create one at https://console.anthropic.com/settings/keys'
@@ -160,16 +180,12 @@ function Invoke-Api {
     }
     New-Item -ItemType Directory -Force -Path $ApiConfigDir | Out-Null
     Write-Info 'launching Claude Code on your API key - billed per token, separate from your subscription'
-    # No ANTHROPIC_BASE_URL here: this talks to Anthropic directly, not to the proxy.
+    # No base URL and no auth token: this must reach Anthropic directly, not the proxy.
     # Its own config dir keeps this profile apart from both the subscription login
     # and the proxied profile.
-    $env:CLAUDE_CONFIG_DIR  = $ApiConfigDir
-    $env:ANTHROPIC_API_KEY  = $key
-    try { & claude @Rest } finally {
-        Remove-Item Env:CLAUDE_CONFIG_DIR -ErrorAction SilentlyContinue
-        # Restore whatever the shell had before, so we don't clobber the user's own export.
-        if ($preExistingKey) { $env:ANTHROPIC_API_KEY = $preExistingKey }
-        else { Remove-Item Env:ANTHROPIC_API_KEY -ErrorAction SilentlyContinue }
+    Invoke-ClaudeWith @{
+        CLAUDE_CONFIG_DIR = $ApiConfigDir
+        ANTHROPIC_API_KEY = $key
     }
 }
 
