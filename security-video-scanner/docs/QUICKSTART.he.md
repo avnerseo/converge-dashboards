@@ -32,7 +32,31 @@ cd converge-dashboards/security-video-scanner
 
 ---
 
-## מסלול א׳ — שורת פקודה
+## הדרך הקצרה (מומלץ) — סקריפט התקנה
+
+במקום שלבים 1–3 ידניים, יש סקריפט שעושה הכל: בודק אם Python ו‑ffmpeg מותקנים,
+מתקין אותם אם לא, בונה סביבה מבודדת, מתקין את vscan ומוריד את המודלים.
+
+**Windows (PowerShell):**
+
+```powershell
+cd C:\path\to\security-video-scanner
+powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+```
+
+**macOS / Linux:**
+
+```bash
+cd /path/to/security-video-scanner
+bash scripts/setup.sh
+```
+
+אפשר להריץ שוב ושוב — הוא מדלג על מה שכבר מותקן. בסוף הוא מדפיס את הפקודה
+הבאה להרצה. אם משהו נכשל, אפשר לעשות את אותם שלבים ידנית לפי ההמשך.
+
+---
+
+## מסלול א׳ — שורת פקודה (ידני)
 
 ### שלב 1: להתקין Python ו‑ffmpeg
 
@@ -176,7 +200,16 @@ suggested command
 
 ## מסלול ב׳ — הממשק המלא, בלי דוקר
 
-אחרי שלבים 1–3 של מסלול א׳, פקודה אחת:
+**Windows** — פקודה אחת, פותחת גם את הדפדפן:
+
+```powershell
+.\scripts\start-server.ps1 -Footage "C:\videos"
+```
+
+אם לא תיתן סיסמה, הסקריפט ייצר אחת ויציג אותה על המסך. אפשר גם
+`-Password "..."` ו‑`-Port 8090`.
+
+**macOS / Linux** — אחרי שלבים 1–3 של מסלול א׳:
 
 **macOS / Linux:**
 
@@ -255,6 +288,9 @@ docker compose up -d --build
 | `ffmpeg not found` | ffmpeg לא מותקן או שהטרמינל נפתח לפניו. לסגור ולפתוח מחדש את הטרמינל |
 | `no video files found` | הנתיב שגוי או הסיומת לא נתמכת. לשים את הנתיב בגרשיים, במיוחד אם יש בו רווחים |
 | הפקודה `vscan` לא מוכרת | להריץ דרך הנתיב המלא: `.venv/bin/vscan` (או `.\.venv\Scripts\vscan.exe`) |
+| `VSCAN_FOOTAGE_DIRS=... is not recognized` | זו פקודה בתחביר של מק/לינוקס שהודבקה ל‑PowerShell. בווינדוס משתמשים ב‑`$env:VAR="..."` בשורה נפרדת, או פשוט ב‑`.\scripts\start-server.ps1` |
+| `http://localhost:8080 is not recognized` | כתובת אתר נפתחת בדפדפן, לא בטרמינל. ב‑PowerShell אפשר `start http://localhost:8080` |
+| `running scripts is disabled on this system` | להריץ בצורה הזו: `powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1` |
 | doctor אומר שאין פנים | המצלמה גבוהה או רחוקה מדי. לאנדקס עם `--appearance` ולחפש לפי מראה |
 | האינדוקס איטי מאוד | להוריד `--fps` ל‑1, או לוותר על `--objects` |
 | בממשק לא רואים את הסרטונים | `VSCAN_FOOTAGE_DIRS` לא מצביע על התיקייה הנכונה |
