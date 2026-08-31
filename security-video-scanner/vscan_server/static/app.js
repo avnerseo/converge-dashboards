@@ -70,7 +70,10 @@ const STR = {
     queued: 'Queued', addFootage: 'Add footage', browse: 'Browse files',
     selected: 'selected', startIndexing: 'Start indexing', indexed: 'Indexed',
     duration: 'Length', name: 'Name', remove: 'Remove',
-    confirmRemove: 'Remove this video from the index?', options: 'Options',
+    confirmRemove: 'Remove this video from the index?',
+    confirmRemoveUpload: 'Remove from the index and delete the uploaded file?',
+    uploaded: 'uploaded',
+    nothingFound: 'nothing detected', options: 'Options',
     sampleFps: 'Frames per second', width: 'Analysis width', motion: 'Motion threshold',
     detectObjects: 'Detect objects', force: 'Re-index', startTime: 'Wall-clock start',
     searchMode: 'Search type', byPerson: 'By person', byObject: 'By object',
@@ -325,6 +328,7 @@ VIEWS.footage = async () => {
   const rows = S.videos.map((v) => el('tr', {},
     el('td', {}, el('div', {}, bdi(v.name)),
       el('div', { class: 'small muted' }, bdi(v.path)),
+      v.uploaded ? el('span', { class: 'pill' }, t('uploaded')) : null,
       v.available ? null : el('span', { class: 'pill bad' }, t('videoUnavailable'))),
     el('td', { class: 'mono' }, bdi(v.duration_tc)),
     el('td', { class: 'mono' }, bdi(`${v.width}×${v.height}`)),
@@ -334,7 +338,7 @@ VIEWS.footage = async () => {
     el('td', { class: 'small' }, bdi(localTime(v.indexed_at))),
     el('td', {}, can('analyst') ? el('button', {
       class: 'btn ghost small danger', onclick: guard(async () => {
-        if (!confirm(t('confirmRemove'))) return;
+        if (!confirm(v.uploaded ? t('confirmRemoveUpload') : t('confirmRemove'))) return;
         await api(`/api/videos/${v.id}`, { method: 'DELETE' });
         toast(t('deleted'), 'ok'); await refreshCore(); renderTab();
       }),
@@ -903,7 +907,13 @@ function jobRow(job) {
 function jobSummary(job) {
   const result = job.result || {};
   if (job.kind === 'index' && result.totals) {
-    return `${result.totals.frames} ${t('frames')} · ${result.totals.faces} ${t('facesFound')}`;
+    const line = `${result.totals.frames} ${t('frames')} · `
+      + `${result.totals.faces} ${t('facesFound')} · `
+      + `${result.totals.appearances ?? 0} ${t('byAppearance')}`;
+    const diagnosed = (result.videos || []).filter((v) => v.diagnosis);
+    if (!diagnosed.length) return line;
+    const why = diagnosed[0].diagnosis.map((d) => d.headline).join(' · ');
+    return `${line} — ${t('nothingFound')}: ${why}`;
   }
   if (job.kind === 'ask' && result.events) {
     return `${result.events.length} ${t('results')} · ${result.requests} API calls`;

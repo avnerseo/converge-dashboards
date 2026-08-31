@@ -23,6 +23,7 @@ from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
                           find_person_appearance, load_clusters, search_vectors,
                           started_at_map)
 from vscan.util import fmt_timecode
+from vscan.vectors import clear_caches
 from vscan.video import grab_frame, probe
 
 from .config import Settings, get_settings
@@ -312,6 +313,21 @@ def _upload_target(settings: Settings, filename: str) -> Path:
     return target
 
 
+_COPY_SUFFIX = re.compile(r"\s\(\d+\)$")
+
+
+def _existing_upload(settings: Settings, target: Path, size: int) -> Path | None:
+    """The same recording, uploaded before: same base name and same size."""
+    base = _COPY_SUFFIX.sub("", target.stem)
+    for other in settings.uploads_dir.iterdir():
+        if other == target or not other.is_file():
+            continue
+        if _COPY_SUFFIX.sub("", other.stem) == base and other.suffix == target.suffix \
+                and other.stat().st_size == size:
+            return other
+    return None
+
+
 @router.post("/videos/upload", status_code=status.HTTP_202_ACCEPTED)
 async def upload_video(request: Request,
                        file: UploadFile = File(...),
@@ -351,6 +367,14 @@ async def upload_video(request: Request,
         target.unlink(missing_ok=True)
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "the uploaded file was empty")
 
+    twin = _existing_upload(settings, target, written)
+    if twin is not None:
+        target.unlink(missing_ok=True)
+        raise HTTPException(
+            status.HTTP_409_CONFLICT,
+            f"{twin.name} is already on the server - delete it first if you want "
+            "to index it again")
+
     job_id = runner.submit("index", f"Index {target.name}", {
         "paths": [str(target)],
         "options": {"sample_fps": sample_fps, "objects": objects,
@@ -381,29 +405,45 @@ def list_videos(_: sqlite3.Row = Depends(require_viewer),
                 "frames": row["frames_kept"], "indexed_at": row["indexed_at"],
                 "faces": counts["faces"], "objects": counts["objects"],
                 "appearances": counts["appearances"],
+                "uploaded": settings.uploads_dir.resolve() in Path(row["path"]).parents,
                 "available": Path(row["path"]).exists(),
             })
     return {"videos": out}
 
 
 @router.delete("/videos/{video_id}")
-def delete_video(video_id: int, request: Request,
+def delete_video(video_id: int, request: Request, remove_file: bool = Query(True),
                  user: sqlite3.Row = Depends(require_analyst),
                  store: Store = Depends(get_store),
                  settings: Settings = Depends(settings_dep)) -> dict:
+    """Remove a video from the index.
+
+    A file that was uploaded through the browser is also deleted from disk -
+    it exists only because it was uploaded. Recordings on a mounted share are
+    never touched: they are the customer's, and that mount is read-only.
+    """
     with open_index(settings) as index:
         row = index.get_video(video_id)
         if row is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "no such video in the index")
+        source = Path(row["path"])
         index.clear_video_data(video_id)
         index.conn.execute("DELETE FROM videos WHERE id = ?", (video_id,))
         index.commit()
-        name = Path(row["path"]).name
     for folder in (settings.index_dir / "thumbs" / f"v{video_id}",
                    settings.index_dir / "crops" / f"v{video_id}"):
         shutil.rmtree(folder, ignore_errors=True)
-    store.audit("footage.removed", user=user, detail={"video": name}, ip=client_ip(request))
-    return {"ok": True}
+
+    uploads = settings.uploads_dir.resolve()
+    file_deleted = False
+    if remove_file and uploads in source.resolve().parents:
+        source.unlink(missing_ok=True)
+        file_deleted = True
+    clear_caches(settings.index_dir)
+    store.audit("footage.removed", user=user,
+                detail={"video": source.name, "file_deleted": file_deleted},
+                ip=client_ip(request))
+    return {"ok": True, "file_deleted": file_deleted}
 
 
 # ================================================================= jobs

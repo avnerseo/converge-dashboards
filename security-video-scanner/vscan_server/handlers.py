@@ -64,7 +64,7 @@ def make_index_handler(settings: Settings):
                             (started_override, row["id"]))
                         index.commit()
                 row = index.find_video(path)
-                summary.append({
+                entry = {
                     "video_id": int(row["id"]) if row else None,
                     "name": path.name,
                     "frames": stats.frames_kept,
@@ -72,7 +72,12 @@ def make_index_handler(settings: Settings):
                     "objects": stats.objects,
                     "appearances": stats.appearances,
                     "seconds": round(stats.seconds, 1),
-                })
+                }
+                if stats.faces == 0 and stats.objects == 0 and not ctx.cancelled:
+                    # A silent zero is the worst answer a search tool can give.
+                    # Work out why before the operator has to ask.
+                    entry["diagnosis"] = _diagnose(path, ctx)
+                summary.append(entry)
                 ctx.check_cancel()
             clear_caches(index.root)          # new vectors, stale search matrix
         return {"videos": summary,
@@ -80,6 +85,20 @@ def make_index_handler(settings: Settings):
                            for k in ("frames", "faces", "objects", "appearances")}}
 
     return handle
+
+
+def _diagnose(path: Path, ctx: JobContext) -> list[dict]:
+    """Explain an empty result: no people, faces too small, too dark, ..."""
+    from vscan.doctor import examine
+
+    ctx.progress(message=f"{path.name}: nothing found - checking why")
+    try:
+        report = examine(path, samples=24)
+    except Exception as exc:                      # never fail the job over this
+        return [{"ok": False, "headline": "could not analyse the footage",
+                 "detail": str(exc)}]
+    return [{"ok": v.ok, "headline": v.headline, "detail": v.detail}
+            for v in report.verdicts]
 
 
 def make_cluster_handler(settings: Settings):
