@@ -24,15 +24,14 @@ def test_plain_object_words_go_to_the_local_detector(query, labels):
 
 
 @pytest.mark.parametrize("query,fallback", [
-    ("מתי הרכב הלבן זז", ["car"]),
-    ("when did the white car move", ["car"]),
-    ("איש עם חולצה לבנה", ["person"]),
-    ("a man in a white shirt", ["person"]),
     ("מישהו משאיר תיק ליד הכניסה", ["handbag"]),
+    ("איש עם כובע", ["person"]),
+    ("a person carrying a ladder", ["person"]),
 ])
-def test_a_description_or_an_action_needs_the_model(query, fallback):
-    """'car' is an object; 'the white car moved' is not - colour and movement
-    are not in the detector's vocabulary."""
+def test_what_the_detectors_cannot_measure_needs_the_model(query, fallback):
+    """Colour and movement are measured at index time and stay local. What is
+    left - relationships, actions, clothing we do not measure - needs a look at
+    the frames, and offers the nearest local search as a stopgap."""
     intent = resolve(query, PEOPLE)
     assert intent.mode == "ask", intent.reason
     assert intent.fallback is not None and intent.fallback.labels == fallback
@@ -65,3 +64,27 @@ def test_empty_query_is_not_a_crash():
 def test_every_intent_explains_itself():
     for query in ("car", "דוד", "מתי הרכב הלבן זז"):
         assert resolve(query, PEOPLE).reason, f"{query} came back with no reason"
+
+
+@pytest.mark.parametrize("query,labels,colours,moving", [
+    ("מתי הרכב הלבן זז", ["car"], ["white"], True),
+    ("when did the white car move", ["car"], ["white"], True),
+    ("איש עם חולצה לבנה", ["person"], ["white"], None),
+    ("a man in a white shirt", ["person"], ["white"], None),
+    ("רכב חונה", ["car"], [], False),
+    ("אדם עם תיק שחור", ["person", "handbag"], ["black"], None),
+])
+def test_colour_and_movement_stay_local(query, labels, colours, moving):
+    """Colour and movement are measured while indexing, so questions about
+    them are answered locally - not by paying for a look at the frames."""
+    intent = resolve(query, PEOPLE)
+    assert intent.mode == "objects", intent.reason
+    assert intent.labels == labels
+    assert intent.colours == colours
+    assert intent.moving is moving
+
+
+def test_what_is_genuinely_beyond_the_detectors_still_goes_to_the_model():
+    for query in ("מישהו משאיר תיק ליד הכניסה", "איש עם כובע",
+                  "someone acting suspiciously"):
+        assert resolve(query, PEOPLE).mode == "ask", query

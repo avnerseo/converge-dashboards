@@ -10,11 +10,12 @@ import cv2
 import numpy as np
 
 from .appearance import AppearanceEngine, crop_person
+from .attributes import colour_of, displacement
 from .db import Index
 from .faces import FaceEngine, crop_face, sharpness
 from .motion import MotionGate
 from .objects import ObjectEngine
-from .tracking import IoUTracker
+from .tracking import IoUTracker, iou
 from .util import LOG, fingerprint, fmt_timecode
 from .video import VideoInfo, iter_frames, probe
 
@@ -56,6 +57,7 @@ class IndexStats:
     faces: int = 0
     embedded: int = 0
     objects: int = 0
+    coloured: int = 0
     appearances: int = 0
     tracks: int = 0
     seconds: float = 0.0
@@ -123,6 +125,9 @@ class Indexer:
 
         gate = MotionGate(threshold=opts.motion_threshold)
         tracker = IoUTracker()
+        # One tracker per label: a person walking past a parked car should not
+        # be handed the car's track just because the boxes overlap.
+        label_trackers: dict[str, IoUTracker] = {}
         stats = IndexStats(video=str(info.path))
         t0 = time.time()
         last_report = t0
@@ -162,8 +167,12 @@ class Indexer:
                     stats.faces += 1
                     stats.embedded += int(f.emb is not None)
                 for o in objects:
-                    self.index.add_object(video_id, frame_id, t, o.label, o.score, o.box)
+                    colour, track_id, motion = self._describe(
+                        o, t, frame, label_trackers)
+                    self.index.add_object(video_id, frame_id, t, o.label, o.score,
+                                          o.box, colour, track_id, motion)
                     stats.objects += 1
+                    stats.coloured += int(colour is not None)
 
                 if self.appearance_engine is not None:
                     stats.appearances += self._appearances(
@@ -198,11 +207,28 @@ class Indexer:
             self.index.commit()
 
         stats.seconds = time.time() - t0
-        LOG.info("%s: %d frames read, %d kept, %d faces (%d embeddable), %d objects, "
-                 "%d appearance vectors in %.1fs (%.1fx realtime)", info.name,
-                 stats.frames_read, stats.frames_kept, stats.faces, stats.embedded,
-                 stats.objects, stats.appearances, stats.seconds, stats.speed)
+        LOG.info("%s: %d frames read, %d kept, %d faces (%d embeddable), %d objects "
+                 "(%d with a colour), %d appearance vectors in %.1fs (%.1fx realtime)",
+                 info.name, stats.frames_read, stats.frames_kept, stats.faces,
+                 stats.embedded, stats.objects, stats.coloured, stats.appearances,
+                 stats.seconds, stats.speed)
         return stats
+
+    def _describe(self, det, t: float, frame, trackers: dict[str, IoUTracker]):
+        """Colour and movement for one detection, measured now so searching is free.
+
+        Costs about a millisecond; saves an API call per search, for ever.
+        """
+        tracker = trackers.setdefault(det.label, IoUTracker())
+        previous = None
+        for existing in tracker.tracks.values():
+            if iou(det.box, existing.box) >= tracker.min_iou:
+                previous = existing.box
+                break
+        (track,) = tracker.update(t, [det.box])
+        motion = displacement(previous, det.box) if previous is not None else None
+        colour = colour_of(det.label, crop_person(frame, det.box, margin=0.0))
+        return colour, track.id, motion
 
     def _appearances(self, video_id: int, frame_id: int, t: float, frame,
                      objects, tracker: IoUTracker, crop_dir: Path) -> int:

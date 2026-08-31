@@ -688,6 +688,8 @@ class PersonSearch(BaseModel):
 class ObjectSearch(BaseModel):
     labels: list[str] = Field(default_factory=lambda: ["person"])
     min_score: float = 0.4
+    colours: list[str] | None = None
+    moving: bool | None = None
     video_ids: list[int] | None = None
     start: float = 0.0
     end: float | None = None
@@ -733,7 +735,8 @@ def search_objects(body: ObjectSearch, request: Request,
                    store: Store = Depends(get_store),
                    settings: Settings = Depends(settings_dep)) -> dict:
     with open_index(settings) as index:
-        hits = find_objects(index, body.labels, body.min_score, body.video_ids)
+        hits = find_objects(index, body.labels, body.min_score, body.video_ids,
+                            body.colours, body.moving)
         hits = [h for h in hits
                 if h.t >= body.start and (body.end is None or h.t <= body.end)]
         events = group_hits(hits, ", ".join(body.labels), body.gap, body.min_hits,
@@ -741,7 +744,8 @@ def search_objects(body: ObjectSearch, request: Request,
     if body.arrivals:
         events = arrivals(events, body.absence)
     store.audit("search.objects", user=user,
-                detail={"labels": body.labels, "results": len(events)},
+                detail={"labels": body.labels, "colours": body.colours,
+                        "moving": body.moving, "results": len(events)},
                 ip=client_ip(request))
     return _events_payload(events)
 
@@ -899,6 +903,7 @@ def search_auto(body: AutoSearch, request: Request,
                         person_name=intent.person_name,
                         labels=intent.labels or (intent.fallback.labels
                                                  if intent.fallback else ["person"]),
+                        colours=intent.colours, moving=intent.moving,
                         reason="chosen by the operator")
 
     common = {"video_ids": body.video_ids, "start": body.start, "end": body.end,
@@ -921,8 +926,10 @@ def search_auto(body: AutoSearch, request: Request,
         return {**payload, "intent": intent.to_dict()}
 
     if intent.mode == "objects":
-        payload = search_objects(ObjectSearch(labels=intent.labels, **common),
-                                 request, user, store, settings)
+        payload = search_objects(
+            ObjectSearch(labels=intent.labels, colours=intent.colours or None,
+                         moving=intent.moving, **common),
+            request, user, store, settings)
         return {**payload, "intent": intent.to_dict()}
 
     # everything else needs the model to look at the frames

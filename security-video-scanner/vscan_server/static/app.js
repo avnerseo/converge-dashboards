@@ -74,7 +74,8 @@ const STR = {
     estimate: 'אומדן',
     costHint: 'העלות בפועל של החיפוש האחרון, לפי מספר הטוקנים שנצרכו.',
     whyPerson: 'רשום במערכת, אז זה חיפוש פנים',
-    whyObjects: 'הגלאי המקומי מכיר את זה ישירות',
+    whyObjects: 'נמדד כבר באינדוקס — חיפוש מקומי, בלי עלות',
+    thatMoved: 'שזז', thatStayed: 'שלא זז',
     whyDescriptive: 'מתאר מראה או תנועה, לא עצם שהגלאי מזהה',
     whyUnknown: 'לא משהו שהגלאי המקומי מכיר',
     whyNotMeasurable: 'מתאר משהו שהגלאים המקומיים לא יודעים למדוד',
@@ -104,7 +105,8 @@ const STR = {
     estimate: 'estimate',
     costHint: 'What the last search actually cost, from the tokens it used.',
     whyPerson: 'is enrolled, so this is a face search',
-    whyObjects: 'the local detector knows this directly',
+    whyObjects: 'measured when the footage was indexed - local, and free',
+    thatMoved: 'that moved', thatStayed: 'that stayed put',
     whyDescriptive: 'describes appearance or movement, not an object',
     whyUnknown: 'is not something the local detector knows',
     whyNotMeasurable: 'describes something the local detectors cannot measure', options: 'Options',
@@ -162,7 +164,32 @@ const LABELS_HE = {
   'cell phone': 'טלפון', laptop: 'מחשב נייד', bird: 'ציפור', train: 'רכבת',
   boat: 'סירה', bench: 'ספסל', bottle: 'בקבוק', chair: 'כיסא',
 };
+const COLOURS_HE = {
+  white: 'לבן', black: 'שחור', gray: 'אפור', red: 'אדום', orange: 'כתום',
+  yellow: 'צהוב', green: 'ירוק', cyan: 'תכלת', blue: 'כחול', purple: 'סגול',
+  pink: 'ורוד', brown: 'חום',
+};
 const labelName = (label) => (S.lang === 'he' && LABELS_HE[label]) || label;
+const colourName = (colour) => (S.lang === 'he' && COLOURS_HE[colour]) || colour;
+
+/* "white car, moving" in the reader's own language and word order. */
+function describeIntent(intent) {
+  const parts = [];
+  if (S.lang === 'he') {
+    parts.push(labelList(intent.labels));
+    if (intent.colours && intent.colours.length) {
+      parts.push(intent.colours.map(colourName).join(', '));
+    }
+  } else {
+    if (intent.colours && intent.colours.length) {
+      parts.push(intent.colours.map(colourName).join(', '));
+    }
+    parts.push(labelList(intent.labels));
+  }
+  if (intent.moving === true) parts.push(t('thatMoved'));
+  if (intent.moving === false) parts.push(t('thatStayed'));
+  return parts.filter(Boolean).join(' ');
+}
 const labelList = (labels) => (labels || []).map(labelName).join(', ');
 
 /* ------------------------------------------------------------- helpers */
@@ -609,8 +636,7 @@ VIEWS.search = async () => {
                   not_measurable: 'whyNotMeasurable' }[intent.reason_code];
     if (!key) return intent.reason || '';
     const word = intent.reason_code === 'objects_known'
-      ? labelList((intent.reason_word || '').split(', ').filter(Boolean))
-      : intent.reason_word;
+      ? describeIntent(intent) : intent.reason_word;
     return word ? `"${word}" ${t(key)}` : t(key);
   }
 

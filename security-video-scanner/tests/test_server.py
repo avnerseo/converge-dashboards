@@ -350,13 +350,20 @@ def test_one_search_box_routes_to_the_right_engine(client):
     assert by_name["intent"]["mode"] == "person"
     assert by_name["count"] >= 1
 
-    # a description the local detectors cannot measure needs the model, and
-    # without a key it says so instead of answering a different question
-    described = client.post("/api/search",
-                            json={"query": "a man in a white shirt"}).json()
+    # colour is measured while indexing, so it stays local and free
+    coloured = client.post("/api/search",
+                           json={"query": "a man in a white shirt"}).json()
+    assert coloured["intent"]["mode"] == "objects"
+    assert coloured["intent"]["colours"] == ["white"]
+    assert "needs" not in coloured
+
+    # what is genuinely beyond the detectors needs the model, and without a key
+    # it says so instead of quietly answering a different question
+    described = client.post(
+        "/api/search", json={"query": "someone leaving a bag by the entrance"}).json()
     assert described["intent"]["mode"] == "ask"
     assert described["needs"]["key"] is True
-    assert described["intent"]["fallback"]["labels"] == ["person"]
+    assert described["intent"]["fallback"]["labels"] == ["handbag"]
     assert described["count"] == 0
 
 

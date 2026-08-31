@@ -257,18 +257,28 @@ def enroll_appearance(index: Index, name: str, emb: np.ndarray, source: str,
 
 
 def find_objects(index: Index, labels: Sequence[str], min_score: float = 0.4,
-                 video_ids: Sequence[int] | None = None) -> list[Hit]:
+                 video_ids: Sequence[int] | None = None,
+                 colours: Sequence[str] | None = None,
+                 moving: bool | None = None) -> list[Hit]:
+    """Objects, optionally narrowed by the colour and movement stored at index time.
+
+    "The white car" and "the car that moved" are answered here, locally and
+    instantly, rather than by sending frames anywhere.
+    """
     hits: list[Hit] = []
     videos = {int(v["id"]): v for v in index.videos()}
     ids = list(video_ids) if video_ids else list(videos)
     for vid in ids:
-        for row in index.objects_for(vid, labels, min_score):
+        for row in index.objects_for(vid, labels, min_score, colours, moving):
             frame = index.conn.execute("SELECT thumb FROM frames WHERE id = ?",
                                        (row["frame_id"],)).fetchone()
+            meta = {"label": row["label"], "colour": row["colour"],
+                    "box": [row["x"], row["y"], row["w"], row["h"]]}
+            if row["motion"] is not None:
+                meta["motion"] = round(float(row["motion"]), 3)
             hits.append(Hit(video_id=vid, video_path=videos[vid]["path"],
                             t=float(row["t"]), score=float(row["score"]),
-                            thumb=frame["thumb"] if frame else None,
-                            meta={"label": row["label"]}))
+                            thumb=frame["thumb"] if frame else None, meta=meta))
     return hits
 
 

@@ -11,7 +11,7 @@ import numpy as np
 
 from .util import ensure_dir
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
@@ -62,8 +62,12 @@ CREATE TABLE IF NOT EXISTS objects (
     t         REAL NOT NULL,
     label     TEXT NOT NULL,
     score     REAL,
-    x REAL, y REAL, w REAL, h REAL
+    x REAL, y REAL, w REAL, h REAL,
+    colour    TEXT,             -- measured once, so "the white car" costs nothing
+    track     INTEGER,
+    motion    REAL              -- box displacement relative to its own size
 );
+CREATE INDEX IF NOT EXISTS idx_objects_colour ON objects(video_id, label, colour);
 CREATE INDEX IF NOT EXISTS idx_objects_vtl ON objects(video_id, t, label);
 
 CREATE TABLE IF NOT EXISTS appearances (
@@ -145,6 +149,12 @@ class Index:
             self.conn.execute(
                 "ALTER TABLE person_embeddings ADD COLUMN kind TEXT NOT NULL"
                 " DEFAULT 'face'")
+        object_columns = {r["name"] for r in
+                          self.conn.execute("PRAGMA table_info(objects)")}
+        for column, decl in (("colour", "TEXT"), ("track", "INTEGER"),
+                             ("motion", "REAL")):
+            if object_columns and column not in object_columns:
+                self.conn.execute(f"ALTER TABLE objects ADD COLUMN {column} {decl}")
         self.conn.commit()
 
     # -- lifecycle ---------------------------------------------------------
@@ -254,12 +264,14 @@ class Index:
         return int(cur.lastrowid)
 
     def add_object(self, video_id: int, frame_id: int, t: float, label: str,
-                   score: float, box: Sequence[float]) -> int:
+                   score: float, box: Sequence[float], colour: str | None = None,
+                   track: int | None = None, motion: float | None = None) -> int:
         cur = self.conn.execute(
-            "INSERT INTO objects(video_id, frame_id, t, label, score, x, y, w, h)"
-            " VALUES (?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO objects(video_id, frame_id, t, label, score, x, y, w, h,"
+            " colour, track, motion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             (video_id, frame_id, round(t, 3), label, float(score),
-             *[float(v) for v in box]))
+             *[float(v) for v in box], colour, track,
+             None if motion is None else float(motion)))
         return int(cur.lastrowid)
 
     def set_frames_kept(self, video_id: int, n: int) -> None:
@@ -288,12 +300,23 @@ class Index:
         return list(self.conn.execute(sql, params))
 
     def objects_for(self, video_id: int, labels: Sequence[str] | None = None,
-                    min_score: float = 0.0) -> list[sqlite3.Row]:
+                    min_score: float = 0.0, colours: Sequence[str] | None = None,
+                    moving: bool | None = None,
+                    motion_threshold: float = 0.12) -> list[sqlite3.Row]:
         sql = "SELECT * FROM objects WHERE video_id = ? AND score >= ?"
         params: list[Any] = [video_id, min_score]
         if labels:
             sql += f" AND label IN ({','.join('?' * len(labels))})"
             params += list(labels)
+        if colours:
+            sql += f" AND colour IN ({','.join('?' * len(colours))})"
+            params += list(colours)
+        if moving is True:
+            sql += " AND motion >= ?"
+            params.append(motion_threshold)
+        elif moving is False:
+            sql += " AND (motion IS NULL OR motion < ?)"
+            params.append(motion_threshold)
         sql += " ORDER BY t"
         return list(self.conn.execute(sql, params))
 
@@ -372,5 +395,6 @@ class Index:
             "faces": q("SELECT COUNT(*) FROM faces"),
             "appearances": q("SELECT COUNT(*) FROM appearances"),
             "objects": q("SELECT COUNT(*) FROM objects"),
+            "coloured": q("SELECT COUNT(*) FROM objects WHERE colour IS NOT NULL"),
             "persons": q("SELECT COUNT(*) FROM persons"),
         }

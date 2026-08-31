@@ -20,6 +20,7 @@ import re
 import unicodedata
 from dataclasses import dataclass, field
 
+from .attributes import COLOURS
 from .objects import COCO_CLASSES
 
 # Words that carry no search meaning on their own.
@@ -64,6 +65,45 @@ SYNONYMS: dict[str, str] = {
 for _label in COCO_CLASSES:                     # every class answers to its own name
     SYNONYMS.setdefault(_label, _label)
 
+# Colours we measure on every detection while indexing, so a question about
+# one is answered locally and free.
+COLOUR_WORDS: dict[str, str] = {
+    "white": "white", "לבן": "white", "לבנה": "white", "לבנים": "white",
+    "black": "black", "שחור": "black", "שחורה": "black", "שחורים": "black",
+    "gray": "gray", "grey": "gray", "אפור": "gray", "אפורה": "gray",
+    "silver": "gray", "כסוף": "gray", "כסופה": "gray",
+    "red": "red", "אדום": "red", "אדומה": "red",
+    "blue": "blue", "כחול": "blue", "כחולה": "blue",
+    "green": "green", "ירוק": "green", "ירוקה": "green",
+    "yellow": "yellow", "צהוב": "yellow", "צהובה": "yellow",
+    "orange": "orange", "כתום": "orange", "כתומה": "orange",
+    "brown": "brown", "חום": "brown", "חומה": "brown",
+    "pink": "pink", "ורוד": "pink", "ורודה": "pink",
+    "purple": "purple", "סגול": "purple", "סגולה": "purple",
+}
+for _c in COLOURS:
+    COLOUR_WORDS.setdefault(_c, _c)
+
+# Movement, also measured at index time from how far a box travels.
+MOVING_WORDS = {
+    "move", "moved", "moves", "moving", "drove", "drive", "driving", "go", "went",
+    "left", "leaves", "leaving",
+    "arrived", "arrives", "entered", "enters", "passed", "passing",
+    "זז", "זזה", "זזו", "נע", "נעה", "נסע", "נסעה", "עזב", "עזבה", "יצא",
+    "יצאה", "נכנס", "נכנסה", "הגיע", "הגיעה", "עבר", "עברה",
+}
+STILL_WORDS = {"parked", "stationary", "standing", "still", "waiting",
+               "חונה", "חונים", "עומד", "עומדת", "נשאר", "נשארה", "ממתין"}
+
+# Clothing worn on the torso: the colour we already measure for a person is
+# taken from exactly that band, so "a man in a white shirt" is a local search.
+TORSO_WORDS = {
+    "shirt", "tshirt", "t-shirt", "jacket", "coat", "hoodie", "sweater", "vest",
+    "uniform", "dress", "top", "jumper",
+    "חולצה", "חולצת", "מעיל", "ג'קט", "סווטשירט", "קפוצ'ון", "אפודה", "סוודר",
+    "מדים", "שמלה", "וסט",
+}
+
 # Words that mean the question is about description or change, not presence.
 # The local detectors cannot answer these, whatever nouns sit beside them.
 DESCRIPTIVE = {
@@ -71,9 +111,9 @@ DESCRIPTIVE = {
     "white", "black", "red", "blue", "green", "yellow", "grey", "gray", "silver",
     "לבן", "לבנה", "שחור", "שחורה", "אדום", "אדומה", "כחול", "כחולה", "ירוק",
     "צהוב", "אפור", "אפורה", "כסוף", "חום", "ורוד",
-    # clothing and appearance
-    "shirt", "jacket", "coat", "hat", "cap", "mask", "hood", "uniform", "suit",
-    "חולצה", "מעיל", "ג'קט", "כובע", "מסכה", "קפוצ'ון", "מדים", "חליפה", "שמלה",
+    # appearance details we do not measure (colour and clothing are handled above)
+    "hat", "cap", "mask", "hood", "suit", "glasses", "beard", "tattoo",
+    "כובע", "מסכה", "חליפה", "משקפיים", "זקן", "קעקוע", "תספורת",
     # movement and events
     "moved", "moves", "moving", "left", "leaves", "leaving", "arrived", "arrives",
     "entered", "enters", "exit", "exits", "took", "takes", "carrying", "carries",
@@ -117,6 +157,8 @@ class Intent:
     person_id: int | None = None
     person_name: str | None = None
     labels: list[str] = field(default_factory=list)
+    colours: list[str] = field(default_factory=list)
+    moving: bool | None = None
     reason: str = ""
     reason_code: str = ""
     reason_word: str = ""
@@ -125,6 +167,7 @@ class Intent:
     def to_dict(self) -> dict:
         data = {"mode": self.mode, "query": self.query, "person_id": self.person_id,
                 "person_name": self.person_name, "labels": self.labels,
+                "colours": self.colours, "moving": self.moving,
                 "reason": self.reason, "reason_code": self.reason_code,
                 "reason_word": self.reason_word}
         data["fallback"] = self.fallback.to_dict() if self.fallback else None
@@ -174,9 +217,27 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None) -> Intent:
 
     words = tokens_of(query)
     labels: list[str] = []
+    colours: list[str] = []
     unknown: list[str] = []
     descriptive: list[str] = []
+    moving: bool | None = None
     for word in words:
+        colour = _lookup(word, COLOUR_WORDS)
+        if colour:
+            if colour not in colours:
+                colours.append(colour)
+            continue
+        if _lookup(word, {w: w for w in TORSO_WORDS}):
+            # "a white shirt" means a person, described by the colour we store
+            if "person" not in labels:
+                labels.append("person")
+            continue
+        if _lookup(word, {w: w for w in MOVING_WORDS}):
+            moving = True
+            continue
+        if _lookup(word, {w: w for w in STILL_WORDS}):
+            moving = False
+            continue
         if _lookup(word, {d: d for d in DESCRIPTIVE}):
             descriptive.append(word)
             continue
@@ -187,11 +248,19 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None) -> Intent:
         else:
             unknown.append(word)
 
+    # Colour and movement were measured while indexing, so a question that
+    # combines them with an object stays local - and free.
     if labels and not descriptive and not unknown:
-        return Intent("objects", query, labels=labels,
-                      reason=f"looking for {', '.join(labels)} - the detector "
-                             "knows these directly",
-                      reason_code="objects_known", reason_word=", ".join(labels))
+        described = [*colours]
+        if moving is True:
+            described.append("moving")
+        elif moving is False:
+            described.append("still")
+        detail = " ".join(described + labels)
+        return Intent("objects", query, labels=labels, colours=colours, moving=moving,
+                      reason=f"looking for {detail} - measured when the footage "
+                             "was indexed",
+                      reason_code="objects_known", reason_word=detail)
 
     why = "describes something the local detectors cannot measure"
     code, word = "not_measurable", ""
@@ -206,7 +275,8 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None) -> Intent:
 
     fallback = None
     if labels:
-        fallback = Intent("objects", query, labels=labels,
+        fallback = Intent("objects", query, labels=labels, colours=colours,
+                          moving=moving,
                           reason=f"every {', '.join(labels)} in the footage, "
                                  "without the rest of the description",
                           reason_code="objects_known",
