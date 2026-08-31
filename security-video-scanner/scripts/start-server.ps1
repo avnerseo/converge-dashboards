@@ -16,12 +16,17 @@
 
 .PARAMETER Port
     Defaults to 8080.
+
+.PARAMETER Listen
+    Also accept connections from other machines on the network. Off by
+    default: without it the server answers only on this computer.
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$Footage,
     [string]$Password,
-    [int]$Port = 8080
+    [int]$Port = 8080,
+    [switch]$Listen
 )
 
 $ErrorActionPreference = 'Stop'
@@ -55,12 +60,20 @@ if (-not $Password) {
     Write-Host "Write it down - it is only shown now.`n" -ForegroundColor Yellow
 }
 
-$env:VSCAN_FOOTAGE_DIRS  = (Resolve-Path $Footage).Path
+$env:VSCAN_FOOTAGE_DIRS   = (Resolve-Path $Footage).Path
 $env:VSCAN_ADMIN_PASSWORD = $Password
 $env:VSCAN_PORT           = "$Port"
+# This machine only, unless asked otherwise - a face-recognition system should
+# not be reachable from the rest of the network by accident.
+$env:VSCAN_HOST = if ($Listen) { '0.0.0.0' } else { '127.0.0.1' }
 
 Write-Host "footage : $env:VSCAN_FOOTAGE_DIRS"
 Write-Host "sign in : http://localhost:$Port   (user: admin)" -ForegroundColor Green
+if ($Listen) {
+    Write-Host "reachable from the whole network - put it behind HTTPS before real use" -ForegroundColor Yellow
+} else {
+    Write-Host "this computer only (add -Listen to open it to the network)" -ForegroundColor DarkGray
+}
 Write-Host "Leave this window open. Ctrl+C stops the server.`n"
 
 Start-Process "http://localhost:$Port"

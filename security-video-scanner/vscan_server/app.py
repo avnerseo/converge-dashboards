@@ -96,8 +96,11 @@ def main() -> int:
                         format="%(asctime)s %(levelname)-7s %(name)s: %(message)s")
     settings = get_settings()
     import os
+    # 0.0.0.0 in the container (compose publishes it on 127.0.0.1 of the host),
+    # but a bare `vscan-server` on someone's laptop should not be on the wifi.
+    default_host = "0.0.0.0" if os.environ.get("VSCAN_IN_CONTAINER") else "127.0.0.1"
     uvicorn.run("vscan_server.app:app", factory=True,
-                host=os.environ.get("VSCAN_HOST", "0.0.0.0"),
+                host=os.environ.get("VSCAN_HOST", default_host),
                 port=int(os.environ.get("VSCAN_PORT", "8080")),
                 proxy_headers=True, forwarded_allow_ips="*",
                 log_level=os.environ.get("VSCAN_LOG_LEVEL", "info"))

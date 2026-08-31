@@ -12,7 +12,8 @@ ENV PYTHONUNBUFFERED=1 \
     VSCAN_MODEL_DIR=/opt/vscan-models \
     VSCAN_DATA_DIR=/data \
     VSCAN_FOOTAGE_DIRS=/footage \
-    VSCAN_PORT=8080
+    VSCAN_PORT=8080 \
+    VSCAN_IN_CONTAINER=1
 
 WORKDIR /app
 COPY pyproject.toml README.md ./
