@@ -109,6 +109,11 @@ const STR = {
     whyLine: 'קו חצייה — מדווח מי חצה אותו, ולאיזה כיוון',
     crossings: 'חציות',
     noCrossingsThatWay: 'לא נמצאו חציות בכיוון הזה. בכיוון ההפוך כן נמצאו:',
+    markUnknown: 'אני לא יודע איפה', markIt: 'סמן לי על התמונה',
+    markTitle: 'סימון', markAndSearch: 'שמור וחפש', markReady: 'מסומן. אפשר לשמור ולחפש.',
+    markAsArea: 'סמנו את המלבן שבו זה נמצא, ומאותו רגע אפשר לשאול עליו — מקומית, בלי עלות.',
+    markAsLine: 'מתחו קו במקום שבו עוברים, ומאותו רגע אפשר לשאול מי נכנס ומי יצא — מקומית, בלי עלות.',
+    lineName: 'שם הקו',
     inYourFootage: 'מה שיש בהקלטות שלך',
     noSuchObject: 'לא נמצא דבר כזה בהקלטות שאונדקסו. מה שכן נמצא בהן:',
     noSuchColour: 'לא נמצא בצבע הזה. הצבעים שנמצאו בפועל:',
@@ -219,6 +224,11 @@ const STR = {
     whyLine: 'is a counting line - it reports who crossed it, and which way',
     crossings: 'crossings',
     noCrossingsThatWay: 'no crossings that way. In the other direction there were:',
+    markUnknown: 'I do not know where', markIt: 'Show me on the picture',
+    markTitle: 'Marking', markAndSearch: 'Save and search', markReady: 'Marked. Save and search.',
+    markAsArea: 'Draw the rectangle it sits in, and from then on it can be asked about - locally, at no cost.',
+    markAsLine: 'Draw a line where people pass, and from then on you can ask who came in and who went out - locally, at no cost.',
+    lineName: 'Line name',
     inYourFootage: 'In your footage',
     noSuchObject: 'nothing like that in the indexed footage. What is in it:',
     noSuchColour: 'nothing in that colour. The colours actually found:',
@@ -724,6 +734,8 @@ VIEWS.search = async () => {
     const data = await api('/api/search', { method: 'POST',
       body: { query, ...filters(), force_mode: forceMode || null } });
     showInterpretation(data);
+    const offer = (data.intent || {}).mode === 'ask' ? markCard(data.intent) : null;
+    if (offer) resultsBox.append(offer);
     if (data.job_id) {
       const zone = (data.intent || {}).mode === 'zone';
       S.lastAskFrames = filters().max_frames;
@@ -836,6 +848,22 @@ VIEWS.search = async () => {
       }, { person: t('modePerson'), zone: t('modeZone'), line: t('modeLine'),
            objects: t('modeObjects'), ask: t('modeAsk') }[mode]));
     }
+  }
+
+  /* The question named a place we have never been shown. Rather than explain
+     that the detector has no class for gates, offer the one action that makes
+     the question answerable - and then run it. */
+  function markCard(intent) {
+    const suggest = intent.suggest;
+    if (!suggest || !can('analyst') || !S.videos.length) return null;
+    const what = suggest.kind === 'line' ? t('markAsLine') : t('markAsArea');
+    return el('div', { class: 'card' },
+      el('h3', {}, `${t('markUnknown')} “${suggest.name}”`),
+      el('p', {}, what),
+      el('button', { class: 'btn', onclick: () => {
+        markItModal(suggest, filters().video_ids ? filters().video_ids[0] : null,
+          async () => { await run(null); });
+      } }, t('markIt')));
   }
 
   function missingCard(data) {
@@ -1063,85 +1091,71 @@ function openEvent(event) {
       }) }, t('exportClips')) : null));
 }
 
-/* --------------------------------------------------- zones and lines
-   Two questions no detector can answer, because both are about a place
-   rather than a thing. A rectangle that stops looking like itself is a
-   door that opened; a line somebody stepped over is a person who came in
-   or went out. Both are drawn once, by the operator, on their own picture. */
-VIEWS.zones = async () => {
-  const wrap = el('div');
-  if (!S.videos.length) {
-    return el('div', { class: 'card' }, el('p', {}, t('zoneNoVideos')),
-      el('button', { class: 'btn', onclick: () => { S.tab = 'footage'; renderTabs(); renderTab(); } },
-        t('addFootage')));
-  }
-  if (can('analyst')) wrap.append(zoneEditor());
-  wrap.append(await zoneList(), await lineList());
-  return wrap;
-};
+/* --------------------------------------------------- places on the picture
+   Two questions no detector can answer, because both are about a place rather
+   than a thing: a rectangle that stops looking like itself is a door that
+   opened, and a line somebody stepped over is a person who came in or went
+   out. Both need the operator to point at their own picture once - so the
+   pointing happens where the question was asked, not in a tab they have to
+   find first. */
 
-function zoneEditor() {
-  let kind = 'area';                      // 'area' | 'line'
-  let drawn = null;                       // {x,y,w,h} for an area
-  let drawnLine = null;                   // {x1,y1,x2,y2} for a line
-  let flipped = false;
-
+/* One drawing surface, shared by the Places tab and the one-click prompt that
+   appears under a search we could not answer. */
+function drawSurface(options = {}) {
+  const state = { kind: options.kind || 'area', area: null, line: null,
+                  flipped: false };
   const videoPick = el('select', {}, ...S.videos.map((v) =>
-    el('option', { value: v.id }, v.name)));
+    el('option', { value: v.id, selected: v.id === options.videoId }, v.name)));
   const at = el('input', { type: 'range', min: '0', max: '100', value: '35',
     style: 'width:100%' });
   const img = el('img', { alt: '', draggable: false });
   const rect = el('div', { class: 'zone-rect hidden' });
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('class', 'zone-line');
+  svg.setAttribute('class', 'zone-line hidden');
   const canvas = el('div', { class: 'zone-canvas' }, img, rect, svg);
-  const readout = el('div', { class: 'small muted', style: 'margin-top:6px' },
-    t('zoneDraw'));
 
   const video = () => S.videos.find((v) => String(v.id) === videoPick.value) || S.videos[0];
   function loadFrame() {
     const v = video();
+    if (!v) return;
     const seconds = (Number(at.value) / 100) * (v.duration || 0);
     img.src = `/api/media/frame/${v.id}?t=${seconds.toFixed(2)}&width=960`;
   }
   videoPick.addEventListener('change', () => { reset(); loadFrame(); });
   at.addEventListener('change', loadFrame);
   img.addEventListener('load', paint);
-  loadFrame();
 
-  function reset() { drawn = null; drawnLine = null; paint(); }
+  function reset() { state.area = null; state.line = null; paint(); }
 
   function paintArea() {
-    if (!drawn) { rect.classList.add('hidden'); return; }
+    if (!state.area) { rect.classList.add('hidden'); return; }
     rect.classList.remove('hidden');
-    rect.style.left = `${drawn.x * 100}%`;
-    rect.style.top = `${drawn.y * 100}%`;
-    rect.style.width = `${drawn.w * 100}%`;
-    rect.style.height = `${drawn.h * 100}%`;
+    rect.style.left = `${state.area.x * 100}%`;
+    rect.style.top = `${state.area.y * 100}%`;
+    rect.style.width = `${state.area.w * 100}%`;
+    rect.style.height = `${state.area.h * 100}%`;
   }
 
   /* The arrow is the whole user interface for direction: rather than explain
      which side of a vector counts as "in", show it and let them flip it. */
   function paintLine() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
-    if (!drawnLine) { svg.classList.add('hidden'); return; }
+    if (!state.line) { svg.classList.add('hidden'); return; }
     svg.classList.remove('hidden');
     const w = img.clientWidth || 960;
     const h = img.clientHeight || 540;
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    const p1 = { x: drawnLine.x1 * w, y: drawnLine.y1 * h };
-    const p2 = { x: drawnLine.x2 * w, y: drawnLine.y2 * h };
+    const p1 = { x: state.line.x1 * w, y: state.line.y1 * h };
+    const p2 = { x: state.line.x2 * w, y: state.line.y2 * h };
     const draw = (tag, attrs) => {
       const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
       for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
       svg.append(node);
-      return node;
     };
     draw('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, class: 'wire' });
-    // "in" runs along the line's left normal, or the other way when flipped
     const dx = p2.x - p1.x, dy = p2.y - p1.y;
     const length = Math.hypot(dx, dy) || 1;
-    const sign = flipped ? -1 : 1;
+    const sign = state.flipped ? -1 : 1;
     const nx = (-dy / length) * sign, ny = (dx / length) * sign;
     const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
     const tip = { x: mid.x + nx * 42, y: mid.y + ny * 42 };
@@ -1155,8 +1169,8 @@ function zoneEditor() {
 
   function paint() { paintArea(); paintLine(); }
 
-  /* Drag to draw. Coordinates are kept as fractions of the picture, so the
-     same rectangle or line fits a 4CIF camera and a 4K one. */
+  /* Drag to draw. Coordinates are fractions of the picture, so the same mark
+     fits a 4CIF camera and a 4K one. */
   let origin = null;
   const point = (event) => {
     const area = img.getBoundingClientRect();
@@ -1171,33 +1185,134 @@ function zoneEditor() {
   canvas.addEventListener('pointermove', (event) => {
     if (!origin) return;
     const now = point(event);
-    if (kind === 'area') {
-      drawn = { x: Math.min(origin.x, now.x), y: Math.min(origin.y, now.y),
-                w: Math.abs(now.x - origin.x), h: Math.abs(now.y - origin.y) };
+    if (state.kind === 'area') {
+      state.area = { x: Math.min(origin.x, now.x), y: Math.min(origin.y, now.y),
+                     w: Math.abs(now.x - origin.x), h: Math.abs(now.y - origin.y) };
     } else {
-      drawnLine = { x1: origin.x, y1: origin.y, x2: now.x, y2: now.y };
+      state.line = { x1: origin.x, y1: origin.y, x2: now.x, y2: now.y };
     }
     paint();
   });
   canvas.addEventListener('pointerup', () => {
     origin = null;
-    if (kind === 'area') {
-      if (!drawn || drawn.w < 0.01 || drawn.h < 0.01) { reset(); return; }
-      measure().catch(() => {});
-      return;
-    }
-    if (!drawnLine || Math.hypot(drawnLine.x2 - drawnLine.x1,
-                                 drawnLine.y2 - drawnLine.y1) < 0.03) { reset(); return; }
-    clear(readout).append(el('span', {}, t('inArrow')));
-    paint();
+    const done = surface.shape();
+    if (!done) { reset(); return; }
+    if (options.onShape) options.onShape(done);
   });
 
+  const surface = {
+    node: el('div', {},
+      el('div', { class: 'row', style: 'margin-top:10px' },
+        el('div', { style: 'min-width:240px' }, field(t('videos'), videoPick)),
+        el('div', { class: 'grow', style: 'min-width:200px' },
+          field(t('zoneAtMoment'), at))),
+      canvas),
+    canvas,
+    videoId: () => (video() ? video().id : null),
+    kind: () => state.kind,
+    setKind(kind) { state.kind = kind; reset(); },
+    flip() { state.flipped = !state.flipped; paint(); },
+    reset,
+    shape() {
+      if (state.kind === 'area') {
+        if (!state.area || state.area.w < 0.01 || state.area.h < 0.01) return null;
+        const a = state.area;
+        return { kind: 'area', box: [a.x, a.y, a.w, a.h] };
+      }
+      if (!state.line) return null;
+      const l = state.line;
+      if (Math.hypot(l.x2 - l.x1, l.y2 - l.y1) < 0.03) return null;
+      return { kind: 'line', line: [l.x1, l.y1, l.x2, l.y2], flipped: state.flipped };
+    },
+  };
+  loadFrame();
+  return surface;
+}
+
+/* Save whatever was drawn, under the name the operator already typed. */
+async function savePlace(name, shape, videoId, extra = {}) {
+  if (shape.kind === 'area') {
+    return api('/api/zones', { method: 'POST', body: {
+      name, box: shape.box, video_id: videoId,
+      mode: extra.mode || 'change',
+      sensitivity: extra.sensitivity || 0.15 } });
+  }
+  return api('/api/lines', { method: 'POST', body: {
+    name, line: shape.line, video_id: videoId, flipped: shape.flipped } });
+}
+
+/* The whole point: a question we could not answer becomes answerable in one
+   step, in the place it was asked. No tab to find, no vocabulary to learn. */
+function markItModal(suggest, videoId, onSaved) {
+  const kind = suggest.kind === 'line' ? 'line' : 'area';
+  const name = el('input', { type: 'text', dir: 'auto', value: suggest.name || '' });
+  const hint = el('div', { class: 'small muted', style: 'margin-top:6px' },
+    kind === 'line' ? t('lineDraw') : t('zoneDraw'));
+  const save = el('button', { class: 'btn', disabled: true }, t('markAndSearch'));
+  const surface = drawSurface({ kind, videoId, onShape: () => {
+    save.disabled = false;
+    clear(hint).append(kind === 'line' ? t('inArrow') : t('markReady'));
+  } });
+  const flip = el('button', { class: 'btn ghost', onclick: () => surface.flip() },
+    t('flipDirection'));
+
+  // One line, not the essay from the Places tab: somebody who got here was in
+  // the middle of asking a question, not reading about the product.
+  const box = modal(`${t('markTitle')} “${suggest.name || ''}”`,
+    el('p', { class: 'small muted' },
+      kind === 'line' ? t('markAsLine') : t('markAsArea')),
+    surface.node, hint,
+    el('div', { class: 'row', style: 'margin-top:12px' },
+      el('div', { class: 'grow', style: 'min-width:200px' },
+        field(kind === 'line' ? t('lineName') : t('zoneName'), name)),
+      kind === 'line' ? flip : null, save));
+
+  save.onclick = guard(async () => {
+    const shape = surface.shape();
+    if (!shape) { toast(t('zoneDraw'), 'bad'); return; }
+    if (!name.value.trim()) { toast(t('zoneName'), 'bad'); return; }
+    save.disabled = true;
+    await savePlace(name.value.trim(), shape, surface.videoId());
+    box.remove();
+    toast(t('saved'), 'ok');
+    await refreshCore();
+    await onSaved(name.value.trim());
+  });
+  return box;
+}
+
+VIEWS.zones = async () => {
+  const wrap = el('div');
+  if (!S.videos.length) {
+    return el('div', { class: 'card' }, el('p', {}, t('zoneNoVideos')),
+      el('button', { class: 'btn', onclick: () => { S.tab = 'footage'; renderTabs(); renderTab(); } },
+        t('addFootage')));
+  }
+  if (can('analyst')) wrap.append(zoneEditor());
+  wrap.append(await zoneList(), await lineList());
+  return wrap;
+};
+
+function zoneEditor() {
+  const name = el('input', { type: 'text', dir: 'auto', placeholder: t('zoneNamePh') });
+  const readout = el('div', { class: 'small muted', style: 'margin-top:6px' },
+    t('zoneDraw'));
   const sensitivity = el('input', { type: 'number', value: '0.15', min: '0.01',
     max: '1', step: '0.01' });
-  async function measure() {
+  const mode = el('select', {},
+    el('option', { value: 'change' }, t('zoneModeChange')),
+    el('option', { value: 'motion' }, t('zoneModeMotion')));
+  const everywhere = checkbox('z-all', t('zoneEveryVideo'), false);
+
+  const surface = drawSurface({ onShape: (shape) => {
+    if (shape.kind === 'area') measure(shape).catch(() => {});
+    else clear(readout).append(t('inArrow'));
+  } });
+
+  async function measure(shape) {
     readout.textContent = '…';
     const stats = await api('/api/zones/preview', { method: 'POST',
-      body: { video_id: video().id, box: [drawn.x, drawn.y, drawn.w, drawn.h] } });
+      body: { video_id: surface.videoId(), box: shape.box } });
     sensitivity.value = stats.suggested_sensitivity || 0.15;
     clear(readout).append(
       el('span', {}, `${t('zoneUsualChange')}: `),
@@ -1210,80 +1325,62 @@ function zoneEditor() {
     }
   }
 
-  const name = el('input', { type: 'text', dir: 'auto', placeholder: t('zoneNamePh') });
-  const mode = el('select', {},
-    el('option', { value: 'change' }, t('zoneModeChange')),
-    el('option', { value: 'motion' }, t('zoneModeMotion')));
-  const everywhere = checkbox('z-all', t('zoneEveryVideo'), false);
-  const flipButton = el('button', { class: 'btn ghost', onclick: () => {
-    flipped = !flipped; paint();
-  } }, t('flipDirection'));
-
+  const heading = el('h2', {}, t('zoneNew'));
+  const hint = el('p', { class: 'legal' }, t('zoneHint'));
+  const scopeLabel = everywhere.querySelector('label') || everywhere;
+  const flipButton = el('button', { class: 'btn ghost', onclick: () => surface.flip() },
+    t('flipDirection'));
   const areaFields = el('div', { class: 'row', style: 'margin-top:12px' },
     el('div', { style: 'min-width:280px' }, field(t('zoneMode'), mode)),
     el('div', { style: 'min-width:120px' }, field(t('sensitivity'), sensitivity)));
   const lineFields = el('div', { class: 'row hidden', style: 'margin-top:12px' },
     flipButton);
-
-  const save = el('button', { class: 'btn', onclick: guard(async () => {
-    if (!name.value.trim()) { toast(t('zoneName'), 'bad'); return; }
-    const scope = everywhere.querySelector('input').checked ? null : video().id;
-    if (kind === 'area') {
-      if (!drawn) { toast(t('zoneDraw'), 'bad'); return; }
-      await api('/api/zones', { method: 'POST', body: {
-        name: name.value.trim(), box: [drawn.x, drawn.y, drawn.w, drawn.h],
-        video_id: scope, mode: mode.value, sensitivity: Number(sensitivity.value) } });
-    } else {
-      if (!drawnLine) { toast(t('lineDraw'), 'bad'); return; }
-      await api('/api/lines', { method: 'POST', body: {
-        name: name.value.trim(), video_id: scope, flipped,
-        line: [drawnLine.x1, drawnLine.y1, drawnLine.x2, drawnLine.y2] } });
-    }
-    toast(t('saved'), 'ok');
-    name.value = ''; reset();
-    await refreshCore(); await renderTab();
-  }) }, t('zoneSave'));
-
-  const heading = el('h2', {}, t('zoneNew'));
-  const hint = el('p', { class: 'legal' }, t('zoneHint'));
-  const scopeLabel = everywhere.querySelector('label') || everywhere;
+  const save = el('button', { class: 'btn' }, t('zoneSave'));
 
   /* Every word on this card belongs to one of the two shapes. Leaving it
      talking about rectangles while an operator draws a line is how a tool
-     starts to feel like it was built for someone else. */
+     starts to feel like it was built for somebody else. */
   function relabel() {
-    const line = kind === 'line';
+    const line = surface.kind() === 'line';
     heading.textContent = line ? t('lineNew') : t('zoneNew');
     hint.textContent = line ? t('lineHint') : t('zoneHint');
     name.placeholder = line ? t('lineNamePh') : t('zoneNamePh');
     save.textContent = line ? t('lineSave') : t('zoneSave');
     scopeLabel.textContent = line ? t('lineEveryVideo') : t('zoneEveryVideo');
+    areaFields.classList.toggle('hidden', line);
+    lineFields.classList.toggle('hidden', !line);
+    clear(readout).append(line ? t('lineDraw') : t('zoneDraw'));
   }
+
+  save.onclick = guard(async () => {
+    const shape = surface.shape();
+    if (!shape) { toast(surface.kind() === 'line' ? t('lineDraw') : t('zoneDraw'), 'bad'); return; }
+    if (!name.value.trim()) { toast(t('zoneName'), 'bad'); return; }
+    await savePlace(name.value.trim(), shape,
+      everywhere.querySelector('input').checked ? null : surface.videoId(),
+      { mode: mode.value, sensitivity: Number(sensitivity.value) });
+    toast(t('saved'), 'ok');
+    name.value = ''; surface.reset();
+    await refreshCore(); await renderTab();
+  });
 
   const kindPick = el('div', { class: 'row' },
     ...[['area', t('kindArea')], ['line', t('kindLine')]].map(([value, text]) =>
       el('button', {
-        class: value === kind ? 'btn small' : 'btn ghost small',
+        class: value === surface.kind() ? 'btn small' : 'btn ghost small',
         onclick: (event) => {
-          kind = value; reset();
+          surface.setKind(value);
           for (const button of event.target.parentNode.children) {
             button.className = 'btn ghost small';
           }
           event.target.className = 'btn small';
-          areaFields.classList.toggle('hidden', kind !== 'area');
-          lineFields.classList.toggle('hidden', kind === 'area');
-          clear(readout).append(kind === 'area' ? t('zoneDraw') : t('lineDraw'));
           relabel();
         },
       }, text)));
 
   relabel();
   return el('div', { class: 'card' },
-    heading, hint, kindPick,
-    el('div', { class: 'row', style: 'margin-top:10px' },
-      el('div', { style: 'min-width:240px' }, field(t('videos'), videoPick)),
-      el('div', { class: 'grow', style: 'min-width:220px' }, field(t('zoneAtMoment'), at))),
-    canvas, readout, areaFields, lineFields,
+    heading, hint, kindPick, surface.node, readout, areaFields, lineFields,
     el('div', { class: 'row', style: 'margin-top:12px' },
       el('div', { style: 'min-width:220px' }, field(t('zoneName'), name)),
       everywhere, save));

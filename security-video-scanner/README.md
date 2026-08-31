@@ -269,10 +269,17 @@ Nothing is decoded and no model runs, so a twelve-hour recording answers in
 milliseconds, as often as an investigation asks. `--labels` decides what counts:
 people by default, vehicles for a barrier, both for a shared entrance.
 
-In the web UI the line's name is a search term like a zone's, and the direction
-comes from the sentence: with a line called `gate`, "when did someone leave
-through the gate" runs it with `--direction out`, and a search that finds
-nothing that way offers the other one - "no crossings out; 4 came in".
+In the web UI nobody visits a tab to set this up. An operator types "when did
+someone leave through the gate", and because we have never been shown a gate the
+answer is not an error but an offer: *I do not know where "gate" is - show me on
+the picture.* One click opens a frame, they drag a line across the doorway, and
+the search they asked for runs immediately. The name is theirs, the shape is
+chosen from their own verb - "opened" marks a rectangle, "went out" marks a
+line - and the direction comes from the sentence. A search that finds nothing
+one way offers the other: "no crossings out; 4 came in".
+
+The Places tab remains, for renaming, deleting and reviewing what has been
+marked. It is not on the path to a first answer.
 
 ## `ask` — the instruction search
 

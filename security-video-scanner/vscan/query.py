@@ -37,6 +37,11 @@ STOPWORDS = {
     "a", "an", "any", "show", "me", "find", "search", "for", "of", "in", "on",
     "at", "with", "without", "and", "or", "please", "someone", "something",
     "video", "footage", "camera", "appear", "appears", "there",
+    "who", "whom", "somebody", "anybody", "anyone", "everyone", "nobody",
+    "near", "next", "beside", "by", "behind", "under", "above", "inside",
+    "outside", "toward", "towards", "from", "to", "into", "onto",
+    "מישהו", "מישהי", "משהו", "כלשהו", "אף",
+    "ליד", "על", "מול", "תחת", "מתחת", "מעל", "בתוך", "מחוץ", "לכיוון", "אל",
 }
 
 # Everyday words for the classes the local detector actually knows.
@@ -154,6 +159,34 @@ def strip_prefix(word: str) -> list[str]:
     return forms
 
 
+# Crossing a threshold, as opposed to the threshold itself changing. Which one
+# an operator meant is in the verb they already typed, so we never ask.
+CROSSING_WORDS = (IN_WORDS | OUT_WORDS | {
+    "passed", "passing", "crossed", "crosses", "crossing", "through", "past",
+    "עבר", "עברה", "עברו", "חצה", "חצתה", "חצו", "דרך", "מבעד",
+})
+
+
+def bare_noun(word: str) -> str:
+    """The word without its Hebrew article, as something to name a place.
+
+    "מתי השער נפתח" should offer to mark a place called /sha'ar/, not
+    /ha-sha'ar/ - the operator would have to delete the letter by hand every
+    time otherwise.
+    """
+    for prefix in ("וה", "מה", "לה", "בה", "כה", "שה"):
+        if word.startswith(prefix) and len(word) - len(prefix) >= 3:
+            return word[len(prefix):]
+    if word.startswith("ה") and len(word) >= 4:
+        return word[1:]
+    # "נכנס לחדר" is about a room, not a /lecheder/. Only /la-/ is stripped on
+    # its own: /be-/, /me-/ and /ke-/ start too many ordinary nouns to guess at,
+    # and the name is offered in an editable box anyway.
+    if word.startswith("ל") and len(word) >= 4:
+        return word[1:]
+    return word
+
+
 def _lookup(word: str, table) -> str | None:
     for form in strip_prefix(word):
         if form in table:
@@ -184,6 +217,9 @@ class Intent:
     reason: str = ""
     reason_code: str = ""
     reason_word: str = ""
+    # What the operator would have to mark on the picture for this question to
+    # become answerable locally: a name, and which shape answers it.
+    suggest: dict | None = None
     fallback: "Intent | None" = None            # nearest local search, for 'ask'
 
     def to_dict(self) -> dict:
@@ -194,7 +230,7 @@ class Intent:
                 "labels": self.labels,
                 "colours": self.colours, "moving": self.moving,
                 "reason": self.reason, "reason_code": self.reason_code,
-                "reason_word": self.reason_word}
+                "reason_word": self.reason_word, "suggest": self.suggest}
         data["fallback"] = self.fallback.to_dict() if self.fallback else None
         return data
 
@@ -361,5 +397,14 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None,
                                  "without the rest of the description",
                           reason_code="objects_known",
                           reason_word=", ".join(labels))
+    # "The gate" is not a thing any detector knows - but it is a place, and a
+    # place becomes searchable the moment somebody draws it. Say which word we
+    # did not recognise and what marking it would take, so the interface can
+    # offer to do it here rather than send the operator away to learn a tab.
+    suggest = None
+    if unknown:
+        crossing = any(_lookup(w, {c: c for c in CROSSING_WORDS}) for w in words)
+        suggest = {"name": bare_noun(unknown[0]),
+                   "kind": "line" if crossing else "area"}
     return Intent("ask", query, reason=why, reason_code=code, reason_word=word,
-                  fallback=fallback)
+                  suggest=suggest, fallback=fallback)
