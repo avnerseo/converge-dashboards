@@ -211,15 +211,13 @@ suggested command
 
 **macOS / Linux** — אחרי שלבים 1–3 של מסלול א׳:
 
-**macOS / Linux:**
-
 ```bash
 VSCAN_FOOTAGE_DIRS=/נתיב/לתיקיית/הסרטונים \
 VSCAN_ADMIN_PASSWORD=בחר-סיסמה-חזקה \
 .venv/bin/vscan-server
 ```
 
-**Windows (PowerShell):**
+אותו דבר בווינדוס בלי הסקריפט — שימו לב שכל משתנה בשורה נפרדת:
 
 ```powershell
 $env:VSCAN_FOOTAGE_DIRS="C:\videos"
