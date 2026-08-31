@@ -90,6 +90,14 @@ vscan models fetch               # ~75 MB of ONNX models, once per machine
 
 Python 3.10+. No GPU needed — everything is CPU ONNX through OpenCV's DNN module.
 
+On Windows, `scripts\setup.cmd` does all of the above — Python, ffmpeg, the
+package and the models — and `scripts\start-server.cmd` starts the web
+interface. Use the `.cmd` files rather than the `.ps1` ones they wrap: Windows
+refuses to run PowerShell scripts by default ("running scripts is disabled on
+this system"), and the wrappers get past that for this one script instead of
+asking an operator to loosen a machine-wide setting. They can also just be
+double-clicked.
+
 ## The workflow
 
 ### 1. Index the footage
