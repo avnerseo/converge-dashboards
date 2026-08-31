@@ -19,7 +19,12 @@ set -euo pipefail
 FCC_HOME="${FCC_HOME:-$HOME/.free-claude-code}"
 FCC_PORT="${FCC_PORT:-8082}"
 APP_DIR="$FCC_HOME/app"
-ENV_FILE="$APP_DIR/.env"
+# The app reads its configuration from ~/.fcc/.env — its admin UI prints that
+# path at the bottom of every screen. The .env inside the checkout is NOT read,
+# so a key written only there is silently ignored.
+FCC_ENV_DIR="${FCC_ENV_DIR:-$HOME/.fcc}"
+ENV_FILE="$FCC_ENV_DIR/.env"
+APP_ENV_FILE="$APP_DIR/.env"
 CONFIG_DIR="$FCC_HOME/claude-config"
 API_CONFIG_DIR="$FCC_HOME/api-config"
 KEY_FILE="$FCC_HOME/api-key"
@@ -65,8 +70,9 @@ cmd_setup() {
   (cd "$APP_DIR" && uv sync)
 
   if [ -f "$ENV_FILE" ]; then
-    info ".env already exists — leaving it as is (edit $ENV_FILE to change provider)"
+    info "$ENV_FILE already exists — leaving it as is (edit that file to change provider)"
   else
+    mkdir -p "$FCC_ENV_DIR"; chmod 700 "$FCC_ENV_DIR"
     if [ -f "$APP_DIR/.env.example" ]; then cp "$APP_DIR/.env.example" "$ENV_FILE"; else : > "$ENV_FILE"; fi
     chmod 600 "$ENV_FILE"
     echo
@@ -94,13 +100,17 @@ cmd_setup() {
               -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
       [ "$clean" = "$api_key" ] || warn 'stripped quotes / a "Bearer" prefix from what you pasted'
       api_key=$clean
-      # replace an existing line if .env.example already defines it, else append
-      if grep -q "^${key_var}=" "$ENV_FILE" 2>/dev/null; then
-        tmp=$(mktemp); grep -v "^${key_var}=" "$ENV_FILE" > "$tmp"; mv "$tmp" "$ENV_FILE"
-      fi
-      printf '%s=%s\n' "$key_var" "$api_key" >> "$ENV_FILE"
-      chmod 600 "$ENV_FILE"
-      info "wrote $key_var to $ENV_FILE (mode 600)"
+      # Write to the config the app reads and to the checkout copy, replacing any
+      # existing line for this key rather than appending a second one.
+      for target in "$ENV_FILE" "$APP_ENV_FILE"; do
+        mkdir -p "$(dirname "$target")"
+        if [ -f "$target" ] && grep -q "^${key_var}=" "$target"; then
+          tmp=$(mktemp); grep -v "^${key_var}=" "$target" > "$tmp"; mv "$tmp" "$target"
+        fi
+        printf '%s=%s\n' "$key_var" "$api_key" >> "$target"
+        chmod 600 "$target"
+      done
+      info "wrote $key_var to $ENV_FILE (and to $APP_ENV_FILE), mode 600"
     else
       info "no cloud key stored — configure your local endpoint in the admin UI"
     fi

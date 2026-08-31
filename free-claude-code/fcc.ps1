@@ -28,7 +28,12 @@ $ErrorActionPreference = 'Stop'
 $FccHome  = if ($env:FCC_HOME) { $env:FCC_HOME } else { Join-Path $HOME '.free-claude-code' }
 $FccPort  = if ($env:FCC_PORT) { [int]$env:FCC_PORT } else { 8082 }
 $AppDir    = Join-Path $FccHome 'app'
-$EnvFile   = Join-Path $AppDir  '.env'
+# The app reads its configuration from ~/.fcc/.env - its admin UI prints that
+# path at the bottom of every screen. The .env inside the checkout is NOT read,
+# so a key written only there is silently ignored.
+$FccEnvDir = if ($env:FCC_ENV_DIR) { $env:FCC_ENV_DIR } else { Join-Path $HOME '.fcc' }
+$EnvFile   = Join-Path $FccEnvDir '.env'
+$AppEnvFile = Join-Path $AppDir  '.env'
 $ConfigDir    = Join-Path $FccHome 'claude-config'
 $ApiConfigDir = Join-Path $FccHome 'api-config'
 $KeyFile      = Join-Path $FccHome 'api-key'
@@ -69,8 +74,9 @@ function Invoke-Setup {
     Push-Location $AppDir; try { uv sync } finally { Pop-Location }
 
     if (Test-Path $EnvFile) {
-        Write-Info ".env already exists - leaving it as is (edit $EnvFile to change provider)"
+        Write-Info "$EnvFile already exists - leaving it as is (edit that file to change provider)"
     } else {
+        New-Item -ItemType Directory -Force -Path $FccEnvDir | Out-Null
         $example = Join-Path $AppDir '.env.example'
         if (Test-Path $example) { Copy-Item $example $EnvFile } else { New-Item -ItemType File -Path $EnvFile | Out-Null }
 
@@ -94,11 +100,18 @@ function Invoke-Setup {
             $clean = $clean.Trim('"').Trim("'").Trim()
             if ($clean -ne $plain) { Write-Warn 'stripped quotes / a "Bearer" prefix from what you pasted' }
             $plain = $clean
-            $lines = @()
-            if (Test-Path $EnvFile) { $lines = Get-Content $EnvFile | Where-Object { $_ -notmatch "^$keyVar=" } }
-            $lines += "$keyVar=$plain"
-            Set-Content -Path $EnvFile -Value $lines -Encoding utf8
-            Write-Info "wrote $keyVar to $EnvFile"
+            foreach ($target in @($EnvFile, $AppEnvFile)) {
+                $dir = Split-Path -Parent $target
+                if ($dir) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+                # @() is load-bearing: a one-element pipeline result unrolls to a
+                # bare string, and += would then concatenate text instead of
+                # appending a line, welding two settings into one broken entry.
+                $lines = @()
+                if (Test-Path $target) { $lines = @(Get-Content $target | Where-Object { $_ -notmatch "^$keyVar=" }) }
+                $lines += "$keyVar=$plain"
+                Set-Content -Path $target -Value $lines -Encoding utf8
+            }
+            Write-Info "wrote $keyVar to $EnvFile (and to $AppEnvFile)"
         } else {
             Write-Info 'no cloud key stored - configure your local endpoint in the admin UI'
         }
