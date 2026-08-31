@@ -1218,3 +1218,49 @@ its description. This was the brush only.
 Method note: the finding came from asking *where does the traffic land* instead of *how do I
 make more traffic*. Sixteen Pins pointing at a page whose search snippet makes an unsupported
 health claim is worse than fifteen Pins.
+
+## Reading the product page as a buyer — two fixes — 2026-08-31
+
+Loaded the brush page on a 390x844 viewport and read it the way a visitor would, instead of
+querying fields.
+
+### 1. The two "+ lint roller" options showed no lint roller
+
+Every variant already had an image attached, so the wiring was fine — the mapping was not.
+Both `+ lint roller` options pointed at a photo of the brush **alone**. A buyer paying $39.90
+for the second item in the box had no picture of that second item. That is the exact $10 the
+reprice earlier today rests on.
+
+There was no supplier photograph of a brush and roller together, so two were composed from the
+real photographs already on the product — the white brush beside the pink roller, and the milk
+brown brush beside the pink roller, on white, with the roller's cut-out rounded so the pairing
+reads as deliberate rather than pasted. Nothing generated, nothing implied that is not in the
+box.
+
+`productVariantDetachMedia` then `productVariantAppendMedia` — append alone fails with
+*"the supplied variant already has media attached"*.
+
+Verified live, all five:
+
+| variant | price | image |
+|---|---|---|
+| White brush + lint roller | 39.90 | `combo-brush-roller.png` |
+| Milk brown brush + lint roller | 39.90 | `combo-brown-roller.png` |
+| White brush | 29.90 | white brush photo |
+| Purple brush | 29.90 | purple brush photo |
+| Two brushes - white + milk brown | 39.90 | both brushes photo |
+
+### 2. "Why pet owners love it"
+
+The features heading claimed that pet owners love it. **The store has never had a customer.**
+That is an implied testimonial, and the standing rule is no fabricated reviews or testimonials.
+It had been there since the description was first written and survived every pass, including
+the ones where the claims themselves were audited — because it reads as a template heading
+rather than as a claim.
+
+Changed to **"What it does:"**. Verified live: the old string returns zero.
+
+### Checked and clear
+
+The `Home & Garden` collection holds only the sold-out cup, but it appears in **no menu** —
+main, footer or customer account. It is an orphan, not a dead end for visitors. No action.
