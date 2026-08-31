@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import secrets
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -58,6 +59,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.settings = settings
         app.state.store = store
         app.state.runner = runner
+        app.state.started_at = time.time()
         LOG.info("vscan server %s ready - data in %s, footage roots: %s",
                  __version__, settings.data_dir,
                  ", ".join(str(p) for p in settings.footage_dirs) or "(none configured)")

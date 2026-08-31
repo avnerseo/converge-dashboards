@@ -93,7 +93,30 @@ def wait_for_job(client: TestClient, job_id: int, timeout: float = 180.0) -> dic
 
 # ------------------------------------------------------------------- auth
 def test_health_needs_no_session(client):
-    assert client.get("/api/health").json() == {"ok": True}
+    health = client.get("/api/health").json()
+    assert health["ok"] is True and health["version"]
+    # Freshly started against unchanged source: nothing to restart for.
+    assert health["restart_needed"] is False
+
+
+def test_health_notices_the_server_is_older_than_its_own_source(client, tmp_path):
+    """Updating on-prem means pulling and restarting. Forgetting the restart
+    looks exactly like the new version not working, so the server says so."""
+    import vscan_server.api as api_module
+
+    marker = tmp_path / "newer.py"
+    marker.write_text("# touched after the server started\n")
+    # Explicitly in the future: the test suite is quicker than the one-second
+    # margin the check allows itself.
+    later = time.time() + 30
+    os.utime(marker, (later, later))
+    original = api_module._CODE_ROOTS
+    api_module._CODE_ROOTS = (tmp_path,)
+    try:
+        assert client.get("/api/health").json()["restart_needed"] is True
+    finally:
+        api_module._CODE_ROOTS = original
+    assert client.get("/api/health").json()["restart_needed"] is False
 
 
 def test_api_is_closed_without_a_session(client):

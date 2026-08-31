@@ -15,6 +15,7 @@ from fastapi import (APIRouter, Depends, File, Form, HTTPException, Query,
                      Request, Response, UploadFile, status)
 from pydantic import BaseModel, Field
 
+from vscan import __version__ as VERSION
 from vscan.appearance import DEFAULT_APPEARANCE_THRESHOLD
 from vscan.events import arrivals, group_hits
 from vscan.faces import DEFAULT_MATCH_THRESHOLD
@@ -1632,6 +1633,31 @@ def stats(_: sqlite3.Row = Depends(require_viewer),
             "jobs": {"running": len(running), "queued": len(queued)}}
 
 
+# Where the Python actually lives, so we can tell whether the running process
+# predates it.
+_CODE_ROOTS = (Path(__file__).resolve().parent,
+               Path(__file__).resolve().parent.parent / "vscan")
+
+
+def _code_changed_since(started_at: float) -> bool:
+    """Has the source been updated since this process loaded it?
+
+    An on-prem product is updated by pulling and restarting, and forgetting the
+    restart looks exactly like the new feature not working. The server can see
+    the difference, so it should say so rather than let anyone guess.
+    """
+    newest = 0.0
+    for root in _CODE_ROOTS:
+        for path in root.glob("*.py"):
+            try:
+                newest = max(newest, path.stat().st_mtime)
+            except OSError:
+                continue
+    return newest > started_at + 1
+
+
 @router.get("/health")
-def health() -> dict:
-    return {"ok": True}
+def health(request: Request) -> dict:
+    started_at = getattr(request.app.state, "started_at", 0.0)
+    return {"ok": True, "version": VERSION,
+            "restart_needed": _code_changed_since(started_at)}

@@ -110,6 +110,7 @@ const STR = {
     crossings: 'חציות',
     noCrossingsThatWay: 'לא נמצאו חציות בכיוון הזה. בכיוון ההפוך כן נמצאו:',
     markUnknown: 'אני לא יודע איפה', markIt: 'סמן לי על התמונה',
+    restartNeeded: 'הקוד עודכן אבל השרת עדיין מריץ את הגרסה הישנה. בחלון שבו השרת רץ: Ctrl+C ואז .\\scripts\\start-server.cmd',
     markTitle: 'סימון', markAndSearch: 'שמור וחפש', markReady: 'מסומן. אפשר לשמור ולחפש.',
     markAsArea: 'סמנו את המלבן שבו זה נמצא, ומאותו רגע אפשר לשאול עליו — מקומית, בלי עלות.',
     markAsLine: 'מתחו קו במקום שבו עוברים, ומאותו רגע אפשר לשאול מי נכנס ומי יצא — מקומית, בלי עלות.',
@@ -225,6 +226,7 @@ const STR = {
     crossings: 'crossings',
     noCrossingsThatWay: 'no crossings that way. In the other direction there were:',
     markUnknown: 'I do not know where', markIt: 'Show me on the picture',
+    restartNeeded: 'The code was updated but the server is still running the old version. In the window it runs in: Ctrl+C, then .\\scripts\\start-server.cmd',
     markTitle: 'Marking', markAndSearch: 'Save and search', markReady: 'Marked. Save and search.',
     markAsArea: 'Draw the rectangle it sits in, and from then on it can be asked about - locally, at no cost.',
     markAsLine: 'Draw a line where people pass, and from then on you can ask who came in and who went out - locally, at no cost.',
@@ -399,8 +401,23 @@ function checkbox(id, labelText, checked = false) {
 }
 
 /* --------------------------------------------------------------- session */
+/* Updating an on-prem install means pulling and restarting. Forgetting the
+   restart looks exactly like the new feature not working - and costs an
+   afternoon of both sides guessing. The server can see that its source is
+   newer than the process, so the page says it out loud. */
+async function checkVersion() {
+  try {
+    const health = await api('/api/health');
+    const banner = $('#stale');
+    if (!banner) return;
+    banner.classList.toggle('hidden', !health.restart_needed);
+    if (health.restart_needed) clear(banner).append(t('restartNeeded'));
+  } catch { /* the server is down; the login screen says enough */ }
+}
+
 async function boot() {
   applyLang();
+  checkVersion();
   try {
     const me = await api('/api/auth/me');
     S.user = me.user; S.caps = me.capabilities;
@@ -429,6 +446,7 @@ async function showApp() {
   await refreshCore();
   await renderTab();
   if (!S.pollTimer) S.pollTimer = setInterval(pollJobs, 2500);
+  checkVersion();
 }
 
 const TABS = [

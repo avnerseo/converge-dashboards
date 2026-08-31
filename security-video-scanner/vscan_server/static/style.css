@@ -168,3 +168,12 @@ tbody tr:hover { background: var(--bg); }
              pointer-events: none; }
 .zone-line .wire { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
 .zone-line .arrow { stroke: var(--ok); stroke-width: 3; fill: var(--ok); }
+
+/* A running server that predates its own source. Loud, because the whole
+   point is that nobody should have to work out why nothing changed. */
+.stale {
+  margin: 12px 18px 0; padding: 10px 14px; border-radius: 8px;
+  border: 1px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel));
+  color: var(--fg); font-size: 13px;
+}
