@@ -801,3 +801,27 @@ separate batch, to be built in late October.
 Every claim traces to a verified product fact: rechargeable over USB, water mist built into
 the handle, soft silicone bristles, two sizes, free US shipping. No percentages, no health
 claims, no invented reviews.
+
+## Batch 5 — riding the paw peak, 2026-08-31
+
+The keyword pull on 30 Aug showed `dog paws` sitting at **100/100, its annual maximum, +20%
+week-on-week**, and `dog paw` at 97 with +20% year-on-year. Peluma sells a paw product. Acting
+on a term while it peaks costs nothing and the window closes.
+
+| Pin | board | id | AI disclosure |
+|---|---|---|---|
+| `pin-17` Keep the mud at the door | Paw & Nail Care | `916552961685433760` | AI_MODIFIED |
+| `pin-18` One paw at a time | Paw & Nail Care | `916552961685433761` | AI_MODIFIED |
+| `pin-19` Turn it inside out for bath time | Dog Grooming at Home | `916552961685433762` | **none — correctly** |
+
+`pin-19` carries no disclosure because its image (`d328c8be…jpg`) is a genuine supplier
+photograph, not a generated one. Disclosing it would have been a false statement in the other
+direction, so the flag was left off deliberately, not forgotten.
+
+`pin-17` is the seasonal one: the cup by a doorway with autumn leaves on the mat. It is the
+only asset in the library that reads as a season rather than a product, and it lands as the
+northern autumn starts.
+
+Pin count on the account goes from 8 to 11. That is still small — competitors in this niche run
+into the hundreds — but the boards now cover the two terms that actually rank (`gifts for dog
+lovers`, `gifts for cat lovers`) plus paw care during its peak.
