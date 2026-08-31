@@ -374,7 +374,7 @@ function uploadVideo(file, options, onProgress) {
   });
 }
 
-function uploadCard(getOptions) {
+function uploadCard(getOptions, toggles) {
   const input = el('input', { type: 'file', accept: 'video/*', class: 'hidden' });
   const zone = el('div', { class: 'dropzone' },
     el('div', { class: 'big' }, t('dropHere')),
@@ -413,7 +413,9 @@ function uploadCard(getOptions) {
   }));
   zone.addEventListener('drop', guard((e) => send(e.dataTransfer.files)));
 
-  return el('div', {}, zone, input, progress);
+  return el('div', {}, zone, input,
+    toggles ? el('div', { class: 'row', style: 'margin-top:10px' }, ...toggles) : null,
+    progress);
 }
 
 async function footageImportCard() {
@@ -448,9 +450,10 @@ async function footageImportCard() {
   const fps = el('input', { type: 'number', value: '2', step: '0.5', min: '0.1' });
   const width = el('input', { type: 'number', value: '1280', step: '160', min: '320' });
   const motion = el('input', { type: 'number', value: '0.004', step: '0.001', min: '0' });
-  const startTime = el('input', { type: 'text', placeholder: '2026-08-30 14:00:00' });
-  const objectsBox = checkbox('opt-objects', t('detectObjects'), false);
-  const appearanceBox = checkbox('opt-appearance', t('detectAppearance'), false);
+  const startTime = el('input', { type: 'text', dir: 'ltr',
+    placeholder: '2026-08-30 14:00:00' });
+  const objectsBox = checkbox('opt-objects', t('detectObjects'), true);
+  const appearanceBox = checkbox('opt-appearance', t('detectAppearance'), true);
   const forceBox = checkbox('opt-force', t('force'), false);
 
   const card = el('div', { class: 'card' },
@@ -459,7 +462,7 @@ async function footageImportCard() {
       objects: objectsBox.querySelector('input').checked,
       appearance: appearanceBox.querySelector('input').checked,
       sample_fps: Number(fps.value),
-    })),
+    }), [objectsBox, appearanceBox]),
     el('h3', { style: 'margin-top:18px' }, t('orPickFromServer')),
     el('div', { class: 'row' },
       ...(S.caps.footage_dirs || []).map((dir) => el('button', {
@@ -473,7 +476,7 @@ async function footageImportCard() {
       el('div', { style: 'min-width:150px' }, field(t('width'), width)),
       el('div', { style: 'min-width:150px' }, field(t('motion'), motion)),
       el('div', { style: 'min-width:210px' }, field(t('startTime'), startTime)),
-      objectsBox, appearanceBox, forceBox),
+      forceBox),
     el('button', { class: 'btn', onclick: guard(async () => {
       if (!selected.size) { toast(t('selected') + ': 0', 'bad'); return; }
       const response = await api('/api/videos/index', { method: 'POST', body: {
