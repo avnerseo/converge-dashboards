@@ -1142,3 +1142,46 @@ Pin descriptions still holds, because the brush sits in the Zendrop profile whos
 zone is free. **Open:** `pin-10`, scheduled 4 Sep, says *"Both Peluma sets"* — stale now that
 three options carry two items. Its Routine fires into this session, so the copy gets corrected
 at post time rather than by editing the Routine blind.
+
+## Correction: the Paw Cup is genuinely out of stock, and my diagnosis was wrong — 2026-08-31
+
+I told the merchant the cup's zero inventory was "a sync failure, not a stock-out", on the
+strength of `get_catalog_product(1997733)` returning `availability.in_stock: true` on all eight
+variants. Zendrop support checked the product directly and confirmed it **is out of stock**.
+They are right.
+
+The evidence that settles it was already in my own notes and I failed to join it up:
+`Location/115449626937` reports `fulfillmentService.inventoryManagement: true`. Zendrop owns
+that number. **The 0 in Shopify is Zendrop reporting zero** — it is the supplier's own answer,
+not a failed handshake. The catalog `in_stock` flag is evidently a catalog-level availability
+marker, not live per-variant stock, and I treated it as authoritative because it agreed with
+what I expected.
+
+One claim in their reply is not accurate and should not be carried forward: they said the
+50,000 on the brush is "a default placeholder value placed by Shopify". Shopify has no
+mechanism that invents a quantity for a fulfilment-service item; that number comes from Zendrop
+as an effectively-unlimited marker. It does not change the conclusion — order #1001 proves the
+brush is fulfillable — but the explanation is wrong.
+
+### What this breaks, measured
+
+- `available: False` on the storefront, "Sold out" badge on the collection — at least honest.
+- The cup appears **7 times on the homepage**. That is a theme-level placement and cannot be
+  changed from here.
+- **7 of the 16 live Pins point at the sold-out page** — 11, 12, 15, 17, 18, 19, 21. Three of
+  them were published today, deliberately timed to the `dog paws` annual search peak. That
+  timing is now spent on a product nobody can buy.
+- The BXGY bundle pairs the brush with the cup, so it can never trigger.
+
+### Decision: stop propping up the cup, and do not draft it
+
+Keep the product published. Shopify's "Sold out" is honest, the seven Pins keep a valid target,
+the URL keeps whatever index value it is accruing, and it revives the moment stock returns.
+Drafting it would throw all of that away to fix a badge.
+
+**But every remaining Pin goes to the brush until the cup is back.** The plan was to keep
+covering paw care; that would now be building links to a dead page. This is the actual
+course-correction, and it is worth more than the badge.
+
+The brush was always the stronger product and this makes it explicit: contribution $19.91–21.02
+against the cup's $7.55–8.46, and it is the only thing that has ever sold.
