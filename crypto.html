@@ -16,7 +16,10 @@
   h1{font-size:25px;margin:0 0 6px;}.subtitle{color:var(--text-secondary);font-size:14.5px;max-width:760px;}.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
   .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12.5px;background:var(--chip-bg);color:var(--text-secondary);border:1px solid var(--card-border);}
   .theme-toggle{cursor:pointer;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);border-radius:20px;padding:7px 14px;font-size:13px;}
-  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}.disclaimer b{color:var(--text-primary);}
+  .disclaimer{margin:18px 0;padding:14px 16px;border-radius:10px;background:var(--warning-bg);border:1px solid var(--card-border);font-size:13px;color:var(--text-secondary);}
+.stale-note{margin:18px 0;padding:16px 18px;border-radius:10px;background:#7f1d1d;border:2px solid #dc2626;color:#fff;font-size:14px;line-height:1.7;}
+.stale-note b{color:#fff;}
+.stale-note .stale-head{display:block;font-size:15px;margin-bottom:6px;}.disclaimer b{color:var(--text-primary);}
   .quicknav{position:sticky;top:0;z-index:20;background:var(--page);padding:10px 0;border-bottom:1px solid var(--card-border);margin-bottom:8px;}
   .qn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}.search-input{flex:1;min-width:180px;padding:8px 14px;border-radius:10px;border:1px solid var(--card-border);background:var(--surface-1);color:var(--text-primary);font-size:13px;}
   .qn-links{display:flex;gap:6px;flex-wrap:wrap;}.qn-links a{font-size:12px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:14px;background:var(--chip-bg);}
@@ -78,8 +81,9 @@
   <header class="top"><div><div class="brand-lockup"><span class="brand-mark"></span><span class="brand-text"><span class="brand-word">Converge<span class="brand-tm">™</span></span><span class="brand-tagline">Crypto Intelligence</span></span></div>
   <h1>מנוע מעקב קריפטו — נכסים דיגיטליים אטרקטיביים</h1>
   <div class="subtitle">10 מטבעות מובילים (Tier 1) · מדד פחד ותאווה · נתוני מחיר בזמן אמת מ-Alpha Vantage ו-CoinGecko · "רק להיסטוריה בעיין מקרוב לפני שמקבלים החלטת השקעה"</div>
-  <div class="meta-row"><span class="badge">🗕 עודכן: 20 אוגוסט 2026</span><span class="badge">🔁 פעמיים ביום 08:00+15:30</span><a class="back-link" href="index.html">📈 חזרה לדשבורד המניות</a></div></div>
+  <div class="meta-row"><span class="badge">🛑 לא מתוחזק · נתונים מ-20 אוגוסט 2026</span><span class="badge">🔁 פעמיים ביום 08:00+15:30</span><a class="back-link" href="index.html">📈 חזרה לדשבורד המניות</a></div></div>
   <button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button></header>
+  <div class="stale-note"><span class="stale-head">🛑 <b>הדף אינו מתוחזק — הנתונים ישנים ואינם משקפים את השוק.</b></span>כל המחירים והנתונים בדף זה נכונים ל-<b>20 באוגוסט 2026</b> ולא עודכנו מאז. לשם המחשה, נכון ל-31.8.2026 ביטקוין נסחר סביב <b>$77,900</b> לעומת <b>$64,350</b> המוצגים כאן — פער של כ-21%. <b>אין להסתמך על שום מספר בדף הזה.</b> דשבורד המניות מתעדכן כרגיל: <a href="index.html" style="color:#fecaca;text-decoration:underline;">מעבר לדשבורד המניות</a>.</div>
   <div class="disclaimer">⚠️ <b>לא ייעוץ השקעות.</b> מידע בלבד, אינו המץצה אישית. שוק הקריפטו תנודתי ביותר.</div>
   <nav class="quicknav" id="quicknav"><div class="qn-row"><input id="globalSearch" class="search-input" placeholder="🔍 חיפוש טיקר או ברוד" oninput="filterAll()"></div>
   <div class="qn-links"><a href="#tier1">🏆 שכבה 1</a><a href="#tier2">⭐ שכבה משנית</a><a href="#tables">📋 טבלה מלאה</a><a href="#sentiment">📊 סנטימנט</a><a href="#methodology">🔬 מתודולוגיה</a></div></nav>
