@@ -28,6 +28,21 @@ from .util import LOG, fmt_timecode
 DEFAULT_MODEL = "claude-opus-5"
 _FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
+# USD per million tokens (input, output), for reporting what a search cost.
+# Ratios matter more than absolute accuracy here: the operator needs to see
+# that one search cost cents and another cost dollars.
+PRICING: dict[str, tuple[float, float]] = {
+    "claude-opus-5": (5.0, 25.0),
+    "claude-sonnet-5": (2.0, 10.0),
+    "claude-haiku-4-5": (1.0, 5.0),
+    "claude-fable-5": (10.0, 50.0),
+}
+
+
+def price_of(model: str, input_tokens: int, output_tokens: int) -> float:
+    rate_in, rate_out = PRICING.get(model, PRICING[DEFAULT_MODEL])
+    return (input_tokens * rate_in + output_tokens * rate_out) / 1_000_000
+
 SYSTEM_PROMPT = (
     "You are a video-surveillance analyst reviewing still frames sampled from "
     "security-camera footage. You are given a numbered grid of frames and a "
@@ -111,6 +126,13 @@ class AskResult:
     frames_examined: int = 0
     requests: int = 0
     refusals: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+    model: str = DEFAULT_MODEL
+
+    @property
+    def cost_usd(self) -> float:
+        return price_of(self.model, self.input_tokens, self.output_tokens)
 
 
 # ------------------------------------------------------------------ client
@@ -142,6 +164,14 @@ def _create(client, **kwargs):
             _use_fallbacks = False
             LOG.debug("server-side fallbacks unavailable (%s); using plain create", exc)
     return client.messages.create(**kwargs)
+
+
+def _usage_of(response) -> tuple[int, int]:
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return 0, 0
+    return (int(getattr(usage, "input_tokens", 0) or 0),
+            int(getattr(usage, "output_tokens", 0) or 0))
 
 
 def _json_of(response) -> dict | None:
@@ -237,7 +267,7 @@ def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
         on_progress: Callable[[float, str], None] | None = None,
         should_cancel: Callable[[], bool] | None = None,
         api_key: str | None = None) -> AskResult:
-    result = AskResult(frames_examined=len(refs))
+    result = AskResult(frames_examined=len(refs), model=opts.model)
     if not refs:
         LOG.warning("no indexed frames match that filter - nothing to ask about")
         return result
@@ -257,9 +287,11 @@ def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
         futures = [pool.submit(_ask_batch, client, query, batch, i * opts.grid, opts)
                    for i, batch in enumerate(batches)]
         for done, future in enumerate(as_completed(futures), 1):
-            hits, refused = future.result()
+            hits, refused, used = future.result()
             result.requests += 1
             result.refusals += int(refused)
+            result.input_tokens += used[0]
+            result.output_tokens += used[1]
             candidates.extend(hits)
             if on_progress is not None:
                 on_progress(done / len(batches) * triage_share,
@@ -278,18 +310,24 @@ def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
         if on_progress is not None:
             on_progress(0.8, f"confirming {len(candidates)} candidate frame(s)")
         with ThreadPoolExecutor(max_workers=max(1, opts.concurrency)) as pool:
-            confirmed = list(pool.map(lambda h: _confirm(client, query, h, opts),
-                                      candidates))
+            checked = list(pool.map(lambda h: _confirm(client, query, h, opts),
+                                    candidates))
         result.requests += len(candidates)
-        candidates = [h for h in confirmed if h is not None]
+        for _, used in checked:
+            result.input_tokens += used[0]
+            result.output_tokens += used[1]
+        candidates = [hit for hit, _ in checked if hit is not None]
         LOG.info("confirmation kept %d frame(s)", len(candidates))
 
     result.hits = sorted(candidates, key=lambda h: (h.video_path, h.t))
+    LOG.info("%d request(s), %d in / %d out tokens, about $%.2f on %s",
+             result.requests, result.input_tokens, result.output_tokens,
+             result.cost_usd, result.model)
     return result
 
 
 def _ask_batch(client, query: str, batch: list[FrameRef], offset: int,
-               opts: AskOptions) -> tuple[list[Hit], bool]:
+               opts: AskOptions) -> tuple[list[Hit], bool, tuple[int, int]]:
     images, captions, numbers, kept = [], [], [], []
     for i, ref in enumerate(batch):
         img = _load(ref)
@@ -300,7 +338,7 @@ def _ask_batch(client, query: str, batch: list[FrameRef], offset: int,
         numbers.append(offset + i)
         kept.append(ref)
     if not images:
-        return [], False
+        return [], False, (0, 0)
 
     sheet = build_grid(images, captions, numbers, opts.cell_width)
     prompt = (
@@ -324,11 +362,12 @@ def _ask_batch(client, query: str, batch: list[FrameRef], offset: int,
         )
     except Exception as exc:
         LOG.error("grid request failed: %s", exc)
-        return [], False
+        return [], False, (0, 0)
 
+    used = _usage_of(resp)
     data = _json_of(resp)
     if data is None:
-        return [], True
+        return [], True, used
 
     by_number = {n: ref for n, ref in zip(numbers, kept)}
     hits: list[Hit] = []
@@ -340,17 +379,18 @@ def _ask_batch(client, query: str, batch: list[FrameRef], offset: int,
                         score=float(m.get("confidence", 0.0)),
                         thumb=str(ref.thumb) if ref.thumb else None,
                         meta={"note": str(m.get("note", "")), "stage": "triage"}))
-    return hits, False
+    return hits, False, used
 
 
-def _confirm(client, query: str, hit: Hit, opts: AskOptions) -> Hit | None:
+def _confirm(client, query: str, hit: Hit,
+             opts: AskOptions) -> tuple[Hit | None, tuple[int, int]]:
     from .video import grab_frame
 
     img = grab_frame(hit.video_path, hit.t, 1280)
     if img is None and hit.thumb:
         img = cv2.imread(hit.thumb)
     if img is None:
-        return hit
+        return hit, (0, 0)
     prompt = (
         f"Operator's search: {query}\n\n"
         f"This is a single full-resolution frame at {fmt_timecode(hit.t)} of "
@@ -371,12 +411,13 @@ def _confirm(client, query: str, hit: Hit, opts: AskOptions) -> Hit | None:
         )
     except Exception as exc:
         LOG.error("confirmation request failed: %s", exc)
-        return hit
+        return hit, (0, 0)
+    used = _usage_of(resp)
     data = _json_of(resp)
     if data is None:
-        return None
+        return None, used
     if not data.get("match"):
-        return None
+        return None, used
     hit.score = float(data.get("confidence", hit.score))
     hit.meta = {**hit.meta, "note": str(data.get("note", "")), "stage": "confirmed"}
-    return hit
+    return hit, used

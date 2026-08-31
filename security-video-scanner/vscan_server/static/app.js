@@ -70,6 +70,9 @@ const STR = {
     askNeedsAnalyst: 'חיפוש בהוראה חופשית דורש הרשאת אנליסט.',
     askSwitchedOff: 'חיפוש בהוראה חופשית כבוי בהגדרות.',
     testKey: 'בדיקה ושמירה', keyOk: 'המפתח תקין ונשמר',
+    model: 'מודל לחיפוש חופשי', cost: 'עלות', requests: 'בקשות',
+    estimate: 'אומדן',
+    costHint: 'העלות בפועל של החיפוש האחרון, לפי מספר הטוקנים שנצרכו.',
     whyPerson: 'רשום במערכת, אז זה חיפוש פנים',
     whyObjects: 'הגלאי המקומי מכיר את זה ישירות',
     whyDescriptive: 'מתאר מראה או תנועה, לא עצם שהגלאי מזהה',
@@ -97,6 +100,9 @@ const STR = {
     askNeedsAnalyst: 'Instruction search needs the analyst role.',
     askSwitchedOff: 'Instruction search is switched off in Settings.',
     testKey: 'Test and save', keyOk: 'the key works and was saved',
+    model: 'Instruction-search model', cost: 'cost', requests: 'requests',
+    estimate: 'estimate',
+    costHint: 'What the last search actually cost, from the tokens it used.',
     whyPerson: 'is enrolled, so this is a face search',
     whyObjects: 'the local detector knows this directly',
     whyDescriptive: 'describes appearance or movement, not an object',
@@ -588,6 +594,7 @@ VIEWS.search = async () => {
       body: { query, ...filters(), force_mode: forceMode || null } });
     showInterpretation(data);
     if (data.job_id) {
+      S.lastAskFrames = filters().max_frames;
       resultsBox.append(askProgress(data.job_id, resultsBox, query));
     } else if (data.needs) {
       resultsBox.append(missingCard(data));
@@ -676,11 +683,28 @@ VIEWS.search = async () => {
   return wrap;
 };
 
+/* A grid of nine frames is about 3.4k input tokens; a confirmation on a full
+   frame about 1.4k. Enough to warn someone before they spend, not accounting. */
+function estimateCost(frames) {
+  const model = S.settings.ask_model || 'claude-opus-5';
+  const [inRate, outRate] = (S.settings.ask_pricing || {})[model] || [5, 25];
+  const grids = Math.ceil(frames / 9);
+  const confirms = Math.round(grids * 0.4);
+  const input = grids * 3400 + confirms * 1500;
+  const output = grids * 450 + confirms * 250;
+  return { requests: grids + confirms,
+           usd: (input * inRate + output * outRate) / 1e6 };
+}
+
 function askProgress(jobId, container, label) {
   const bar = el('i', { style: 'width:2%' });
   const message = el('div', { class: 'small muted' }, '…');
-  const card = el('div', { class: 'card' }, el('h3', {}, `${t('byInstruction')} #${jobId}`),
-    el('div', { class: 'bar' }, bar), message);
+  const estimate = estimateCost(Number(S.lastAskFrames || 400));
+  const card = el('div', { class: 'card' },
+    el('h3', {}, `${t('modeAsk')} #${jobId}`),
+    el('div', { class: 'bar' }, bar), message,
+    el('div', { class: 'small muted' },
+      `${t('estimate')}: ~${estimate.requests} ${t('requests')} · ~$${estimate.usd.toFixed(2)}`));
   const timer = setInterval(async () => {
     try {
       const { job } = await api(`/api/jobs/${jobId}`);
@@ -690,7 +714,10 @@ function askProgress(jobId, container, label) {
         clearInterval(timer);
         if (job.status === 'done') {
           showResults(container, job.result.events, label);
-          toast(`${job.result.events.length} ${t('results')} · ${job.result.requests} API calls`, 'ok');
+          const spent = job.result.cost_usd
+            ? ` · ${t('cost')} $${Number(job.result.cost_usd).toFixed(2)}` : '';
+          toast(`${job.result.events.length} ${t('results')} · `
+            + `${job.result.requests} ${t('requests')}${spent}`, 'ok');
         } else {
           message.textContent = job.error || job.status;
         }
@@ -984,7 +1011,10 @@ function jobSummary(job) {
     return `${line} — ${t('nothingFound')}: ${why}`;
   }
   if (job.kind === 'ask' && result.events) {
-    return `${result.events.length} ${t('results')} · ${result.requests} API calls`;
+    const cost = result.cost_usd
+      ? ` · ${t('cost')} $${Number(result.cost_usd).toFixed(2)}` : '';
+    return `${result.events.length} ${t('results')} · `
+      + `${result.requests} ${t('requests')}${cost}`;
   }
   if (job.kind === 'cluster') return `${result.clusters || 0} × ${t('faces')}`;
   if (job.kind === 'export') return `${(result.files || []).length} ${t('clip')}`;
@@ -1059,6 +1089,12 @@ VIEWS.settings = async () => {
     const retention = el('input', { type: 'number', min: '0',
       value: S.settings.retention_days || 0 });
     const askBox = checkbox('set-ask', t('askEnabled'), !!S.settings.ask_enabled);
+    const askModel = el('select', { onchange: guard(async (e) => {
+      await api('/api/settings', { method: 'PATCH',
+        body: { ask_model: e.target.value } });
+      toast(t('saved'), 'ok');
+    }) }, ...(S.settings.ask_models || []).map((m) => el('option',
+      { value: m, selected: m === S.settings.ask_model }, m)));
     const apiKey = el('input', { type: 'password', autocomplete: 'off',
       placeholder: S.settings.ask_key_set ? '••••••••••••  (' + t('apiKeySet') + ')' : 'sk-ant-...' });
     wrap.append(el('div', { class: 'card' }, el('h2', {}, t('settings')),
@@ -1074,6 +1110,7 @@ VIEWS.settings = async () => {
         }) }, t('save'))),
       el('div', { class: 'row', style: 'margin-top:14px' },
         el('div', { style: 'min-width:280px' }, field(t('apiKey'), apiKey)),
+        el('div', { style: 'min-width:200px' }, field(t('model'), askModel)),
         el('button', { class: 'btn ghost', onclick: guard(async () => {
           const key = apiKey.value.trim();
           if (!key) return;
@@ -1085,7 +1122,7 @@ VIEWS.settings = async () => {
         el('span', { class: 'small muted' },
           S.settings.ask_key_set
             ? `${t('apiKeySet')} (${S.settings.ask_key_source})` : t('apiKeyNone'))),
-      el('p', { class: 'small muted' }, t('apiKeyHint')),
+      el('p', { class: 'small muted' }, `${t('apiKeyHint')} ${t('costHint')}`),
       el('div', { class: 'row', style: 'margin-top:12px' },
         el('button', { class: 'btn ghost small', onclick: guard(async () => {
           const result = await api('/api/maintenance/purge', { method: 'POST', body: {} });

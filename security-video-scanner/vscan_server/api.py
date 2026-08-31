@@ -19,6 +19,7 @@ from vscan.appearance import DEFAULT_APPEARANCE_THRESHOLD
 from vscan.events import arrivals, group_hits
 from vscan.faces import DEFAULT_MATCH_THRESHOLD
 from vscan.query import Intent, resolve as resolve_query
+from vscan.semantic import DEFAULT_MODEL as ASK_DEFAULT_MODEL, PRICING as ASK_PRICING
 from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
                           enroll_from_video, find_objects, find_person,
                           find_person_appearance, load_clusters, search_vectors,
@@ -937,6 +938,7 @@ def search_auto(body: AutoSearch, request: Request,
     job_id = runner.submit("ask", f"Ask: {body.query[:60]}", {
         "query": body.query, "video_ids": body.video_ids, "start": body.start,
         "end": body.end, "max_frames": body.max_frames, "gap": body.gap,
+        "model": store.get_setting("ask_model") or None,
         "min_hits": body.min_hits, "arrivals": body.arrivals,
         "absence": body.absence, "confirm": True, "effort": "low",
     }, int(user["id"]))
@@ -1113,6 +1115,7 @@ class SettingsPatch(BaseModel):
     site_name: str | None = None
     default_index_options: dict[str, Any] | None = None
     anthropic_api_key: str | None = None
+    ask_model: str | None = None
 
 
 @router.get("/settings")
@@ -1129,6 +1132,9 @@ def read_settings(_: sqlite3.Row = Depends(require_viewer),
             # the key itself is never sent back - only whether one is stored
             "ask_key_set": bool(store.get_setting("anthropic_api_key")
                                 or os.environ.get("ANTHROPIC_API_KEY")),
+            "ask_model": store.get_setting("ask_model", ASK_DEFAULT_MODEL),
+            "ask_models": list(ASK_PRICING),
+            "ask_pricing": {m: list(r) for m, r in ASK_PRICING.items()},
             "ask_key_source": ("settings" if store.get_setting("anthropic_api_key")
                                else "environment" if os.environ.get("ANTHROPIC_API_KEY")
                                else None),

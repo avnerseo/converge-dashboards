@@ -128,7 +128,9 @@ def make_ask_handler(settings: Settings):
         api_key = ctx.store.get_setting("anthropic_api_key") or None
 
         opts = AskOptions(
-            model=params.get("model") or AskOptions.model,
+            model=(params.get("model")
+                   or ctx.store.get_setting("ask_model")
+                   or AskOptions.model),
             grid=int(params.get("grid", 9)),
             max_frames=int(params.get("max_frames", 400)),
             min_confidence=float(params.get("min_confidence", 0.5)),
@@ -158,6 +160,10 @@ def make_ask_handler(settings: Settings):
             "frames_examined": result.frames_examined,
             "requests": result.requests,
             "refusals": result.refusals,
+            "model": result.model,
+            "input_tokens": result.input_tokens,
+            "output_tokens": result.output_tokens,
+            "cost_usd": round(result.cost_usd, 4),
         }
 
     return handle
