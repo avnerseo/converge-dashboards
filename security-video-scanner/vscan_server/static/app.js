@@ -94,6 +94,8 @@ const STR = {
     modeZone: 'לפי אזור', whyZone: 'אזור במעקב — משווים את הפינה הזו לאיך שהיא נראית בדרך כלל',
     framesExamined: 'פריימים נבדקו', zoneNoVideos: 'צריך לאנדקס הקלטה אחת לפחות כדי לסמן אזור.',
     zoneScanning: 'סורק את האזור', zoneChanged: 'שינוי באזור',
+    inYourFootage: 'מה שיש בהקלטות שלך', noFacesButPeople: 'לא נמצאו פנים ברורות בהקלטה הזאת — אפשר עדיין לחפש אנשים לפי מראה ולפי צבע בגדים',
+    whatNow: 'מה עכשיו', goSearch: 'למסך החיפוש',
   },
   en: {
     overview: 'Overview', footage: 'Footage', search: 'Search', people: 'People',
@@ -184,6 +186,8 @@ const STR = {
     modeZone: 'by zone', whyZone: 'is a watched zone - this compares that corner against how it usually looks',
     framesExamined: 'frames examined', zoneNoVideos: 'Index at least one recording before marking a zone.',
     zoneScanning: 'Scanning the zone', zoneChanged: 'Changed by',
+    inYourFootage: 'In your footage', noFacesButPeople: 'no face was clear enough in this recording - people can still be found by appearance and by clothing colour',
+    whatNow: 'What now', goSearch: 'Go to search',
   },
 };
 const t = (k) => (STR[S.lang] && STR[S.lang][k]) || STR.en[k] || k;
@@ -200,6 +204,14 @@ const COLOURS_HE = {
   white: 'לבן', black: 'שחור', gray: 'אפור', red: 'אדום', orange: 'כתום',
   yellow: 'צהוב', green: 'ירוק', cyan: 'תכלת', blue: 'כחול', purple: 'סגול',
   pink: 'ורוד', brown: 'חום',
+};
+/* Hebrew adjectives agree with the noun: a shirt is feminine, a car is not.
+   "אדם בחולצה אדום" is the kind of thing that tells an operator this product
+   was not written for them. */
+const COLOURS_HE_F = {
+  white: 'לבנה', black: 'שחורה', gray: 'אפורה', red: 'אדומה', orange: 'כתומה',
+  yellow: 'צהובה', green: 'ירוקה', cyan: 'תכלת', blue: 'כחולה',
+  purple: 'סגולה', pink: 'ורודה', brown: 'חומה',
 };
 const labelName = (label) => (S.lang === 'he' && LABELS_HE[label]) || label;
 const colourName = (colour) => (S.lang === 'he' && COLOURS_HE[colour]) || colour;
@@ -223,6 +235,18 @@ function describeIntent(intent) {
   return parts.filter(Boolean).join(' ');
 }
 const labelList = (labels) => (labels || []).map(labelName).join(', ');
+
+/* Turn what the index actually holds into a sentence the search box accepts,
+   so every suggestion offered is a search that returns something. */
+function contentPhrase(label, colour) {
+  if (!colour) return labelName(label);
+  if (S.lang === 'he') {
+    return label === 'person'
+      ? `אדם בחולצה ${COLOURS_HE_F[colour] || colourName(colour)}`
+      : `${labelName(label)} ${colourName(colour)}`;
+  }
+  return label === 'person' ? `a person in a ${colour} shirt` : `${colour} ${label}`;
+}
 
 /* ------------------------------------------------------------- helpers */
 function el(tag, attrs = {}, ...children) {
@@ -380,12 +404,14 @@ function renderTabs() {
 }
 
 async function refreshCore() {
-  const [videos, persons, zones] = await Promise.all([
+  const [videos, persons, zones, stats] = await Promise.all([
     api('/api/videos').catch(() => ({ videos: [] })),
     api('/api/persons').catch(() => ({ persons: [] })),
     api('/api/zones').catch(() => ({ zones: [] })),
+    api('/api/stats').catch(() => null),
   ]);
   S.videos = videos.videos; S.persons = persons.persons; S.zones = zones.zones;
+  S.stats = stats || S.stats;
 }
 
 const VIEWS = {};
@@ -403,7 +429,7 @@ async function renderTab() {
 
 /* -------------------------------------------------------------- overview */
 VIEWS.overview = async () => {
-  const stats = await api('/api/stats');
+  const stats = S.stats || await api('/api/stats');
   const wrap = el('div');
   const tiles = [
     [t('videos'), stats.index.videos], [t('hours'), stats.footage_hours],
@@ -726,21 +752,35 @@ VIEWS.search = async () => {
   }) }, t('run'));
   box.addEventListener('keydown', (e) => { if (e.key === 'Enter') runButton.click(); });
 
+  /* Suggestions taken from the index itself. An empty search box in front of
+     twelve hours of footage is a riddle; "person in a red shirt (15)" is an
+     answer you can click, and every chip here is known to return something. */
+  const chip = (text, count) => el('button', {
+    class: 'btn ghost small', onclick: () => { box.value = text; runButton.click(); },
+  }, text, count ? el('span', { class: 'muted' }, ' ', bdi(count)) : null);
+
+  const contents = (S.stats && S.stats.contents) || {};
+  const seen = new Set();
+  const found = [];
+  for (const combo of (contents.combos || []).slice(0, 5)) {
+    const text = contentPhrase(combo.label, combo.colour);
+    if (!seen.has(text)) { seen.add(text); found.push(chip(text, combo.count)); }
+  }
+  for (const entry of (contents.labels || []).slice(0, 4)) {
+    const text = contentPhrase(entry.label, null);
+    if (!seen.has(text)) { seen.add(text); found.push(chip(text, entry.count)); }
+  }
+  for (const person of S.persons.slice(0, 3)) found.push(chip(person.name));
+  for (const zone of S.zones.slice(0, 3)) found.push(chip(zone.name));
+
   const examples = el('div', { class: 'row', style: 'margin-top:10px' },
-    el('span', { class: 'small muted' }, `${t('examples')}:`),
-    ...(S.lang === 'he'
-      ? ['מתי הרכב הלבן זז', 'איש עם חולצה לבנה', 'רכב', 'מישהו משאיר תיק']
-      : ['when did the white car move', 'a man in a white shirt', 'car',
-         'someone leaving a bag'])
-      .map((text) => el('button', { class: 'btn ghost small', onclick: () => {
-        box.value = text; runButton.click();
-      } }, text)),
-    ...S.persons.slice(0, 3).map((person) => el('button', {
-      class: 'btn ghost small', onclick: () => { box.value = person.name; runButton.click(); },
-    }, person.name)),
-    ...S.zones.slice(0, 3).map((zone) => el('button', {
-      class: 'btn ghost small', onclick: () => { box.value = zone.name; runButton.click(); },
-    }, zone.name)));
+    el('span', { class: 'small muted' },
+      `${found.length ? t('inYourFootage') : t('examples')}:`),
+    ...(found.length ? found
+      : (S.lang === 'he'
+        ? ['מתי הרכב הלבן זז', 'איש עם חולצה לבנה', 'רכב', 'מישהו משאיר תיק']
+        : ['when did the white car move', 'a man in a white shirt', 'car',
+           'someone leaving a bag']).map((text) => chip(text))));
 
   wrap.append(el('div', { class: 'card' },
     el('div', { class: 'row' }, el('div', { class: 'grow' }, box), runButton,
@@ -1253,19 +1293,35 @@ function jobRow(job) {
           toast(t('cancel'), 'ok');
         }) }, t('cancel'))
       : job.kind === 'export' && job.status === 'done'
-        ? exportLinks(job) : null));
+        ? exportLinks(job)
+        : job.kind === 'index' && job.status === 'done'
+          // The jobs table is a dead end otherwise: indexing finished, and
+          // nothing on screen says where to go with it.
+          ? el('button', { class: 'btn small', onclick: async () => {
+              S.tab = 'search'; renderTabs(); await refreshCore(); await renderTab();
+            } }, t('goSearch'))
+          : null));
 }
 
 function jobSummary(job) {
   const result = job.result || {};
   if (job.kind === 'index' && result.totals) {
-    const line = `${result.totals.frames} ${t('frames')} · `
-      + `${result.totals.faces} ${t('facesFound')} · `
-      + `${result.totals.appearances ?? 0} ${t('byAppearance')}`;
+    const totals = result.totals;
+    const line = `${totals.frames} ${t('frames')} · `
+      + `${totals.faces} ${t('facesFound')} · `
+      + `${totals.objects ?? 0} ${t('objects')} · `
+      + `${totals.appearances ?? 0} ${t('byAppearance')}`;
     const diagnosed = (result.videos || []).filter((v) => v.diagnosis);
-    if (!diagnosed.length) return line;
-    const why = diagnosed[0].diagnosis.map((d) => d.headline).join(' · ');
-    return `${line} — ${t('nothingFound')}: ${why}`;
+    if (diagnosed.length) {
+      const why = diagnosed[0].diagnosis.map((d) => d.headline).join(' · ');
+      return `${line} — ${t('nothingFound')}: ${why}`;
+    }
+    // Faces are the one thing an operator expects and often does not get:
+    // too small, turned away, too dark. Say so, instead of leaving a zero.
+    if (!totals.faces && (totals.objects || totals.appearances)) {
+      return `${line} — ${t('noFacesButPeople')}`;
+    }
+    return line;
   }
   if (job.kind === 'ask' && result.events) {
     const cost = result.cost_usd

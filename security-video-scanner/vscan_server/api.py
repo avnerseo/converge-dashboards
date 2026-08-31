@@ -1445,11 +1445,13 @@ def stats(_: sqlite3.Row = Depends(require_viewer),
           settings: Settings = Depends(settings_dep)) -> dict:
     with open_index(settings) as index:
         index_stats = index.stats()
+        contents = index.contents()
         total_seconds = index.conn.execute(
             "SELECT COALESCE(SUM(duration), 0) AS d FROM videos").fetchone()["d"]
     running = store.jobs(limit=200, status="running")
     queued = store.jobs(limit=200, status="queued")
     return {"index": index_stats,
+            "contents": contents,
             "footage_hours": round((total_seconds or 0) / 3600, 2),
             "jobs": {"running": len(running), "queued": len(queued)}}
 
