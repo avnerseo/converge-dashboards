@@ -104,8 +104,9 @@ def make_ask_handler(settings: Settings):
     def handle(ctx: JobContext, params: dict) -> dict:
         from vscan.semantic import AskOptions, ask, select_frames
 
-        if not settings.ask_enabled:
-            raise RuntimeError("natural-language search is disabled on this deployment")
+        if not ctx.store.get_setting("ask_enabled", settings.ask_enabled):
+            raise RuntimeError("natural-language search is switched off in Settings")
+        api_key = ctx.store.get_setting("anthropic_api_key") or None
 
         opts = AskOptions(
             model=params.get("model") or AskOptions.model,
@@ -127,7 +128,7 @@ def make_ask_handler(settings: Settings):
         ctx.progress(0.02, f"{len(refs)} frame(s) selected")
         result = ask(params["query"], refs, opts,
                      on_progress=lambda f, m: ctx.progress(0.02 + f * 0.95, m),
-                     should_cancel=lambda: ctx.cancelled)
+                     should_cancel=lambda: ctx.cancelled, api_key=api_key)
         events = group_hits(result.hits, params["query"],
                             float(params.get("gap", 5.0)),
                             int(params.get("min_hits", 1)), starts)

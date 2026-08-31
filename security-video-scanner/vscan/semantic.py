@@ -110,13 +110,15 @@ class AskResult:
 
 
 # ------------------------------------------------------------------ client
-def _client():
+def _client(api_key: str | None = None):
     try:
         import anthropic
     except ImportError as exc:                    # pragma: no cover - env dependent
         raise SystemExit(
             "the 'ask' command needs the Anthropic SDK: pip install anthropic"
         ) from exc
+    if api_key:
+        return anthropic.Anthropic(api_key=api_key)
     if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
         LOG.info("ANTHROPIC_API_KEY not set - falling back to an 'ant auth login' profile")
     return anthropic.Anthropic()
@@ -229,7 +231,8 @@ def _load(ref: FrameRef, max_width: int = 0) -> np.ndarray | None:
 # ---------------------------------------------------------------- the ask
 def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
         on_progress: Callable[[float, str], None] | None = None,
-        should_cancel: Callable[[], bool] | None = None) -> AskResult:
+        should_cancel: Callable[[], bool] | None = None,
+        api_key: str | None = None) -> AskResult:
     result = AskResult(frames_examined=len(refs))
     if not refs:
         LOG.warning("no indexed frames match that filter - nothing to ask about")
@@ -243,7 +246,7 @@ def ask(query: str, refs: Sequence[FrameRef], opts: AskOptions = AskOptions(),
         LOG.info("dry run - no API calls made")
         return result
 
-    client = _client()
+    client = _client(api_key)
     candidates: list[Hit] = []
     triage_share = 0.75 if opts.confirm else 1.0     # leave room for the second pass
     with ThreadPoolExecutor(max_workers=max(1, opts.concurrency)) as pool:

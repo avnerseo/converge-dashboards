@@ -129,6 +129,17 @@ tbody tr:hover { background: var(--bg); }
 .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh;
               padding: 20px; }
 .login-wrap .card { max-width: 380px; width: 100%; }
+.dropzone {
+  border: 2px dashed var(--line-strong, var(--line)); border-radius: 12px;
+  padding: 28px 20px; text-align: center; background: var(--bg);
+  transition: border-color .15s, background .15s; cursor: pointer;
+}
+.dropzone:hover, .dropzone.over { border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg)); }
+.dropzone .big { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.dropzone .hint { color: var(--muted); font-size: 13px; }
+.upload-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.upload-row .name { flex: 1; font-size: 13.5px; overflow-wrap: anywhere; }
 .filebrowser { max-height: 320px; overflow: auto; border: 1px solid var(--line);
                border-radius: 8px; }
 .filebrowser div.entry { padding: 6px 10px; display: flex; gap: 8px; align-items: center;

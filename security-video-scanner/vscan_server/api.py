@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import datetime as dt
+import os
+import re
 import shutil
 import sqlite3
 from pathlib import Path
@@ -9,8 +11,8 @@ from typing import Any, Literal
 
 import cv2
 import numpy as np
-from fastapi import (APIRouter, Depends, File, HTTPException, Query, Request,
-                     Response, UploadFile, status)
+from fastapi import (APIRouter, Depends, File, Form, HTTPException, Query,
+                     Request, Response, UploadFile, status)
 from pydantic import BaseModel, Field
 
 from vscan.appearance import DEFAULT_APPEARANCE_THRESHOLD
@@ -111,6 +113,11 @@ def me(user: sqlite3.Row = Depends(current_user),
         "capabilities": {
             "ask": bool(store.get_setting("ask_enabled", settings.ask_enabled)),
             "footage_dirs": [str(p) for p in settings.footage_dirs],
+            "uploads_dir": str(settings.uploads_dir.resolve()),
+            "max_video_upload_mb": settings.max_video_upload_mb,
+            "ask_key_set": bool(store.get_setting("anthropic_api_key")
+                                or os.environ.get("ANTHROPIC_API_KEY")),
+            "is_admin": user["role"] == "admin",
         },
     }
 
@@ -219,17 +226,18 @@ def sources(_: sqlite3.Row = Depends(require_viewer),
     out = []
     for root in settings.footage_dirs:
         out.append({"path": str(root), "name": root.name or str(root),
-                    "exists": root.is_dir()})
+                    "exists": root.is_dir(), "uploads": False})
+    uploads = settings.uploads_dir.resolve()
+    out.append({"path": str(uploads), "name": "uploads", "exists": uploads.is_dir(),
+                "uploads": True})
     return {"sources": out}
 
 
 @router.get("/sources/browse")
 def browse(path: str = Query(""), _: sqlite3.Row = Depends(require_analyst),
            settings: Settings = Depends(settings_dep)) -> dict:
-    if not settings.footage_dirs:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST,
-                            "no footage directories are configured on this server")
-    target = settings.resolve_footage(path) if path else settings.footage_dirs[0]
+    target = (settings.resolve_footage(path) if path
+              else settings.readable_roots[0])
     if not target.is_dir():
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "not a directory")
     dirs, files = [], []
@@ -243,7 +251,7 @@ def browse(path: str = Query(""), _: sqlite3.Row = Depends(require_analyst),
         except OSError:
             continue
     parent = None
-    if any(root in target.parents for root in settings.footage_dirs):
+    if any(root in target.parents for root in settings.readable_roots):
         parent = str(target.parent)
     return {"path": str(target), "parent": parent, "dirs": dirs, "files": files}
 
@@ -282,6 +290,76 @@ def start_index(body: IndexBody, request: Request,
     store.audit("footage.index_started", user=user,
                 detail={"job_id": job_id, "files": len(resolved)}, ip=client_ip(request))
     return {"job_id": job_id, "files": len(resolved)}
+
+
+_SAFE_NAME = re.compile(r"[^\w.\- ()\[\]\u0590-\u05FF]+", re.UNICODE)
+
+
+def _upload_target(settings: Settings, filename: str) -> Path:
+    """A safe, non-colliding path under the uploads folder."""
+    name = _SAFE_NAME.sub("_", Path(filename or "video").name).strip() or "video"
+    if Path(name).suffix.lower() not in VIDEO_SUFFIXES:
+        raise HTTPException(
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            f"{name}: not a video file we can read "
+            f"({', '.join(sorted(VIDEO_SUFFIXES))})")
+    target = settings.uploads_dir / name
+    stem, suffix = Path(name).stem, Path(name).suffix
+    counter = 2
+    while target.exists():
+        target = settings.uploads_dir / f"{stem} ({counter}){suffix}"
+        counter += 1
+    return target
+
+
+@router.post("/videos/upload", status_code=status.HTTP_202_ACCEPTED)
+async def upload_video(request: Request,
+                       file: UploadFile = File(...),
+                       objects: bool = Form(True),
+                       appearance: bool = Form(True),
+                       sample_fps: float = Form(2.0),
+                       user: sqlite3.Row = Depends(require_analyst),
+                       store: Store = Depends(get_store),
+                       runner: JobRunner = Depends(runner_dep),
+                       settings: Settings = Depends(settings_dep)) -> dict:
+    """Take a video straight from the browser and start indexing it.
+
+    For the operator who has a file, not a mounted camera share: drag it in,
+    and it lands in the uploads folder like any other recording.
+    """
+    target = _upload_target(settings, file.filename or "")
+    limit = settings.max_video_upload_mb * 1024 * 1024
+    written = 0
+    try:
+        with target.open("wb") as out:                 # streamed, never in memory
+            while chunk := await file.read(1 << 20):
+                written += len(chunk)
+                if written > limit:
+                    raise HTTPException(
+                        status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                        f"the file is larger than the {settings.max_video_upload_mb} MB "
+                        "limit for uploads - point the server at the folder it "
+                        "lives in instead")
+                out.write(chunk)
+    except HTTPException:
+        target.unlink(missing_ok=True)
+        raise
+    except Exception:
+        target.unlink(missing_ok=True)
+        raise
+    if written == 0:
+        target.unlink(missing_ok=True)
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "the uploaded file was empty")
+
+    job_id = runner.submit("index", f"Index {target.name}", {
+        "paths": [str(target)],
+        "options": {"sample_fps": sample_fps, "objects": objects,
+                    "appearance": appearance},
+    }, int(user["id"]))
+    store.audit("footage.uploaded", user=user,
+                detail={"name": target.name, "bytes": written, "job_id": job_id},
+                ip=client_ip(request))
+    return {"job_id": job_id, "name": target.name, "bytes": written}
 
 
 @router.get("/videos")
@@ -736,6 +814,10 @@ def search_ask(body: AskBody, request: Request,
                             "natural-language search is switched off on this deployment")
     if not body.query.strip():
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "a description is required")
+    if not (store.get_setting("anthropic_api_key") or os.environ.get("ANTHROPIC_API_KEY")):
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            "no Claude API key is configured - an admin can add one under Settings")
     job_id = runner.submit("ask", f"Ask: {body.query[:60]}", body.model_dump(),
                            int(user["id"]))
     store.audit("search.ask", user=user,
@@ -891,6 +973,7 @@ class SettingsPatch(BaseModel):
     retention_days: int | None = None
     site_name: str | None = None
     default_index_options: dict[str, Any] | None = None
+    anthropic_api_key: str | None = None
 
 
 @router.get("/settings")
@@ -904,6 +987,12 @@ def read_settings(_: sqlite3.Row = Depends(require_viewer),
                                                     settings.retention_days)),
             "site_name": store.get_setting("site_name", "vscan"),
             "default_index_options": store.get_setting("default_index_options", {}),
+            # the key itself is never sent back - only whether one is stored
+            "ask_key_set": bool(store.get_setting("anthropic_api_key")
+                                or os.environ.get("ANTHROPIC_API_KEY")),
+            "ask_key_source": ("settings" if store.get_setting("anthropic_api_key")
+                               else "environment" if os.environ.get("ANTHROPIC_API_KEY")
+                               else None),
         },
         "deployment": {
             "data_dir": str(settings.data_dir),
@@ -920,8 +1009,9 @@ def patch_settings(body: SettingsPatch, request: Request,
                    store: Store = Depends(get_store)) -> dict:
     changed = {}
     for key, value in body.model_dump(exclude_none=True).items():
-        store.set_setting(key, value)
-        changed[key] = value
+        store.set_setting(key, value.strip() if key == "anthropic_api_key" else value)
+        # never write a credential into the audit trail
+        changed[key] = "(set)" if key == "anthropic_api_key" and value else value
     store.audit("settings.updated", user=admin, detail=changed, ip=client_ip(request))
     return {"ok": True, "changed": changed}
 

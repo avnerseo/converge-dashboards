@@ -51,6 +51,15 @@ const STR = {
     appearanceHint: 'מראה = בגדים ומבנה גוף. עובד גם כשלא רואים פנים, אבל חלש יותר מזיהוי פנים ומשתנה בין ימים.',
     noAppearance: 'הסרטון לא אונדקס עם מראה. הוסיפו --appearance / סמנו את התיבה באינדוקס.',
     detectAppearance: 'וקטורי מראה (Re-ID)',
+    dropHere: 'גררו לכאן קובץ וידאו',
+    dropHint: 'או לחצו כדי לבחור קובץ מהמחשב. הקובץ נשמר על השרת ומתחיל להתאנדקס מיד.',
+    uploading: 'מעלה', uploadDone: 'ההעלאה הסתיימה, האינדוקס התחיל',
+    orPickFromServer: 'או לבחור מתוך התיקיות שמחוברות לשרת',
+    askNeedsKey: 'חיפוש בהוראה חופשית דורש מפתח API של Claude. מנהל יכול להוסיף אותו בלשונית הגדרות.',
+    askNeedsKeyAdmin: 'צריך מפתח API של Claude. אפשר להוסיף אותו למטה בהגדרות ← מפתח Claude API.',
+    apiKey: 'מפתח Claude API', apiKeySet: 'מפתח מוגדר', apiKeyNone: 'לא הוגדר מפתח',
+    apiKeyHint: 'המפתח נשמר על השרת שלכם ומשמש רק לחיפוש בהוראה חופשית. הוא לא מוצג שוב אחרי השמירה.',
+    askExample: 'למשל: מישהו משאיר תיק ליד הכניסה והולך',
   },
   en: {
     overview: 'Overview', footage: 'Footage', search: 'Search', people: 'People',
@@ -95,6 +104,15 @@ const STR = {
     appearanceHint: 'Appearance means clothing and build. It works when no face is visible, but it is weaker than a face match and changes between days.',
     noAppearance: 'This video was indexed without appearance vectors. Re-index with the appearance option.',
     detectAppearance: 'Appearance vectors (re-id)',
+    dropHere: 'Drop a video file here',
+    dropHint: 'or click to choose one. It is stored on the server and indexing starts immediately.',
+    uploading: 'Uploading', uploadDone: 'Upload finished, indexing started',
+    orPickFromServer: 'or pick from the folders mounted on the server',
+    askNeedsKey: 'Instruction search needs a Claude API key. An admin can add one under Settings.',
+    askNeedsKeyAdmin: 'Needs a Claude API key - add one below under Settings > Claude API key.',
+    apiKey: 'Claude API key', apiKeySet: 'a key is configured', apiKeyNone: 'no key configured',
+    apiKeyHint: 'Stored on your own server and used only for instruction search. It is never shown again after saving.',
+    askExample: 'e.g. someone leaving a bag by the entrance and walking away',
   },
 };
 const t = (k) => (STR[S.lang] && STR[S.lang][k]) || STR.en[k] || k;
@@ -223,6 +241,10 @@ async function showApp() {
   $('#login').classList.add('hidden');
   $('#app').classList.remove('hidden');
   $('#whoami').textContent = `${S.user.username} · ${S.user.role}`;
+  try {
+    const me = await api('/api/auth/me');
+    S.user = me.user; S.caps = me.capabilities;
+  } catch { /* keep what we have */ }
   try { S.settings = (await api('/api/settings')).settings; } catch { S.settings = {}; }
   $('#site-name').textContent = S.settings.site_name || 'vscan';
   renderTabs();
@@ -326,6 +348,74 @@ VIEWS.footage = async () => {
   return wrap;
 };
 
+function uploadVideo(file, options, onProgress) {
+  // XHR rather than fetch: it reports upload progress, and a recording can be
+  // gigabytes - the operator needs to see it moving.
+  return new Promise((resolve, reject) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('objects', String(options.objects));
+    form.append('appearance', String(options.appearance));
+    form.append('sample_fps', String(options.sample_fps));
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/videos/upload');
+    xhr.withCredentials = true;
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) onProgress(e.loaded / e.total);
+    });
+    xhr.addEventListener('load', () => {
+      let data = null;
+      try { data = JSON.parse(xhr.responseText); } catch { data = null; }
+      if (xhr.status >= 200 && xhr.status < 300) resolve(data);
+      else reject(new Error((data && data.detail) || `HTTP ${xhr.status}`));
+    });
+    xhr.addEventListener('error', () => reject(new Error('network error')));
+    xhr.send(form);
+  });
+}
+
+function uploadCard(getOptions) {
+  const input = el('input', { type: 'file', accept: 'video/*', class: 'hidden' });
+  const zone = el('div', { class: 'dropzone' },
+    el('div', { class: 'big' }, t('dropHere')),
+    el('div', { class: 'hint' }, t('dropHint')));
+  const progress = el('div', {});
+
+  async function send(files) {
+    for (const file of [...files]) {
+      const bar = el('i', { style: 'width:0%' });
+      const row = el('div', { class: 'upload-row' },
+        el('span', { class: 'name' }, el('bdi', { dir: 'ltr' }, file.name)),
+        el('span', { class: 'small muted mono' }, bytes(file.size)),
+        el('div', { class: 'bar', style: 'flex:1' }, bar));
+      progress.append(row);
+      try {
+        const result = await uploadVideo(file, getOptions(),
+          (fraction) => { bar.style.width = `${Math.round(fraction * 100)}%`; });
+        bar.style.width = '100%';
+        toast(`${t('uploadDone')}: ${result.name}`, 'ok');
+        row.append(el('span', { class: 'pill ok small' }, `#${result.job_id}`));
+      } catch (err) {
+        toast(`${file.name}: ${err.message}`, 'bad');
+        row.append(el('span', { class: 'pill bad small' }, err.message));
+      }
+    }
+    await refreshCore();
+  }
+
+  zone.addEventListener('click', () => input.click());
+  input.addEventListener('change', guard(() => send(input.files)));
+  ['dragenter', 'dragover'].forEach((name) => zone.addEventListener(name, (e) => {
+    e.preventDefault(); zone.classList.add('over');
+  }));
+  ['dragleave', 'drop'].forEach((name) => zone.addEventListener(name, (e) => {
+    e.preventDefault(); zone.classList.remove('over');
+  }));
+  zone.addEventListener('drop', guard((e) => send(e.dataTransfer.files)));
+
+  return el('div', {}, zone, input, progress);
+}
+
 async function footageImportCard() {
   const selected = new Set();
   const chosen = el('div', { class: 'small muted' }, `0 ${t('selected')}`);
@@ -365,6 +455,12 @@ async function footageImportCard() {
 
   const card = el('div', { class: 'card' },
     el('h2', {}, t('addFootage')),
+    uploadCard(() => ({
+      objects: objectsBox.querySelector('input').checked,
+      appearance: appearanceBox.querySelector('input').checked,
+      sample_fps: Number(fps.value),
+    })),
+    el('h3', { style: 'margin-top:18px' }, t('orPickFromServer')),
     el('div', { class: 'row' },
       ...(S.caps.footage_dirs || []).map((dir) => el('button', {
         class: 'btn ghost small', onclick: guard(() => loadDir(dir)),
@@ -407,7 +503,7 @@ VIEWS.search = async () => {
     el('option', { value: 'person' }, t('byPerson')),
     el('option', { value: 'appearance' }, t('byAppearance')),
     el('option', { value: 'objects' }, t('byObject')),
-    S.caps.ask && can('analyst') ? el('option', { value: 'ask' }, t('byInstruction')) : null);
+    can('analyst') ? el('option', { value: 'ask' }, t('byInstruction')) : null);
   const specific = el('div');
   const videoPick = el('select', {}, el('option', { value: '' }, t('allVideos')),
     ...S.videos.map((v) => el('option', { value: v.id }, v.name)));
@@ -423,8 +519,7 @@ VIEWS.search = async () => {
   const threshold = el('input', { type: 'number', value: '0.363', step: '0.01', min: '0', max: '1' });
   const labels = el('input', { type: 'text', value: 'person' });
   const minScore = el('input', { type: 'number', value: '0.4', step: '0.05', min: '0', max: '1' });
-  const query = el('textarea', { rows: '3',
-    placeholder: S.lang === 'he' ? 'למשל: מישהו משאיר תיק ליד הכניסה' : 'e.g. someone leaving a bag by the entrance' });
+  const query = el('textarea', { rows: '3', placeholder: t('askExample') });
   const maxFrames = el('input', { type: 'number', value: '400', step: '50', min: '9' });
   const confirmBox = checkbox('f-confirm', t('confirmPass'), true);
   const effort = el('select', {}, ...['low', 'medium', 'high', 'xhigh', 'max'].map(
@@ -445,11 +540,16 @@ VIEWS.search = async () => {
         el('div', { style: 'min-width:260px' }, field(t('labels'), labels)),
         el('div', { style: 'min-width:150px' }, field(t('minScore'), minScore))));
     } else {
+      const ready = S.caps.ask && S.caps.ask_key_set;
       specific.append(field(t('query'), query),
         el('div', { class: 'row' },
           el('div', { style: 'min-width:150px' }, field(t('maxFrames'), maxFrames)),
           el('div', { style: 'min-width:150px' }, field(t('effort'), effort)),
           confirmBox));
+      if (!ready) {
+        specific.append(el('p', { class: 'legal', style: 'margin-top:10px' },
+          can('admin') ? t('askNeedsKeyAdmin') : t('askNeedsKey')));
+      }
     }
   }
   mode.addEventListener('change', renderSpecific);
@@ -878,6 +978,8 @@ VIEWS.settings = async () => {
     const retention = el('input', { type: 'number', min: '0',
       value: S.settings.retention_days || 0 });
     const askBox = checkbox('set-ask', t('askEnabled'), !!S.settings.ask_enabled);
+    const apiKey = el('input', { type: 'password', autocomplete: 'off',
+      placeholder: S.settings.ask_key_set ? '••••••••••••  (' + t('apiKeySet') + ')' : 'sk-ant-...' });
     wrap.append(el('div', { class: 'card' }, el('h2', {}, t('settings')),
       el('div', { class: 'row' },
         el('div', { style: 'min-width:220px' }, field(t('siteName'), siteName)),
@@ -889,6 +991,18 @@ VIEWS.settings = async () => {
             ask_enabled: askBox.querySelector('input').checked } });
           toast(t('saved'), 'ok'); await showApp();
         }) }, t('save'))),
+      el('div', { class: 'row', style: 'margin-top:14px' },
+        el('div', { style: 'min-width:280px' }, field(t('apiKey'), apiKey)),
+        el('button', { class: 'btn ghost', onclick: guard(async () => {
+          if (!apiKey.value.trim()) return;
+          await api('/api/settings', { method: 'PATCH', body: {
+            anthropic_api_key: apiKey.value.trim() } });
+          apiKey.value = ''; toast(t('saved'), 'ok'); await showApp(); renderTab();
+        }) }, t('save')),
+        el('span', { class: 'small muted' },
+          S.settings.ask_key_set
+            ? `${t('apiKeySet')} (${S.settings.ask_key_source})` : t('apiKeyNone'))),
+      el('p', { class: 'small muted' }, t('apiKeyHint')),
       el('div', { class: 'row', style: 'margin-top:12px' },
         el('button', { class: 'btn ghost small', onclick: guard(async () => {
           const result = await api('/api/maintenance/purge', { method: 'POST', body: {} });

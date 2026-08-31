@@ -289,6 +289,48 @@ def test_appearance_search_without_references_is_a_clear_error(client):
     assert "appearance" in response.json()["detail"].lower()
 
 
+@pytest.mark.skipif(not HAS_FFMPEG, reason="ffmpeg not installed")
+def test_uploading_a_video_indexes_it(client, tmp_path_factory):
+    """The operator who has a file, not a mounted share: drag it in."""
+    login(client)
+    import subprocess
+    clip = tmp_path_factory.mktemp("upload") / "dropped clip.mp4"
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi",
+                    "-i", "testsrc=size=320x240:rate=10:duration=3",
+                    "-c:v", "libx264", "-pix_fmt", "yuv420p", str(clip)],
+                   check=True)
+
+    with clip.open("rb") as fh:
+        response = client.post("/api/videos/upload",
+                               files={"file": (clip.name, fh, "video/mp4")},
+                               data={"objects": "false", "appearance": "false",
+                                     "sample_fps": "2"})
+    assert response.status_code == 202, response.text
+    body = response.json()
+    assert body["bytes"] > 0
+    job = wait_for_job(client, body["job_id"])
+    assert job["status"] == "done", job
+
+    names = [v["name"] for v in client.get("/api/videos").json()["videos"]]
+    assert body["name"] in names, "the uploaded clip should be indexed and listed"
+
+
+def test_upload_rejects_files_that_are_not_video(client):
+    login(client)
+    response = client.post("/api/videos/upload",
+                           files={"file": ("notes.txt", b"hello", "text/plain")})
+    assert response.status_code == 415
+    assert "video" in response.json()["detail"].lower()
+
+
+def test_upload_needs_the_analyst_role(client):
+    login(client, "vera", "another-good-password")
+    response = client.post("/api/videos/upload",
+                           files={"file": ("x.mp4", b"\0" * 10, "video/mp4")})
+    assert response.status_code == 403
+    login(client)
+
+
 # ------------------------------------------------------------------ admin
 def test_ask_is_refused_when_switched_off(client):
     login(client)

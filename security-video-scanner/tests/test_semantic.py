@@ -73,7 +73,7 @@ def test_ask_triages_then_confirms(monkeypatch):
         return {"match": True, "confidence": 0.85, "note": "confirmed box"}
 
     client = FakeClient(replies)
-    monkeypatch.setattr(semantic, "_client", lambda: client)
+    monkeypatch.setattr(semantic, "_client", lambda api_key=None: client)
 
     result = ask("someone carrying a box", _refs(4),
                  AskOptions(grid=4, concurrency=1))
@@ -94,7 +94,7 @@ def test_ask_without_confirm_keeps_triage_scores(monkeypatch):
     _fake_frame_loader(monkeypatch)
     client = FakeClient(lambda kw: {"matches": [{"frame": 2, "confidence": 0.7,
                                                  "note": "van"}]})
-    monkeypatch.setattr(semantic, "_client", lambda: client)
+    monkeypatch.setattr(semantic, "_client", lambda api_key=None: client)
     result = ask("a van", _refs(3), AskOptions(grid=3, confirm=False,
                                                      concurrency=1))
     assert [h.t for h in result.hits] == [2.0]
@@ -111,13 +111,13 @@ def test_ask_handles_refusal(monkeypatch):
                 stop_reason="refusal",
                 stop_details=SimpleNamespace(category="privacy"), content=[])
 
-    monkeypatch.setattr(semantic, "_client", Refusing)
+    monkeypatch.setattr(semantic, "_client", lambda api_key=None: Refusing())
     result = ask("anything", _refs(2), AskOptions(grid=2, concurrency=1))
     assert result.hits == [] and result.refusals == 1
 
 
 def test_ask_dry_run_makes_no_calls(monkeypatch):
     called = []
-    monkeypatch.setattr(semantic, "_client", lambda: called.append(1))
+    monkeypatch.setattr(semantic, "_client", lambda api_key=None: called.append(1))
     result = ask("q", _refs(5), AskOptions(dry_run=True))
     assert not called and result.requests == 0

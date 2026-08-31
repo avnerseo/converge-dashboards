@@ -51,6 +51,8 @@ class Settings:
     bootstrap_password: str = field(
         default_factory=lambda: os.environ.get("VSCAN_ADMIN_PASSWORD", ""))
     max_upload_mb: int = field(default_factory=lambda: _env_int("VSCAN_MAX_UPLOAD_MB", 25))
+    max_video_upload_mb: int = field(
+        default_factory=lambda: _env_int("VSCAN_MAX_VIDEO_UPLOAD_MB", 8192))
     secure_cookie: bool = field(
         default_factory=lambda: _env_bool("VSCAN_SECURE_COOKIE", False))
 
@@ -93,18 +95,22 @@ class Settings:
         """Browser-playable transcodes of the moments an operator opens."""
         return self.data_dir / "previews"
 
+    @property
+    def readable_roots(self) -> list[Path]:
+        """Everywhere a video may legitimately live: mounts, plus what was uploaded."""
+        return [*self.footage_dirs, self.uploads_dir.resolve()]
+
     def resolve_footage(self, path: str | Path) -> Path:
-        """Resolve `path` and refuse anything outside the configured roots.
+        """Resolve `path` and refuse anything outside the readable roots.
 
         Every filesystem path that arrives from a browser goes through here.
         """
+        roots = self.readable_roots
         target = Path(path).expanduser()
         if not target.is_absolute():
-            if not self.footage_dirs:
-                raise PermissionError("no footage directories are configured")
-            target = self.footage_dirs[0] / target
+            target = roots[0] / target
         target = target.resolve()
-        for root in self.footage_dirs:
+        for root in roots:
             if target == root or root in target.parents:
                 return target
         raise PermissionError(f"path is outside the configured footage directories: {path}")
