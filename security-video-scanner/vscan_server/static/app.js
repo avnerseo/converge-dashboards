@@ -60,6 +60,21 @@ const STR = {
     apiKey: 'מפתח Claude API', apiKeySet: 'מפתח מוגדר', apiKeyNone: 'לא הוגדר מפתח',
     apiKeyHint: 'המפתח נשמר על השרת שלכם ומשמש רק לחיפוש בהוראה חופשית. הוא לא מוצג שוב אחרי השמירה.',
     askExample: 'למשל: מישהו משאיר תיק ליד הכניסה והולך',
+    uploaded: 'הועלה', nothingFound: 'לא נמצא כלום',
+    confirmRemoveUpload: 'למחוק מהאינדקס וגם את הקובץ מהשרת?',
+    searchPlaceholder: 'מה לחפש? למשל: מתי הרכב הלבן זז, דוד, מישהו משאיר תיק',
+    searchedAs: 'חיפשתי', modePerson: 'לפי פנים', modeObjects: 'לפי אובייקט',
+    modeAsk: 'לפי הוראה חופשית', advanced: 'סינון', examples: 'דוגמאות',
+    cannotAnswerYet: 'לזה עוד אי אפשר לענות',
+    meanwhile: 'בינתיים אפשר לחפש מקומית',
+    askNeedsAnalyst: 'חיפוש בהוראה חופשית דורש הרשאת אנליסט.',
+    askSwitchedOff: 'חיפוש בהוראה חופשית כבוי בהגדרות.',
+    testKey: 'בדיקה ושמירה', keyOk: 'המפתח תקין ונשמר',
+    whyPerson: 'רשום במערכת, אז זה חיפוש פנים',
+    whyObjects: 'הגלאי המקומי מכיר את זה ישירות',
+    whyDescriptive: 'מתאר מראה או תנועה, לא עצם שהגלאי מזהה',
+    whyUnknown: 'לא משהו שהגלאי המקומי מכיר',
+    whyNotMeasurable: 'מתאר משהו שהגלאים המקומיים לא יודעים למדוד',
   },
   en: {
     overview: 'Overview', footage: 'Footage', search: 'Search', people: 'People',
@@ -73,7 +88,20 @@ const STR = {
     confirmRemove: 'Remove this video from the index?',
     confirmRemoveUpload: 'Remove from the index and delete the uploaded file?',
     uploaded: 'uploaded',
-    nothingFound: 'nothing detected', options: 'Options',
+    nothingFound: 'nothing detected',
+    searchPlaceholder: 'What are you looking for? e.g. when did the white car move, David, someone leaving a bag',
+    searchedAs: 'Searched as', modePerson: 'by face', modeObjects: 'by object',
+    modeAsk: 'by instruction', advanced: 'Filters', examples: 'Examples',
+    cannotAnswerYet: 'This cannot be answered yet',
+    meanwhile: 'In the meantime, searchable locally',
+    askNeedsAnalyst: 'Instruction search needs the analyst role.',
+    askSwitchedOff: 'Instruction search is switched off in Settings.',
+    testKey: 'Test and save', keyOk: 'the key works and was saved',
+    whyPerson: 'is enrolled, so this is a face search',
+    whyObjects: 'the local detector knows this directly',
+    whyDescriptive: 'describes appearance or movement, not an object',
+    whyUnknown: 'is not something the local detector knows',
+    whyNotMeasurable: 'describes something the local detectors cannot measure', options: 'Options',
     sampleFps: 'Frames per second', width: 'Analysis width', motion: 'Motion threshold',
     detectObjects: 'Detect objects', force: 'Re-index', startTime: 'Wall-clock start',
     searchMode: 'Search type', byPerson: 'By person', byObject: 'By object',
@@ -119,6 +147,17 @@ const STR = {
   },
 };
 const t = (k) => (STR[S.lang] && STR[S.lang][k]) || STR.en[k] || k;
+
+/* The detector speaks COCO; the operator does not. */
+const LABELS_HE = {
+  person: 'אדם', car: 'רכב', truck: 'משאית', bus: 'אוטובוס',
+  motorcycle: 'אופנוע', bicycle: 'אופניים', dog: 'כלב', cat: 'חתול',
+  handbag: 'תיק', backpack: 'תרמיל', suitcase: 'מזוודה', umbrella: 'מטרייה',
+  'cell phone': 'טלפון', laptop: 'מחשב נייד', bird: 'ציפור', train: 'רכבת',
+  boat: 'סירה', bench: 'ספסל', bottle: 'בקבוק', chair: 'כיסא',
+};
+const labelName = (label) => (S.lang === 'he' && LABELS_HE[label]) || label;
+const labelList = (labels) => (labels || []).map(labelName).join(', ');
 
 /* ------------------------------------------------------------- helpers */
 function el(tag, attrs = {}, ...children) {
@@ -506,105 +545,134 @@ async function footageImportCard() {
 /* ---------------------------------------------------------------- search */
 VIEWS.search = async () => {
   const wrap = el('div');
-  const mode = el('select', {},
-    el('option', { value: 'person' }, t('byPerson')),
-    el('option', { value: 'appearance' }, t('byAppearance')),
-    el('option', { value: 'objects' }, t('byObject')),
-    can('analyst') ? el('option', { value: 'ask' }, t('byInstruction')) : null);
-  const specific = el('div');
+  const box = el('input', { type: 'search', autocomplete: 'off',
+    placeholder: t('searchPlaceholder'), style: 'font-size:17px; padding:12px 14px' });
+  const interpretation = el('div', { class: 'small muted', style: 'margin-top:8px' });
+  const resultsBox = el('div');
+
+  // filters, folded away: most searches need none of them
   const videoPick = el('select', {}, el('option', { value: '' }, t('allVideos')),
     ...S.videos.map((v) => el('option', { value: v.id }, v.name)));
-  const from = el('input', { type: 'text', placeholder: '00:00:00' });
-  const to = el('input', { type: 'text', placeholder: '' });
+  const from = el('input', { type: 'text', dir: 'ltr', placeholder: '00:00:00' });
+  const to = el('input', { type: 'text', dir: 'ltr', placeholder: '' });
   const gap = el('input', { type: 'number', value: '5', min: '0', step: '1' });
   const arrivalsBox = checkbox('f-arrivals', t('onlyArrivals'), false);
   const absence = el('input', { type: 'number', value: '300', min: '10', step: '10' });
-  const resultsBox = el('div');
-
-  const personPick = el('select', {}, ...S.persons.map(
-    (p) => el('option', { value: p.id }, `${p.name} (${p.references})`)));
-  const threshold = el('input', { type: 'number', value: '0.363', step: '0.01', min: '0', max: '1' });
-  const labels = el('input', { type: 'text', value: 'person' });
-  const minScore = el('input', { type: 'number', value: '0.4', step: '0.05', min: '0', max: '1' });
-  const query = el('textarea', { rows: '3', placeholder: t('askExample') });
   const maxFrames = el('input', { type: 'number', value: '400', step: '50', min: '9' });
-  const confirmBox = checkbox('f-confirm', t('confirmPass'), true);
-  const effort = el('select', {}, ...['low', 'medium', 'high', 'xhigh', 'max'].map(
-    (e) => el('option', { value: e, selected: e === 'low' }, e)));
-
-  function renderSpecific() {
-    clear(specific);
-    if (mode.value === 'person' || mode.value === 'appearance') {
-      const byFace = mode.value === 'person';
-      threshold.value = byFace ? '0.363' : '0.60';
-      specific.append(el('div', { class: 'row' },
-        el('div', { style: 'min-width:220px' }, field(t('person'), personPick)),
-        el('div', { style: 'min-width:150px' }, field(t('threshold'), threshold))));
-      if (!S.persons.length) specific.append(el('p', { class: 'muted' }, t('noPersons')));
-      if (!byFace) specific.append(el('p', { class: 'small muted' }, t('appearanceHint')));
-    } else if (mode.value === 'objects') {
-      specific.append(el('div', { class: 'row' },
-        el('div', { style: 'min-width:260px' }, field(t('labels'), labels)),
-        el('div', { style: 'min-width:150px' }, field(t('minScore'), minScore))));
-    } else {
-      const ready = S.caps.ask && S.caps.ask_key_set;
-      specific.append(field(t('query'), query),
-        el('div', { class: 'row' },
-          el('div', { style: 'min-width:150px' }, field(t('maxFrames'), maxFrames)),
-          el('div', { style: 'min-width:150px' }, field(t('effort'), effort)),
-          confirmBox));
-      if (!ready) {
-        specific.append(el('p', { class: 'legal', style: 'margin-top:10px' },
-          can('admin') ? t('askNeedsKeyAdmin') : t('askNeedsKey')));
-      }
-    }
-  }
-  mode.addEventListener('change', renderSpecific);
-  renderSpecific();
-
-  const runButton = el('button', { class: 'btn', onclick: guard(async () => {
-    runButton.disabled = true;
-    try {
-      const common = {
-        video_ids: videoPick.value ? [Number(videoPick.value)] : null,
-        start: parseTc(from.value), end: to.value ? parseTc(to.value) : null,
-        gap: Number(gap.value), arrivals: arrivalsBox.querySelector('input').checked,
-        absence: Number(absence.value),
-      };
-      if (mode.value === 'person' || mode.value === 'appearance') {
-        if (!personPick.value) { toast(t('noPersons'), 'bad'); return; }
-        const path = mode.value === 'person'
-          ? '/api/search/person' : '/api/search/appearance';
-        const data = await api(path, { method: 'POST', body: {
-          ...common, person_id: Number(personPick.value),
-          threshold: Number(threshold.value) } });
-        showResults(resultsBox, data.events,
-          personPick.options[personPick.selectedIndex].text);
-      } else if (mode.value === 'objects') {
-        const data = await api('/api/search/objects', { method: 'POST', body: {
-          ...common, labels: labels.value.split(',').map((s) => s.trim()).filter(Boolean),
-          min_score: Number(minScore.value) } });
-        showResults(resultsBox, data.events, labels.value);
-      } else {
-        const started = await api('/api/search/ask', { method: 'POST', body: {
-          ...common, query: query.value, max_frames: Number(maxFrames.value),
-          confirm: confirmBox.querySelector('input').checked, effort: effort.value } });
-        toast(`${t('jobStarted')} #${started.job_id}`, 'ok');
-        clear(resultsBox).append(askProgress(started.job_id, resultsBox, query.value));
-      }
-    } finally { runButton.disabled = false; }
-  }) }, t('run'));
-
-  wrap.append(el('div', { class: 'card' },
-    el('div', { class: 'row' },
-      el('div', { style: 'min-width:200px' }, field(t('searchMode'), mode)),
+  const advanced = el('div', { class: 'hidden' },
+    el('div', { class: 'row', style: 'margin-top:12px' },
       el('div', { style: 'min-width:200px' }, field(t('videos'), videoPick)),
       el('div', { style: 'min-width:120px' }, field(t('from'), from)),
       el('div', { style: 'min-width:120px' }, field(t('to'), to)),
       el('div', { style: 'min-width:130px' }, field(t('gap'), gap)),
       el('div', { style: 'min-width:150px' }, field(t('absence'), absence)),
-      arrivalsBox),
-    specific, runButton), resultsBox);
+      el('div', { style: 'min-width:150px' }, field(t('maxFrames'), maxFrames)),
+      arrivalsBox));
+  const advancedToggle = el('button', { class: 'btn ghost small', onclick: () => {
+    advanced.classList.toggle('hidden');
+  } }, t('advanced'));
+
+  const filters = () => ({
+    video_ids: videoPick.value ? [Number(videoPick.value)] : null,
+    start: parseTc(from.value), end: to.value ? parseTc(to.value) : null,
+    gap: Number(gap.value), arrivals: arrivalsBox.querySelector('input').checked,
+    absence: Number(absence.value), max_frames: Number(maxFrames.value),
+  });
+
+  async function run(forceMode) {
+    const query = box.value.trim();
+    if (!query) return;
+    clear(interpretation);
+    clear(resultsBox);
+    const data = await api('/api/search', { method: 'POST',
+      body: { query, ...filters(), force_mode: forceMode || null } });
+    showInterpretation(data);
+    if (data.job_id) {
+      resultsBox.append(askProgress(data.job_id, resultsBox, query));
+    } else if (data.needs) {
+      resultsBox.append(missingCard(data));
+    } else {
+      showResults(resultsBox, data.events, query);
+    }
+  }
+
+  function reasonText(intent) {
+    const key = { person_enrolled: 'whyPerson', objects_known: 'whyObjects',
+                  descriptive_word: 'whyDescriptive', unknown_word: 'whyUnknown',
+                  not_measurable: 'whyNotMeasurable' }[intent.reason_code];
+    if (!key) return intent.reason || '';
+    const word = intent.reason_code === 'objects_known'
+      ? labelList((intent.reason_word || '').split(', ').filter(Boolean))
+      : intent.reason_word;
+    return word ? `"${word}" ${t(key)}` : t(key);
+  }
+
+  function showInterpretation(data) {
+    const intent = data.intent || {};
+    const label = { person: t('modePerson'), objects: t('modeObjects'),
+                    ask: t('modeAsk') }[intent.mode] || '';
+    const why = reasonText(intent);
+    clear(interpretation).append(
+      el('span', {}, `${t('searchedAs')}: `),
+      el('b', {}, label),
+      why ? el('span', {}, ' — ') : null,
+      why ? el('span', { dir: 'auto' }, why) : null);
+    // let the operator overrule us in one click
+    const others = ['person', 'objects', 'ask'].filter((m) => m !== intent.mode
+      && (m !== 'person' || S.persons.length));
+    for (const mode of others) {
+      interpretation.append(' ', el('button', {
+        class: 'btn ghost small', onclick: guard(() => run(mode)),
+      }, { person: t('modePerson'), objects: t('modeObjects'),
+           ask: t('modeAsk') }[mode]));
+    }
+  }
+
+  function missingCard(data) {
+    const needs = data.needs || {};
+    const intent = data.intent || {};
+    const card = el('div', { class: 'card' },
+      el('h3', {}, t('cannotAnswerYet')),
+      el('p', { class: 'legal' },
+        needs.role ? t('askNeedsAnalyst')
+          : needs.key ? (can('admin') ? t('askNeedsKeyAdmin') : t('askNeedsKey'))
+            : t('askSwitchedOff')));
+    if (intent.fallback && intent.fallback.labels.length) {
+      card.append(el('p', {}, t('meanwhile')),
+        el('button', { class: 'btn', onclick: guard(() => run('objects')) },
+          `${t('modeObjects')}: ${labelList(intent.fallback.labels)}`));
+    }
+    if (needs.key && can('admin')) {
+      card.append(' ', el('button', { class: 'btn ghost', onclick: () => {
+        S.tab = 'settings'; renderTabs(); renderTab();
+      } }, t('settings')));
+    }
+    return card;
+  }
+
+  const runButton = el('button', { class: 'btn', onclick: guard(async () => {
+    runButton.disabled = true;
+    try { await run(null); } finally { runButton.disabled = false; }
+  }) }, t('run'));
+  box.addEventListener('keydown', (e) => { if (e.key === 'Enter') runButton.click(); });
+
+  const examples = el('div', { class: 'row', style: 'margin-top:10px' },
+    el('span', { class: 'small muted' }, `${t('examples')}:`),
+    ...(S.lang === 'he'
+      ? ['מתי הרכב הלבן זז', 'איש עם חולצה לבנה', 'רכב', 'מישהו משאיר תיק']
+      : ['when did the white car move', 'a man in a white shirt', 'car',
+         'someone leaving a bag'])
+      .map((text) => el('button', { class: 'btn ghost small', onclick: () => {
+        box.value = text; runButton.click();
+      } }, text)),
+    ...S.persons.slice(0, 3).map((person) => el('button', {
+      class: 'btn ghost small', onclick: () => { box.value = person.name; runButton.click(); },
+    }, person.name)));
+
+  wrap.append(el('div', { class: 'card' },
+    el('div', { class: 'row' }, el('div', { class: 'grow' }, box), runButton,
+      advancedToggle),
+    interpretation, examples, advanced), resultsBox);
   return wrap;
 };
 
@@ -1007,11 +1075,13 @@ VIEWS.settings = async () => {
       el('div', { class: 'row', style: 'margin-top:14px' },
         el('div', { style: 'min-width:280px' }, field(t('apiKey'), apiKey)),
         el('button', { class: 'btn ghost', onclick: guard(async () => {
-          if (!apiKey.value.trim()) return;
-          await api('/api/settings', { method: 'PATCH', body: {
-            anthropic_api_key: apiKey.value.trim() } });
-          apiKey.value = ''; toast(t('saved'), 'ok'); await showApp(); renderTab();
-        }) }, t('save')),
+          const key = apiKey.value.trim();
+          if (!key) return;
+          await api('/api/settings/test-key', { method: 'POST', body: { api_key: key } });
+          await api('/api/settings', { method: 'PATCH',
+            body: { anthropic_api_key: key, ask_enabled: true } });
+          apiKey.value = ''; toast(t('keyOk'), 'ok'); await showApp(); renderTab();
+        }) }, t('testKey')),
         el('span', { class: 'small muted' },
           S.settings.ask_key_set
             ? `${t('apiKeySet')} (${S.settings.ask_key_source})` : t('apiKeyNone'))),

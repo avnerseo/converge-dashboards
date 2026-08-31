@@ -331,6 +331,53 @@ def test_upload_needs_the_analyst_role(client):
     login(client)
 
 
+@pytest.mark.skipif(not (HAS_FACES and HAS_FFMPEG), reason="needs the indexed flow")
+def test_one_search_box_routes_to_the_right_engine(client):
+    """The operator types a sentence; the server picks person, object or model."""
+    login(client)
+
+    by_object = client.post("/api/search", json={"query": "person", "gap": 3}).json()
+    assert by_object["intent"]["mode"] == "objects"
+    assert by_object["intent"]["labels"] == ["person"]
+    assert by_object["count"] >= 1
+
+    person_id = client.post("/api/persons",
+                            json={"name": "Routed Person"}).json()["person"]["id"]
+    clusters = client.get("/api/clusters").json()["clusters"]
+    client.post(f"/api/persons/{person_id}/faces/from-cluster",
+                json={"cluster_id": clusters[0]["id"]})
+    by_name = client.post("/api/search", json={"query": "Routed Person"}).json()
+    assert by_name["intent"]["mode"] == "person"
+    assert by_name["count"] >= 1
+
+    # a description the local detectors cannot measure needs the model, and
+    # without a key it says so instead of answering a different question
+    described = client.post("/api/search",
+                            json={"query": "a man in a white shirt"}).json()
+    assert described["intent"]["mode"] == "ask"
+    assert described["needs"]["key"] is True
+    assert described["intent"]["fallback"]["labels"] == ["person"]
+    assert described["count"] == 0
+
+
+def test_search_box_rejects_an_empty_query(client):
+    login(client)
+    assert client.post("/api/search", json={"query": "  "}).status_code == 400
+
+
+def test_key_test_endpoint_rejects_a_bad_key(client):
+    login(client)
+    response = client.post("/api/settings/test-key", json={"api_key": "sk-ant-nope"})
+    assert response.status_code in (400, 501)
+
+
+def test_key_test_is_admin_only(client):
+    login(client, "vera", "another-good-password")
+    assert client.post("/api/settings/test-key",
+                       json={"api_key": "x"}).status_code == 403
+    login(client)
+
+
 # ------------------------------------------------------------------ admin
 def test_ask_is_refused_when_switched_off(client):
     login(client)

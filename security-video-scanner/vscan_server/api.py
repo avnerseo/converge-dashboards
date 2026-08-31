@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 from vscan.appearance import DEFAULT_APPEARANCE_THRESHOLD
 from vscan.events import arrivals, group_hits
 from vscan.faces import DEFAULT_MATCH_THRESHOLD
+from vscan.query import Intent, resolve as resolve_query
 from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
                           enroll_from_video, find_objects, find_person,
                           find_person_appearance, load_clusters, search_vectors,
@@ -35,7 +36,7 @@ from .security import (check_password_policy, clear_session_cookie, client_ip,
                        current_user, get_store, hash_password, login_throttle,
                        new_session_token, require_admin, require_analyst,
                        require_viewer, set_session_cookie, verify_password)
-from .store import ROLES, Store
+from .store import ROLE_RANK, ROLES, Store
 
 router = APIRouter(prefix="/api")
 VIDEO_SUFFIXES = {".mp4", ".mkv", ".avi", ".mov", ".m4v", ".mpg", ".mpeg",
@@ -864,6 +865,104 @@ def search_ask(body: AskBody, request: Request,
                 detail={"query": body.query, "job_id": job_id,
                         "max_frames": body.max_frames}, ip=client_ip(request))
     return {"job_id": job_id}
+
+
+class AutoSearch(BaseModel):
+    query: str
+    video_ids: list[int] | None = None
+    start: float = 0.0
+    end: float | None = None
+    gap: float = 5.0
+    min_hits: int = 1
+    arrivals: bool = False
+    absence: float = 300.0
+    max_frames: int = 400
+    force_mode: Literal["person", "objects", "ask"] | None = None
+
+
+@router.post("/search")
+def search_auto(body: AutoSearch, request: Request,
+                user: sqlite3.Row = Depends(require_viewer),
+                store: Store = Depends(get_store),
+                runner: JobRunner = Depends(runner_dep),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    """One search box: work out what was meant, then run the right engine."""
+    if not body.query.strip():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "type what you are looking for")
+
+    with open_index(settings) as index:
+        people = [(int(p["id"]), p["name"]) for p in index.persons()]
+    intent = resolve_query(body.query, people)
+    if body.force_mode and body.force_mode != intent.mode:
+        intent = Intent(body.force_mode, body.query, person_id=intent.person_id,
+                        person_name=intent.person_name,
+                        labels=intent.labels or (intent.fallback.labels
+                                                 if intent.fallback else ["person"]),
+                        reason="chosen by the operator")
+
+    common = {"video_ids": body.video_ids, "start": body.start, "end": body.end,
+              "gap": body.gap, "min_hits": body.min_hits, "arrivals": body.arrivals,
+              "absence": body.absence}
+
+    if intent.mode == "person":
+        payload = search_person(PersonSearch(person_id=intent.person_id, **common),
+                                request, user, store, settings)
+        if payload["count"] == 0:
+            # no face was visible - the same person may still be findable by build
+            with open_index(settings) as index:
+                has_appearance = bool(index.person_embeddings(intent.person_id,
+                                                              "appearance"))
+            if has_appearance:
+                payload = search_appearance(
+                    AppearanceSearch(person_id=intent.person_id, **common),
+                    request, user, store, settings)
+                intent.reason += " - no face matched, so this is by appearance"
+        return {**payload, "intent": intent.to_dict()}
+
+    if intent.mode == "objects":
+        payload = search_objects(ObjectSearch(labels=intent.labels, **common),
+                                 request, user, store, settings)
+        return {**payload, "intent": intent.to_dict()}
+
+    # everything else needs the model to look at the frames
+    key_set = bool(store.get_setting("anthropic_api_key")
+                   or os.environ.get("ANTHROPIC_API_KEY"))
+    enabled = bool(store.get_setting("ask_enabled", settings.ask_enabled))
+    if not (key_set and enabled) or ROLE_RANK.get(user["role"], -1) < ROLE_RANK["analyst"]:
+        return {"events": [], "count": 0, "intent": intent.to_dict(),
+                "needs": {"key": not key_set, "enabled": not enabled,
+                          "role": ROLE_RANK.get(user["role"], -1)
+                                  < ROLE_RANK["analyst"]}}
+
+    job_id = runner.submit("ask", f"Ask: {body.query[:60]}", {
+        "query": body.query, "video_ids": body.video_ids, "start": body.start,
+        "end": body.end, "max_frames": body.max_frames, "gap": body.gap,
+        "min_hits": body.min_hits, "arrivals": body.arrivals,
+        "absence": body.absence, "confirm": True, "effort": "low",
+    }, int(user["id"]))
+    store.audit("search.ask", user=user,
+                detail={"query": body.query, "job_id": job_id}, ip=client_ip(request))
+    return {"job_id": job_id, "intent": intent.to_dict()}
+
+
+class KeyTest(BaseModel):
+    api_key: str
+
+
+@router.post("/settings/test-key")
+def test_api_key(body: KeyTest, _: sqlite3.Row = Depends(require_admin)) -> dict:
+    """Check a key before storing it, so a bad paste fails here and not mid-search."""
+    try:
+        import anthropic
+    except ImportError:
+        raise HTTPException(status.HTTP_501_NOT_IMPLEMENTED,
+                            "the Anthropic SDK is not installed on this server")
+    try:
+        anthropic.Anthropic(api_key=body.api_key.strip()).models.list(limit=1)
+    except Exception as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                            f"the key was not accepted: {type(exc).__name__}") from exc
+    return {"ok": True}
 
 
 class ClusterBody(BaseModel):
