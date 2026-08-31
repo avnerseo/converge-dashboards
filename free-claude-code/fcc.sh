@@ -83,6 +83,17 @@ cmd_setup() {
     if [ -n "$key_var" ]; then
       printf '%s (input hidden): ' "$key_var"; read -rs api_key; echo
       [ -n "$api_key" ] || die "no key entered"
+      # People paste the whole Authorization header out of a provider's sample
+      # code — '"Bearer nvapi-..."' — and the hidden prompt makes it invisible.
+      # Reduce whatever arrived to the bare token.
+      clean=$(printf '%s' "$api_key" \
+        | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+              -e 's/^["'"'"']//' -e 's/["'"'"']$//' \
+              -e 's/^[Bb][Ee][Aa][Rr][Ee][Rr][[:space:]][[:space:]]*//' \
+              -e 's/^["'"'"']//' -e 's/["'"'"']$//' \
+              -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+      [ "$clean" = "$api_key" ] || warn 'stripped quotes / a "Bearer" prefix from what you pasted'
+      api_key=$clean
       # replace an existing line if .env.example already defines it, else append
       if grep -q "^${key_var}=" "$ENV_FILE" 2>/dev/null; then
         tmp=$(mktemp); grep -v "^${key_var}=" "$ENV_FILE" > "$tmp"; mv "$tmp" "$ENV_FILE"
@@ -180,19 +191,28 @@ cmd_testkey() {
   case "$key" in *\"*|*\'*) warn 'the stored value contains quote characters';; esac
   case "$name" in NVIDIA*) case "$key" in nvapi-*) ;; *) warn "an NVIDIA key normally starts with 'nvapi-'";; esac;; esac
 
+  # Both endpoints REQUIRE authentication. A model listing does not: NVIDIA's
+  # /v1/models answers 200 to anyone, so testing against it would call a broken
+  # key valid. Only 401 means rejected — any other status still proves the
+  # credential was accepted.
   case "$name" in
-    NVIDIA*) url=https://integrate.api.nvidia.com/v1/models ;;
-    *)       url=https://openrouter.ai/api/v1/models ;;
+    NVIDIA*) url=https://integrate.api.nvidia.com/v1/chat/completions
+             body='{"model":"nvidia/nemotron-3-super-120b-a12b","messages":[{"role":"user","content":"hi"}],"max_tokens":1}' ;;
+    *)       url=https://openrouter.ai/api/v1/key; body= ;;
   esac
   info "calling $url directly, without the proxy"
-  code=$(curl -sS -o /dev/null -m 30 -w '%{http_code}' -H "Authorization: Bearer $key" "$url") \
-    || die "could not reach the provider"
+  if [ -n "$body" ]; then
+    code=$(curl -sS -o /dev/null -m 30 -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+             -H "Authorization: Bearer $key" -d "$body" "$url") || die "could not reach the provider"
+  else
+    code=$(curl -sS -o /dev/null -m 30 -w '%{http_code}' -H "Authorization: Bearer $key" "$url") \
+      || die "could not reach the provider"
+  fi
   echo "  HTTP $code"
   case "$code" in
-    200) info 'the key is VALID — so the failure is in the proxy or its config, not the key' ;;
-    401) warn 'the provider REJECTED this key: revoked, incomplete, or from another account. Generate a fresh one and re-run setup.' ;;
+    401) warn 'the provider REJECTED this key: revoked, malformed, or from another account. Re-run setup and paste ONLY the token.' ;;
     403) warn 'the key is recognised but not entitled to this endpoint' ;;
-    *)   warn 'unexpected status — check the provider dashboard' ;;
+    *)   info 'the key was ACCEPTED (no 401) — so the failure is in the proxy or its config, not the key' ;;
   esac
 }
 

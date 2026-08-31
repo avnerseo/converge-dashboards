@@ -86,6 +86,14 @@ function Invoke-Setup {
             $secure = Read-Host "$keyVar (input hidden)" -AsSecureString
             $plain  = [System.Net.NetworkCredential]::new('', $secure).Password
             if (-not $plain) { Die 'no key entered' }
+            # People paste the whole Authorization header out of a provider's sample
+            # code - '"Bearer nvapi-..."' - and the hidden prompt makes it invisible.
+            # Reduce whatever arrived to the bare token.
+            $clean = $plain.Trim().Trim('"').Trim("'").Trim()
+            if ($clean -match '^(?i)Bearer\s+(.+)$') { $clean = $Matches[1].Trim() }
+            $clean = $clean.Trim('"').Trim("'").Trim()
+            if ($clean -ne $plain) { Write-Warn 'stripped quotes / a "Bearer" prefix from what you pasted' }
+            $plain = $clean
             $lines = @()
             if (Test-Path $EnvFile) { $lines = Get-Content $EnvFile | Where-Object { $_ -notmatch "^$keyVar=" } }
             $lines += "$keyVar=$plain"
@@ -213,11 +221,22 @@ function Invoke-TestKey {
     if ($key -match '["'']'){ Write-Warn 'the stored value contains quote characters - it was pasted with quotes' }
     if ($name -like 'NVIDIA*' -and $key -notlike 'nvapi-*') { Write-Warn "an NVIDIA key normally starts with 'nvapi-'" }
 
-    $url = if ($name -like 'NVIDIA*') { 'https://integrate.api.nvidia.com/v1/models' } else { 'https://openrouter.ai/api/v1/models' }
+    # Both endpoints REQUIRE authentication. A model listing does not: NVIDIA's
+    # /v1/models answers 200 to anyone, so testing against it would call a broken
+    # key valid. Only 401 means rejected - any other status still proves the
+    # credential was accepted.
+    $isNv = $name -like 'NVIDIA*'
+    $url  = if ($isNv) { 'https://integrate.api.nvidia.com/v1/chat/completions' } else { 'https://openrouter.ai/api/v1/key' }
+    $args = @{ Uri = $url; Headers = @{ Authorization = "Bearer $key" }; UseBasicParsing = $true }
+    if ($isNv) {
+        $args.Method      = 'POST'
+        $args.ContentType = 'application/json'
+        $args.Body        = '{"model":"nvidia/nemotron-3-super-120b-a12b","messages":[{"role":"user","content":"hi"}],"max_tokens":1}'
+    }
     Write-Info "calling $url directly, without the proxy"
     $code = 0
     try {
-        $r = Invoke-WebRequest -Uri $url -Headers @{ Authorization = "Bearer $key" } -UseBasicParsing
+        $r = Invoke-WebRequest @args
         $code = [int]$r.StatusCode
     } catch {
         if ($_.Exception.Response) { $code = [int]$_.Exception.Response.StatusCode }
@@ -225,10 +244,9 @@ function Invoke-TestKey {
     }
     Write-Host "  HTTP $code"
     switch ($code) {
-        200 { Write-Info 'the key is VALID - so the failure is in the proxy or its config, not the key' }
-        401 { Write-Warn 'the provider REJECTED this key: revoked, incomplete, or from another account. Generate a fresh one and re-run setup.' }
+        401 { Write-Warn 'the provider REJECTED this key: revoked, malformed, or from another account. Re-run setup and paste ONLY the token.' }
         403 { Write-Warn 'the key is recognised but not entitled to this endpoint' }
-        default { Write-Warn "unexpected status - see the provider dashboard" }
+        default { Write-Info 'the key was ACCEPTED (no 401) - so the failure is in the proxy or its config, not the key' }
     }
 }
 
