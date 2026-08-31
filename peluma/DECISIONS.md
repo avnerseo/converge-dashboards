@@ -1082,3 +1082,63 @@ grounds, leaving the anomaly in place.
 Two ways out, and they are the merchant's call, not an inference to be made here:
 steer the mix toward the single brushes (featured variant, default selection, imagery), or
 make the Sets carry their own cost. No price or variant order was changed.
+
+## The brush is repriced by content, not by colour — 2026-08-31
+
+Two changes to the flagship, both verified from the live storefront afterwards.
+
+### 1. Variant names now say what is in the box
+
+`productOptionUpdate` on the single `Style` option. Variant IDs and SKUs unchanged, so the
+BXGY bundle — which targets **products**, not variants — could not break, and was re-checked
+`ACTIVE` after.
+
+| was | is |
+|---|---|
+| Porcelain White Brush | White brush |
+| Purple Brush | Purple brush |
+| Porcelain White Set | White brush + lint roller |
+| Milk Brown Set | Milk brown brush + lint roller |
+| Set | Two brushes - white + milk brown |
+
+This was written down as needed on 28 Aug — *"the names should become self-explanatory"* — and
+then left undone for three days. It took one mutation.
+
+### 2. Renaming immediately exposed a live cannibalisation risk
+
+The moment `Set` became `Two brushes - white + milk brown`, it read as **two brushes for the
+price of one**, at $29.90. It is also the worst-margin line on the page (landed ≈$17.42).
+Clarity turned a hidden anomaly into the obvious buy.
+
+So the pricing decision stopped being optional. Applied:
+
+| variant | contents | price | landed | fee | **contribution** |
+|---|---|---|---|---|---|
+| White brush | 1 item | 29.90 | ≈8.82 | 1.17 | **≈19.91** |
+| Purple brush | 1 item | 29.90 | ≤8.82 | 1.17 | **≥19.91** |
+| White brush + lint roller | 2 items | 29.90 → **39.90** | 17.42 | 1.46 | **21.02** |
+| Two brushes | 2 items | 29.90 → **39.90** | ≈17.42 | 1.46 | **≈21.02** |
+| Milk brown brush + lint roller | 2 items | 39.90 | 17.42 | 1.46 | **21.02** |
+
+**One item $29.90, two items $39.90.** No compare-at anywhere, so no unsubstantiated discount
+claim was introduced.
+
+**Why this is not the 28 Aug reprice that was reverted.** That one raised prices from cost plus
+margin, and eBay's $8.99–$16.94 for the same generic product refuted it. This one is justified
+by a second physical item in the box — the strongest argument available on the page — and it
+deletes the least defensible thing that was there: **$10 for a colour.**
+
+Minimum contribution across the product moves from **$11.31 to $19.91**. Every variant now
+clears the ~$17 gate; before, the one that actually sold did not.
+
+### 3. Copy that the rename would have falsified
+
+The live description still read *"The Porcelain White Set and Milk Brown Set also include the
+rolling lint remover"* — names that no longer exist. Rewritten to describe the options by
+content, and confirmed on the storefront: zero occurrences of the old names remain.
+
+Checked and clear: no live Pin quotes a price, and the "free worldwide shipping" claim in three
+Pin descriptions still holds, because the brush sits in the Zendrop profile whose Rest-of-World
+zone is free. **Open:** `pin-10`, scheduled 4 Sep, says *"Both Peluma sets"* — stale now that
+three options carry two items. Its Routine fires into this session, so the copy gets corrected
+at post time rather than by editing the Routine blind.
