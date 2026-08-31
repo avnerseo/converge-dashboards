@@ -12,7 +12,7 @@
 #                       token, does NOT consume your subscription quota)
 #   plain `claude`    - your normal subscription install, untouched by this script
 #
-# Usage: ./fcc.sh setup | start | claude | api | status | stop | uninstall
+# Usage: ./fcc.sh setup | start | claude | api | testkey | status | stop | uninstall
 
 set -euo pipefail
 
@@ -166,6 +166,36 @@ cmd_api() {
       claude "$@"
 }
 
+# Calls the provider directly with the stored key, bypassing the proxy entirely.
+# A 401 here means the key itself is bad; a 200 here with a 401 through the proxy
+# means the proxy is the problem. Never prints the key.
+cmd_testkey() {
+  [ -f "$ENV_FILE" ] || die "no .env at $ENV_FILE — run './fcc.sh setup' first"
+  local line name raw key url code
+  line=$(grep -m1 -E '^(NVIDIA_NIM|OPENROUTER)_API_KEY=' "$ENV_FILE") || die "no provider key found in $ENV_FILE"
+  name=${line%%=*}; raw=${line#*=}
+  key=$(printf '%s' "$raw" | tr -d '[:space:]')
+  info "$name — ${#key} chars, starts '${key:0:6}', ends '${key: -4}'"
+  [ "$raw" = "$key" ] || warn 'the stored value has surrounding whitespace'
+  case "$key" in *\"*|*\'*) warn 'the stored value contains quote characters';; esac
+  case "$name" in NVIDIA*) case "$key" in nvapi-*) ;; *) warn "an NVIDIA key normally starts with 'nvapi-'";; esac;; esac
+
+  case "$name" in
+    NVIDIA*) url=https://integrate.api.nvidia.com/v1/models ;;
+    *)       url=https://openrouter.ai/api/v1/models ;;
+  esac
+  info "calling $url directly, without the proxy"
+  code=$(curl -sS -o /dev/null -m 30 -w '%{http_code}' -H "Authorization: Bearer $key" "$url") \
+    || die "could not reach the provider"
+  echo "  HTTP $code"
+  case "$code" in
+    200) info 'the key is VALID — so the failure is in the proxy or its config, not the key' ;;
+    401) warn 'the provider REJECTED this key: revoked, incomplete, or from another account. Generate a fresh one and re-run setup.' ;;
+    403) warn 'the key is recognised but not entitled to this endpoint' ;;
+    *)   warn 'unexpected status — check the provider dashboard' ;;
+  esac
+}
+
 cmd_status() {
   echo "FCC_HOME : $FCC_HOME"
   echo "app      : $([ -d "$APP_DIR" ] && echo present || echo 'missing (run setup)')"
@@ -201,8 +231,9 @@ case "${1:-}" in
   start)     cmd_start ;;
   claude)    shift; cmd_claude "$@" ;;
   api)       shift; cmd_api "$@" ;;
+  testkey)   cmd_testkey ;;
   status)    cmd_status ;;
   stop)      cmd_stop ;;
   uninstall) cmd_uninstall ;;
-  *) echo "usage: $0 {setup|start|claude|api|status|stop|uninstall}" >&2; exit 2 ;;
+  *) echo "usage: $0 {setup|start|claude|api|testkey|status|stop|uninstall}" >&2; exit 2 ;;
 esac

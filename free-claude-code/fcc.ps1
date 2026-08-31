@@ -11,12 +11,12 @@
 #                       token, does NOT consume your subscription quota)
 #   plain `claude`    - your normal subscription install, untouched by this script
 #
-# Usage:  .\fcc.ps1 setup | start | claude | api | status | stop | uninstall
+# Usage:  .\fcc.ps1 setup | start | claude | api | testkey | status | stop | uninstall
 # If PowerShell blocks the script:  Set-ExecutionPolicy -Scope Process Bypass
 
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('setup', 'start', 'claude', 'api', 'status', 'stop', 'uninstall')]
+    [ValidateSet('setup', 'start', 'claude', 'api', 'testkey', 'status', 'stop', 'uninstall')]
     [string]$Command = 'status',
 
     [Parameter(ValueFromRemainingArguments = $true)]
@@ -197,6 +197,41 @@ function Invoke-Api {
     }
 }
 
+# Calls the provider directly with the stored key, bypassing the proxy entirely.
+# A 401 here means the key itself is bad; a 200 here with a 401 through the proxy
+# means the proxy is the problem. Never prints the key.
+function Invoke-TestKey {
+    if (-not (Test-Path $EnvFile)) { Die "no .env at $EnvFile - run '.\fcc.ps1 setup' first" }
+    $line = Get-Content $EnvFile | Where-Object { $_ -match '^(NVIDIA_NIM|OPENROUTER)_API_KEY=' } | Select-Object -First 1
+    if (-not $line) { Die "no provider key found in $EnvFile" }
+    $name, $raw = $line -split '=', 2
+    $key = $raw.Trim()
+    $head = $key.Substring(0, [Math]::Min(6, $key.Length))
+    $tail = $key.Substring([Math]::Max(0, $key.Length - 4))
+    Write-Info "$name — $($key.Length) chars, starts '$head', ends '$tail'"
+    if ($raw -ne $key)      { Write-Warn 'the stored value has leading/trailing whitespace' }
+    if ($key -match '["'']'){ Write-Warn 'the stored value contains quote characters - it was pasted with quotes' }
+    if ($name -like 'NVIDIA*' -and $key -notlike 'nvapi-*') { Write-Warn "an NVIDIA key normally starts with 'nvapi-'" }
+
+    $url = if ($name -like 'NVIDIA*') { 'https://integrate.api.nvidia.com/v1/models' } else { 'https://openrouter.ai/api/v1/models' }
+    Write-Info "calling $url directly, without the proxy"
+    $code = 0
+    try {
+        $r = Invoke-WebRequest -Uri $url -Headers @{ Authorization = "Bearer $key" } -UseBasicParsing
+        $code = [int]$r.StatusCode
+    } catch {
+        if ($_.Exception.Response) { $code = [int]$_.Exception.Response.StatusCode }
+        else { Die "could not reach the provider: $($_.Exception.Message)" }
+    }
+    Write-Host "  HTTP $code"
+    switch ($code) {
+        200 { Write-Info 'the key is VALID - so the failure is in the proxy or its config, not the key' }
+        401 { Write-Warn 'the provider REJECTED this key: revoked, incomplete, or from another account. Generate a fresh one and re-run setup.' }
+        403 { Write-Warn 'the key is recognised but not entitled to this endpoint' }
+        default { Write-Warn "unexpected status - see the provider dashboard" }
+    }
+}
+
 function Invoke-Status {
     Write-Host "FCC_HOME : $FccHome"
     Write-Host ("app      : " + $(if (Test-Path $AppDir) { 'present' } else { 'missing (run setup)' }))
@@ -233,6 +268,7 @@ switch ($Command) {
     'start'     { Invoke-Start }
     'claude'    { Invoke-Claude }
     'api'       { Invoke-Api }
+    'testkey'   { Invoke-TestKey }
     'status'    { Invoke-Status }
     'stop'      { Invoke-Stop }
     'uninstall' { Invoke-Uninstall }
