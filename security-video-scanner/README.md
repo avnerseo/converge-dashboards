@@ -9,7 +9,7 @@ vscan find  --person "David" --arrivals --report david.html
 vscan ask   "someone carrying a large box to the front door" --report box.html
 ```
 
-Five search engines share one index:
+Six search engines share one index:
 
 | | what it answers | where it runs |
 |---|---|---|
@@ -17,6 +17,7 @@ Five search engines share one index:
 | **Appearance search** | "who else looks like this" — works with no face visible | fully local (Youtu ReID, CPU) |
 | **Object search** | "when was anyone/a white car/a bag on camera" | fully local (YOLOX-S, 80 COCO classes) |
 | **Zone search** | "when did the door open", "when was the gate left open" | fully local (thumbnail arithmetic) |
+| **Counting lines** | "when did someone come in", "who left through the gate" | fully local (stored tracks) |
 | **`ask` — instruction search** | anything you can describe in a sentence | frames are sent to the Claude API |
 
 Everything except `ask` runs offline: no frame leaves the machine.
@@ -171,6 +172,9 @@ vscan ask "a delivery van stopping at the gate"    # anything describable
 
 vscan zone add --video gate --name "front door" --box 0.42,0.30,0.14,0.38
 vscan zone scan --name "front door" --report door.html   # when did it open?
+
+vscan line add  --video gate --name "gate" --line 0.5,0.1,0.5,0.9
+vscan line scan --name "gate" --direction out            # who left through it?
 ```
 
 Output looks like this, with an HTML timeline and JSON on request:
@@ -233,6 +237,42 @@ In the web UI a saved zone's **name becomes a search term**: with a zone called
 `front door`, typing "when did the front door open" into the one search box
 routes to the zone scan — locally, for nothing. Without that zone the same
 sentence has no local answer and goes to the model.
+
+## Counting lines — "who came in, and who went out"
+
+A zone says a rectangle changed. It cannot say which way somebody was walking,
+and direction is most of the question: "when did someone enter the room" and
+"when did someone leave through the gate" are opposite answers about the same
+doorway.
+
+So the operator drags a line across the place people pass, and is shown an
+arrow: crossings that follow it are `in`, the rest are `out`. One button flips
+the arrow, which is the entire interface for a decision that would otherwise
+need explaining in vectors.
+
+```bash
+vscan line add  --video gate --name "front gate" --line 0.5,0.1,0.5,0.9
+vscan line list
+vscan line scan --name "front gate"                       # both directions
+vscan line scan --name "front gate" --direction out --report left.html
+vscan line scan --line 0.5,0.1,0.5,0.9 --labels car       # unsaved, one-off
+```
+
+Every crossing is read off the tracks already stored while indexing: the
+bottom-centre of each box, frame to frame, tested against the drawn segment.
+Being on opposite sides of the *infinite* line is not enough - someone walking
+past the far end of a doorway has not gone through it - and the moment reported
+is halfway between the two frames, because nobody stands on a threshold. Each
+crossing is its own event, carrying its direction, label and colour.
+
+Nothing is decoded and no model runs, so a twelve-hour recording answers in
+milliseconds, as often as an investigation asks. `--labels` decides what counts:
+people by default, vehicles for a barrier, both for a shared entrance.
+
+In the web UI the line's name is a search term like a zone's, and the direction
+comes from the sentence: with a line called `gate`, "when did someone leave
+through the gate" runs it with `--direction out`, and a search that finds
+nothing that way offers the other one - "no crossings out; 4 came in".
 
 ## `ask` — the instruction search
 
@@ -302,6 +342,8 @@ vscan label --cluster N   name a cluster, making it searchable
 vscan similar             who else looks like the person at this moment
 vscan zone add|list|remove|scan
                           watch one rectangle: a door, a till, a parking bay
+vscan line add|list|remove|scan
+                          count who crosses a line, and in which direction
 vscan doctor              is this footage searchable? measure before indexing
 vscan ask "QUERY"         natural-language search (Claude API)
 vscan clip                cut one clip out of an indexed video

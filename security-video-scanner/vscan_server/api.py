@@ -27,6 +27,7 @@ from vscan.search import (appearance_at, enroll_appearance, enroll_from_faces,
 from vscan.util import fmt_timecode
 from vscan.vectors import clear_caches
 from vscan.video import grab_frame, probe
+from vscan.tripwire import Line, crossings, to_events as crossings_to_events
 from vscan.zones import (Box, DEFAULT_SENSITIVITY as ZONE_SENSITIVITY,
                          ZonePlan, preview as zone_preview, run as run_zone)
 
@@ -798,6 +799,110 @@ def preview_zone(body: ZonePreview, _: sqlite3.Row = Depends(require_viewer),
         return zone_preview(index, body.video_id, box)
 
 
+# ============================================================== tripwires
+# A line drawn across a doorway. Zones say a rectangle changed; a line says who
+# went through it and in which direction - which is the whole of "when did
+# someone enter the room" and "when did someone leave through the gate", and is
+# not answerable from detections alone however good the detector is.
+
+class LineBody(BaseModel):
+    name: str
+    line: list[float] = Field(min_length=4, max_length=4)   # x1,y1,x2,y2
+    video_id: int | None = None
+    flipped: bool = False
+    labels: list[str] = Field(default_factory=lambda: ["person"])
+
+
+class LinePatch(BaseModel):
+    name: str | None = None
+    line: list[float] | None = None
+    flipped: bool | None = None
+    labels: list[str] | None = None
+
+
+def _line_dict(row: sqlite3.Row) -> dict:
+    return {"id": int(row["id"]), "name": row["name"], "video_id": row["video_id"],
+            "line": [row["x1"], row["y1"], row["x2"], row["y2"]],
+            "flipped": bool(row["flipped"]),
+            "labels": [l for l in (row["labels"] or "person").split(",") if l],
+            "created_at": row["created_at"]}
+
+
+@router.get("/lines")
+def list_lines(video_id: int | None = Query(None),
+               _: sqlite3.Row = Depends(require_viewer),
+               settings: Settings = Depends(settings_dep)) -> dict:
+    with open_index(settings) as index:
+        rows = index.tripwires(video_id)
+    return {"lines": [_line_dict(r) for r in rows]}
+
+
+@router.post("/lines", status_code=status.HTTP_201_CREATED)
+def create_line(body: LineBody, request: Request,
+                user: sqlite3.Row = Depends(require_analyst),
+                store: Store = Depends(get_store),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    if not body.name.strip():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "a line needs a name")
+    try:
+        line = Line.parse(body.line, body.flipped)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    with open_index(settings) as index:
+        if body.video_id is not None and index.get_video(body.video_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such video")
+        try:
+            line_id = index.add_tripwire(body.name, line.as_tuple(), body.video_id,
+                                         body.flipped, body.labels or ["person"])
+        except ValueError as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        row = index.get_tripwire(line_id)
+    store.audit("line.create", user=user,
+                detail={"name": body.name, "video_id": body.video_id},
+                ip=client_ip(request))
+    return {"line": _line_dict(row)}
+
+
+@router.patch("/lines/{line_id}")
+def patch_line(line_id: int, body: LinePatch, request: Request,
+               user: sqlite3.Row = Depends(require_analyst),
+               store: Store = Depends(get_store),
+               settings: Settings = Depends(settings_dep)) -> dict:
+    fields: dict[str, Any] = {"name": body.name}
+    if body.flipped is not None:
+        fields["flipped"] = int(body.flipped)
+    if body.labels is not None:
+        fields["labels"] = ",".join(body.labels) or "person"
+    if body.line is not None:
+        try:
+            parsed = Line.parse(body.line)
+        except ValueError as exc:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        fields.update(zip(("x1", "y1", "x2", "y2"), parsed.as_tuple()))
+    with open_index(settings) as index:
+        if index.get_tripwire(line_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such line")
+        index.update_tripwire(line_id, **fields)
+        row = index.get_tripwire(line_id)
+    store.audit("line.update", user=user, detail={"line_id": line_id},
+                ip=client_ip(request))
+    return {"line": _line_dict(row)}
+
+
+@router.delete("/lines/{line_id}")
+def delete_line(line_id: int, request: Request,
+                user: sqlite3.Row = Depends(require_analyst),
+                store: Store = Depends(get_store),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    with open_index(settings) as index:
+        row = index.get_tripwire(line_id)
+        if row is None or not index.delete_tripwire(line_id):
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such line")
+        name = row["name"]
+    store.audit("line.delete", user=user, detail={"line": name}, ip=client_ip(request))
+    return {"deleted": line_id}
+
+
 # ================================================================= search
 class PersonSearch(BaseModel):
     person_id: int
@@ -1043,6 +1148,68 @@ def _zone_summary(plan: ZonePlan) -> dict:
             "sensitivity": plan.sensitivity, "label": plan.label}
 
 
+class LineSearch(BaseModel):
+    line_id: int | None = None
+    line: list[float] | None = None          # or an unsaved line, used once
+    flipped: bool = False
+    direction: Literal["in", "out", "both"] = "both"
+    labels: list[str] | None = None
+    video_ids: list[int] | None = None
+    start: float = 0.0
+    end: float | None = None
+    min_score: float = 0.4
+
+
+@router.post("/search/line")
+def search_line(body: LineSearch, request: Request,
+                user: sqlite3.Row = Depends(require_viewer),
+                store: Store = Depends(get_store),
+                settings: Settings = Depends(settings_dep)) -> dict:
+    """Who crossed the line, when, and which way."""
+    with open_index(settings) as index:
+        row = index.get_tripwire(body.line_id) if body.line_id else None
+        if body.line_id and row is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such line")
+        raw = body.line if body.line is not None else \
+            ([row["x1"], row["y1"], row["x2"], row["y2"]] if row else None)
+        if raw is None:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                                "give a saved line or two points to draw one")
+        try:
+            line = Line.parse(raw, bool(row["flipped"]) if row else body.flipped)
+        except ValueError as exc:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+
+        labels = body.labels or (
+            [l for l in (row["labels"] or "person").split(",") if l] if row
+            else ["person"])
+        video_ids = body.video_ids
+        if not video_ids and row is not None and row["video_id"]:
+            video_ids = [int(row["video_id"])]
+        if not video_ids:
+            video_ids = [int(v["id"]) for v in index.videos()]
+
+        label = row["name"] if row else "line"
+        found = []
+        for video_id in video_ids:
+            found.extend(crossings(index, int(video_id), line, labels,
+                                   body.min_score, body.start, body.end))
+        events = crossings_to_events(found, label, started_at_map(index),
+                                     body.direction)
+        # Both totals, whichever way the question was asked: an operator
+        # reading "4 went out" wants to know that 5 went in.
+        tally = {"in": sum(1 for c in found if c.direction == "in"),
+                 "out": sum(1 for c in found if c.direction == "out")}
+
+    store.audit("search.line", user=user,
+                detail={"line": label, "direction": body.direction,
+                        "results": len(events)}, ip=client_ip(request))
+    return {**_events_payload(events), "tally": tally,
+            "line": {"label": label, "line": list(line.as_tuple()),
+                     "flipped": line.flipped, "direction": body.direction,
+                     "labels": labels}}
+
+
 class AskBody(BaseModel):
     query: str
     video_ids: list[int] | None = None
@@ -1094,7 +1261,7 @@ class AutoSearch(BaseModel):
     arrivals: bool = False
     absence: float = 300.0
     max_frames: int = 400
-    force_mode: Literal["person", "zone", "objects", "ask"] | None = None
+    force_mode: Literal["person", "zone", "line", "objects", "ask"] | None = None
 
 
 @router.post("/search")
@@ -1110,11 +1277,13 @@ def search_auto(body: AutoSearch, request: Request,
     with open_index(settings) as index:
         people = [(int(p["id"]), p["name"]) for p in index.persons()]
         watched = [(int(z["id"]), z["name"]) for z in index.zones()]
-    intent = resolve_query(body.query, people, watched)
+        drawn = [(int(l["id"]), l["name"]) for l in index.tripwires()]
+    intent = resolve_query(body.query, people, watched, drawn)
     if body.force_mode and body.force_mode != intent.mode:
         intent = Intent(body.force_mode, body.query, person_id=intent.person_id,
                         person_name=intent.person_name, zone_id=intent.zone_id,
-                        zone_name=intent.zone_name,
+                        zone_name=intent.zone_name, line_id=intent.line_id,
+                        line_name=intent.line_name, direction=intent.direction,
                         labels=intent.labels or (intent.fallback.labels
                                                  if intent.fallback else ["person"]),
                         colours=intent.colours, moving=intent.moving,
@@ -1137,6 +1306,13 @@ def search_auto(body: AutoSearch, request: Request,
                     AppearanceSearch(person_id=intent.person_id, **common),
                     request, user, store, settings)
                 intent.reason += " - no face matched, so this is by appearance"
+        return {**payload, "intent": intent.to_dict()}
+
+    if intent.mode == "line" and intent.line_id:
+        payload = search_line(
+            LineSearch(line_id=intent.line_id, direction=intent.direction,
+                       video_ids=body.video_ids, start=body.start, end=body.end),
+            request, user, store, settings)
         return {**payload, "intent": intent.to_dict()}
 
     if intent.mode == "zone" and intent.zone_id:

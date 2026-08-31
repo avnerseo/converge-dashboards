@@ -11,7 +11,7 @@ import numpy as np
 
 from .util import ensure_dir
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 
 # Tables first, then the migration that adds columns older indexes lack, and
 # only then the indexes - some of which name those columns, so creating them
@@ -109,6 +109,16 @@ CREATE TABLE IF NOT EXISTS zones (
     created_at  TEXT
 );
 
+CREATE TABLE IF NOT EXISTS tripwires (
+    id          INTEGER PRIMARY KEY,
+    video_id    INTEGER REFERENCES videos(id) ON DELETE CASCADE,  -- NULL: every video
+    name        TEXT NOT NULL,
+    x1 REAL, y1 REAL, x2 REAL, y2 REAL,   -- fractions of the frame
+    flipped     INTEGER NOT NULL DEFAULT 0,  -- which side counts as "in"
+    labels      TEXT NOT NULL DEFAULT 'person',
+    created_at  TEXT
+);
+
 CREATE TABLE IF NOT EXISTS face_labels (
     face_id   INTEGER PRIMARY KEY REFERENCES faces(id) ON DELETE CASCADE,
     person_id INTEGER NOT NULL REFERENCES persons(id) ON DELETE CASCADE,
@@ -127,6 +137,7 @@ CREATE INDEX IF NOT EXISTS idx_appearances_vt ON appearances(video_id, t);
 CREATE INDEX IF NOT EXISTS idx_appearances_track ON appearances(video_id, track);
 CREATE INDEX IF NOT EXISTS idx_pemb_person ON person_embeddings(person_id);
 CREATE INDEX IF NOT EXISTS idx_zones_video ON zones(video_id);
+CREATE INDEX IF NOT EXISTS idx_tripwires_video ON tripwires(video_id);
 """
 
 
@@ -247,8 +258,12 @@ class Index:
             return rows
         out: list[sqlite3.Row] = []
         for sel in selectors:
-            hits = [r for r in rows
-                    if str(r["id"]) == sel or r["path"] == sel or sel in Path(r["path"]).name]
+            # An id or a full path is exact and wins outright. Falling through
+            # to the substring match would let "2" also select every file whose
+            # name happens to contain a 2 - which is most CCTV exports.
+            hits = [r for r in rows if str(r["id"]) == sel or r["path"] == sel]
+            if not hits:
+                hits = [r for r in rows if sel in Path(r["path"]).name]
             if not hits:
                 raise SystemExit(f"no indexed video matches {sel!r}")
             out.extend(h for h in hits if h not in out)
@@ -364,8 +379,18 @@ class Index:
 
     def zone_by_name(self, name: str, video_id: int | None = None
                      ) -> sqlite3.Row | None:
+        """Look a zone up by the name an operator typed.
+
+        Without a video in hand the name alone has to find it - a search box
+        knows "the door", not which file it was drawn on. With one, a zone
+        drawn on that video wins over one that applies to all of them.
+        """
+        if video_id is None:
+            return self.conn.execute(
+                "SELECT * FROM zones WHERE name = ? ORDER BY video_id IS NULL,"
+                " id LIMIT 1", (name.strip(),)).fetchone()
         return self.conn.execute(
-            "SELECT * FROM zones WHERE name = ? AND (video_id IS ? OR video_id IS NULL)"
+            "SELECT * FROM zones WHERE name = ? AND (video_id = ? OR video_id IS NULL)"
             " ORDER BY video_id IS NULL LIMIT 1", (name.strip(), video_id)).fetchone()
 
     def get_zone(self, zone_id: int) -> sqlite3.Row | None:
@@ -385,6 +410,61 @@ class Index:
 
     def delete_zone(self, zone_id: int) -> bool:
         cur = self.conn.execute("DELETE FROM zones WHERE id = ?", (zone_id,))
+        self.conn.commit()
+        return cur.rowcount > 0
+
+    # -- tripwires ---------------------------------------------------------
+    def add_tripwire(self, name: str, line: Sequence[float],
+                     video_id: int | None = None, flipped: bool = False,
+                     labels: Sequence[str] = ("person",)) -> int:
+        """A counting line an operator drew across a doorway, gate or aisle."""
+        if self.tripwire_by_name(name, video_id) is not None:
+            raise ValueError(f"a line called {name!r} already exists here")
+        cur = self.conn.execute(
+            "INSERT INTO tripwires(video_id, name, x1, y1, x2, y2, flipped,"
+            " labels, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+            (video_id, name.strip(), *[float(v) for v in line], int(bool(flipped)),
+             ",".join(labels) or "person",
+             dt.datetime.now().isoformat(timespec="seconds")))
+        self.conn.commit()
+        return int(cur.lastrowid)
+
+    def tripwires(self, video_id: int | None = None) -> list[sqlite3.Row]:
+        if video_id is None:
+            return list(self.conn.execute("SELECT * FROM tripwires ORDER BY name"))
+        return list(self.conn.execute(
+            "SELECT * FROM tripwires WHERE video_id = ? OR video_id IS NULL"
+            " ORDER BY name", (video_id,)))
+
+    def tripwire_by_name(self, name: str, video_id: int | None = None
+                         ) -> sqlite3.Row | None:
+        """As zone_by_name: the name alone must be enough to find it."""
+        if video_id is None:
+            return self.conn.execute(
+                "SELECT * FROM tripwires WHERE name = ? ORDER BY video_id IS NULL,"
+                " id LIMIT 1", (name.strip(),)).fetchone()
+        return self.conn.execute(
+            "SELECT * FROM tripwires WHERE name = ?"
+            " AND (video_id = ? OR video_id IS NULL)"
+            " ORDER BY video_id IS NULL LIMIT 1", (name.strip(), video_id)).fetchone()
+
+    def get_tripwire(self, tripwire_id: int) -> sqlite3.Row | None:
+        return self.conn.execute("SELECT * FROM tripwires WHERE id = ?",
+                                 (tripwire_id,)).fetchone()
+
+    def update_tripwire(self, tripwire_id: int, **fields) -> bool:
+        allowed = {"name", "x1", "y1", "x2", "y2", "flipped", "labels", "video_id"}
+        sets = {k: v for k, v in fields.items() if k in allowed and v is not None}
+        if not sets:
+            return False
+        assignments = ", ".join(f"{k} = ?" for k in sets)
+        cur = self.conn.execute(f"UPDATE tripwires SET {assignments} WHERE id = ?",
+                                (*sets.values(), tripwire_id))
+        self.conn.commit()
+        return cur.rowcount > 0
+
+    def delete_tripwire(self, tripwire_id: int) -> bool:
+        cur = self.conn.execute("DELETE FROM tripwires WHERE id = ?", (tripwire_id,))
         self.conn.commit()
         return cur.rowcount > 0
 
@@ -485,4 +565,5 @@ class Index:
             "coloured": q("SELECT COUNT(*) FROM objects WHERE colour IS NOT NULL"),
             "persons": q("SELECT COUNT(*) FROM persons"),
             "zones": q("SELECT COUNT(*) FROM zones"),
+            "tripwires": q("SELECT COUNT(*) FROM tripwires"),
         }

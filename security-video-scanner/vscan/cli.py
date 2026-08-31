@@ -34,6 +34,8 @@ def build_parser() -> argparse.ArgumentParser:
   vscan similar --video gate --at 00:03:12   # who else looks like that person?
   vscan zone add --video gate --name "front door" --box 0.42,0.30,0.14,0.38
   vscan zone scan --name "front door"        # when did that door open?
+  vscan line add --video gate --name "gate" --line 0.5,0.1,0.5,0.9
+  vscan line scan --name "gate" --direction out   # who left through it?
 """)
     p.add_argument("--version", action="version", version=f"vscan {__version__}")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -149,6 +151,37 @@ def build_parser() -> argparse.ArgumentParser:
     z.add_argument("--sensitivity", type=float, default=None)
     _add_range_args(z)                       # --video lives here
     _add_group_args(z)
+    _add_output_args(z)
+
+    # ---- counting lines
+    s = sub.add_parser("line", help="count who crosses a line, and which way")
+    lsub = s.add_subparsers(dest="line_command", required=True)
+
+    z = lsub.add_parser("add", help="save a counting line")
+    z.add_argument("--name", required=True, help='e.g. "front gate"')
+    z.add_argument("--line", required=True, metavar="X1,Y1,X2,Y2",
+                   help="two points as fractions of the frame, e.g. 0.5,0.1,0.5,0.9")
+    z.add_argument("--video", default=None,
+                   help="the video it was drawn on; omit to count in every video")
+    z.add_argument("--flip", action="store_true",
+                   help="swap which side of the line counts as 'in'")
+    z.add_argument("--labels", nargs="+", default=["person"],
+                   help="what to count (default: person)")
+
+    lsub.add_parser("list", help="show the saved lines")
+
+    z = lsub.add_parser("remove", help="delete a saved line")
+    z.add_argument("--name", required=True)
+    z.add_argument("--video", default=None)
+
+    z = lsub.add_parser("scan", help="report every crossing")
+    z.add_argument("--name", default=None, help="a saved line")
+    z.add_argument("--line", default=None, metavar="X1,Y1,X2,Y2",
+                   help="or two points given here, without saving them")
+    z.add_argument("--direction", choices=("in", "out", "both"), default="both")
+    z.add_argument("--flip", action="store_true")
+    z.add_argument("--labels", nargs="*", default=None)
+    _add_range_args(z)                       # --video lives here
     _add_output_args(z)
 
     # ---- cluster / label
@@ -540,6 +573,78 @@ def cmd_zone(args, index: Index) -> int:
     return emit(index, args, events, f"{label} - {mode}", query=label)
 
 
+def cmd_line(args, index: Index) -> int:
+    from .search import started_at_map
+    from .tripwire import Line, crossings, to_events
+
+    if args.line_command == "add":
+        video_id = _zone_video_id(index, args.video)
+        line = Line.parse(args.line, args.flip)
+        line_id = index.add_tripwire(args.name, line.as_tuple(), video_id,
+                                     args.flip, args.labels)
+        scope = Path(index.get_video(video_id)["path"]).name if video_id else "every video"
+        print(f"line {line_id}: {args.name!r} on {scope} "
+              f"(counting {', '.join(args.labels)})")
+        return 0
+
+    if args.line_command == "list":
+        rows = index.tripwires()
+        if not rows:
+            print("no lines yet - add one with 'vscan line add'.")
+            return 1
+        for r in rows:
+            video = index.get_video(r["video_id"]) if r["video_id"] else None
+            scope = Path(video["path"]).name if video else "all videos"
+            print(f"{r['id']:3d}. {r['name']:<24} {scope:<28} "
+                  f"{r['x1']:.2f},{r['y1']:.2f} -> {r['x2']:.2f},{r['y2']:.2f}"
+                  f"  {r['labels']}{'  (flipped)' if r['flipped'] else ''}")
+        return 0
+
+    if args.line_command == "remove":
+        row = index.tripwire_by_name(args.name, _zone_video_id(index, args.video))
+        if row is None or not index.delete_tripwire(int(row["id"])):
+            LOG.error("no line called %r", args.name)
+            return 1
+        print(f"deleted line {args.name!r}")
+        return 0
+
+    # ---- scan
+    if not args.name and not args.line:
+        LOG.error("give --name of a saved line, or --line x1,y1,x2,y2")
+        return 2
+    saved = index.tripwire_by_name(args.name) if args.name else None
+    if args.name and saved is None:
+        LOG.error("no line called %r - 'vscan line list' shows the saved ones",
+                  args.name)
+        return 1
+
+    if args.line:
+        line = Line.parse(args.line, args.flip)
+    else:
+        line = Line.parse([saved["x1"], saved["y1"], saved["x2"], saved["y2"]],
+                          bool(saved["flipped"]))
+    labels = args.labels or (
+        [l for l in (saved["labels"] or "person").split(",") if l] if saved
+        else ["person"])
+    label = args.name or "line"
+
+    selectors = args.videos
+    if not selectors and saved is not None and saved["video_id"]:
+        selectors = [str(saved["video_id"])]
+    video_ids = _video_ids(index, selectors) or [int(v["id"]) for v in index.videos()]
+
+    start = parse_timecode(args.start)
+    end = parse_timecode(args.end) if args.end else None
+    found = []
+    for video_id in video_ids:
+        found.extend(crossings(index, video_id, line, labels, 0.4, start, end))
+    inbound = sum(1 for c in found if c.direction == "in")
+    print(f"{len(found)} crossing(s): {inbound} in, {len(found) - inbound} out")
+
+    events = to_events(found, label, started_at_map(index), args.direction)
+    return emit(index, args, events, f"{label} - {args.direction}", query=label)
+
+
 def cmd_cluster(args, index: Index) -> int:
     from .report import write_cluster_report
     from .search import cluster_faces, save_clusters
@@ -687,7 +792,7 @@ COMMANDS = {
     "persons": cmd_persons, "forget": cmd_forget, "find": cmd_find,
     "objects": cmd_objects, "cluster": cmd_cluster, "label": cmd_label,
     "ask": cmd_ask, "similar": cmd_similar, "doctor": cmd_doctor,
-    "zone": cmd_zone,
+    "zone": cmd_zone, "line": cmd_line,
     "clip": cmd_clip, "models": cmd_models,
 }
 

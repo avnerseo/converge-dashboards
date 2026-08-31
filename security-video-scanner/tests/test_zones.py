@@ -6,15 +6,13 @@ times, indexes it, and then asks the questions an operator would ask.
 from __future__ import annotations
 
 import shutil
-import subprocess
-from pathlib import Path
 
 import pytest
 
 pytest.importorskip("cv2")
-import cv2                                                  # noqa: E402
 import numpy as np                                          # noqa: E402
 
+from conftest import build_static_camera_clip               # noqa: E402
 from vscan.db import Index                                  # noqa: E402
 from vscan.events import group_hits                         # noqa: E402
 from vscan.indexer import IndexOptions, Indexer             # noqa: E402
@@ -29,37 +27,14 @@ OPEN = [(12.0, 20.0), (38.0, 44.0)]           # seconds the door stands open
 SECONDS = 60
 
 
-def _write_video(out: Path) -> None:
-    rng = np.random.default_rng(3)
-    back = rng.integers(60, 90, size=(H, W, 3), dtype=np.uint8)
-    back = cv2.GaussianBlur(back, (21, 21), 0)
-    cv2.rectangle(back, (40, 300), (600, 470), (70, 70, 78), -1)          # floor
-    x, y, w, h = DOOR
-    cv2.rectangle(back, (x, y), (x + w, y + h), (150, 148, 140), -1)      # shut door
-    cv2.rectangle(back, (x, y), (x + w, y + h), (40, 40, 45), 2)
-
-    raw = out.with_suffix(".raw")
-    with open(raw, "wb") as fh:
-        for n in range(SECONDS * FPS):
-            t = n / FPS
-            frame = cv2.add(back, rng.integers(0, 8, back.shape, dtype=np.uint8))
-            if any(a <= t <= b for a, b in OPEN):
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (18, 18, 22), -1)
-            fh.write(frame.tobytes())
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo",
-                    "-pix_fmt", "bgr24", "-s", f"{W}x{H}", "-r", str(FPS),
-                    "-i", str(raw), "-c:v", "libx264", "-pix_fmt", "yuv420p",
-                    str(out)], check=True)
-    raw.unlink()
-
-
 @pytest.fixture(scope="module")
 def door(tmp_path_factory) -> tuple[Index, int]:
     if not HAS_FFMPEG:
         pytest.skip("ffmpeg is needed to build the sample recording")
     root = tmp_path_factory.mktemp("zones")
     video = root / "door.mp4"
-    _write_video(video)
+    build_static_camera_clip(video, seconds=SECONDS, fps=FPS,
+                             open_windows=OPEN, door=DOOR, size=(W, H))
     index = Index(root / "index")
     Indexer(index, IndexOptions(sample_fps=2.0, detect_faces=False,
                                 detect_objects=False)).run(video, progress=False)

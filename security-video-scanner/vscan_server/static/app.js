@@ -3,7 +3,8 @@
 
 const S = {
   user: null, caps: {}, lang: localStorage.getItem('vscan.lang') || 'he',
-  tab: 'overview', videos: [], persons: [], zones: [], clusters: [], settings: {},
+  tab: 'overview', videos: [], persons: [], zones: [], lines: [], clusters: [],
+  settings: {},
   results: [], resultsLabel: '', jobs: [], pollTimer: null,
 };
 
@@ -94,6 +95,20 @@ const STR = {
     modeZone: 'לפי אזור', whyZone: 'אזור במעקב — משווים את הפינה הזו לאיך שהיא נראית בדרך כלל',
     framesExamined: 'פריימים נבדקו', zoneNoVideos: 'צריך לאנדקס הקלטה אחת לפחות כדי לסמן אזור.',
     zoneScanning: 'סורק את האזור', zoneChanged: 'שינוי באזור',
+    lines: 'קווי חצייה', kindArea: 'אזור (מלבן)', kindLine: 'קו חצייה',
+    lineDraw: 'גררו קו במקום שבו אנשים עוברים — פתח דלת, שער, מסדרון',
+    lineNone: 'עדיין לא סומנו קווים.', lineSearch: 'כל החציות',
+    lineNew: 'סימון קו חצייה חדש', lineSave: 'שמירת הקו',
+    lineNamePh: 'למשל: שער כניסה',
+    lineEveryVideo: 'לספור על הקו הזה בכל הסרטונים (מצלמה קבועה)',
+    lineHint: 'גלאי יודע לומר שאדם נמצא בנקודה מסוימת, אבל לא שהנקודה הזאת היא פתח, ולא אם האדם נכנס או יצא. מותחים קו פעם אחת במקום שבו עוברים, והמערכת סופרת כל חצייה עם הכיוון שלה — מתוך המסלולים שכבר נשמרו באינדוקס, מקומית ובלי עלות.',
+    lineWhich: 'מה נספר', flipDirection: 'החלף כיוון',
+    inArrow: 'החץ מסמן איזה כיוון נחשב "נכנס". לחיצה על "החלף כיוון" הופכת אותו.',
+    directionIn: 'נכנס', directionOut: 'יצא',
+    modeLine: 'לפי קו חצייה',
+    whyLine: 'קו חצייה — מדווח מי חצה אותו, ולאיזה כיוון',
+    crossings: 'חציות',
+    noCrossingsThatWay: 'לא נמצאו חציות בכיוון הזה. בכיוון ההפוך כן נמצאו:',
     inYourFootage: 'מה שיש בהקלטות שלך',
     noSuchObject: 'לא נמצא דבר כזה בהקלטות שאונדקסו. מה שכן נמצא בהן:',
     noSuchColour: 'לא נמצא בצבע הזה. הצבעים שנמצאו בפועל:',
@@ -190,6 +205,20 @@ const STR = {
     modeZone: 'by zone', whyZone: 'is a watched zone - this compares that corner against how it usually looks',
     framesExamined: 'frames examined', zoneNoVideos: 'Index at least one recording before marking a zone.',
     zoneScanning: 'Scanning the zone', zoneChanged: 'Changed by',
+    lines: 'Counting lines', kindArea: 'Area (rectangle)', kindLine: 'Counting line',
+    lineDraw: 'Drag a line where people pass - a doorway, a gate, an aisle',
+    lineNone: 'No lines drawn yet.', lineSearch: 'All crossings',
+    lineNew: 'Draw a new counting line', lineSave: 'Save line',
+    lineNamePh: 'e.g. front gate',
+    lineEveryVideo: 'Count on this line in every video (fixed camera)',
+    lineHint: 'A detector can say a person is at these pixels, but not that those pixels are a doorway, nor whether the person was going in or out. Draw the line once where people pass, and every crossing is counted with its direction - read off the tracks already stored during indexing, locally and at no cost.',
+    lineWhich: 'What is counted', flipDirection: 'Flip direction',
+    inArrow: 'The arrow shows which way counts as "in". Flip direction reverses it.',
+    directionIn: 'in', directionOut: 'out',
+    modeLine: 'by counting line',
+    whyLine: 'is a counting line - it reports who crossed it, and which way',
+    crossings: 'crossings',
+    noCrossingsThatWay: 'no crossings that way. In the other direction there were:',
     inYourFootage: 'In your footage',
     noSuchObject: 'nothing like that in the indexed footage. What is in it:',
     noSuchColour: 'nothing in that colour. The colours actually found:',
@@ -412,14 +441,15 @@ function renderTabs() {
 }
 
 async function refreshCore() {
-  const [videos, persons, zones, stats] = await Promise.all([
+  const [videos, persons, zones, lines, stats] = await Promise.all([
     api('/api/videos').catch(() => ({ videos: [] })),
     api('/api/persons').catch(() => ({ persons: [] })),
     api('/api/zones').catch(() => ({ zones: [] })),
+    api('/api/lines').catch(() => ({ lines: [] })),
     api('/api/stats').catch(() => null),
   ]);
   S.videos = videos.videos; S.persons = persons.persons; S.zones = zones.zones;
-  S.stats = stats || S.stats;
+  S.lines = lines.lines; S.stats = stats || S.stats;
 }
 
 const VIEWS = {};
@@ -704,10 +734,30 @@ VIEWS.search = async () => {
     } else {
       showResults(resultsBox, data.events, query);
       if (!data.count) {
-        const note = emptyNote(data.intent || {});
+        const note = (data.intent || {}).mode === 'line'
+          ? emptyCrossings(data) : emptyNote(data.intent || {});
         if (note) resultsBox.append(note);
       }
     }
+  }
+
+  /* Nobody went out through that door - but four people came in, and that is
+     the answer the operator is one click away from. */
+  function emptyCrossings(data) {
+    const intent = data.intent || {};
+    const tally = data.tally || {};
+    const other = intent.direction === 'in' ? 'out' : 'in';
+    if (intent.direction === 'both' || !tally[other]) return null;
+    return el('div', { class: 'card' },
+      el('p', {}, t('noCrossingsThatWay')),
+      el('div', { class: 'row' }, el('button', {
+        class: 'btn', onclick: guard(async () => {
+          const again = await api('/api/search/line', { method: 'POST',
+            body: { line_id: intent.line_id, direction: other } });
+          showResults(resultsBox, again.events, intent.line_name || '');
+        }),
+      }, `${other === 'in' ? t('directionIn') : t('directionOut')} · `,
+         bdi(tally[other]))));
   }
 
   /* A zero is not an answer. We know exactly what is in the index, so when a
@@ -753,7 +803,8 @@ VIEWS.search = async () => {
 
   function reasonText(intent) {
     const key = { person_enrolled: 'whyPerson', objects_known: 'whyObjects',
-                  zone_watched: 'whyZone', descriptive_word: 'whyDescriptive',
+                  zone_watched: 'whyZone', line_watched: 'whyLine',
+                  descriptive_word: 'whyDescriptive',
                   unknown_word: 'whyUnknown',
                   not_measurable: 'whyNotMeasurable' }[intent.reason_code];
     if (!key) return intent.reason || '';
@@ -765,7 +816,8 @@ VIEWS.search = async () => {
   function showInterpretation(data) {
     const intent = data.intent || {};
     const label = { person: t('modePerson'), zone: t('modeZone'),
-                    objects: t('modeObjects'), ask: t('modeAsk') }[intent.mode] || '';
+                    line: t('modeLine'), objects: t('modeObjects'),
+                    ask: t('modeAsk') }[intent.mode] || '';
     const why = reasonText(intent);
     clear(interpretation).append(
       el('span', {}, `${t('searchedAs')}: `),
@@ -773,13 +825,15 @@ VIEWS.search = async () => {
       why ? el('span', {}, ' — ') : null,
       why ? el('span', { dir: 'auto' }, why) : null);
     // let the operator overrule us in one click
-    const others = ['person', 'zone', 'objects', 'ask'].filter((m) => m !== intent.mode
+    const others = ['person', 'zone', 'line', 'objects', 'ask'].filter((m) =>
+      m !== intent.mode
       && (m !== 'person' || S.persons.length)
-      && (m !== 'zone' || intent.zone_id));
+      && (m !== 'zone' || intent.zone_id)
+      && (m !== 'line' || intent.line_id));
     for (const mode of others) {
       interpretation.append(' ', el('button', {
         class: 'btn ghost small', onclick: guard(() => run(mode)),
-      }, { person: t('modePerson'), zone: t('modeZone'),
+      }, { person: t('modePerson'), zone: t('modeZone'), line: t('modeLine'),
            objects: t('modeObjects'), ask: t('modeAsk') }[mode]));
     }
   }
@@ -825,6 +879,7 @@ VIEWS.search = async () => {
   }
   for (const person of S.persons.slice(0, 3)) found.push(chip(person.name));
   for (const zone of S.zones.slice(0, 3)) found.push(chip(zone.name));
+  for (const line of S.lines.slice(0, 3)) found.push(chip(line.name));
 
   const examples = el('div', { class: 'row', style: 'margin-top:10px' },
     el('span', { class: 'small muted' },
@@ -938,6 +993,7 @@ async function findSimilar(event) {
 
 function resultCard(event) {
   const zoneHit = !!(event.meta && event.meta.zone);
+  const crossed = !!(event.meta && event.meta.direction);
   const thumb = event.best_thumb
     ? `/api/media/thumb?path=${encodeURIComponent(event.best_thumb)}`
     : `/api/media/frame/${event.video_id}?t=${event.best_t}&width=480`;
@@ -953,9 +1009,13 @@ function resultCard(event) {
       event.meta && event.meta.note ? el('div', { class: 'small', dir: 'auto' }, event.meta.note) : null,
       zoneHit ? el('div', { class: 'small muted' },
         `${t('zoneChanged')}: `, bdi(`${Math.round(event.meta.changed * 100)}%`)) : null,
+      crossed ? el('div', { class: 'small' },
+        el('b', {}, event.meta.direction === 'in' ? t('directionIn') : t('directionOut')),
+        ' · ', labelName(event.meta.label),
+        event.meta.colour ? ` · ${colourName(event.meta.colour)}` : '') : null,
       // "who else looks like this" reads an appearance vector out of a person
       // box; a rectangle on a wall has none, so it is not offered there.
-      zoneHit ? null : el('button', {
+      (zoneHit || crossed) ? null : el('button', {
         class: 'btn ghost small', style: 'margin-top:8px',
         onclick: guard(async (e) => { e.stopPropagation(); await findSimilar(event); }),
       }, t('findSimilar'))));
@@ -1003,10 +1063,11 @@ function openEvent(event) {
       }) }, t('exportClips')) : null));
 }
 
-/* ----------------------------------------------------------------- zones
-   A door is not an object, so it cannot be detected. It is a rectangle that
-   sometimes stops looking like itself - which the operator has to point at
-   once, and can then ask about for ever, locally and for nothing. */
+/* --------------------------------------------------- zones and lines
+   Two questions no detector can answer, because both are about a place
+   rather than a thing. A rectangle that stops looking like itself is a
+   door that opened; a line somebody stepped over is a person who came in
+   or went out. Both are drawn once, by the operator, on their own picture. */
 VIEWS.zones = async () => {
   const wrap = el('div');
   if (!S.videos.length) {
@@ -1015,19 +1076,25 @@ VIEWS.zones = async () => {
         t('addFootage')));
   }
   if (can('analyst')) wrap.append(zoneEditor());
-  wrap.append(await zoneList());
+  wrap.append(await zoneList(), await lineList());
   return wrap;
 };
 
 function zoneEditor() {
-  let drawn = null;                       // {x,y,w,h} in fractions of the frame
+  let kind = 'area';                      // 'area' | 'line'
+  let drawn = null;                       // {x,y,w,h} for an area
+  let drawnLine = null;                   // {x1,y1,x2,y2} for a line
+  let flipped = false;
+
   const videoPick = el('select', {}, ...S.videos.map((v) =>
     el('option', { value: v.id }, v.name)));
   const at = el('input', { type: 'range', min: '0', max: '100', value: '35',
     style: 'width:100%' });
   const img = el('img', { alt: '', draggable: false });
   const rect = el('div', { class: 'zone-rect hidden' });
-  const canvas = el('div', { class: 'zone-canvas' }, img, rect);
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'zone-line');
+  const canvas = el('div', { class: 'zone-canvas' }, img, rect, svg);
   const readout = el('div', { class: 'small muted', style: 'margin-top:6px' },
     t('zoneDraw'));
 
@@ -1037,22 +1104,59 @@ function zoneEditor() {
     const seconds = (Number(at.value) / 100) * (v.duration || 0);
     img.src = `/api/media/frame/${v.id}?t=${seconds.toFixed(2)}&width=960`;
   }
-  videoPick.addEventListener('change', () => { drawn = null; paint(); loadFrame(); });
+  videoPick.addEventListener('change', () => { reset(); loadFrame(); });
   at.addEventListener('change', loadFrame);
+  img.addEventListener('load', paint);
   loadFrame();
 
-  function paint() {
+  function reset() { drawn = null; drawnLine = null; paint(); }
+
+  function paintArea() {
     if (!drawn) { rect.classList.add('hidden'); return; }
     rect.classList.remove('hidden');
-    rect.style.insetInlineStart = '';
     rect.style.left = `${drawn.x * 100}%`;
     rect.style.top = `${drawn.y * 100}%`;
     rect.style.width = `${drawn.w * 100}%`;
     rect.style.height = `${drawn.h * 100}%`;
   }
 
+  /* The arrow is the whole user interface for direction: rather than explain
+     which side of a vector counts as "in", show it and let them flip it. */
+  function paintLine() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    if (!drawnLine) { svg.classList.add('hidden'); return; }
+    svg.classList.remove('hidden');
+    const w = img.clientWidth || 960;
+    const h = img.clientHeight || 540;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const p1 = { x: drawnLine.x1 * w, y: drawnLine.y1 * h };
+    const p2 = { x: drawnLine.x2 * w, y: drawnLine.y2 * h };
+    const draw = (tag, attrs) => {
+      const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+      svg.append(node);
+      return node;
+    };
+    draw('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, class: 'wire' });
+    // "in" runs along the line's left normal, or the other way when flipped
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const length = Math.hypot(dx, dy) || 1;
+    const sign = flipped ? -1 : 1;
+    const nx = (-dy / length) * sign, ny = (dx / length) * sign;
+    const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+    const tip = { x: mid.x + nx * 42, y: mid.y + ny * 42 };
+    draw('line', { x1: mid.x, y1: mid.y, x2: tip.x, y2: tip.y, class: 'arrow' });
+    draw('polygon', { class: 'arrow head', points: [
+      `${tip.x + nx * 9},${tip.y + ny * 9}`,
+      `${tip.x - ny * 7 - nx * 4},${tip.y + nx * 7 - ny * 4}`,
+      `${tip.x + ny * 7 - nx * 4},${tip.y - nx * 7 - ny * 4}`,
+    ].join(' ') });
+  }
+
+  function paint() { paintArea(); paintLine(); }
+
   /* Drag to draw. Coordinates are kept as fractions of the picture, so the
-     same rectangle fits a 4CIF camera and a 4K one. */
+     same rectangle or line fits a 4CIF camera and a 4K one. */
   let origin = null;
   const point = (event) => {
     const area = img.getBoundingClientRect();
@@ -1060,21 +1164,32 @@ function zoneEditor() {
              y: Math.min(1, Math.max(0, (event.clientY - area.top) / area.height)) };
   };
   canvas.addEventListener('pointerdown', (event) => {
-    origin = point(event); drawn = null; paint();
+    origin = point(event); reset();
     canvas.setPointerCapture(event.pointerId);
     event.preventDefault();
   });
   canvas.addEventListener('pointermove', (event) => {
     if (!origin) return;
     const now = point(event);
-    drawn = { x: Math.min(origin.x, now.x), y: Math.min(origin.y, now.y),
-              w: Math.abs(now.x - origin.x), h: Math.abs(now.y - origin.y) };
+    if (kind === 'area') {
+      drawn = { x: Math.min(origin.x, now.x), y: Math.min(origin.y, now.y),
+                w: Math.abs(now.x - origin.x), h: Math.abs(now.y - origin.y) };
+    } else {
+      drawnLine = { x1: origin.x, y1: origin.y, x2: now.x, y2: now.y };
+    }
     paint();
   });
   canvas.addEventListener('pointerup', () => {
     origin = null;
-    if (!drawn || drawn.w < 0.01 || drawn.h < 0.01) { drawn = null; paint(); return; }
-    measure().catch(() => {});
+    if (kind === 'area') {
+      if (!drawn || drawn.w < 0.01 || drawn.h < 0.01) { reset(); return; }
+      measure().catch(() => {});
+      return;
+    }
+    if (!drawnLine || Math.hypot(drawnLine.x2 - drawnLine.x1,
+                                 drawnLine.y2 - drawnLine.y1) < 0.03) { reset(); return; }
+    clear(readout).append(el('span', {}, t('inArrow')));
+    paint();
   });
 
   const sensitivity = el('input', { type: 'number', value: '0.15', min: '0.01',
@@ -1100,31 +1215,83 @@ function zoneEditor() {
     el('option', { value: 'change' }, t('zoneModeChange')),
     el('option', { value: 'motion' }, t('zoneModeMotion')));
   const everywhere = checkbox('z-all', t('zoneEveryVideo'), false);
+  const flipButton = el('button', { class: 'btn ghost', onclick: () => {
+    flipped = !flipped; paint();
+  } }, t('flipDirection'));
+
+  const areaFields = el('div', { class: 'row', style: 'margin-top:12px' },
+    el('div', { style: 'min-width:280px' }, field(t('zoneMode'), mode)),
+    el('div', { style: 'min-width:120px' }, field(t('sensitivity'), sensitivity)));
+  const lineFields = el('div', { class: 'row hidden', style: 'margin-top:12px' },
+    flipButton);
 
   const save = el('button', { class: 'btn', onclick: guard(async () => {
-    if (!drawn) { toast(t('zoneDraw'), 'bad'); return; }
     if (!name.value.trim()) { toast(t('zoneName'), 'bad'); return; }
-    await api('/api/zones', { method: 'POST', body: {
-      name: name.value.trim(), box: [drawn.x, drawn.y, drawn.w, drawn.h],
-      video_id: everywhere.querySelector('input').checked ? null : video().id,
-      mode: mode.value, sensitivity: Number(sensitivity.value) } });
+    const scope = everywhere.querySelector('input').checked ? null : video().id;
+    if (kind === 'area') {
+      if (!drawn) { toast(t('zoneDraw'), 'bad'); return; }
+      await api('/api/zones', { method: 'POST', body: {
+        name: name.value.trim(), box: [drawn.x, drawn.y, drawn.w, drawn.h],
+        video_id: scope, mode: mode.value, sensitivity: Number(sensitivity.value) } });
+    } else {
+      if (!drawnLine) { toast(t('lineDraw'), 'bad'); return; }
+      await api('/api/lines', { method: 'POST', body: {
+        name: name.value.trim(), video_id: scope, flipped,
+        line: [drawnLine.x1, drawnLine.y1, drawnLine.x2, drawnLine.y2] } });
+    }
     toast(t('saved'), 'ok');
-    name.value = ''; drawn = null; paint();
+    name.value = ''; reset();
     await refreshCore(); await renderTab();
   }) }, t('zoneSave'));
 
+  const heading = el('h2', {}, t('zoneNew'));
+  const hint = el('p', { class: 'legal' }, t('zoneHint'));
+  const scopeLabel = everywhere.querySelector('label') || everywhere;
+
+  /* Every word on this card belongs to one of the two shapes. Leaving it
+     talking about rectangles while an operator draws a line is how a tool
+     starts to feel like it was built for someone else. */
+  function relabel() {
+    const line = kind === 'line';
+    heading.textContent = line ? t('lineNew') : t('zoneNew');
+    hint.textContent = line ? t('lineHint') : t('zoneHint');
+    name.placeholder = line ? t('lineNamePh') : t('zoneNamePh');
+    save.textContent = line ? t('lineSave') : t('zoneSave');
+    scopeLabel.textContent = line ? t('lineEveryVideo') : t('zoneEveryVideo');
+  }
+
+  const kindPick = el('div', { class: 'row' },
+    ...[['area', t('kindArea')], ['line', t('kindLine')]].map(([value, text]) =>
+      el('button', {
+        class: value === kind ? 'btn small' : 'btn ghost small',
+        onclick: (event) => {
+          kind = value; reset();
+          for (const button of event.target.parentNode.children) {
+            button.className = 'btn ghost small';
+          }
+          event.target.className = 'btn small';
+          areaFields.classList.toggle('hidden', kind !== 'area');
+          lineFields.classList.toggle('hidden', kind === 'area');
+          clear(readout).append(kind === 'area' ? t('zoneDraw') : t('lineDraw'));
+          relabel();
+        },
+      }, text)));
+
+  relabel();
   return el('div', { class: 'card' },
-    el('h2', {}, t('zoneNew')),
-    el('p', { class: 'legal' }, t('zoneHint')),
-    el('div', { class: 'row' },
+    heading, hint, kindPick,
+    el('div', { class: 'row', style: 'margin-top:10px' },
       el('div', { style: 'min-width:240px' }, field(t('videos'), videoPick)),
       el('div', { class: 'grow', style: 'min-width:220px' }, field(t('zoneAtMoment'), at))),
-    canvas, readout,
+    canvas, readout, areaFields, lineFields,
     el('div', { class: 'row', style: 'margin-top:12px' },
       el('div', { style: 'min-width:220px' }, field(t('zoneName'), name)),
-      el('div', { style: 'min-width:280px' }, field(t('zoneMode'), mode)),
-      el('div', { style: 'min-width:120px' }, field(t('sensitivity'), sensitivity)),
       everywhere, save));
+}
+
+function scopeName(videoId) {
+  const video = S.videos.find((v) => v.id === videoId);
+  return video ? bdi(video.name) : t('allVideos');
 }
 
 async function zoneList() {
@@ -1133,26 +1300,22 @@ async function zoneList() {
     card.append(el('p', { class: 'muted' }, t('zoneNone')));
     return card;
   }
-  const rows = S.zones.map((zone) => {
-    const video = S.videos.find((v) => v.id === zone.video_id);
-    return el('tr', {},
-      el('td', { dir: 'auto' }, el('b', {}, zone.name)),
-      el('td', { class: 'small' }, video ? bdi(video.name) : t('allVideos')),
-      el('td', { class: 'small' },
-        zone.mode === 'motion' ? t('zoneModeMotion') : t('zoneModeChange')),
-      el('td', { class: 'mono small' }, bdi(Number(zone.sensitivity).toFixed(2))),
-      el('td', {},
-        el('div', { class: 'row' },
-          el('button', { class: 'btn small', onclick: guard(() => searchZone(zone)) },
-            t('zoneSearch')),
-          can('analyst') ? el('button', { class: 'btn ghost small danger',
-            onclick: guard(async () => {
-              if (!confirm(t('zoneDeleteConfirm'))) return;
-              await api(`/api/zones/${zone.id}`, { method: 'DELETE' });
-              toast(t('deleted'), 'ok');
-              await refreshCore(); await renderTab();
-            }) }, t('remove')) : null)));
-  });
+  const rows = S.zones.map((zone) => el('tr', {},
+    el('td', { dir: 'auto' }, el('b', {}, zone.name)),
+    el('td', { class: 'small' }, scopeName(zone.video_id)),
+    el('td', { class: 'small' },
+      zone.mode === 'motion' ? t('zoneModeMotion') : t('zoneModeChange')),
+    el('td', { class: 'mono small' }, bdi(Number(zone.sensitivity).toFixed(2))),
+    el('td', {}, el('div', { class: 'row' },
+      el('button', { class: 'btn small', onclick: guard(() => searchZone(zone)) },
+        t('zoneSearch')),
+      can('analyst') ? el('button', { class: 'btn ghost small danger',
+        onclick: guard(async () => {
+          if (!confirm(t('zoneDeleteConfirm'))) return;
+          await api(`/api/zones/${zone.id}`, { method: 'DELETE' });
+          toast(t('deleted'), 'ok');
+          await refreshCore(); await renderTab();
+        }) }, t('remove')) : null))));
   card.append(el('table', {},
     el('thead', {}, el('tr', {}, el('th', {}, t('name')), el('th', {}, t('zoneScope')),
       el('th', {}, t('zoneMode')), el('th', {}, t('sensitivity')), el('th', {}, ''))),
@@ -1160,25 +1323,74 @@ async function zoneList() {
   return card;
 }
 
-/* Searching a zone from the Zones tab lands on the Search tab, so results,
-   clips and exports all live in one place. */
-async function searchZone(zone) {
-  const data = await api('/api/search/zone', { method: 'POST',
-    body: { zone_id: zone.id, gap: 5 } });
+async function lineList() {
+  const card = el('div', { class: 'card' }, el('h2', {}, t('lines')));
+  if (!S.lines.length) {
+    card.append(el('p', { class: 'muted' }, t('lineNone')));
+    return card;
+  }
+  const rows = S.lines.map((line) => el('tr', {},
+    el('td', { dir: 'auto' }, el('b', {}, line.name)),
+    el('td', { class: 'small' }, scopeName(line.video_id)),
+    el('td', { class: 'small' }, labelList(line.labels)),
+    el('td', {}, el('div', { class: 'row' },
+      el('button', { class: 'btn small',
+        onclick: guard(() => searchLine(line, 'both')) }, t('lineSearch')),
+      el('button', { class: 'btn ghost small',
+        onclick: guard(() => searchLine(line, 'in')) }, t('directionIn')),
+      el('button', { class: 'btn ghost small',
+        onclick: guard(() => searchLine(line, 'out')) }, t('directionOut')),
+      can('analyst') ? el('button', { class: 'btn ghost small danger',
+        onclick: guard(async () => {
+          if (!confirm(t('zoneDeleteConfirm'))) return;
+          await api(`/api/lines/${line.id}`, { method: 'DELETE' });
+          toast(t('deleted'), 'ok');
+          await refreshCore(); await renderTab();
+        }) }, t('remove')) : null))));
+  card.append(el('table', {},
+    el('thead', {}, el('tr', {}, el('th', {}, t('name')), el('th', {}, t('zoneScope')),
+      el('th', {}, t('lineWhich')), el('th', {}, ''))),
+    el('tbody', {}, ...rows)));
+  return card;
+}
+
+/* Searching from this tab lands on the Search tab, so results, clips and
+   exports all live in one place. */
+async function showOnSearchTab(label, render) {
   S.tab = 'search'; renderTabs();
   await renderTab();
   const host = document.querySelector('#view > div');
   const box = el('div');
   host.append(box);
-  if (data.job_id) {
-    box.append(jobProgress(data.job_id, box, zone.name, { estimate: false,
-      title: `${t('zoneScanning')}: ${zone.name}` }));
-  } else {
-    showResults(box, data.events, zone.name);
-    toast(`${data.count} ${t('results')} · ${data.frames_examined} ${t('framesExamined')}`,
-      data.count ? 'ok' : '');
-  }
+  render(box, label);
 }
+
+async function searchZone(zone) {
+  const data = await api('/api/search/zone', { method: 'POST',
+    body: { zone_id: zone.id, gap: 5 } });
+  await showOnSearchTab(zone.name, (box, label) => {
+    if (data.job_id) {
+      box.append(jobProgress(data.job_id, box, label, { estimate: false,
+        title: `${t('zoneScanning')}: ${label}` }));
+    } else {
+      showResults(box, data.events, label);
+      toast(`${data.count} ${t('results')} · ${data.frames_examined} ${t('framesExamined')}`,
+        data.count ? 'ok' : '');
+    }
+  });
+}
+
+async function searchLine(line, direction) {
+  const data = await api('/api/search/line', { method: 'POST',
+    body: { line_id: line.id, direction: direction || 'both' } });
+  await showOnSearchTab(line.name, (box, label) => {
+    showResults(box, data.events, label);
+    const tally = data.tally || {};
+    toast(`${t('directionIn')}: ${tally.in || 0} · ${t('directionOut')}: ${tally.out || 0}`,
+      data.count ? 'ok' : '');
+  });
+}
+
 
 /* ---------------------------------------------------------------- people */
 VIEWS.people = async () => {

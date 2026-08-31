@@ -6,6 +6,7 @@ choosing between them is our job, not theirs:
 
   * a name we have enrolled            -> face and appearance search, local
   * the name of a watched zone         -> zone change detection, local
+  * the name of a counting line        -> who crossed it, and which way, local
   * nothing but object words           -> object search, local
   * anything with a colour, an action,
     a relationship, a description      -> instruction search, via the model
@@ -96,6 +97,17 @@ MOVING_WORDS = {
 STILL_WORDS = {"parked", "stationary", "standing", "still", "waiting",
                "חונה", "חונים", "עומד", "עומדת", "נשאר", "נשארה", "ממתין"}
 
+# Direction, which only means anything once a line has been drawn. Until then
+# "entered" and "left" are both just movement; after it they are opposite
+# answers to the same question.
+IN_WORDS = {"in", "into", "entered", "enters", "enter", "entering", "arrived",
+            "arrives", "came", "comes",
+            "נכנס", "נכנסה", "נכנסו", "כניסה", "הגיע", "הגיעה", "נכנסים"}
+OUT_WORDS = {"out", "left", "leaves", "leaving", "leave", "exited", "exits",
+             "exit", "departed", "went",
+             "יצא", "יצאה", "יצאו", "יציאה", "עזב", "עזבה", "עוזב", "יוצא",
+             "יוצאת", "יוצאים"}
+
 # Clothing worn on the torso: the colour we already measure for a person is
 # taken from exactly that band, so "a man in a white shirt" is a local search.
 TORSO_WORDS = {
@@ -125,8 +137,12 @@ DESCRIPTIVE = {
 }
 
 _TOKEN = re.compile(r"[\w'֐-׿]+", re.UNICODE)
-# Hebrew glues its articles and prepositions onto the word: "הרכב" is "the car".
-_HE_PREFIXES = ("ה", "ו", "ב", "ל", "מ", "ש", "כ", "וה", "שה", "כש")
+# Hebrew glues its articles and prepositions onto the word: "הרכב" is "the car",
+# and they stack - "מהשער" is "from the gate", two prefixes deep. A search term
+# an operator typed as a zone name has to survive all of them.
+_HE_PREFIXES = ("ה", "ו", "ב", "ל", "מ", "ש", "כ",
+                "וה", "שה", "כש", "מה", "לה", "בה", "כה",
+                "ומ", "וב", "ול", "וש")
 
 
 def strip_prefix(word: str) -> list[str]:
@@ -153,12 +169,15 @@ class Intent:
     `reason_word` are what a localised interface renders, so an operator
     working in Hebrew is not handed an English sentence.
     """
-    mode: str                          # 'person' | 'zone' | 'objects' | 'ask'
+    mode: str          # 'person' | 'zone' | 'line' | 'objects' | 'ask'
     query: str
     person_id: int | None = None
     person_name: str | None = None
     zone_id: int | None = None
     zone_name: str | None = None
+    line_id: int | None = None
+    line_name: str | None = None
+    direction: str = "both"            # 'in' | 'out' | 'both', for a line
     labels: list[str] = field(default_factory=list)
     colours: list[str] = field(default_factory=list)
     moving: bool | None = None
@@ -170,7 +189,9 @@ class Intent:
     def to_dict(self) -> dict:
         data = {"mode": self.mode, "query": self.query, "person_id": self.person_id,
                 "person_name": self.person_name, "zone_id": self.zone_id,
-                "zone_name": self.zone_name, "labels": self.labels,
+                "zone_name": self.zone_name, "line_id": self.line_id,
+                "line_name": self.line_name, "direction": self.direction,
+                "labels": self.labels,
                 "colours": self.colours, "moving": self.moving,
                 "reason": self.reason, "reason_code": self.reason_code,
                 "reason_word": self.reason_word}
@@ -206,6 +227,17 @@ def match_person(query: str, persons: list[tuple[int, str]]) -> tuple[int, str] 
     return best
 
 
+def direction_of(query: str) -> str:
+    """'in', 'out', or 'both' - what the sentence asked for."""
+    words = _TOKEN.findall(_normalise(query))
+    for word in words:
+        if _lookup(word, {w: w for w in OUT_WORDS}):
+            return "out"
+        if _lookup(word, {w: w for w in IN_WORDS}):
+            return "in"
+    return "both"
+
+
 def match_zone(query: str, zones: list[tuple[int, str]]) -> tuple[int, str] | None:
     """A watched zone named in the query ("when did the door open").
 
@@ -230,9 +262,10 @@ def match_zone(query: str, zones: list[tuple[int, str]]) -> tuple[int, str] | No
 
 
 def resolve(query: str, persons: list[tuple[int, str]] | None = None,
-            zones: list[tuple[int, str]] | None = None) -> Intent:
+            zones: list[tuple[int, str]] | None = None,
+            lines: list[tuple[int, str]] | None = None) -> Intent:
     """Turn a sentence into the search that actually answers it."""
-    persons, zones = persons or [], zones or []
+    persons, zones, lines = persons or [], zones or [], lines or []
     text = _normalise(query)
     if not text:
         return Intent("ask", query, reason="empty query")
@@ -242,6 +275,18 @@ def resolve(query: str, persons: list[tuple[int, str]] | None = None,
         return Intent("person", query, person_id=person[0], person_name=person[1],
                       reason=f"{person[1]} is enrolled, so this is a face search",
                       reason_code="person_enrolled", reason_word=person[1])
+
+    # A line beats an area of the same name: it answers the same question with
+    # a direction attached, which is strictly more than the area can say.
+    line = match_zone(query, lines)
+    if line is not None:
+        heading = direction_of(query)
+        return Intent("line", query, line_id=line[0], line_name=line[1],
+                      direction=heading,
+                      reason=f"{line[1]} is a counting line, so this reports who "
+                             f"crossed it" + ("" if heading == "both"
+                                              else f" going {heading}"),
+                      reason_code="line_watched", reason_word=line[1])
 
     zone = match_zone(query, zones)
     if zone is not None:

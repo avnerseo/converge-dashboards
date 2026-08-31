@@ -151,3 +151,23 @@ def test_an_index_written_by_an_older_version_still_opens(tmp_path):
                             index.conn.execute("PRAGMA table_info(person_embeddings)")}
         assert index.conn.execute("SELECT COUNT(*) FROM objects").fetchone()[0] == 1
         assert index.zones() == []              # new tables arrive with the upgrade
+
+
+def test_selecting_a_video_by_id_does_not_also_match_filenames(tmp_path):
+    """A CCTV export is called gate_20260830.mp4; selecting video 2 must not
+    drag in every file whose name happens to contain a 2."""
+    from vscan.db import Index
+
+    class _Info:
+        def __init__(self, path):
+            self.path = path
+            self.duration, self.fps = 10.0, 5.0
+            self.width, self.height = 320, 240
+            self.codec, self.started_at = "h264", None
+
+    with Index(tmp_path / "index") as index:
+        for name in ("gate_20260830.mp4", "door_20260831.mp4"):
+            index.upsert_video(_Info(tmp_path / name), 2.0, name, {})
+        assert [r["id"] for r in index.resolve_videos(["2"])] == [2]
+        assert [r["id"] for r in index.resolve_videos(["gate"])] == [1]
+        assert len(index.resolve_videos(["2026"])) == 2      # still a substring

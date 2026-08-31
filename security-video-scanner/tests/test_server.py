@@ -24,14 +24,34 @@ HAS_FFMPEG = bool(shutil.which("ffmpeg"))
 
 @pytest.fixture(scope="module")
 def footage(tmp_path_factory) -> Path:
-    """A footage root with one short clip in it (empty file if we have no faces)."""
+    """A footage root with one short clip in it.
+
+    With reference faces we composite them into the scene, which is what the
+    face and appearance tests need. Without them we still write a fixed-camera
+    clip, so everything about *places* - zones and counting lines - is tested
+    wherever ffmpeg exists rather than skipped along with the faces.
+    """
     root = tmp_path_factory.mktemp("footage")
     if HAS_FACES and HAS_FFMPEG:
         import sys
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         from make_sample_video import build
         build(FACES[:2], root / "cam1.mp4", seconds=14, fps=10)
+    elif HAS_FFMPEG:
+        from conftest import build_static_camera_clip
+        build_static_camera_clip(root / "cam1.mp4", seconds=30)
     return root
+
+
+def ensure_indexed(client: TestClient, footage: Path) -> None:
+    """Index the fixture clip if the flow that normally does it was skipped."""
+    if client.get("/api/videos").json()["videos"]:
+        return
+    started = client.post("/api/videos/index", json={
+        "paths": [str(footage / "cam1.mp4")],
+        "options": {"sample_fps": 3, "objects": True}})
+    assert started.status_code == 202, started.text
+    assert wait_for_job(client, started.json()["job_id"])["status"] == "done"
 
 
 @pytest.fixture(scope="module")
@@ -367,11 +387,12 @@ def test_one_search_box_routes_to_the_right_engine(client):
     assert described["count"] == 0
 
 
-@pytest.mark.skipif(not (HAS_FACES and HAS_FFMPEG), reason="needs the indexed flow")
-def test_zones_are_drawn_saved_and_searched(client):
+@pytest.mark.skipif(not HAS_FFMPEG, reason="needs a clip to index")
+def test_zones_are_drawn_saved_and_searched(client, footage):
     """The 'when did the door open' path: a rectangle, a name, then a search
     that runs entirely on the thumbnails written during indexing."""
     login(client)
+    ensure_indexed(client, footage)
     video_id = client.get("/api/videos").json()["videos"][0]["id"]
 
     measured = client.post("/api/zones/preview", json={
@@ -409,6 +430,59 @@ def test_zones_are_drawn_saved_and_searched(client):
     assert patched.json()["zone"]["sensitivity"] == 0.3
     assert client.delete(f"/api/zones/{zone['id']}").status_code == 200
     assert client.get("/api/zones").json()["zones"] == []
+
+
+@pytest.mark.skipif(not HAS_FFMPEG, reason="needs a clip to index")
+def test_counting_lines_are_drawn_saved_and_read_by_direction(client, footage):
+    """"When did someone leave through the gate" - the question a detector
+    cannot answer, because direction is not a property of a detection."""
+    login(client)
+    ensure_indexed(client, footage)
+    video_id = client.get("/api/videos").json()["videos"][0]["id"]
+
+    created = client.post("/api/lines", json={
+        "name": "gate", "line": [0.5, 0.0, 0.5, 1.0], "video_id": video_id})
+    assert created.status_code == 201, created.text
+    line = created.json()["line"]
+    assert line["labels"] == ["person"] and line["flipped"] is False
+
+    assert client.post("/api/lines", json={
+        "name": "gate", "line": [0.1, 0.1, 0.9, 0.9]}).status_code == 409
+    assert client.post("/api/lines", json={
+        "name": "nowhere", "line": [0.5, 0.5, 0.5, 0.5]}).status_code == 400
+
+    found = client.post("/api/search/line", json={"line_id": line["id"]}).json()
+    tally = found["tally"]
+    assert tally["in"] + tally["out"] == found["count"]
+    for event in found["events"]:
+        assert event["meta"]["direction"] in ("in", "out")
+        assert event["start"] == event["end"]        # a crossing is a moment
+
+    # asking for one direction returns a subset, and flipping swaps the two
+    outbound = client.post("/api/search/line", json={
+        "line_id": line["id"], "direction": "out"}).json()
+    assert outbound["count"] == tally["out"]
+    client.patch(f"/api/lines/{line['id']}", json={"flipped": True})
+    flipped = client.post("/api/search/line", json={"line_id": line["id"]}).json()
+    assert flipped["tally"]["in"] == tally["out"]
+    assert flipped["tally"]["out"] == tally["in"]
+
+    # and the name, with a direction word, is enough to run it from the box
+    routed = client.post("/api/search",
+                         json={"query": "when did someone leave through the gate"}).json()
+    assert routed["intent"]["mode"] == "line"
+    assert routed["intent"]["direction"] == "out"
+    assert routed["intent"]["line_id"] == line["id"]
+    assert "needs" not in routed
+
+    assert client.delete(f"/api/lines/{line['id']}").status_code == 200
+    assert client.get("/api/lines").json()["lines"] == []
+
+
+def test_a_line_search_needs_a_line(client):
+    login(client)
+    assert client.post("/api/search/line", json={}).status_code == 400
+    assert client.post("/api/search/line", json={"line_id": 9999}).status_code == 404
 
 
 def test_a_zone_search_needs_a_zone_or_a_rectangle(client):
