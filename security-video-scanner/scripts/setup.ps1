@@ -23,18 +23,10 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
+. (Join-Path $PSScriptRoot '_common.ps1')
 
 function Write-Step { param($n, $text) Write-Host "`n[$n] $text" -ForegroundColor Cyan }
-function Write-Ok   { param($text) Write-Host "    OK  $text" -ForegroundColor Green }
-function Write-Warn { param($text) Write-Host "    !   $text" -ForegroundColor Yellow }
-function Have       { param($name) [bool](Get-Command $name -ErrorAction SilentlyContinue) }
-
-function Update-PathFromRegistry {
-    # winget updates the stored PATH, but not the one this window started with
-    $machine = [Environment]::GetEnvironmentVariable('Path', 'Machine')
-    $user    = [Environment]::GetEnvironmentVariable('Path', 'User')
-    $env:Path = "$machine;$user"
-}
+function Have       { param($name) Test-Tool $name }
 
 function Get-PythonCommand {
     foreach ($candidate in @('py', 'python3', 'python')) {
@@ -74,21 +66,22 @@ Write-Ok "$python -> $(& $python --version)"
 
 # ---------------------------------------------------------------- 2. ffmpeg
 Write-Step 2 "ffmpeg (this is what opens the video files)"
-if (-not (Have 'ffmpeg') -and -not $SkipTools) {
+$ffmpeg = Resolve-FfmpegPath
+if (-not $ffmpeg -and -not $SkipTools) {
     if (-not (Have 'winget')) {
         Write-Warn "winget is not available. Install ffmpeg manually and re-run."
         exit 1
     }
     Write-Host "    installing ffmpeg with winget..."
     winget install --id Gyan.FFmpeg -e --accept-source-agreements --accept-package-agreements
-    Update-PathFromRegistry
+    $ffmpeg = Resolve-FfmpegPath
 }
-if (-not (Have 'ffmpeg')) {
-    Write-Warn "ffmpeg is installed but this window cannot see it yet."
+if (-not $ffmpeg) {
+    Write-Warn "ffmpeg is installed but cannot be found on this machine."
     Write-Warn "Close PowerShell, open it again, and run this script once more."
     exit 1
 }
-Write-Ok "ffmpeg found"
+Write-Ok "ffmpeg ($ffmpeg)"
 
 # ------------------------------------------------------- 3. virtualenv + app
 Write-Step 3 "Python environment and vscan itself"

@@ -27,6 +27,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
+. (Join-Path $PSScriptRoot '_common.ps1')
+
+if (-not (Resolve-FfmpegPath)) {
+    Write-Host "ffmpeg is not installed - the server cannot read video without it." -ForegroundColor Yellow
+    Write-Host "    powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1"
+    exit 1
+}
 
 $server = Join-Path $root '.venv\Scripts\vscan-server.exe'
 if (-not (Test-Path $server)) {

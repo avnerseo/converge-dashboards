@@ -29,17 +29,19 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
-
-function Write-Ok   { param($t) Write-Host "  OK   $t" -ForegroundColor Green }
-function Write-Bad  { param($t) Write-Host "  MISS $t" -ForegroundColor Red }
-function Write-Head { param($t) Write-Host "`n$t" -ForegroundColor Cyan }
+. (Join-Path $PSScriptRoot '_common.ps1')
 
 # ------------------------------------------------------------ installation
 Write-Head "Checking the installation"
 $problems = 0
 
-if (Get-Command ffmpeg -ErrorAction SilentlyContinue) { Write-Ok "ffmpeg" }
-else { Write-Bad "ffmpeg - close PowerShell, reopen it, and run scripts\setup.ps1"; $problems++ }
+$ffmpeg = Resolve-FfmpegPath
+if ($ffmpeg) {
+    Write-Ok "ffmpeg ($ffmpeg)"
+} else {
+    Write-Bad "ffmpeg - run: powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1"
+    $problems++
+}
 
 $vscan = Join-Path $root '.venv\Scripts\vscan.exe'
 if (Test-Path $vscan) {
