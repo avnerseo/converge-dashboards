@@ -171,3 +171,35 @@ def test_selecting_a_video_by_id_does_not_also_match_filenames(tmp_path):
         assert [r["id"] for r in index.resolve_videos(["2"])] == [2]
         assert [r["id"] for r in index.resolve_videos(["gate"])] == [1]
         assert len(index.resolve_videos(["2026"])) == 2      # still a substring
+
+
+def test_suggestions_leave_out_what_the_detector_is_guessing_at(tmp_path):
+    """On cluttered indoor footage YOLOX reads a carrier bag as a dog at 0.51
+    and a cabinet as an oven at 0.42. Searching still finds those if asked;
+    offering them as things to look for would be a lie."""
+    from vscan.db import Index
+
+    class _Info:
+        def __init__(self, path):
+            self.path = path
+            self.duration, self.fps = 60.0, 10.0
+            self.width, self.height = 640, 480
+            self.codec, self.started_at = "h264", None
+
+    with Index(tmp_path / "index") as index:
+        video_id = index.upsert_video(_Info(tmp_path / "shop.mp4"), 2.0, "fp", {})
+        frame_id = index.add_frame(video_id, 1.0, 0.5, None)
+        for score in (0.92, 0.74, 0.71, 0.58):                # a real person
+            index.add_object(video_id, frame_id, 1.0, "person", score,
+                             (0, 0, 40, 90), "gray", 1, 0.3)
+        for score in (0.51, 0.41, 0.41):                      # a bag, allegedly
+            index.add_object(video_id, frame_id, 1.0, "dog", score,
+                             (0, 0, 30, 30), "gray", 1, 0.0)
+        index.commit()
+
+        offered = index.contents()
+        assert [l["label"] for l in offered["labels"]] == ["person"]
+        assert offered["labels"][0]["count"] == 4
+        assert [c["colour"] for c in offered["combos"]] == ["gray"]
+        # ... but the dog is still in the index for anyone who asks for it
+        assert len(index.objects_for(video_id, ["dog"])) == 3

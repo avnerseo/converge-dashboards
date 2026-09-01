@@ -532,23 +532,35 @@ class Index:
                 out[int(row["id"])] = row
         return out
 
-    def contents(self, limit: int = 12) -> dict[str, list[dict]]:
-        """What is actually in the index, so a search box can offer it.
+    # What a suggestion has to clear to be worth offering. Measured on real
+    # indoor footage: person detections sit around 0.74, while the long tail of
+    # COCO classes on a cluttered scene - a bag read as a dog, a cabinet as an
+    # oven - clusters at 0.4-0.5. Searching still finds those if asked; we just
+    # do not put them forward as things the operator can look for.
+    SUGGEST_SCORE = 0.55
+    SUGGEST_COUNT = 3
+
+    def contents(self, limit: int = 12, min_score: float = SUGGEST_SCORE,
+                 min_count: int = SUGGEST_COUNT) -> dict[str, list[dict]]:
+        """What is confidently in the index, so a search box can offer it.
 
         An operator who has just indexed footage should not have to guess what
         the detector found - "person (19), car (4), a red one (15)" is the
-        difference between a search box and a riddle.
+        difference between a search box and a riddle. It should also not be
+        offered a dog that is a carrier bag.
         """
         labels = [{"label": r["label"], "count": int(r["n"])} for r in self.conn.execute(
-            "SELECT label, COUNT(*) AS n FROM objects GROUP BY label"
-            " ORDER BY n DESC LIMIT ?", (limit,))]
+            "SELECT label, COUNT(*) AS n FROM objects WHERE score >= ?"
+            " GROUP BY label HAVING n >= ? ORDER BY n DESC LIMIT ?",
+            (min_score, min_count, limit))]
         # Pairs, not two separate lists: "a red car" is a search that works,
         # while "red" on its own is not a question anyone can answer.
         combos = [{"label": r["label"], "colour": r["colour"], "count": int(r["n"])}
                   for r in self.conn.execute(
             "SELECT label, colour, COUNT(*) AS n FROM objects"
-            " WHERE colour IS NOT NULL GROUP BY label, colour"
-            " ORDER BY n DESC LIMIT ?", (limit,))]
+            " WHERE colour IS NOT NULL AND score >= ? GROUP BY label, colour"
+            " HAVING n >= ? ORDER BY n DESC LIMIT ?",
+            (min_score, min_count, limit))]
         return {"labels": labels, "combos": combos}
 
     def commit(self) -> None:
