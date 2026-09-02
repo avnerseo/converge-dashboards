@@ -1920,3 +1920,77 @@ price cannot reach a shelf that sits below our cost, it only shrinks the margin.
 It stays as an impulse-channel product while Pinterest runs.
 
 Nothing imported. Decision belongs to the merchant.
+
+## 2 Sep 2026 — deeper dig on the water fountain. Recommendation reversed to no.
+
+Merchant asked whether the category is worth entering, given that $30 fountains
+undercut us. Dug in. **It is not worth entering, and the arithmetic passing was
+not enough.**
+
+### The category is owned, with full mainstream distribution
+
+The category leader is **PETLIBRO Dockstream**: 2.5 L, cordless, stainless steel
+tray, quiet pump, 5,000 mAh battery, 30 days per charge, 23 dB.
+
+Our candidate `2922283` is 2.6 L, cordless, stainless steel tray, silent. **Those
+are the same specifications.** We would be selling an unbranded copy of the
+category leader.
+
+Petlibro is carried at **Amazon, Walmart, Chewy, Best Buy and Costco**, and takes
+"best overall" in both Forbes and Cats.com round-ups. This is not an underserved
+dropship niche — it is a shelf category with a brand on it.
+
+### The price ladder puts our cost where their retail is
+
+Verified for cordless stainless steel specifically:
+
+| tier | US retail |
+|------|-----------|
+| budget | $24.99–$29.99 with coupons |
+| mid | $39.99–$69.99 |
+| premium | up to $89.99 |
+
+**Our landed cost is $39.95 — the bottom of the mid tier's retail price.** To clear
+$17 contribution we must sell at $59.90, which is premium territory, against a
+brand with review counts, Forbes coverage and a Costco pallet.
+
+### The operational risk is worse than the pricing
+
+Searched what actually goes wrong with these. Pumps clog on pet hair wrapped
+around the impeller, fail on hard-water calcium scale, and adapters die. There is
+an entire content industry devoted to "why did my cat fountain stop working" —
+multiple sites running five or more articles each on the same failure.
+
+Under our own refund policy we cover full return shipping on a defective item. On
+a $59.90 product landed at $39.95, shipped 8 days from China, **every pump failure
+is the full sale refunded plus a unit we cannot recover.** The brush has no moving
+parts. This does not.
+
+### Decision: do not enter
+
+Reversing my own recommendation from earlier today. It survived the cost screen and
+fails everything after it. Recording the reason so it is not re-proposed: **passing
+the arithmetic is necessary, not sufficient.** The screen must also ask who already
+owns the category and what happens when the product breaks.
+
+### The finding underneath all of today's screening
+
+Six products tested against verified US retail. The pattern is not about product
+choice, it is about the model:
+
+**Per-unit shipping from China cannot beat US retail on anything US retail carries.**
+Our $9–$34 per unit is the whole disadvantage; Walmart moves containers. No amount
+of catalog searching fixes that, which is why five of six failed on cost and the
+sixth failed on everything else.
+
+It works in exactly three situations:
+1. the product is **not in US mainstream retail**, or
+2. the buyer **never comparison-shops** — impulse and social channels, or
+3. we add something retail cannot — bundling, customization, a brand people want.
+
+Peluma already sits in the second. The brush at $29.90 contributes $15 and dies
+only when someone puts it beside a Walmart listing. That is an argument for
+pushing Pinterest and TikTok harder, and against chasing Google Shopping and
+against adding commodity products at all.
+
+Nothing imported. Nothing priced.
