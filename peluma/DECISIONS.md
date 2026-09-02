@@ -1753,3 +1753,104 @@ Amazon search results, it is competing against "add one more thing before checko
 which is a contest we can actually win, at a cost of $0.75.
 
 No import performed. Decision belongs to the merchant.
+
+## 2 Sep 2026 — the real unit economics, and a correction I owe the merchant
+
+Merchant's instinct was to cut the brush price. Before pricing anything I went and
+got the numbers that were never actually verified. Two of them overturn things this
+project has been treating as settled.
+
+### Correction 1: the $21.70 landed cost is an Israel number, and I conceded it wrongly
+
+Pulled order `#1001` from Zendrop. The full record:
+
+```
+country: IL      city: Hadera
+product_cost:   $7.50
+shipping_cost:  $14.20
+total_cost:     $21.70
+```
+
+**That is the merchant's own test order, shipped to Hadera.** The $14.20 is
+Israel shipping. Peluma sells to the United States, so $21.70 has never been the
+landed cost of anything we sell.
+
+Zendrop's own estimate for the same product to the US:
+
+```
+regular   $9.92   8 days
+```
+
+Earlier in this project I calculated $17.42, was told the other session's $21.70
+was right, and wrote "הצ'אט השני צדק. אני טעיתי." **That concession was wrong.**
+$7.50 product + $9.92 US shipping = **$17.42**, which is exactly the figure I had.
+Both numbers were correct for different destinations; I abandoned the one that
+applies to our actual market. Correcting it here in writing.
+
+Also worth noting: Zendrop quotes **8 days** to the US, while our shipping policy
+promises 12–18. We are under-promising, which is safe, but it is not accurate.
+
+### Correction 2: per-variant costs, from Shopify's own `unitCost`
+
+| variant | price | unitCost | weight |
+|---------|-------|----------|--------|
+| White brush | $29.90 | **$3.76** | 173 g |
+| Purple brush | $29.90 | **$3.61** | 125 g |
+| White brush + lint roller | $39.90 | $22.20 | 307 g |
+| Milk brown brush + lint roller | $39.90 | $22.20 | 307 g |
+| Two brushes | $39.90 | $20.16 | 307 g |
+
+The $22.20 and $20.16 are landed-to-Israel figures Zendrop wrote back after order
+`#1001`; the $3.76 and $3.61 are product-only. Different units in the same column,
+so the table cannot be read straight. Using the invoice instead:
+
+**US landed cost, single brush:** $3.76 + $9.92 = **$13.68**
+**US landed cost, set:** $7.50 + $9.92 = **$17.42**
+
+**Contribution at today's prices** (payment fees ~3.5%):
+- Single at $29.90 → **≈ $15.17**
+- Set at $39.90 → **≈ $21.08**
+
+Both clear the $17 gate the merchant set, or come close. The margin was never the
+problem.
+
+### Why cutting the price does not work
+
+Market retail for this product, verified across six listings today: **$6.99 to
+$11.99**, clustered $9–$12.
+
+**Our landed cost of $13.68 is higher than the price Walmart charges a consumer.**
+
+So the merchant's instinct — drop the price to compete — is arithmetically
+unavailable:
+
+| our price | contribution |
+|-----------|--------------|
+| $29.90 (today) | $15.17 |
+| $24.90 | $10.35 |
+| $19.90 | $5.52 |
+| $16.90 | $2.62 |
+| $11.99 (market) | **negative** |
+
+We cannot reach the shelf price. Walmart sells the finished item to a shopper for
+less than it costs us to buy one and ship it.
+
+### Where the cost actually sits, and the one lever that moves it
+
+Shipping is **$9.92 of a $13.68 landed cost — 73%.** The product is $3.76. Any
+attempt to fix this by negotiating the product price is chasing the small number.
+
+Tested whether a US-stocked supplier changes it. Product `2041986`, a US-supplier
+item, ships to the US for **$6.99** against our **$9.92** from China. So domestic
+sourcing saves about $3 a unit and cuts delivery from 8 days to a few — but US
+catalog items cost $7–$16 rather than $3.76, so total landed cost rises. It buys
+speed, not margin.
+
+### What this means for the decision in front of us
+
+The brush's economics are fine and its price is not the problem to solve. The
+problem is which shelf we stand on. Restating the conclusion from the pricing
+research, now with the cost data behind it: **we cannot win a comparison, so we
+must not be shown in one.** That is an argument about channel, not price.
+
+No price was changed. This is analysis for the merchant's decision.
