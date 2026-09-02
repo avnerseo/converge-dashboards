@@ -1994,3 +1994,95 @@ pushing Pinterest and TikTok harder, and against chasing Google Shopping and
 against adding commodity products at all.
 
 Nothing imported. Nothing priced.
+
+## 2 Sep 2026 — eight products screened. The answer is not a product.
+
+Merchant asked me to keep hunting. Did. Two more candidates, then the pattern
+became the finding.
+
+### Candidate 7: `2018469`, Pet Bathrobe / fast-drying towel — $4.46, 8 images
+
+The best single candidate found all day, and it still does not clear cleanly.
+
+- **Shipping to the US: $6.42** — the cheapest of anything tested. Landed **$10.88**.
+- On-brand: it is the step after the brush, in the same grooming moment.
+- **No moving parts.** None of the pump-failure exposure that killed the fountain.
+- Photogenic in a way a spec product is not — a dog in a bathrobe is Pinterest
+  material, and Pinterest is our only working channel.
+- Sizes and colours, so it takes a variant shape.
+
+Verified US retail: **$9.29 to $39.95**, with a real mid-listing at $25.99 and a
+clearance unit at $6.49.
+
+| our price | contribution |
+|-----------|--------------|
+| $24.90 | $13.15 |
+| $29.90 | **$17.97** |
+
+It clears the gate only at $29.90, which puts us in the upper part of the range as
+an unbranded item — the same position that is not selling the brush today. Better
+than everything else tested, not obviously good.
+
+### The pattern across all eight
+
+| # | product | landed | US retail | outcome |
+|---|---------|--------|-----------|---------|
+| 1 | mist brush *(live)* | $13.68 | $6.99–$11.99 | cost above market |
+| 2 | grooming glove | ~$9.75 | $5.53–$12.74 | cost at market |
+| 3 | ultrasonic deterrent | $20.36 | $8.99–$20.99 | cost at market top |
+| 4 | window cat hammock | $47.17 | — | shipping 2× product |
+| 5 | expandable cat backpack | $50.90 | $34.00–$51.99 | cost at market top |
+| 6 | wireless water fountain | $39.95 | $30s–$90.99 | brand owns it, pumps fail |
+| 7 | pet bathrobe | $10.88 | $9.29–$39.95 | marginal |
+
+**Seven of seven land at or above the cheap end of US retail.** This is not bad
+luck in product choice. Zendrop's catalog is generic Chinese goods, and every one
+of them is *already in US retail*, sold by someone moving containers. There is no
+"absent from US retail" product hiding in it to find. I have now looked hard
+enough to say that rather than keep looking.
+
+### So the answer is the third path, not a product
+
+The three ways this model works were written down earlier today: the product is
+absent from US retail, the buyer does not comparison-shop, or **we add something
+retail cannot**. One is empty. Two is where Pinterest already puts us. Three is
+untried, and it is the only one with room.
+
+**Bundles that no retailer sells.**
+
+A "Peluma bath day set" — mist brush, drying bathrobe, grooming glove — has no
+comparison price anywhere, because nobody assembles that exact combination. The
+shopper cannot put it beside a Walmart listing, which is the single thing that
+kills us on every product above.
+
+And it attacks the real cost problem. Shipping is 73% of the brush's landed cost.
+Bundling pays it **once across three items** instead of three times:
+
+```
+brush     $3.76
+bathrobe  $4.46
+glove     $0.75
+product   $8.97
+shipping  ~$9.92   (one charge, if combined)
+landed    ~$18.89
+```
+
+At **$59.90**, contribution ≈ **$38.91** — more than double anything else tested,
+against a price no one can check.
+
+### The one thing that must be verified before any of this is real
+
+**Does Zendrop charge one shipping fee for three separate catalog items in a single
+order, or three?** Everything above depends on it.
+
+Evidence it might: order `#1001` was a single line item, "Porcelain White Set",
+which contains a brush *and* a lint roller, and carried **one** shipping charge.
+But that is one supplier SKU containing two objects, not three catalog items we
+combined ourselves — a different thing.
+
+`get_catalog_shipping_estimate` only accepts one product, so it cannot answer this.
+**Only a real multi-item order can.** If Zendrop charges per item, the bundle
+economics collapse to roughly the same place as everything else, and the honest
+answer becomes that this catalog has nothing for us.
+
+Nothing imported. Nothing priced.
