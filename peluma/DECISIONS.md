@@ -1480,3 +1480,68 @@ review budget is **3 requests**, with a cooling-off period after a rejection.
 Google's decision, by email to `avnerseo@gmail.com`, a few days out. The Gmail
 connector dropped mid-session, so this session cannot poll the inbox until it
 reconnects.
+
+## 2 Sep 2026 — Zendrop's stock signal cannot be trusted. Proven.
+
+Queried `get_catalog_product` for the paw wash cup, catalog id `1997733`, supplier
+NexoraUSA — the product Zendrop's own support told us in writing on 1 Sep is **out
+of stock at the supplier**, and which we pulled to DRAFT today for exactly that
+reason. The API returned:
+
+```
+availability.in_stock:  true
+inventory_level:        "In stock"
+variants (all 8):       tracked: false, available: null
+```
+
+**Zendrop reports "In stock" for a product its own support says is out of stock.**
+This is the same false signal that made me tell the merchant "sync failure, stock
+exists" on 31 Aug, before support corrected me. It was not a one-off reading error;
+the field is simply wrong, and it stays wrong days later.
+
+Checked whether this is specific to that product. It is not. Across 45 catalog
+items sampled from two searches (`pet grooming` and `pet hair remover lint`, both
+`ships_from: US`), **every single variant returns `tracked: false` and
+`available: null`.** There is no live stock count anywhere in the catalog on this
+plan — `get_my_product_inventory` is gated behind "Upgrade to Select".
+
+### Why this matters more than any single product choice
+
+The Merchant Center suspension came from selling something we could not ship. If we
+add products under a supplier feed that reports "In stock" unconditionally, we are
+not reducing that risk by picking better products — we are multiplying it by the
+number of products we add.
+
+### The guardrail, and it belongs on our side
+
+Shopify inventory tracking, currently **off** on both products (`tracksInventory:
+false`), is what let all 8 cup variants keep reporting `availableForSale: true` on
+zero quantity. Turning it on with a deliberate finite quantity converts an unbounded
+exposure — infinite units of something that may not exist — into a bounded one: the
+product marks itself Sold out after N orders, and no further customer can pay for
+something we have not confirmed. Restocking the number becomes a decision we make
+after checking with the supplier, not something that silently never happens.
+
+This is proposed, not done: inventory settings are product state, which is gated on
+the merchant's approval.
+
+### On the catalog itself
+
+Separately worth recording, from the same searches: of 45 US-supplier items, all but
+two came from a supplier literally named **"Amazon Products"** — Zendrop reselling
+Amazon listings, **one image each**, with Amazon marketing copy carrying claims we
+are not allowed to repeat ("100% Satisfaction Guaranteen" and similar). A single
+stock photo is not enough to build a product page of the standard the brush page
+now holds. The one exception found so far is `1640419` (ExactFit Solutions, $11.60,
+23 images).
+
+### Pinterest, same session
+
+Two pins published to keyword-named boards, both using real supplier photography
+rather than the AI-composited images, both linking to the brush:
+
+- `916552961685488301` → Cat Grooming — "A grooming brush with the water built in"
+- `916552961685488300` → Dog Grooming — "Brushing a long coat, no bath needed"
+
+Copy describes the mechanism only — silicone bristles, mist in the handle, USB
+rechargeable, free US shipping. No percentages, no health claims.
