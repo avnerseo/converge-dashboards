@@ -871,3 +871,19 @@ catalog feed, so it carries product data rather than being a plain image Pin. Th
 confirmation that the merchant feed ingestion is actually working end to end.
 
 Account total: 16 Pins.
+
+## Pin 9 — posted 2 Sep 2026, 16:02 UTC (scheduled routine)
+
+Fired by routine "Peluma — post Pin 9 to Pinterest" (`trig_01BiJwzXEyXxeRKLfyuSrdsu`).
+
+- **Pin id** `916552961685496300`
+- **Board** Dog Grooming at Home `916553030354941640`
+- **Title** Short, medium or long coats
+- **Link** the brush product page
+- **Image** `peluma-pin-9.png` — the three colourways
+
+Brush-only, so it is unaffected by the cup going to DRAFT this morning. Copy
+describes colours and coat lengths only; no claims.
+
+**Total pins now 14.** All still reporting zero impressions — see DECISIONS.md,
+2 Sep: the account is inside its 4–8 week indexing window, day 5.
