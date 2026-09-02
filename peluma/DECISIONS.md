@@ -1422,3 +1422,61 @@ because it is machine-detectable from the feed alone without any crawl of the po
 
 Setting a product to DRAFT is gated on the merchant's explicit approval
 ("אל תשנה מחירים או סטטוס מוצר בלי אישור שלי"), so it is asked, not done.
+
+## 2 Sep 2026 — review requested, and what it took to find the button
+
+Submitted. The card now reads **"Review requested on Sep 2, 2026. It can take a
+few days to complete."**
+
+Two things worth remembering, because both cost time today.
+
+**The cup went to DRAFT** (product `10323824017721`), on the merchant's explicit
+approval. Verified from the public site, cache-busted: product URL returns **404**,
+homepage mentions of the cup went **7 → 0**, `/collections/all` **→ 0**. The brush
+is unaffected. This removed the false in-stock signal, took the sold-out product
+off the homepage without any theme edit, and retired the US-only delivery profile
+that contradicted the shipping policy.
+
+**The merchant fixed all four policy pages.** Read back from the live site:
+shipping rewritten and no longer promising worldwide; contact information now
+carries `Peluma / Adnei-Paz Street 29 / Hadera 3832986 / Israel` plus the brand
+email and the contact-form URL; privacy and terms swapped to `pelumapets@gmail.com`
+(0 occurrences of the personal address remain on any page except the refund policy,
+which stays ring-fenced).
+
+### Final pre-submission audit — 10 of 10
+
+Business address published · city and postcode · country · working contact form ·
+personal email gone · cup 404 · brush in-stock signal true · "Free Worldwide
+Shipping" removed · shipping claim matches the delivery profiles · zero unearned
+badges · SSL valid.
+
+**One false alarm, mine.** An audit script reported "26 suspicious claims" because
+that pass forgot to strip `<script>`/`<style>`. Re-ran it split: 13 matches per page
+in raw source, **0 in text a customer sees** — all of them CSS like `width: 100%`
+and class names containing `badge`. The earlier clean result was the correct one.
+Told the merchant it was my bug, not a store problem.
+
+### The button is mislabeled, and I got it wrong first
+
+There is **no `Request review` button** on the Misrepresentation card. The only
+control is **`I disagree with the issue`** — and it opens a dialog titled
+**"Before you request a review"** with a checkbox `My account meets the policy
+requirements` and a `Request review` action. It is the review-request flow wearing
+a dispute label.
+
+I had told the merchant not to touch that button, reading it as a denial that
+would burn the appeal. That was wrong, and the page header contradicted me:
+*"If you've fixed the issues **or** disagree with them, request a review."* One
+action, both paths. Corrected it in writing and had him open the dialog without
+submitting, so the reading could be confirmed before anything was sent.
+
+Also learned: **`Fix issue` in the red banner is only an anchor link.** It scrolls
+to, or navigates to, the diagnostics page — it is not the submit control. And the
+review budget is **3 requests**, with a cooling-off period after a rejection.
+
+### Waiting on
+
+Google's decision, by email to `avnerseo@gmail.com`, a few days out. The Gmail
+connector dropped mid-session, so this session cannot poll the inbox until it
+reconnects.
