@@ -2086,3 +2086,99 @@ economics collapse to roughly the same place as everything else, and the honest
 answer becomes that this catalog has nothing for us.
 
 Nothing imported. Nothing priced.
+
+## 2 Sep 2026 — market research on the category we are actually in
+
+Merchant asked me to study what is happening in pet sales while we wait on
+Zendrop. Four areas researched. The market is healthy; our position inside it is
+the problem, and the research says so in three independent ways.
+
+### The market is growing, and that is not our issue
+
+- US pet industry **$158 B in 2025 → $165 B projected 2026**, +4.4% (about 2% of
+  that inflation).
+- **95 million** US households own a pet. Dog ownership rose **51% → 53%** in a
+  single year, roughly 4 million more dog homes.
+
+Nothing here explains zero sales. Demand is not the constraint.
+
+### Growth is in categories we are not in
+
+Where the money is moving in 2026: health and wellness **42%** of spend, premium
+nutrition **28%**, technology and monitoring **12%**. Pet *services* have doubled
+to ~$14 B over a decade and are the fastest-growing major segment. Supplements are
+one of the most dynamic segments. Human-grade dog food searches are **+311% YoY**;
+freeze-dried raw **+403% YoY**.
+
+Grooming accessories appear nowhere in the growth list. They are a mature
+commodity category — consistent with the pricing work: six listings of our own
+product clustered at $9–$12.
+
+Also recorded: consumers are described as **"more intentional… prioritising
+essential care"**. That is a direct headwind for a $29.90 discretionary gadget.
+
+### Who owns pet e-commerce
+
+| retailer | US pet e-commerce net sales |
+|----------|------------------------------|
+| Chewy | **$12.0 B** |
+| Walmart | $1.6 B |
+| PetSmart | $1.1 B |
+| Amazon | $0.79 B |
+
+Chewy is **7.5× Walmart** in this channel. The online pet shopper's default is
+already decided, and it is not a search box we can win.
+
+### Pinterest is genuinely the right channel — and we are using it wrong
+
+The platform data is better than expected:
+
+- **1.8% e-commerce conversion**, and **2.3× the conversion value** of other social
+  platforms.
+- **~80% of Pinterest traffic to a store is new visitors** — no retargeting spend.
+- Pinterest drives **planned, higher-ticket** purchases where TikTok drives impulse.
+  Pet owners use it to plan "cat-friendly living rooms" and "outdoor dog oases".
+- It rewards products that are **aesthetic** — minimalist, neutral, sleek.
+
+Two mismatches follow, and both are ours to fix at no cost:
+
+1. **We pin a tool as a product shot.** The audience is planning a room. Our pins
+   are catalogue photography of a brush on white.
+2. **Idea Pins get 4× the saves and 3.2× the outbound clicks of standard pins.**
+   Every pin published for Peluma so far is a standard pin.
+
+### The Christmas plan was aimed at the wrong category
+
+What US pet owners actually buy as gifts:
+
+| gift | share of gifted pets |
+|------|----------------------|
+| toys | **68%** |
+| food or treats | 45% |
+| bedding | 8% |
+| clothing | 6% |
+| leash, collar, harness | 3% |
+| **grooming products** | **3%** |
+
+52% of dog owners and 41% of cat owners buy Christmas gifts. **Grooming is the
+smallest category on the list, tied for last.** The gift boards built on Pinterest
+in August point at a 3% slice.
+
+The price band is fine — 27% of dog owners spend $25–$50 on a pet gift and a
+further 25% spend $75–$100+. **$29.90 is well placed. The category is not.**
+
+### What the three research threads agree on
+
+Pricing said our cost exceeds the shelf price. Product screening said everything
+in the catalog is already in US retail. Market research now says our category is
+the slowest-growing and the least-gifted, while our channel is the right one used
+in the wrong format.
+
+**The consistent reading: right channel, wrong product.** That is a more hopeful
+conclusion than it sounds — the expensive asset to build is an audience, and the
+channel data says the one we are building on is the best-converting option
+available to a store this size.
+
+Two things are free and available now, independent of Zendrop's answer: shift pin
+content from product shots toward the room-and-lifestyle framing Pinterest
+rewards, and test Idea Pins against standard pins.
