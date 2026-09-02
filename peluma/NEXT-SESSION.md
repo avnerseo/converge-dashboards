@@ -112,3 +112,8 @@ The merchant sometimes has the theme editor open on `189462839609`. An open edit
 stale copy and its save overwrites API writes — this has already corrupted the product
 template once, appending new shipping text to old rather than replacing it. Before writing
 to that theme, ask whether the editor is closed. After writing, read the file back.
+
+---
+
+**Superseded by `README.md` (2 Sep 2026).** Read that first; this file is kept as a record of
+what the state looked like on 28 August.
