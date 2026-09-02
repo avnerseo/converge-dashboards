@@ -1668,3 +1668,88 @@ nothing about health.
 The stock risk documented earlier applies to this exactly as it applies to
 everything else in the catalog, and cannot be engineered away. Import is proposed
 as DRAFT, not executed, pending the merchant's word.
+
+## 2 Sep 2026 — deep research on the glove. It kills my own recommendation, and finds something worse.
+
+Merchant asked for demand, volume, competitors and prices before deciding. Did the
+research. **It rules out the product I recommended three messages earlier**, and
+turns up a bigger problem with the product we already sell.
+
+### Pinterest could not size this niche, and I am not pretending otherwise
+
+`PINTEREST_GET_KEYWORD_TRENDS`, region US. First call silently ignored my terms
+because I used `terms` instead of `include_keywords` and got the global top 50 back
+("nails", "hairstyles", "wallpaper"). Re-ran correctly against `growing`, `monthly`
+and `yearly`:
+
+- `growing` filtered to glove/grooming/shedding/pet hair/dog brush/cat brush → **empty**
+- `monthly`, same terms → **empty**
+- `yearly` → the only match is the generic **"cats"**, at **−10% year over year**
+
+Absence from a top-50 ranking is not absence of demand — a niche product is not
+expected to rank against "nails". So this tells us the category is not a mega-term
+and **nothing more**. It is not evidence against the product, and I am not going to
+present it as if it were.
+
+### Retail reality for the glove
+
+- The category leader (Delomo) carries **85,000+ reviews at 4.5 stars** on Amazon.
+  Demand is real, proven, and very large.
+- Street price is **$5.53 to $12.74**, frequently discounted 29–50%.
+- There is a listing badged **#1 Best Seller** with a 2026 model date, so the
+  category is actively contested right now.
+
+Our landed cost would be roughly $0.75 plus shipping, so margin at $16.90 looks
+fine on a spreadsheet. It is not fine in the market. A US shopper who searches
+"pet grooming glove" is offered an 85,000-review product at about $8 with two-day
+delivery. We would offer an unbranded one at $16.90 with 12–18 day delivery.
+
+**Rejecting my own recommendation as a standalone product.** The economics were
+computed against our cost and never against the shelf we would be standing on.
+That was the error.
+
+### The bigger finding: our own brush is priced against the same shelf
+
+Searched the retail price of the product Peluma already sells — a 3-in-1
+rechargeable mist/steam grooming brush with a water tank. Multiple independent
+listings:
+
+| retailer | price |
+|----------|-------|
+| Walmart, 4-in-1 steam cat brush | **$6.99** |
+| Walmart, steam brush 3-in-1 white | **$9.68** |
+| Walmart, XYRSRUW steam brush | **$10.69** |
+| Walmart, 2026 New Pet Steam Brush | **$11.66** |
+| Walmart, cat steam brush for shedding | **$11.99** |
+| Amazon, Feelneedy rechargeable steam brush | **$10.99** |
+
+Typical range **$6.99 to $18.99, clustered at $9–$12**.
+
+**Peluma sells it at $29.90 single and $39.90 for the two-item options.** That is
+roughly **2.5× to 3.5×** what the same class of product costs on Walmart or Amazon,
+against two-day delivery instead of our 12–18 days.
+
+This is a better explanation of zero sales than any traffic theory considered so
+far, and it was never checked. It should have been checked before the price was set.
+
+### What it does and does not mean
+
+It is not automatically fatal. Brands sell commodity goods at 3× routinely. It
+requires one of: a real brand people buy into, a genuinely differentiated product,
+or traffic that does not comparison-shop. Peluma currently has none of the three,
+though the third is the closest to reach.
+
+The sharp version, and it matters for the Google fight: **a 3× price survives on
+impulse channels and dies on comparison channels.** Pinterest and TikTok show a
+product in a moment of desire with no price row next to it. Google Shopping shows
+our $29.90 in a grid beside somebody's $9.68. We have spent today restoring the
+channel that is worst suited to our current pricing.
+
+### Salvage for the glove
+
+As a **standalone product it is rejected**. As a **bundle add-on** it is a different
+proposition: at roughly $9.90 added to a $29.90 brush order it is not competing in
+Amazon search results, it is competing against "add one more thing before checkout",
+which is a contest we can actually win, at a cost of $0.75.
+
+No import performed. Decision belongs to the merchant.
