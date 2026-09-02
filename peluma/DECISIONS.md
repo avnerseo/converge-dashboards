@@ -1311,3 +1311,61 @@ mobile is a privacy decision that belongs to the merchant, not something to do o
 Order #1001's tracking is `4PX3003119499366CN` — the `CN` suffix confirms the brush ships from
 China, consistent with the 12–18 day estimate on the page and with the $9.92 shipping component
 in its cost.
+
+## 2 Sep 2026 — Merchant Center suspension: what I verified and what I fixed
+
+Read the actual suspension email in full (`googlebase-noreply@google.com`, 1 Sep,
+thread `1a05a5442a914f40`). The operative text:
+
+> During our policy review we still found an issue with your account
+> (Peluma - Account ID: 5845593043): **Misrepresentation**. As a result, your
+> product listings and/or Shopping ads are unavailable for display to users.
+> ... You might be asked to submit a government-issued ID to verify your identity.
+
+Only one such email exists in the mailbox (searched 90 days) — "still" is Google's
+template wording, not evidence of an earlier notice. The 2 Sep "Drop in Number of
+Active Items" alert is the consequence of this suspension, not a separate fault.
+
+The email names no sub-reason. The sub-reason is only visible in the Merchant
+Center console, so the merchant has to read it there. What follows is what is
+provably wrong on the live storefront right now.
+
+### Verified against the live store (2 Sep)
+
+| # | Finding | Evidence | Who can fix |
+|---|---------|----------|-------------|
+| 1 | No business identity anywhere on the storefront | Footer is `© 2026 Peluma, Powered by Shopify` and nothing else. `shopAddress` (Adnei-Paz Street 29, Hadera, 3832986) appears on no public page. | Merchant — it is his home address, his call |
+| 2 | Shipping Policy promises worldwide, delivery profiles do not deliver it | Policy: *"We offer Free Worldwide Shipping on all orders."* Profile `135010484537` "Paw Wash Cup — US only (NexoraUSA)" has exactly one zone: United States. A non-US buyer gets no rate at all for the cup. | Merchant — `shopPolicyUpdate` needs `write_legal_policies`, denied to this session |
+| 3 | Personal free-mail address on four legal pages | `avnerseo@gmail.com` × 6: privacy 1, refund 2, terms 2, contact-information 1 | Merchant — same permission wall |
+| 4 | Contact page carried the personal address | — | **Fixed by me, see below** |
+
+Not faults, checked and ruled out:
+- `shopLocales` is `en` only, primary and published. The `?locale=he` in the
+  admin's policy URLs is an admin artefact, not what a customer sees.
+- `/pages/contact` renders a working Shopify contact form (`class="contact-form__form"`)
+  in addition to the email address. That is two contact methods, which is what
+  Google asks for — so **no phone number needs to be published**.
+- Israel and United States markets are both ACTIVE. Not a policy problem.
+
+### What I changed
+
+`pageUpdate` on Page `174333722937` (`/pages/contact`) — I have `write_content`,
+which is why this one was possible where the policy pages were not:
+- `avnerseo@gmail.com` → `pelumapets@gmail.com`
+- Removed *"Sunday to Thursday"* from the reply-time promise. Accurate for an
+  Israeli work week, confusing on a US-facing store, and it is not needed to
+  keep the sentence true.
+- "About us" now reads: *"Peluma is an independent online store, operated from
+  Israel and shipping to customers in the United States."* — country of operation
+  stated plainly, which is half of what a Misrepresentation reviewer looks for.
+
+Read back from the public URL, not from the admin: `curl https://pelumapets.com/pages/contact`
+returns `pelumapets@gmail.com` and no other address.
+
+### What is still missing and cannot be done from here
+
+A physical business address on the storefront. Google's Misrepresentation policy
+wants a business that a customer can identify and locate. Peluma currently
+publishes a first name and nothing else. The only address the business has is the
+merchant's home address, so publishing it is a privacy decision that is his alone
+to make — this session will not publish a home address on the merchant's behalf.
