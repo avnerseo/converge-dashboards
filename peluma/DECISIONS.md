@@ -2261,3 +2261,70 @@ Option 2 is the only one that fixes the arithmetic rather than rearranging aroun
 it. It requires capital and it is the merchant's decision alone.
 
 Nothing changed in the store.
+
+## 2 Sep 2026 — multi-item SKUs, and the first candidate that is not a commodity
+
+The nuance the merchant pushed me back to: Zendrop refuses to bundle *separate
+catalog products*, but a **supplier SKU that already contains several objects
+carries one shipping charge**. Our own store proves it — "White brush + lint
+roller" is one SKU holding two objects, and order `#1001` paid shipping once.
+
+So the route is to find multi-item SKUs that already exist, not to assemble them.
+Searched supplier 13, Pet Supplies, for set / kit / pack / combo names. 39 returned.
+
+### Shipping measured on the best of them
+
+| id | product | product | ship US | landed |
+|----|---------|---------|---------|--------|
+| `2012930` | Pet Emergency Wound Care Kit | $9.15 | $18.61 | $27.76 |
+| `2015419` | Compact Travel First Aid Kit | $7.91 | $18.61 | $26.52 |
+| `2914820` | Electric Pet Grooming Kit | $5.73 | $13.57 | $19.30 |
+| **`3050917`** | **Dog Leash & Harness Set** | **$4.67** | **$7.82** | **$12.49** |
+
+The first-aid kits were the ones I expected to win — health and wellness is 42% of
+US pet spend and the fastest-growing area in the market research. **They lost on
+shipping**: $18.61 to move a $9 item, because a kit in a case is bulky. The
+research pointed at the right category and the freight killed it. Recording that,
+because it is the fourth time today that shipping has overruled a category
+argument.
+
+### `3050917` — the first candidate whose competitors are not Walmart
+
+One SKU containing **harness, collar, leash, bow and poop-bag holder**. Cloth,
+sizes S–XL, **16 variants**, **7 images**. Landed **$12.49** — second cheapest of
+anything tested, and shipping is 63% of cost rather than the brush's 73%.
+
+What makes it different from the previous eight has nothing to do with the
+arithmetic. Searching its US market returns **Lucy & Co., Sniff & Bark, Posh Dog
+Life, Furry Muse** — boutique direct-to-consumer brands, several of them Shopify
+stores. Lucy & Co. has reached Petco. **There is no $9.68 Walmart commodity
+listing sitting underneath this category**, which was the thing that killed the
+brush, the glove, the deterrent and the backpack.
+
+It also lands exactly where the Pinterest research pointed: the platform rewards
+**aesthetic, minimalist products** bought as **planned purchases** by people
+designing a look around their pet. A matching pink bow harness set is that
+product. A grooming tool photographed on white is not.
+
+No moving parts, so none of the pump-failure exposure that ruled out the fountain.
+
+### The gap, and I am not papering over it
+
+**I could not verify a single price in this category.** Amazon, Walmart and the
+boutique sites (furrymuse.com) are all blocked from this environment, and the
+search snippets returned product descriptions without prices. I know the
+competitive *structure* is boutique rather than commodity. I do **not** know
+whether these sets sell at $25 or at $60, and the whole decision turns on it.
+
+Given today started with me pricing a product against our cost instead of the
+shelf, I am not going to estimate it and call it research.
+
+**The one thing needed before this goes further:** a real price for a comparable
+boutique harness-and-leash set. Thirty seconds on lucyand.co or sniffandbark.com
+from an unblocked browser answers it.
+
+If those sets sell at $40+, then at $34.90 we clear roughly $21 contribution
+*inside* the market rather than above it — the first time that has been true all
+day. If they sell at $25, this joins the other eight.
+
+Nothing imported.
