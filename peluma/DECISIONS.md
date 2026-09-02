@@ -1264,3 +1264,50 @@ Changed to **"What it does:"**. Verified live: the old string returns zero.
 
 The `Home & Garden` collection holds only the sold-out cup, but it appears in **no menu** —
 main, footer or customer account. It is an orphan, not a dead end for visitors. No action.
+
+## Google Merchant Center suspended the store — Misrepresentation — 2026-09-01
+
+Found by reading the merchant's mailbox, not by any check I was running. Two messages:
+
+- **1 Sep** — *"During our policy review we still found an issue with your account (Peluma,
+  Account ID 5845593043): **Misrepresentation**. As a result, your product listings and/or
+  Shopping ads are unavailable for display to users."* Google adds that identity verification
+  by government ID may be required.
+- **2 Sep** — a separate alert about a drop in active items.
+
+This is a policy suspension, not a feed error. **Free Google Shopping listings — one of only
+two free traffic channels in the plan — produce nothing until it is lifted.** The word "still"
+implies at least one earlier review already failed.
+
+### What the store actually shows, checked
+
+Google's console holds the specific reason; it is not in the email. What is visible from here:
+
+1. **No verifiable business identity anywhere on the storefront.** The Contact Information
+   policy contains a single line — `avnerseo@gmail.com`. No business name, no postal address,
+   no phone. Fetching `/pages/contact` confirms it: the only occurrences of "Israel" are a
+   country dropdown, and the address and phone held in `shopAddress`
+   (Adnei-Paz Street 29, Hadera, `0523578812`) appear nowhere on the site.
+   **This is the most common trigger for Misrepresentation on a new store.**
+2. **A personal free-mail address throughout the legal pages.** `avnerseo@gmail.com` appears in
+   Contact Information, the Privacy Policy, the Refund Policy and the Terms — while
+   `shop.contactEmail` is already `pelumapets@gmail.com`. Inconsistent, and a free-mail-only
+   contact is itself a weak trust signal.
+3. **The Shipping Policy is inaccurate.** It states *"Free Worldwide Shipping on all orders"*,
+   but the Paw Wash Cup sits in a US-only delivery profile. Google checks stated policy against
+   actual shipping configuration.
+
+### What I could not do
+
+`shopPolicyUpdate` returns **"Access denied … Required access: `write_legal_policies`"**. The
+policy pages cannot be edited from here at all, so the whole fix is the merchant's.
+
+Two further constraints worth stating: the Refund Policy is ring-fenced by standing
+instruction and is not to be touched regardless; and publishing a **home** address and personal
+mobile is a privacy decision that belongs to the merchant, not something to do on his behalf.
+
+### Reading the order that shipped
+
+Order #1001's tracking is `4PX3003119499366CN` — the `CN` suffix confirms the brush ships from
+China, consistent with the 12–18 day estimate on the page and with the $9.92 shipping component
+in its cost.

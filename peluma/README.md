@@ -102,7 +102,8 @@ at Home `916553030354941638` · Paw & Nail Care `916553030354941962` · Gifts fo
 
 | # | blocker | owner | why it matters |
 |---|---|---|---|
-| 1 | **No card field at checkout.** PayPal only, and its first transaction failed. PayPlus account exists, service not activated. | merchant — phone call | The November test is uninterpretable if run with a known checkout handicap. |
+| 0 | **Google Merchant Center suspended the account — `Misrepresentation`.** Listings are not shown to anyone. Free Google Shopping is dead until resolved. | merchant — Merchant Center console | One of only two free traffic channels. |
+| 1 | **No card field at checkout.** PayPal only, and its first transaction failed. PayPlus account is now activated; a quote (#31219) awaits signature. | merchant — sign / finish setup | The November test is uninterpretable if run with a known checkout handicap. |
 | 2 | **Paw cup out of stock at supplier.** | Zendrop — "Notify Me" | Half the catalogue, and 7 of 16 Pins point at it. |
 | 3 | **Sold-out cup appears 7× on the homepage.** | merchant — theme edit | First thing a visitor sees. Assistant may not touch the theme. |
 | 4 | **No photograph of the real product in a real hand.** | waiting on delivery | No demo, before/after or testimonial ad exists without it. |
