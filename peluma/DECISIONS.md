@@ -1601,3 +1601,70 @@ There is no API fix for that. What is left is a periodic manual check against th
 supplier, and the merchant's "Notify Me" on the Zendrop product page. Any product
 we add carries this same unremovable risk, so the decision to add one is a judgement
 about upside, not a problem that can be engineered away.
+
+## 2 Sep 2026 — screening candidates: the US catalog is a dead end, the CN one is not
+
+Merchant asked me to keep screening under the criterion "real supplier, real
+photography". Result overturns the assumption I started from.
+
+### The US catalog cannot produce a product page
+
+Ran `keyword: deshedding brush dog cat`, `ships_from: US`, `max_price: 18`.
+**28 results. All 28 from supplier id 417, "Amazon Products". All 28 with exactly
+one image.** Combined with the earlier sweep, that is **71 of 73 US items** from
+the same Amazon reseller with a single stock photo each, and copy carrying claims
+we cannot repeat — "reduce shedding by up to 95%", "100% Satisfaction Guarantee",
+and in one case (`2069212`) a California Proposition 65 cancer and reproductive
+harm warning sitting in the product description.
+
+A single stock photo cannot build a page at the standard the brush page holds.
+**"Import a US-supplier product with usable photography" is not an option that
+exists in this catalog.** Recording that so nobody re-litigates it later.
+
+### What the same search revealed about our own product
+
+The brush we sell is catalog `1972847`, "Cat / Pet Steam Brush", **$1.22**, supplier
+**Zendrop Fulfillment, country CN**, 7 images. The US catalog carries the same class
+of product — steam/mist brushes with water tanks, USB rechargeable — at **$7.01 to
+$16.37**. So switching the brush to a US supplier would cut delivery from 12–18 days
+to a few days, at roughly 6 to 13 times the item cost. That is a real trade, not a
+free win, and it is not decided here.
+
+### Where the usable products actually are
+
+Queried `supplier_id: 13` (Zendrop Fulfillment, the same supplier as our brush),
+`category_id: 48` Pet Supplies, `max_price: 6`. Completely different picture:
+clean English product names rather than keyword spam, and **5 to 7 images** on the
+better entries.
+
+Ranked by image count, the on-brand candidates:
+
+| id | price | imgs | what it is |
+|----|-------|------|------------|
+| `2880183` | **$0.75** | 4 + 10 in description | Silicone grooming glove, hair removal, 3 colours |
+| `2601723` | $3.40 | 7 | 3-in-1 portable dog water bottle and food dispenser |
+| `2768078` | $1.72 | 7 | Biodegradable pet waste bags — a consumable, so repeat purchase |
+| `2655648` | $2.63 | 1 | Silicone bath brush — on-brand but one image, rejected |
+
+### Recommendation: `2880183`, the silicone grooming glove
+
+Reasons, in order of weight:
+
+1. **It is the brush's natural companion.** A glove for the hands-on pass, the brush
+   for the coat. That is a bundle that raises order value rather than a second
+   unrelated product competing for the same visitor.
+2. **Same supplier as the brush**, so the shipping path and lead time are ones we
+   have already measured and already disclose on the shipping policy page.
+3. **$0.75.** Even at a conservative $16.90 the contribution clears our floor with
+   room that no US-catalog item comes close to.
+4. **14 images** across the catalog entry and its description — enough to build a
+   real page.
+5. **Three colours**, so it takes the same variant shape the brush already uses.
+
+Its supplied copy claims "reducing shedding" and "promoting relaxation and
+well-being". Both get rewritten; we describe the silicone nubs and what they do,
+nothing about health.
+
+The stock risk documented earlier applies to this exactly as it applies to
+everything else in the catalog, and cannot be engineered away. Import is proposed
+as DRAFT, not executed, pending the merchant's word.
