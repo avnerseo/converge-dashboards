@@ -2182,3 +2182,82 @@ available to a store this size.
 Two things are free and available now, independent of Zendrop's answer: shift pin
 content from product shots toward the room-and-lifestyle framing Pinterest
 rewards, and test Idea Pins against standard pins.
+
+## 2 Sep 2026 — Zendrop answered. The bundle is dead, and I said what I would say.
+
+Zendrop support (Tessa, their AI agent) answered the shipping question directly:
+
+> "Zendrop charges **per product, not per order**. Your order with 3 different
+> products would have **3 separate shipping fees**, even if they ship to the same
+> address… Zendrop does **not support a single SKU bundle** that ships as one unit
+> for one shipping fee. Even if you sell them as a bundle, shipping is still
+> calculated per product inside the bundle."
+
+Items *may* travel in one parcel when supplier, timing, address and size allow —
+but that is packing, not billing. Three products, three shipping charges.
+
+Noting the source is their AI agent rather than a person. The answer is specific,
+internally consistent, and came through their official channel, so I am treating
+it as authoritative rather than using its provenance as an excuse to relitigate it.
+
+### Honouring the pre-commitment
+
+I wrote earlier: *"If Zendrop charges per item, the bundle economics collapse…
+and the honest answer becomes that this catalog has nothing for us."* Working it
+through rather than softening it.
+
+```
+brush     $3.76 + $9.92 shipping
+bathrobe  $4.46 + $6.42
+glove     $0.75 + ~$9.00
+                ────────
+product          $8.97
+shipping        $25.34    ← three charges
+landed          $34.31
+```
+
+Contribution at $59.90 would be **$23.49**, which does clear the $17 gate. So the
+bundle does not fail on margin.
+
+**It fails on credibility.** Bought separately at US retail those three items cost
+roughly **$10 + $22 + $8 = $40**. A bundle has to be cheaper than buying the parts,
+or there is no reason to buy it — and the shopper can price the parts, which
+destroys the "no comparison possible" argument that was the entire point.
+
+| bundle price | contribution | credible? |
+|--------------|--------------|-----------|
+| $39.90 | $4.19 | yes, but the margin is gone |
+| $49.90 | $13.84 | doubtful, above the parts |
+| $59.90 | $23.49 | no — 50% above buying the parts |
+
+There is no price that is both credible and worth doing. **The bundle is dead.**
+
+### Where that leaves the model
+
+Every route through this catalog is now closed with evidence:
+
+- eight products screened, seven land at or above the cheap end of US retail
+- the one that passed on cost is owned by a brand with a Costco pallet
+- the bundle route is closed by Zendrop's own billing rule
+
+The cause is the same in every case and it is not product selection.
+**Per-unit shipping from China, $6–$34 an item, against retailers moving
+containers.** Zendrop cannot be made to charge it once.
+
+### The actual fork, stated plainly
+
+1. **Stay as is.** One product, Pinterest only, ~$15 a sale, ~6 sales a month to
+   cover ~$84 of fixed cost. Survivable, not a business.
+2. **Change the sourcing model.** Buy inventory in bulk and hold it with a US
+   fulfilment partner. This is the only option that removes the per-unit China
+   shipping instead of working around it — the brush at ~$3.76 plus roughly $1.50
+   of domestic shipping lands near $5.26 and could sell at $19.90 *inside* the
+   market range rather than 3× above it. Costs money up front and carries
+   inventory risk.
+3. **Change category** to something where shipping is small against value.
+4. **Stop selling physical commodity goods.**
+
+Option 2 is the only one that fixes the arithmetic rather than rearranging around
+it. It requires capital and it is the merchant's decision alone.
+
+Nothing changed in the store.
