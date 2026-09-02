@@ -1369,3 +1369,56 @@ wants a business that a customer can identify and locate. Peluma currently
 publishes a first name and nothing else. The only address the business has is the
 merchant's home address, so publishing it is a privacy decision that is his alone
 to make — this session will not publish a home address on the merchant's behalf.
+
+## 2 Sep 2026 — the Merchant Center console text, and the real automated trigger
+
+The merchant opened `merchants.google.com/mc/products/diagnostics/accountissues?a=5845593043`.
+The console says more than the email did:
+
+- **"Misrepresentation — Prevents all products from showing in Israel and United States."**
+  Both markets, not just the US.
+- **"Google found this issue through automated checks."** No human reviewed this.
+  So the trigger is something a crawler can measure, not a judgement call about tone.
+- `I disagree with the issue` is **greyed out** — disputing is not offered. The only
+  path is fix → `Verify info` → request review.
+- The checklist Google prints is its generic Misrepresentation list, not a diagnosis:
+  business transparency; reviews/badges; SSL; **"Provide information in the business
+  information settings in your Merchant Center"**; and **"match your product data in
+  your Merchant Center with your online store"**.
+
+### Two of those bullets I could test. One came back clean, one came back bad.
+
+**Badges and unearned seals — clean.** Scanned the homepage and the brush product page
+for `guarantee|certified|approved|award|seal|badge|trusted|verified|100%|money.?back|
+secure checkout|satisfaction|as seen|#1|best.?sell|vet|clinically|official`. **Zero
+matches on both pages.** The storefront makes no unearned trust claim. SSL is valid.
+Neither of those bullets is our problem.
+
+**Product data match — this is the bad one.** Product `10323824017721` (Paw Wash Cup):
+
+```
+status: ACTIVE          tracksInventory: FALSE
+all 8 variants: inventoryQuantity 0, inventoryPolicy DENY, availableForSale TRUE
+```
+
+`tracksInventory: false` is why every variant reports `availableForSale: true` despite
+zero quantity. Zendrop support confirmed in writing on 1 Sep that this product is
+**out of stock at the supplier**. So the storefront and the Google feed both advertise
+an in-stock, orderable product that cannot be fulfilled, and a customer can pay for it.
+
+That is exactly what an automated Misrepresentation check looks for, and it is the
+strongest single candidate for the trigger — stronger than the missing address,
+because it is machine-detectable from the feed alone without any crawl of the policies.
+
+### Revised priority
+
+| Order | Action | Owner | Why first |
+|-------|--------|-------|-----------|
+| 1 | Cup → DRAFT | merchant approval, then me | Kills the false availability, removes it from the feed, drops it off the homepage without a theme edit, and ends the US-only vs "worldwide shipping" contradiction. Four problems, one action |
+| 2 | Merchant Center → `Verify info` | merchant | The button Google put on the page. Business information settings is a named bullet |
+| 3 | Contact information policy + address | merchant | Business identity, first bullet |
+| 4 | Shipping policy rewrite | merchant | `write_legal_policies` denied to this session |
+| 5 | Request review | merchant | Only after 1–4. A failed review triggers a waiting period |
+
+Setting a product to DRAFT is gated on the merchant's explicit approval
+("אל תשנה מחירים או סטטוס מוצר בלי אישור שלי"), so it is asked, not done.
