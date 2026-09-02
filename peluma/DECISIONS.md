@@ -2404,3 +2404,75 @@ distribution, but it is the wrong signal on a brand account.
 The harness-set decision stands on its economics — landed $12.49 against a verified
 $90.60 competitor — and none of that changes. What changes is that **importing it
 today would not teach us anything**, because there is no traffic to test it with.
+
+## 2 Sep 2026 — Pinterest account audited. Correcting myself twice.
+
+Read the actual Pinterest account through the merchant's browser rather than
+inferring from our own files. Two of my statements were wrong.
+
+**Wrong #1: I said the domain was not claimed.** It is. The Business Hub shows
+`@avnerseo • Online merchant or marketplace • pelumapets.com`, and merchant status
+is **Approved**. I concluded "not claimed" from the absence of a record in our
+files, which is inference from silence, not a check. The advice to go and claim it
+was wasted merchant time.
+
+**Wrong #2: I read the "We'll begin distributing your products" banner as meaning
+approval was fresh.** It is a persistent card. Pinterest's approval email is dated
+**29 August, 05:43 UTC — four days ago.** So distribution has had four days, not
+zero. My "we're simply early, nothing is wrong" reading was too comfortable.
+
+### What the account actually holds
+
+| | |
+|---|---|
+| Merchant status | **Approved**, 29 Aug |
+| Catalog | live, id `4860981355946` |
+| Data source | **"Peluma Shopify Feed"** `1572766331811` — a **URL feed**, not the native Shopify app |
+| Last ingestion | **2 Sep, 12:16** — daily, working |
+| Products in catalog | **5** |
+| Market | United States / English (US) |
+| Shopify card in Hub | **"Continue setup"** — native connection never finished |
+| Ad account | **does not exist** |
+| Pinterest tag | **impossible** — the tag lives inside an ad account |
+| Event Quality Score | "Setup failed" — explained by the above |
+
+The 5 products are the brush's 5 variants. The feed ingested at 12:16 today, after
+the cup went to DRAFT at 08:51, so it has already picked that up correctly.
+
+### The distinction that matters, and that the audit does not resolve
+
+**The missing ad account and the missing tag are about paid ads and conversion
+measurement. Neither has anything to do with organic Pin distribution.** The tag
+reports what happens *after* a click. We have no clicks because we have no
+impressions.
+
+So the zero-impression finding stands unexplained: **five days of Pins, four days
+of merchant approval, zero organic impressions.** Nothing found in this audit
+accounts for it.
+
+The remaining explanation is the ordinary one: a brand-new account with zero
+followers, and Pinterest's own indexing window, which this project recorded as
+**4–8 weeks** before any of today's work. Day 5 of that window is not evidence of
+failure — but it is also not something we can accelerate, and it means **we will
+not know whether Pinterest works for us until early October.**
+
+### What follows, and it is uncomfortable
+
+Peluma has been treating Pinterest as "the channel that works" on the strength of
+published platform statistics — 1.8% conversion, 2.3× conversion value — not on a
+single number of our own. **Our own number is zero, and it stays unknowable for
+weeks.**
+
+That reframes the next six weeks. **The store's outcome in that period does not
+depend on product selection at all.** It depends on two things already on the
+merchant's list: Google lifting the suspension, and a card field appearing at
+checkout. Screening an eleventh product changes nothing while both are open.
+
+### On the advice to create an ad account
+
+Declining to recommend it. Creating an ad account exists to spend money, and no
+budget decision has been made; the catalog is one product in five variants, which
+is nothing for a shopping algorithm to optimise against. **Finishing the native
+Shopify app connection is worth doing** — it is free, it installs the tag by
+itself, and it clears the Event Quality Score failure — but it buys measurement we
+have nothing to measure yet.
