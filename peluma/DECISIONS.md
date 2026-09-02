@@ -2328,3 +2328,79 @@ If those sets sell at $40+, then at $34.90 we clear roughly $21 contribution
 day. If they sell at $25, this joins the other eight.
 
 Nothing imported.
+
+## 2 Sep 2026 — the external test already existed. Every pin has zero impressions.
+
+Merchant asked for an external test of the product theory rather than more of my
+analysis. The test already existed and nobody had read it: **13 Pins have been live
+since 29 August.** Pulled `PINTEREST_GET_PIN` with `include_metrics` on eight of
+them, covering both products, all five boards, and three creative types.
+
+### The result
+
+| pin | live since | impressions | saves | outbound clicks |
+|-----|-----------|-------------|-------|-----------------|
+| "Turn it inside out" (cup) | 29 Aug | **0** | 0 | 0 |
+| "For cats who hate being brushed" | 29 Aug | **0** | 0 | 0 |
+| "Muddy paws stop at the door" (carousel) | 29 Aug | **0** | 0 | 0 |
+| "A gift for the dog lover on your list" | 30 Aug | **0** | 0 | 0 |
+| "For the friend who walks the dog in the rain" | 30 Aug | **0** | 0 | 0 |
+| "Keep the mud at the door" | 31 Aug | **0** | 0 | 0 |
+| "For the sofa that is always covered in fur" | 31 Aug | **0** | 0 | 0 |
+| "No batteries, just a USB cable" | 31 Aug | **0** | 0 | 0 |
+
+Lifetime *and* 90-day, both zero, on all eight, across REGULAR and CAROUSEL.
+
+**These are impressions, not clicks.** Zero clicks would mean the pins are shown and
+ignored. **Zero impressions means Pinterest is not showing them to anybody.**
+
+### What this changes about the question we have been arguing all day
+
+Ten products screened, pricing verified against six listings, market research on
+category and channel, a bundle theory built and killed — all of it reasons about
+**what to put in front of the Pinterest audience.**
+
+**There is no measured Pinterest audience.** Distribution is zero. Until that
+changes, the product question cannot be tested by anything except a paid channel,
+and the choice between a brush and a harness set is unfalsifiable.
+
+**This outranks the product decision.** Recording it as such.
+
+### Being fair to the data before drawing conclusions
+
+Three reasons zero may not yet mean failure, and I am not going to overstate this:
+
+1. **The account is four days old.** Pinterest throttles new accounts hard, and the
+   README's own prior was "indexing takes 4–8 weeks". Day 4 of a 28–56 day window is
+   not evidence of failure.
+2. **`monthly_views` returns `-1`** on the account, which reads as analytics not yet
+   available rather than a measured zero. Some of these zeros may be "no data" rather
+   than "no impressions".
+3. `follower_count` is **0** and the account reports `pin_count: 5` while we have
+   published 13 — the account's own reporting is lagging reality.
+
+So the honest statement is: **zero measured distribution after four days, on an
+account whose analytics may not be reporting yet.** Not "Pinterest has rejected us".
+
+### What is worth checking, and it is cheap
+
+The known lever for a new Pinterest business account is **claiming the website**.
+An unclaimed domain limits distribution and attribution, and nothing in this project
+records having claimed `pelumapets.com` on Pinterest. That is free, takes minutes,
+and is a merchant action.
+
+Second: the account username is **`avnerseo`**, not Peluma. The business name is set
+to Peluma but the handle is the merchant's SEO-consultancy handle. It does not block
+distribution, but it is the wrong signal on a brand account.
+
+### The revised order of work
+
+1. Establish that Pinterest distributes anything at all — claim the domain, then
+   re-read these same eight pins' metrics in about a week. **Same pins, same boards,
+   real before-and-after.**
+2. Only once impressions are non-zero does the brush-versus-harness question become
+   answerable by evidence rather than argument.
+
+The harness-set decision stands on its economics — landed $12.49 against a verified
+$90.60 competitor — and none of that changes. What changes is that **importing it
+today would not teach us anything**, because there is no traffic to test it with.
