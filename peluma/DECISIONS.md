@@ -1545,3 +1545,59 @@ rather than the AI-composited images, both linking to the brush:
 
 Copy describes the mechanism only — silicone bristles, mist in the handle, USB
 rechargeable, free US shipping. No percentages, no health claims.
+
+## 2 Sep 2026 — the inventory cap does not work, and why. Plus what actually improved.
+
+Merchant said go, so I turned Shopify inventory tracking on for the brush
+(product `10320315810105`, all 5 variants) intending a finite cap of 20 units.
+**The cap failed.** Recording exactly what happened, because the reason is
+structural and will apply to every product we ever add.
+
+### What happened, in order
+
+1. `inventoryItemUpdate` set `tracked: true` on all 5 inventory items. Fine.
+2. `inventorySetQuantities` against location `115449626937` → **"location not found"**.
+3. `locations(first: 10)` returned **one** location, `115449168185` "Adnei-Paz
+   Street 29". So I activated 20 units there. It worked — and it was a mistake.
+4. Re-reading the product showed `totalInventory: 250099`, roughly 50,020 per
+   variant, not 20.
+5. `inventoryItem.inventoryLevels` revealed the truth: there are **two** active
+   locations. `115449626937` is named **"Zendrop"** and holds **50,000 units per
+   variant**. The `locations` query had simply not returned it.
+6. Tried to cap the Zendrop location to 25 → **"location not found" again.**
+
+That error is Shopify's wording for *you have no write access to a location owned
+by another app's fulfillment service*. **The Zendrop location is read-only to us.**
+Zendrop pushes 50,000 as its way of saying "unlimited", and we cannot lower it.
+
+So a numeric cap is not available to us at all, on any Zendrop-sourced product.
+
+### The mistake I made and reverted
+
+Activating 20 units at "Adnei-Paz Street 29" put fictional stock at the merchant's
+home address, at a location that physically holds nothing. Shopify could have
+routed a real order there instead of to Zendrop and broken fulfilment. Removed it
+with `inventoryDeactivate` on all 5 levels. Verified after: each variant now sits
+at the Zendrop location only, `availableForSale: true`, store selling normally.
+
+### What did genuinely improve, and it is not nothing
+
+`tracksInventory` is now **true**. Before, it was false — and that is precisely what
+let the cup report `availableForSale: true` on `inventoryQuantity: 0` for days.
+Shopify was being handed a zero and ignoring it, because untracked items are always
+purchasable.
+
+With tracking on, **a zero from Zendrop now marks the product Sold out by itself.**
+That closes the failure mode that caused the Google suspension, on Shopify's side.
+
+### The hole that remains, stated plainly
+
+Zendrop may never send that zero. Proven earlier today: `get_catalog_product` still
+returns `in_stock: true` for the cup that their own support says is out of stock.
+Tracking makes us obey a truthful zero; it cannot manufacture one from a supplier
+that does not send it.
+
+There is no API fix for that. What is left is a periodic manual check against the
+supplier, and the merchant's "Notify Me" on the Zendrop product page. Any product
+we add carries this same unremovable risk, so the decision to add one is a judgement
+about upside, not a problem that can be engineered away.
