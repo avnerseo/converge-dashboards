@@ -47,27 +47,46 @@ Last verified end to end: **2 September 2026.**
 
 ## 3. Live state
 
+*Everything in this section was verified against the live store or a real invoice on
+2 Sep 2026. Numbers that are estimates say so.*
+
 ### Products
 
 | product | id | status | buyable |
 |---|---|---|---|
 | Peluma 3-in-1 Mist Grooming Brush | `10320315810105` | ACTIVE | **yes**, all 5 variants |
-| Peluma 2-in-1 Paw Wash Cup | `10323824017721` | ACTIVE | **no** — supplier out of stock |
+| Peluma 2-in-1 Paw Wash Cup | `10323824017721` | **DRAFT** | no — pulled 2 Sep |
 
-### Brush variants, prices and economics
+The cup was set to DRAFT because it was **advertising itself as in stock while the supplier
+had none** — the storefront and the Google feed both offered a product we could not ship,
+which is the most likely cause of the Merchant Center suspension. Pulling it also removed it
+from the homepage (7 mentions → 0) without touching the theme, and retired the US-only
+delivery profile that contradicted the shipping policy. Verified: product URL returns **404**.
 
-Pricing rule now in force: **one item $29.90, two items $39.90.** No compare-at anywhere.
+**Inventory tracking is now ON** for the brush (`tracksInventory: true`). It was off, which is
+exactly why the cup could report `availableForSale: true` on zero quantity — Shopify ignores
+zeros on untracked items. A zero from Zendrop will now mark a product sold out by itself.
 
-| variant | SKU | price | landed | contribution |
-|---|---|---|---|---|
-| White brush | `MDYQJZF3J` | 29.90 | ~11 est | ~17.7 |
-| Purple brush | `ZAF7RY7XJ` | 29.90 | ~11 est | ~17.7 |
-| White brush + lint roller | `PE17TFL2V` | 39.90 | **21.70 invoiced** | **16.74** |
-| Milk brown brush + lint roller | `1O3NPE8` | 39.90 | ~21.70 | ~16.74 |
-| Two brushes - white + milk brown | `Z75Y6C7M0` | 39.90 | ~21.70 | ~16.74 |
+### Brush economics — the real US numbers
 
-Paw cup: `$16.90`, landed `$7.65` (S) / `$8.56` (L), NexoraUSA, ships $0 in 6 days. Dead
-until restock.
+Pricing: **one item $29.90, two items $39.90.** No compare-at anywhere.
+
+**The landed cost this project used for weeks was wrong.** Order `#1001` shipped to **Hadera,
+Israel** — it is the merchant's own test order. Its $21.70 total is $7.50 product plus **$14.20
+Israel shipping**, and has never been the cost of anything we sell to the US.
+
+Zendrop's own US quote for the same product: **$9.92, 8 days.**
+
+| | product | US shipping | landed | price | contribution |
+|---|---|---|---|---|---|
+| single brush | $3.76 | $9.92 | **$13.68** | $29.90 | **~$15.17** |
+| brush + lint roller | $7.50 | $9.92 | **$17.42** | $39.90 | **~$21.08** |
+
+Per-variant `unitCost` in Shopify reads $3.76 / $3.61 for single brushes and $22.20 for the
+sets — **those two columns are in different units.** The $22.20 is a landed-to-Israel figure
+Zendrop wrote back after `#1001`. Use the table above, not the raw field.
+
+**Shipping is 73% of the landed cost.** That single fact drives most of section 8.
 
 ### Running costs
 
@@ -109,16 +128,15 @@ at Home `916553030354941638` · Paw & Nail Care `916553030354941962` · Gifts fo
 
 ## 5. What is blocking, and who owns it
 
-| # | blocker | owner | why it matters |
+| # | blocker | owner | state |
 |---|---|---|---|
-| 0 | **Google Merchant Center suspended the account — `Misrepresentation`.** Listings are not shown to anyone. Free Google Shopping is dead until resolved. | merchant — Merchant Center console | One of only two free traffic channels. |
-| 1 | **No card field at checkout.** PayPal only, and its first transaction failed. PayPlus account is now activated; a quote (#31219) awaits signature. | merchant — sign / finish setup | The November test is uninterpretable if run with a known checkout handicap. |
-| 2 | **Paw cup out of stock at supplier.** | Zendrop — "Notify Me" | Half the catalogue, and 7 of 16 Pins point at it. |
-| 3 | **Sold-out cup appears 7× on the homepage.** | merchant — theme edit | First thing a visitor sees. Assistant may not touch the theme. |
-| 4 | **No photograph of the real product in a real hand.** | waiting on delivery | No demo, before/after or testimonial ad exists without it. |
-| 5 | Zendrop UBB $29/mo with zero orders | merchant — ask to downgrade | ~$116 saved before the window. |
-
----
+| 0 | **Google Merchant Center suspended — `Misrepresentation`**, found by automated checks, blocking all products in both Israel and the US. | merchant | **Review requested 2 Sep.** Identity verified by selfie. Storefront audit passes 10/10. Awaiting Google, a few days. **2 of 3 review requests remain.** |
+| 1 | **No card field at checkout.** PayPal only. PayPlus is activated; quote #31219 awaits signature. | merchant — sign | Unchanged. Still the hardest blocker: a US visitor who reaches checkout and sees only PayPal leaves. |
+| 2 | **Paw cup out of stock at supplier.** | Zendrop — "Notify Me" | Product now DRAFT, so it no longer harms the store. |
+| 3 | ~~Sold-out cup 7× on the homepage~~ | — | **Solved** by the DRAFT, without a theme edit. |
+| 4 | **No photograph of the real product in a real hand.** | waiting on delivery | Unchanged. Still the standing gate on all video. |
+| 5 | Zendrop UBB $29/mo with zero orders | merchant — ask to downgrade | Unchanged. |
+| 6 | **No viable second product found.** Ten screened on 2 Sep; nine rejected on verified US retail prices. | see section 8 | One candidate open, pending a US-dollar price check. |
 
 ## 6. Hard-won knowledge — read before touching anything
 
@@ -213,27 +231,147 @@ from measured demand rather than intuition.
 
 ## 8. The strategic position, stated plainly
 
-The store is no longer the problem. Products are clean, copy is honest, prices are coherent,
-six social and feed channels are wired. **What it has never had is a single real customer.**
+*Rewritten 2 Sep 2026 after pricing, product-screening and market research all landed on the
+same conclusion from different directions.*
 
-Every number in this document except one is a model. The exception is order `#1001`, which the
-merchant placed himself.
+### The one sentence
 
-The structural fact, arrived at from four independent directions: **these products have no
-defensibility.** eBay sells the same generic brush at $8.99–$16.94; Peluma asks $29.90. That
-works only if brand or content is worth the gap, and there is no evidence yet for either.
+**Right channel, wrong product.** Pinterest is the best-converting option available to a store
+this size. What we put in front of it is a commodity we cannot price competitively.
 
-So the plan is a **single dated test**: the gifting window, **10 Nov – 22 Dec**, run on free
-organic Pinterest, with a working checkout and real product photography.
+### Why the brush cannot be fixed by lowering its price
 
-**If that window passes with real content, buyable products and a card field, and still
-produces nothing — the answer is the product, not the marketing.** That converts "will this
-work" from an argument into an experiment with a date.
+The same rechargeable mist grooming brush, verified across six live listings on 2 Sep:
 
-Standing gate: **no video production until there is footage of the real product in a real
-hand.** Generating more AI clips is spending effort on an asset that will not convince anyone.
+| retailer | price |
+|---|---|
+| Walmart, 4-in-1 | $6.99 |
+| Walmart, 3-in-1 white | $9.68 |
+| Walmart, XYRSRUW | $10.69 |
+| Walmart, 2026 model | $11.66 |
+| Walmart, for shedding | $11.99 |
+| Amazon, Feelneedy | $10.99 |
 
----
+**Our landed cost of $13.68 is higher than the price Walmart charges a shopper.** Every
+competitive price point loses money. Cutting the price does not reach the shelf; it only
+shrinks the margin. The brush stays at $29.90 as an impulse-channel product.
+
+**The sharp version: a 3× price survives on impulse channels and dies on comparison channels.**
+Pinterest shows a product in a moment of desire. Google Shopping shows our $29.90 in a grid
+beside somebody's $9.68.
+
+### Ten products screened, and why nine failed
+
+Screen used: **landed cost must be ≥ $18.50 below verified US retail** to clear ~$17
+contribution. Landed = Zendrop product price + Zendrop's own US shipping quote. Retail = live
+Walmart / Chewy / Amazon listings.
+
+| product | landed | verified US retail | outcome |
+|---|---|---|---|
+| mist brush *(live)* | $13.68 | $6.99–$11.99 | cost above market |
+| silicone grooming glove | ~$9.75 | $5.53–$12.74 | cost at market |
+| ultrasonic bark deterrent | $20.36 | $8.99–$20.99 | cost at market top |
+| window cat hammock | $47.17 | — | shipping 2× the product |
+| expandable cat backpack | $50.90 | $34.00–$51.99 | cost at market top |
+| wireless water fountain | $39.95 | $30s–$90.99 | passed on cost, failed on everything else |
+| pet bathrobe | $10.88 | $9.29–$39.95 | marginal |
+| pet first-aid kits ×2 | $26–$28 | — | $18.61 to ship a $9 item |
+| **dog leash & harness set** | **$12.49** | **unverified** | **open** |
+
+**Why the failures are structural, not bad luck.** Shipping squeezes from both ends. Cheap
+products die against a ~$9 shipping floor; bulky ones die against shipping that outgrows the
+product. And Zendrop's catalog is generic Chinese goods — **every item in it is already in US
+retail**, sold by someone moving containers while we pay $6–$34 a unit.
+
+The water fountain deserves its own note because it passed the arithmetic and still failed:
+its specs are identical to **PETLIBRO Dockstream**, which is carried at Amazon, Walmart, Chewy,
+Best Buy *and* Costco. **Passing the cost screen is necessary, not sufficient** — the screen
+must also ask who already owns the category and what happens when the product breaks.
+
+### The bundle route, and Zendrop closing it
+
+Zendrop support, asked directly on 2 Sep: **shipping is charged per product, not per order.**
+Three products in one order means three shipping fees even to one address, and they do **not**
+support a single-SKU bundle. Items may travel in one parcel; that is packing, not billing.
+
+So a self-assembled "bath day set" is dead: the three items cost about $40 at US retail, and
+any price that clears our gate is above the sum of the parts — which a shopper can check.
+
+**But there is a door left open.** A *supplier* SKU that already contains several objects does
+carry one shipping charge. Our own store proves it — "White brush + lint roller" is one SKU
+holding two objects, and `#1001` paid shipping once. The route is to find existing multi-item
+SKUs, not to assemble them.
+
+### The open candidate: `3050917`, Dog Leash & Harness Set
+
+One SKU containing **harness, collar, leash, bow and poop-bag holder.** 16 variants, 7 images,
+landed **$12.49**.
+
+It is the first candidate whose competitors are **not Walmart**. Searching its US market returns
+Lucy & Co. (now in Petco), Sniff & Bark, Posh Dog Life, Furry Muse — boutique DTC brands, several
+on Shopify. **There is no $9.68 commodity listing underneath this category.** It also matches
+what the Pinterest research asks for: an aesthetic product bought as a planned purchase.
+
+| our price | contribution |
+|---|---|
+| $39.90 | $26.01 |
+| $49.90 | $35.66 |
+| $59.90 | $45.31 |
+
+Against the brush's $15.17.
+
+**Verified 2 Sep, in USD**, by re-opening sniffandbark.com.co with `?country=US` (the first
+pull came back in ILS because the site geo-detects Israel; converting that is not the same as
+the US price, so it was re-pulled rather than converted):
+
+| their product | list | with their standing CRAZY40 code |
+|---|---|---|
+| AllSet harness alone | $59.00 | $35.40 |
+| Joyline leash alone | $49.00 | $29.40 |
+| Bundle — harness + leash + bag holder | $109.00 | $65.40 |
+| **Mega Bundle** — collar + leash + bowtie + harness + bandana + bag holder | **$151.00** | **$90.60** |
+
+The Mega Bundle is the near-exact match for `3050917` (ours lacks only the bandana).
+
+**Treat the "regular" prices as theatre, not market data.** The harness's compare-at changes
+with size while its sale price does not — a size L shows 23% off and an XS shows 12% off, same
+product, same campaign — and the leash carries no compare-at at all. Those anchors are
+marketing inputs. **The honest market price is the post-code figure: $90.60.**
+
+**The pre-committed rule was: proceed above $35 USD. It came back at $90.60 — 2.6× the
+threshold. Decision: proceed.**
+
+### What the market research says about the category itself
+
+- US pet industry **$158 B (2025) → $165 B (2026)**, +4.4%. 95 M pet households. Dog ownership
+  **51% → 53%** in one year. **Demand is not the constraint.**
+- But growth sits where we are not: health and wellness **42%** of spend, premium nutrition
+  **28%**, technology **12%**; services are the fastest-growing segment. **Grooming accessories
+  appear nowhere on the growth list.**
+- **Chewy owns pet e-commerce at $12.0 B — 7.5× Walmart.**
+- Christmas gifting: toys **68%**, treats **45%**, bedding **8%**, **grooming 3%** — tied for
+  last. The gift boards built in August point at a 3% slice. The **price band is right**
+  ($25–$50 is what 27% of dog owners spend); the category is not.
+
+### Pinterest is confirmed, and we are using it wrong
+
+**1.8% conversion, 2.3× the conversion value of other social platforms, ~80% new visitors.** It
+drives **planned** purchases by people designing a look around their pet — "cat-friendly living
+rooms", "outdoor dog oases".
+
+Two mismatches, both free to fix:
+1. **We pin a tool as a catalogue shot** at an audience planning a room.
+2. **Idea Pins get 4× the saves and 3.2× the outbound clicks of standard pins** — and every
+   Peluma pin so far is a standard pin.
+
+### The test still stands
+
+A single dated test in the gifting window, **10 Nov – 22 Dec**, on free organic Pinterest, with
+a working checkout and real product photography. **If that passes with real content, buyable
+products and a card field and still produces nothing, the answer is the product, not the
+marketing.**
+
+Standing gate: **no video production until there is footage of the real product in a real hand.**
 
 ## 9. The other files
 
