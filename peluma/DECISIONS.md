@@ -1854,3 +1854,69 @@ research, now with the cost data behind it: **we cannot win a comparison, so we
 must not be shown in one.** That is an argument about channel, not price.
 
 No price was changed. This is analysis for the merchant's decision.
+
+## 2 Sep 2026 — full product screen against verified US retail. One survivor.
+
+Merchant's point, and he is right: the brush was chosen without anyone checking
+what it retails for in the US. Ran the screen that should have run first. Rule
+applied: **we must be able to price at or below US retail and still clear ~$17
+contribution.** Equivalent to landed cost ≤ market price − $18.50.
+
+Every landed cost below is Zendrop product price + Zendrop's own US shipping quote
+(all 8 days). Every market price is from live Walmart / Chewy / Amazon listings
+pulled today, not estimated.
+
+| candidate | product | ship US | landed | verified US retail | verdict |
+|-----------|---------|---------|--------|--------------------|---------|
+| Mist brush *(what we sell)* | $3.76 | $9.92 | **$13.68** | $6.99–$11.99 | **fail** — costs more than the shelf price |
+| Silicone grooming glove | $0.75 | ~$9 | ~$9.75 | $5.53–$12.74 | **fail** |
+| Ultrasonic bark deterrent | $12.02 | $8.34 | **$20.36** | $8.99–$20.99 | **fail** — lands at the top of the range |
+| Window cat hammock | $15.08 | **$32.09** | $47.17 | not verified | **fail** — shipping is 2× the product |
+| Expandable cat backpack | $16.80 | **$34.10** | $50.90 | $34.00–$51.99 | **fail** — lands at the top of the range |
+| **Smart wireless water fountain** | $20.61 | $19.34 | **$39.95** | **$30s–$90.99** | **pass** |
+
+### The structural reason five of six failed
+
+Shipping scales with volume, and it squeezes from both ends:
+
+- Anything **cheap** dies against a ~$9 shipping floor. A $0.75 glove lands near
+  $10 against an $8 shelf price. No cheap product in this catalog can ever work.
+- Anything **bulky** dies against shipping that outgrows the product. The cat
+  hammock costs $15 and ships for $32.
+
+The window that survives is narrow: **dense, compact, and expensive** — high value
+per gram. That is the whole rule, and it explains every row above.
+
+### The survivor: `2922283`, Smart Pet Wireless Water Dispenser
+
+2.6 L, stainless steel tray, cordless, silent, four colours, **0.67 kg**. Five
+catalog images plus four more in the description — nine usable.
+
+Landed **$39.95**. Verified comparables: a Walmart cordless stainless fountain with
+the same 2.6 L tank sits at **$90.99**; the wider category runs from the $30s up.
+
+| our price | contribution after ~3.5% fees |
+|-----------|-------------------------------|
+| $54.90 | $13.03 |
+| **$59.90** | **$17.85** |
+| $64.90 | $22.68 |
+
+**$59.90 clears the gate and sits well under the $90.99 comparable** — the first
+time in this project a price is defensible from below rather than 3× from above.
+
+### Risks, stated rather than buried
+
+- The **$19.34 shipping is a Zendrop quote, not a paid invoice.** No US order has
+  ever been placed by this store. Confirmed only by a real order.
+- Cheaper fountains exist in the $30s. We beat the premium listings, not the floor.
+- It is an **electrical product with a pump**, so defect and return rates run higher
+  than a brush. Refund exposure is real at $59.90.
+- The Zendrop stock-signal problem documented this morning applies unchanged.
+
+### On the brush
+
+Not proposing a price cut. At $29.90 it contributes ~$15 when it sells; cutting the
+price cannot reach a shelf that sits below our cost, it only shrinks the margin.
+It stays as an impulse-channel product while Pinterest runs.
+
+Nothing imported. Decision belongs to the merchant.
