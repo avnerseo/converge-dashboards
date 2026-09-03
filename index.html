@@ -1,1 +1,835 @@
-READ_FROM_SANDBOX_FILE
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converge™ — סורק מניות קנייה והחזקה</title>
+<style>
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --surface-2:#eef1f6; --ink:#14181f; --ink-soft:#586074;
+  --border:#dfe3ea; --accent:#1d4ed8; --accent-ink:#ffffff; --accent-soft:#e3ebfd;
+  --positive:#157a3d; --negative:#b91c1c; --warn:#a15c00;
+  --tier1-bg:#eef4ff; --tier1-border:#c7d9fb;
+  --highrisk-bg:#fff7ed; --highrisk-border:#fbd9a5;
+  --chip-bg:#eef1f6; --chip-ink:#3c4353;
+  --quicknav-h:106px;
+  --shadow:0 1px 2px rgba(20,24,31,.06), 0 4px 14px rgba(20,24,31,.05);
+  color-scheme: light;
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){}
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --surface:#171a21; --surface-2:#1d212b; --ink:#e7e9ee; --ink-soft:#9aa2b1;
+    --border:#2a2f3a; --accent:#6d97f5; --accent-ink:#0b1220; --accent-soft:#1c2740;
+    --positive:#3fbf72; --negative:#f0655f; --warn:#e0a530;
+    --tier1-bg:#141d33; --tier1-border:#2a3c66;
+    --highrisk-bg:#241c12; --highrisk-border:#4a3418;
+    --chip-bg:#232834; --chip-ink:#c3c9d6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --surface:#171a21; --surface-2:#1d212b; --ink:#e7e9ee; --ink-soft:#9aa2b1;
+  --border:#2a2f3a; --accent:#6d97f5; --accent-ink:#0b1220; --accent-soft:#1c2740;
+  --positive:#3fbf72; --negative:#f0655f; --warn:#e0a530;
+  --tier1-bg:#141d33; --tier1-border:#2a3c66;
+  --highrisk-bg:#241c12; --highrisk-border:#4a3418;
+  --chip-bg:#232834; --chip-ink:#c3c9d6;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Heebo",Arial,sans-serif;line-height:1.55;}
+a{color:var(--accent);}
+h1,h2,h3,h4{font-weight:800;margin:0 0 .4em;color:var(--ink);}
+h2{font-size:1.4rem;border-bottom:2px solid var(--border);padding-bottom:.4em;margin-top:2.2em;}
+h3{font-size:1.1rem;}
+p{color:var(--ink-soft);}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px;}
+.small{font-size:.82rem;color:var(--ink-soft);}
+.mono{font-variant-numeric:tabular-nums;}
+button,select,input{font-family:inherit;}
+
+/* ===== Header ===== */
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);}
+.header-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;flex:0 0 auto;}
+.wordmark{font-size:1.25rem;font-weight:800;letter-spacing:.2px;}
+.wordmark sup{font-size:.55em;top:-.9em;}
+.header-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.updated-pill{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:.82rem;color:var(--ink-soft);}
+.theme-toggle{border:1px solid var(--border);background:var(--surface-2);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:.82rem;display:flex;align-items:center;gap:6px;}
+.theme-toggle:hover{border-color:var(--accent);}
+
+/* ===== Disclaimer ===== */
+.disclaimer{background:linear-gradient(135deg,#7a1f1f,#5a1414);color:#fff;padding:12px 0;}
+:root[data-theme="dark"] .disclaimer, :root:not([data-theme="light"]) .disclaimer{background:linear-gradient(135deg,#5a1414,#3d0d0d);}
+.disclaimer .wrap{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;}
+.disclaimer .tag{background:rgba(255,255,255,.18);border-radius:6px;padding:3px 10px;font-size:.75rem;white-space:nowrap;}
+
+/* ===== Quicknav ===== */
+#quicknav{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
+#quicknav .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 20px;scrollbar-width:thin;}
+#quicknav a{white-space:nowrap;font-size:.85rem;font-weight:600;color:var(--ink-soft);text-decoration:none;padding:8px 12px;border-radius:8px;}
+#quicknav a:hover{background:var(--surface-2);color:var(--ink);}
+#quicknav a.risk-link{color:var(--warn);}
+
+/* ===== Controls ===== */
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;align-items:center;}
+.controls input[type="search"]{flex:1;min-width:220px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:.95rem;}
+.controls select{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:.9rem;}
+.controls .count-badge{font-size:.82rem;color:var(--ink-soft);}
+
+/* ===== KPI row ===== */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0 28px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);}
+.kpi .num{font-size:1.7rem;font-weight:800;color:var(--accent);}
+.kpi .label{font-size:.8rem;color:var(--ink-soft);margin-top:2px;}
+
+/* ===== Tier1 cards ===== */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0;}
+.tier1-card{background:var(--tier1-bg);border:1px solid var(--tier1-border);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);}
+.tier1-card .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.tier1-card .ticker{font-size:1.3rem;font-weight:800;}
+.tier1-card .company{font-size:.85rem;color:var(--ink-soft);}
+.tier1-card .price{font-size:1.15rem;font-weight:700;text-align:left;direction:ltr;}
+.tier1-card .price .chg{font-size:.78rem;display:block;text-align:left;}
+.up{color:var(--positive);} .down{color:var(--negative);}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--accent);color:var(--accent-ink);margin-top:6px;}
+.tier1-card .rationale{margin:10px 0;font-size:.88rem;color:var(--ink);}
+.tier1-card .flags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
+.flag{font-size:.72rem;background:var(--warn);color:#fff;border-radius:6px;padding:2px 8px;opacity:.9;}
+.tier1-card .sources{font-size:.75rem;color:var(--ink-soft);margin-top:8px;}
+.tier1-card .sources a{color:var(--ink-soft);text-decoration:underline;}
+.sent-line{font-size:.78rem;margin-top:6px;}
+
+.empty-state{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:22px;color:var(--ink-soft);font-size:.9rem;}
+
+/* ===== Tabs & tables ===== */
+.tabs{display:flex;gap:6px;margin:14px 0 0;flex-wrap:wrap;}
+.tab-btn{border:1px solid var(--border);background:var(--surface);color:var(--ink-soft);padding:8px 16px;border-radius:10px 10px 0 0;cursor:pointer;font-size:.88rem;font-weight:600;}
+.tab-btn.active{background:var(--surface);color:var(--accent);border-bottom:2px solid var(--surface);position:relative;top:1px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.table-toolbar{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-top:none;padding:10px 14px;flex-wrap:wrap;gap:8px;}
+.export-btn{border:1px solid var(--accent);color:var(--accent);background:transparent;padding:6px 14px;border-radius:8px;font-size:.82rem;cursor:pointer;font-weight:600;}
+.export-btn:hover{background:var(--accent-soft);}
+.table-scroll{overflow-x:auto;border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.86rem;}
+thead th{position:sticky;top:var(--quicknav-h, 106px);background:var(--surface-2);color:var(--ink);text-align:right;padding:10px 12px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);white-space:nowrap;z-index:5;}
+thead th:hover{color:var(--accent);}
+thead th .arrow{font-size:.7em;opacity:.6;margin-left:4px;}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--surface-2);}
+td.num,th.num{direction:ltr;text-align:left;}
+.tier-tag{font-size:.68rem;font-weight:700;border-radius:6px;padding:2px 7px;}
+.tier-tag.t1{background:var(--accent);color:var(--accent-ink);}
+.tier-tag.t2{background:var(--warn);color:#fff;}
+.tier-tag.tn{background:var(--chip-bg);color:var(--chip-ink);}
+
+/* ===== High risk section (preserve structure/classes exactly) ===== */
+#highrisk{scroll-margin-top:var(--quicknav-h, 106px);}
+.highrisk-banner{background:var(--highrisk-bg);border:1px solid var(--highrisk-border);border-radius:14px;padding:16px 20px;margin:14px 0 20px;font-size:.9rem;color:var(--ink);}
+.highrisk-banner strong{color:var(--warn);}
+.highrisk-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 20px;}
+.highrisk-kpi-row .kpi{background:var(--surface);}
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
+.risk-card{background:var(--surface);border:1px solid var(--highrisk-border);border-right:4px solid var(--warn);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);}
+.risk-card .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.risk-card .ticker{font-size:1.2rem;font-weight:800;}
+.risk-card .company{font-size:.82rem;color:var(--ink-soft);}
+.risk-card .price{font-weight:700;direction:ltr;text-align:left;}
+.risk-badge{display:inline-block;font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--warn);color:#fff;margin-top:6px;}
+.risk-card .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.chip{font-size:.72rem;border-radius:999px;padding:3px 10px;background:var(--chip-bg);color:var(--chip-ink);font-weight:600;}
+.chip.catalyst{background:var(--accent-soft);color:var(--accent);}
+.chip.inst-strong{background:#dff5e6;color:var(--positive);}
+:root[data-theme="dark"] .chip.inst-strong,:root:not([data-theme="light"]) .chip.inst-strong{background:#123322;}
+.chip.inst-mixed{background:#fdeccb;color:var(--warn);}
+:root[data-theme="dark"] .chip.inst-mixed,:root:not([data-theme="light"]) .chip.inst-mixed{background:#3a2c10;}
+.risk-card .finding{font-size:.84rem;margin-top:8px;}
+.risk-card .source-line{font-size:.72rem;color:var(--ink-soft);margin-top:8px;}
+
+/* ===== Sentiment layer ===== */
+.sentiment-banner{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:.82rem;color:var(--ink-soft);margin-bottom:10px;}
+.sec-tag{font-size:.7rem;font-weight:700;background:var(--chip-bg);color:var(--chip-ink);border-radius:6px;padding:2px 8px;}
+
+/* ===== Chart ===== */
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;}
+#tooltip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:.78rem;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:100;max-width:220px;}
+:root[data-theme="dark"] #tooltip, :root:not([data-theme="light"]) #tooltip{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
+
+/* ===== Compare & methodology & limitations ===== */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0;}
+.compare-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.compare-card h4{margin-bottom:8px;}
+.compare-card ul{margin:0;padding-inline-start:18px;font-size:.85rem;color:var(--ink-soft);}
+.source-list{columns:2;column-gap:30px;font-size:.85rem;color:var(--ink-soft);}
+@media (max-width:640px){.source-list{columns:1;}}
+.limits-box{background:var(--surface);border:1px solid var(--border);border-right:4px solid var(--warn);border-radius:12px;padding:16px 20px;font-size:.88rem;}
+.limits-box li{margin-bottom:6px;}
+footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);font-size:.8rem;color:var(--ink-soft);text-align:center;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap header-row">
+    <div class="brand">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="36" height="36" rx="9" stroke="var(--accent)" stroke-width="2.5"/>
+        <path d="M13 20 L18 26 L27 14" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div class="wordmark">Converge<sup>™</sup></div>
+    </div>
+    <div class="header-meta">
+      <span class="updated-pill">עודכן: <span id="updated-date"></span></span>
+      <button class="theme-toggle" id="theme-toggle" type="button">🌓 מצב תצוגה</button>
+    </div>
+  </div>
+</header>
+
+<div class="disclaimer">
+  <div class="wrap">
+    <span class="tag">חשוב</span>
+    <span>הדשבורד הזה הוא כלי מחקר אוטומטי בלבד ואינו מהווה ייעוץ השקעות, המלצה לביצוע עסקה, או תחליף לייעוץ פיננסי מוסמך. כל החלטת השקעה היא באחריות המשתמש בלבד.</span>
+  </div>
+</div>
+
+<nav id="quicknav">
+  <div class="wrap">
+    <a href="#kpi">סקירה</a>
+    <a href="#tier1">שכבה 1</a>
+    <a href="#tier2">שכבה משנית</a>
+    <a href="#tables">טבלאות מתודולוגיה</a>
+    <a href="#highrisk" class="risk-link">⚠ סיכון גבוה</a>
+    <a href="#sentiment">שכבת סנטימנט</a>
+    <a href="#chart">פיזור סקטוריאלי</a>
+    <a href="#compare">השוואה לכלים</a>
+    <a href="#methodology">מתודולוגיה ומקורות</a>
+    <a href="#limits">שקיפות ומגבלות</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <div class="controls">
+    <input type="search" id="global-search" placeholder="חיפוש לפי טיקר או שם חברה...">
+    <select id="sector-filter">
+      <option value="">כל הסקטורים</option>
+    </select>
+    <span class="count-badge" id="result-count"></span>
+  </div>
+
+  <section id="kpi">
+    <h2>סקירה כללית</h2>
+    <div class="kpi-row">
+      <div class="kpi"><div class="num" id="kpi-total">–</div><div class="label">מניות שנסרקו (כלל המתודולוגיות)</div></div>
+      <div class="kpi"><div class="num" id="kpi-tier1">–</div><div class="label">שכבה 1 — שכנוע גבוה</div></div>
+      <div class="kpi"><div class="num" id="kpi-tier2">–</div><div class="label">שכבה משנית</div></div>
+      <div class="kpi"><div class="num">10</div><div class="label">מעקב סיכון גבוה (קבוע)</div></div>
+      <div class="kpi"><div class="num" id="kpi-sectors">–</div><div class="label">סקטורים מיוצגים</div></div>
+    </div>
+  </section>
+
+  <section id="tier1">
+    <h2>שכבה 1 — שכנוע גבוה (מופיעות בשתיים מתוך שלוש רשימות עצמאיות)</h2>
+    <p class="small">קריטריון: הופעה עצמאית בשתיים לפחות מבין שלוש המתודולוגיות (קונצנזוס אנליסטים כמותי / פונדמנטלי-איכות / עריכתי לטווח ארוך). מחירים חיים מ-Alpha Vantage (סגירה 2026-09-02, אלא אם צוין אחרת). ניתוח סנטימנט מצוטט מ-<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a>.</p>
+    <div class="card-grid" id="tier1-grid"></div>
+  </section>
+
+  <section id="tier2">
+    <h2>שכבה משנית — שכנוע בודד עם גיבוי סנטימנט</h2>
+    <p class="small">קריטריון: מניה שהופיעה במקור מתודולוגי אחד בלבד, אך זכתה לגיבוי סנטימנט אמין (StockTwits / Reddit / אנליסטים מוכרים ב-X) עם תזה פונדמנטלית ולא ספקולטיבית.</p>
+    <div class="empty-state" id="tier2-empty">
+      <strong>אין מניות בשכבה זו בהרצה הנוכחית.</strong><br>
+      בבדיקה השוואתית בין רשימת הבאזז החיובי עם גיבוי פונדמנטלי (MU, PLTR, VRT, BWXT) לבין שלוש רשימות המתודולוגיה הראשיות — לא נמצאה חפיפה מאומתת בטיקר בודד. במקום לאלץ שיוך שגוי, השכבה מוצגת ריקה בשקיפות. ראו את טבלת "שכבת הסנטימנט" למטה למידע המלא על הבאזז שנמצא.
+    </div>
+  </section>
+
+  <section id="tables">
+    <h2>טבלאות מלאות לפי מתודולוגיה</h2>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tabA">א. קונצנזוס אנליסטים כמותי</button>
+      <button class="tab-btn" data-tab="tabB">ב. איכות וערך פונדמנטלי</button>
+      <button class="tab-btn" data-tab="tabC">ג. המלצות עריכתיות</button>
+    </div>
+
+    <div class="tab-panel active" id="tabA">
+      <div class="table-toolbar">
+        <span class="small">מקורות: TipRanks, Zacks, MarketBeat. לחיצה על כותרת עמודה ממיינת.</span>
+        <button class="export-btn" data-export="tableA">ייצוא CSV</button>
+      </div>
+      <div class="table-scroll"><table id="tableA"></table></div>
+    </div>
+
+    <div class="tab-panel" id="tabB">
+      <div class="table-toolbar">
+        <span class="small">מקורות: Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat / GuruFocus.</span>
+        <button class="export-btn" data-export="tableB">ייצוא CSV</button>
+      </div>
+      <div class="table-scroll"><table id="tableB"></table></div>
+    </div>
+
+    <div class="tab-panel" id="tabC">
+      <div class="table-toolbar">
+        <span class="small">מקורות: Barron's, The Motley Fool, Morningstar, Kiplinger, Forbes.</span>
+        <button class="export-btn" data-export="tableC">ייצוא CSV</button>
+      </div>
+      <div class="table-scroll"><table id="tableC"></table></div>
+    </div>
+  </section>
+
+  <section id="highrisk">
+    <h2>⚠ שכבת סיכון גבוה — הנפקות חדשות וקטליסטים מוסדיים</h2>
+    <div class="highrisk-banner">
+      <strong>אזהרת סיכון:</strong> קטגוריה זו כוללת מניות שהונפקו בכ-5 השנים האחרונות, וכן מניות ותיקות שהפכו אטרקטיביות למוסדיים בעקבות קטליסט (ביטחון וגיאופוליטיקה, אנרגיה גרעינית, מינרלים קריטיים, תשתיות AI). התנודתיות גבוהה משמעותית משכבה 1. רשימת 10 המניות קבועה ואינה משתנה בין הרצות אלא אם מתגלה עדות חזקה במיוחד. עדכון כניסה/יציאה מוסדית (13F/13G) מבוסס על תוצאות חיפוש בלבד ולא על משיכת דוחות מלאים.
+    </div>
+    <div class="highrisk-kpi-row">
+      <div class="kpi"><div class="num" id="hr-strong">–</div><div class="label">כניסה מוסדית חזקה (30 יום)</div></div>
+      <div class="kpi"><div class="num" id="hr-mixed">–</div><div class="label">איתות מעורב / חלש</div></div>
+      <div class="kpi"><div class="num" id="hr-none">–</div><div class="label">ללא עדות מהותית חדשה</div></div>
+      <div class="kpi"><div class="num">10</div><div class="label">סה"כ במעקב</div></div>
+    </div>
+    <div class="risk-grid" id="highrisk-grid"></div>
+  </section>
+
+  <section id="sentiment">
+    <h2>שכבת סנטימנט (משנית — אינה נכללת בציון הראשי) <span class="sec-tag">SECONDARY</span></h2>
+    <div class="sentiment-banner">שכבה זו מבוססת על באזז ברשתות חברתיות (StockTwits, Reddit, X) ואינה משפיעה על דירוג שכבה 1 / שכבה משנית. מטרתה בלבד: להבדיל בין מומנטום ספקולטיבי קצר-טווח לבין תזת השקעה ארוכת-טווח.</div>
+    <div class="table-scroll"><table id="tableSentiment"></table></div>
+  </section>
+
+  <section id="chart">
+    <h2>פיזור סקטוריאלי — מספר מתודולוגיות תומכות לפי סקטור</h2>
+    <p class="small">כל נקודה מייצגת מניה; ציר Y מציין באיזה מספר מתודולוגיות (מתוך 3) המניה הופיעה. גודל הנקודה = שכבה 1 מודגשת. רחפו מעל נקודה לפרטים.</p>
+    <div class="chart-wrap">
+      <svg id="scatter" width="100%" height="420" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </section>
+
+  <section id="compare">
+    <h2>השוואה כנה לכלים מקצועיים</h2>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>Converge (כלי זה)</h4>
+        <ul>
+          <li>איחוד 3 מתודולוגיות עצמאיות + שכבת סנטימנט נפרדת</li>
+          <li>מבוסס תוצאות חיפוש בלבד — לא טעינת נתונים מלאה מהמקור</li>
+          <li>מחירים חיים חלקיים (Alpha Vantage, מוגבל ל-25 קריאות ליום)</li>
+          <li>ללא היסטוריית מחיר, ללא Backtesting, ללא ניהול תיק</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Finviz</h4>
+        <ul>
+          <li>סינון פונדמנטלי/טכני מקיף בזמן אמת על אלפי מניות</li>
+          <li>מפות חום, גרפים טכניים מלאים</li>
+          <li>ללא איחוד מתודולוגיות עריכתיות או ניתוח סנטימנט חדשותי</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>TipRanks</h4>
+        <ul>
+          <li>מעקב ביצועי אנליסטים בפועל, Smart Score מבוסס AI רחב</li>
+          <li>מסחר פנים, קרנות גידור, בלוגרים פיננסיים במקום אחד</li>
+          <li>מנוי בתשלום לגישה מלאה לנתונים היסטוריים</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Bloomberg Terminal</h4>
+        <ul>
+          <li>נתוני שוק בזמן אמת ברמה מוסדית, עומק חסר תחרות</li>
+          <li>ניתוח פיננסי, חדשות ומסחר משולבים מלאים</li>
+          <li>עלות גבוהה משמעותית, מיועד למקצועני השקעות</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="methodology">
+    <h2>מתודולוגיה ומקורות</h2>
+    <p>הדשבורד מסנתז שלוש מתודולוגיות עצמאיות (קונצנזוס אנליסטים כמותי, איכות/ערך פונדמנטלי, המלצות עריכתיות ארוכות-טווח), שכבת סנטימנט משנית נפרדת, ושכבת סיכון גבוה ייעודית למניות עם קטליסט מוסדי. מניה המופיעה בשתיים משלוש הרשימות הראשיות מסווגת "שכבה 1". נתוני שוק חיים מגיעים מ-Alpha Vantage (GLOBAL_QUOTE). ניתוח סנטימנט חדשותי מצוטט מ-<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> — פלטפורמת נתונים ומחקר פיננסי המספקת ציוני סנטימנט מבוססי-מסמכים וניתוח מגמות תקשורתיות בזמן אמת.</p>
+    <h3>רשימת מקורות שצוטטו בהרצה זו</h3>
+    <div class="source-list" id="source-list"></div>
+  </section>
+
+  <section id="limits">
+    <h2>שקיפות ומגבלות נתונים</h2>
+    <div class="limits-box">
+      <ul>
+        <li><strong>בסיס המחקר:</strong> כל המחקר האיכותני בוצע באמצעות WebSearch בלבד — קריאת כותרות, תקצירים וקישורים ממנועי חיפוש — ולא באמצעות טעינת עמודי מקור מלאים (WebFetch). ייתכן שנתונים מסוימים (כגון ציוני Smart Score מדויקים, מספר אנליסטים, יעדי מחיר) לא היו נגישים בתקצירי החיפוש וסומנו "לא נמצא בתוצאות החיפוש" במקום להיות מומצאים.</li>
+        <li><strong>מכסת חיפוש:</strong> כלי המחקר האוטומטיים חרגו ממכסת החיפושים באמצע העבודה בחלק מהמתודולוגיות, מה שהגביל את מספר הסקטורים/המניות הקטנות שניתן היה לאמת באופן מלא.</li>
+        <li><strong>מחירים חיים:</strong> Alpha Vantage מוגבל ל-25 קריאות ליום במפתח החינמי ולקצב של בקשה בשנייה; חלק מהבקשות בהרצה זו נחסמו ב-Rate Limit ולכן לא לכל המניות יש מחיר עדכני להיום — במקרים אלה מצוין "לא זמין הרצה זו".</li>
+        <li><strong>שכבת סיכון גבוה:</strong> נתוני מחיר/שווי שוק לחלק מ-10 המניות הקבועות לא אותרו בתוצאות חיפוש עדכניות; דווח בשקיפות היכן שהמידע חסר או מיושן, כולל תאריך הנתון האחרון הידוע.</li>
+        <li><strong>איזון סקטוריאלי:</strong> נעשה מאמץ לאזן בין סקטורים, אך כיסוי הטכנולוגיה נותר גבוה יחסית בשל ריבוי הכיסוי התקשורתי לסקטור זה; אנרגיה, נדל"ן וצריכה בסיסית מיוצגים בצמצום יחסי בהרצה זו.</li>
+        <li><strong>איתותים סותרים:</strong> לא זוהו מקרים של המלצת "קנייה חזקה" מול "מכירה" מפורשת על אותה מניה בין המקורות שנסרקו בהרצה זו; ריבוי שדות "לא נמצא" מונע לעיתים השוואה מלאה בין מקורות.</li>
+        <li>אין לראות בדשבורד זה תחליף לבדיקת נתונים ישירה מול מקור (דוחות SEC, אתרי היחצ״ן של החברות, או פלטפורמת ברוקראז׳).</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Converge™ — כלי מחקר אוטומטי. לא ייעוץ השקעות. נבנה עם Alpha Vantage ו-<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a>.
+  </div>
+</footer>
+
+<div id="tooltip"></div>
+
+<script>
+/* ============ DATA ============ */
+const TODAY = "3 בספטמבר 2026";
+document.getElementById('updated-date').textContent = TODAY;
+
+// Tier 1 — appear in >=2 of 3 primary methodologies
+const TIER1 = [
+  {
+    ticker:"AMZN", company:"Amazon.com Inc.", sector:"צריכה מחזורית / טכנולוגיה",
+    price:"254.98", chgPct:"+0.02%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
+    methods:["קונצנזוס (TipRanks Strong Buy)","עריכתי (Barron's Top 10 2026, Motley Fool)"],
+    rationale:"מופיעה הן ברשימת TipRanks Strong Buy (השוואה מול GOOGL) והן ברשימת Top 10 של Barron's ל-2026 ובמאמר Motley Fool 'no-brainer buy' לחציון השני של 2026. תזה: AWS מאיץ, פרסום ~75 מיליארד דולר, אופציונליות ב-AI.",
+    sentiment:"סנטימנט Bigdata.com: שלילי מתון (-0.20, בסיס -0.15) עקב תביעת FTC/22 מדינות בגין הטעיית מפרסמים (~20 מיליארד דולר), חקירת DOJ על תמחור בקר, ושביתות טימסטרס. מנגד: הרחבת AWS לסעודיה, capex AI מוגדל ל-220 מיליארד דולר.",
+    flags:["תביעת FTC/רגולציה","סכסוכי עבודה"],
+    sources:[["TipRanks","https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"],["Barron's (דיווח משני)","https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"],["Motley Fool","https://www.fool.com/investing/2026/08/27/3-stocks-that-are-no-brainer-buys-in-the-second-ha/"]]
+  },
+  {
+    ticker:"LLY", company:"Eli Lilly & Co.", sector:"בריאות / תרופות",
+    price:"1160.08", chgPct:"+0.01%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
+    methods:["קונצנזוס (TipRanks Perfect 10 Smart Score)","עריכתי (Motley Fool, מסגרת השוואתית מול UNH)"],
+    rationale:"TipRanks מדרגת את LLY Smart Score מושלם (10) במאמר על מניות בריאות. Motley Fool דנה ב-LLY במאמר השוואתי ('Better Buy') מול UNH — לא המלצה חד-משמעית עצמאית, אך מצוטטת כמועמדת מובילה.",
+    sentiment:"סנטימנט Bigdata.com: חיובי מאוד (+0.45, בסיס +0.34, מומנטום +0.11, z-score רבעוני 1.54). מונע מרכישת Merida Biosciences תמורת עד 2.9 מיליארד דולר, אישור FDA להרחבת Mounjaro להפחתת סיכון קרדיווסקולרי, והכאת תחזיות ברבעון האחרון עם הגדלת תחזית ל-85-87 מיליארד דולר.",
+    flags:["תביעת Novo Nordisk (פרסום מטעה, סיכון משני)"],
+    sources:[["TipRanks","https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"],["Motley Fool (via Yahoo)","https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"]]
+  },
+  {
+    ticker:"GOOGL", company:"Alphabet Inc.", sector:"טכנולוגיה / שירותי תקשורת",
+    price:"337.12", chgPct:"+0.63%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
+    methods:["קונצנזוס (TipRanks Strong Buy)","פונדמנטלי (סקר Benzinga חוב-נמוך/ROE-גבוה, ללא נתונים מספריים מאומתים)"],
+    rationale:"TipRanks מדרגת GOOGL 'Strong Buy' במאמר השוואתי מול AMZN. הוזכרה גם בסקר Benzinga למניות עם חוב נמוך ו-ROE גבוה, אך ללא נתונים מספריים ספציפיים שאומתו בתוצאות החיפוש.",
+    sentiment:"סנטימנט Bigdata.com: שלילי כרוני (-0.30, זהה לבסיס, מומנטום שטוח). דומיננטי: פסיקת בית משפט בתביעת האנטיטראסט של הפרסום הדיגיטלי (נמנעה פירוק אך נדרשו שינויי מבנה), הרשעת מהנדס לשעבר בגניבת סודות AI. מנגד: צמיחת Google Cloud של 82% שנה-על-שנה וגידול תקציב capex.",
+    flags:["לחץ רגולטורי/אנטיטראסט מתמשך"],
+    sources:[["TipRanks","https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"],["Benzinga","https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"]]
+  },
+  {
+    ticker:"CMCSA", company:"Comcast Corp.", sector:"שירותי תקשורת / מדיה",
+    price:"26.81", chgPct:"+1.94%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
+    methods:["פונדמנטלי (GuruFocus — יחסי P/E ו-D/E)","עריכתי (Barron's Top 10 2026)"],
+    rationale:"מופיעה ברשימת Top 10 של Barron's ל-2026. נתוני GuruFocus מראים P/E מגמתי (TTM) של 5.00 ו-D/E של 1.02 — ה-P/E הנמוך החריג מסומן כחשוד לעיוות חשבונאי (ככל הנראה קשור לתהליך פיצול NBCUniversal) ולא כאיתות ערך אמיתי.",
+    sentiment:"סנטימנט Bigdata.com: ניטרלי-שלילי משתפר (-0.12, בסיס -0.20, מומנטום +0.08). חיובי: הרחבת רשת, השקת אפליקציות וידאו מבוססות AI. סיכון: תביעת Main Street Sports על דמי רישוי, אי-ודאות סביב פיצול המדיה/טכנולוגיה.",
+    flags:["עיוות חשבונאי אפשרי ב-P/E","אי-ודאות פיצול חברה"],
+    sources:[["GuruFocus","https://www.gurufocus.com/term/pettm/CMCSA"],["Barron's (דיווח משני)","https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"]]
+  }
+];
+
+// Methodology tables — each row: ticker, company, sector, metrics object, sourceLabel, sourceUrl, tier
+const TABLE_A = [ // Quant consensus
+  {t:"OUST",c:"Ouster, Inc.",sec:"טכנולוגיה (LiDAR)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/article/tipranks-perfect-10s-unveiling-3-high-scoring-stocks-for-2026"},
+  {t:"QBTS",c:"D-Wave Quantum Inc.",sec:"טכנולוגיה (מחשוב קוונטי)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks (Yahoo)",url:"https://finance.yahoo.com/news/tipranks-perfect-10s-unveiling-3-080000767.html"},
+  {t:"DY",c:"Dycom Industries",sec:"תעשייה (תשתיות תקשורת)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes"},
+  {t:"RTX",c:"RTX Corporation",sec:"תעשייה (הגנה/תעופה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/3-aerospace-defense-stocks-buy-130500348.html"},
+  {t:"TXT",c:"Textron Inc.",sec:"תעשייה (הגנה/תעופה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/TXT/pressreleases/1320911/"},
+  {t:"GS",c:"Goldman Sachs Group",sec:"פיננסים (בנקאות השקעות)",rating:"Strong Buy (שדרוג Zacks)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/know-goldman-gs-rating-upgrade-160002513.html"},
+  {t:"THG",c:"Hanover Insurance Group",sec:"פיננסים (ביטוח, small/mid-cap)",rating:"Strong Buy (שדרוג Zacks)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/know-hanover-insurance-thg-rating-160001263.html"},
+  {t:"LLY",c:"Eli Lilly & Co.",sec:"בריאות / תרופות",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"},
+  {t:"VRTX",c:"Vertex Pharmaceuticals",sec:"בריאות / ביוטכנולוגיה",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"},
+  {t:"AVGO",c:"Broadcom Inc.",sec:"טכנולוגיה (מוליכים למחצה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/AVGO/pressreleases/1504612/"},
+  {t:"TER",c:"Teradyne, Inc.",sec:"טכנולוגיה (ציוד בדיקה)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/TER/pressreleases/211762/"},
+  {t:"WDC",c:"Western Digital Corp.",sec:"טכנולוגיה (אחסון נתונים)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/WDC-Q/pressreleases/249766/"},
+  {t:"SNDK",c:"SanDisk Corporation",sec:"טכנולוגיה (אחסון נתונים, small/mid-cap)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/news/zacks-investment-ideas-feature-highlights-085600648.html"},
+  {t:"GOOGL",c:"Alphabet Inc.",sec:"טכנולוגיה / שירותי תקשורת",rating:"Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"},
+  {t:"AMZN",c:"Amazon.com Inc.",sec:"צריכה מחזורית / טכנולוגיה",rating:"Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"}
+];
+
+const TABLE_B = [ // Fundamental quality/value
+  {t:"JNJ",c:"Johnson & Johnson",sec:"בריאות / תרופות",roe:"26.64%",pe:"22.98 (Fwd)",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/JNJ"},
+  {t:"TXN",c:"Texas Instruments",sec:"טכנולוגיה (מוליכים למחצה)",roe:"לא נמצא",pe:"52.18 (TTM)",de:"0.84",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/TXN"},
+  {t:"HON",c:"Honeywell International",sec:"תעשייה",roe:"23.89%",pe:"8.62 (TTM, ⚠ חריג)",de:"2.70",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/deb2equity/NYSE:HON/"},
+  {t:"TGT",c:"Target Corp.",sec:"צריכה מחזורית (קמעונאות)",roe:"26.40%",pe:"16.76 (TTM)",de:"1.05",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/ROE/NYSE:TGT/"},
+  {t:"MRK",c:"Merck & Co.",sec:"בריאות / תרופות",roe:"-12.16% (⚠ חריג)",pe:"123.13 (TTM, ⚠ חריג)",de:"1.29",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/MRK"},
+  {t:"JPM",c:"JPMorgan Chase",sec:"פיננסים (בנקאות)",roe:"18.16%",pe:"15.57 (TTM)",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/JPM"},
+  {t:"CVX",c:"Chevron Corp.",sec:"אנרגיה",roe:"לא נמצא",pe:"19.73 (TTM)",de:"0.25",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/CVX"},
+  {t:"CMCSA",c:"Comcast Corp.",sec:"שירותי תקשורת / מדיה",roe:"לא נמצא",pe:"5.00 (TTM, ⚠ חריג)",de:"1.02",fcf:"לא נמצא",tier:"t1",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/CMCSA"},
+  {t:"PFE",c:"Pfizer Inc.",sec:"בריאות / תרופות",roe:"לא נמצא",pe:"37.38 (TTM) / 8.45 (Fwd)",de:"0.71",fcf:"~6.9% (נגזר מ-P/FCF 14.56)",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/PFE"},
+  {t:"PG",c:"Procter & Gamble",sec:"צריכה בסיסית",roe:"לא נמצא",pe:"לא נמצא",de:"0.68",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/PG"},
+  {t:"GOOGL",c:"Alphabet Inc. (GOOG)",sec:"טכנולוגיה",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"t1",src:"Benzinga (ללא נתונים מספריים)",url:"https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"},
+  {t:"AAPL",c:"Apple Inc.",sec:"טכנולוגיה",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"Benzinga (ללא נתונים מספריים)",url:"https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"}
+];
+
+const TABLE_C = [ // Editorial
+  {t:"AMZN",c:"Amazon.com Inc.",sec:"צריכה מחזורית / טכנולוגיה",pubs:"Barron's + Motley Fool (⭐ חפיפה)",thesis:"AWS מאיץ, פרסום, אופציונליות AI",tier:"t1",src:"Barron's / Motley Fool",url:"https://www.fool.com/investing/2026/08/27/3-stocks-that-are-no-brainer-buys-in-the-second-ha/"},
+  {t:"DIS",c:"Walt Disney Co.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"אימפריית מדיה ותיקה, איפוס סטרימינג, מכונת מזומנים פארקים",tier:"tn",src:"Barron's (דיווח משני)",url:"https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"},
+  {t:"XOM",c:"Exxon Mobil Corp.",sec:"אנרגיה",pubs:"Barron's",thesis:"צבירת ערך מובילה בסקטור האנרגיה",tier:"tn",src:"Barron's (דיווח משני)",url:"https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"},
+  {t:"BMY",c:"Bristol Myers Squibb",sec:"בריאות / תרופות",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"CMCSA",c:"Comcast Corp.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"t1",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"FRFHF",c:"Fairfax Financial Holdings",sec:"פיננסים / ביטוח",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"FLUT",c:"Flutter Entertainment",sec:"צריכה מחזורית / הימורים מקוונים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"MSGS",c:"Madison Square Garden Sports",sec:"שירותי תקשורת / ספורט (small/mid-cap)",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"SLG",c:"SL Green Realty",sec:"נדל\"ן (משרדים, NYC)",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"V",c:"Visa Inc.",sec:"פיננסים / תשלומים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"CPB",c:"Campbell's",sec:"צריכה בסיסית",pubs:"Morningstar",thesis:"חברת איכות גבוהה, מתומחרת בחסר",tier:"tn",src:"Morningstar (X)",url:"https://x.com/MorningstarInc/status/2007240493525069976"},
+  {t:"CLPBY",c:"Coloplast",sec:"בריאות / ציוד רפואי",pubs:"Morningstar",thesis:"חברת איכות גבוהה, מתומחרת בחסר",tier:"tn",src:"Morningstar (X)",url:"https://x.com/MorningstarInc/status/2007240493525069976"},
+  {t:"NVDA",c:"Nvidia Corp.",sec:"טכנולוגיה / מוליכים למחצה",pubs:"Motley Fool",thesis:"'מניה בלתי ניתנת לעצירה' להחזקה ל-2026 ואילך",tier:"tn",src:"Motley Fool",url:"https://www.fool.com/investing/2026/01/31/2-unstoppable-stocks-to-buy-in-2026-and-hold-nvda/"},
+  {t:"UNH",c:"UnitedHealth Group",sec:"בריאות / ביטוח מנוהל",pubs:"Motley Fool (מסגרת השוואתית)",thesis:"לא המלצת קנייה חד-משמעית — מאמר השוואתי מול LLY",tier:"tn",src:"Motley Fool (via Yahoo)",url:"https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"},
+  {t:"LLY",c:"Eli Lilly & Co.",sec:"בריאות / תרופות",pubs:"Motley Fool (מסגרת השוואתית)",thesis:"לא המלצת קנייה חד-משמעית — מאמר השוואתי מול UNH",tier:"t1",src:"Motley Fool (via Yahoo)",url:"https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"}
+];
+
+const SENTIMENT_ROWS = [
+  {t:"BYND",name:"Beyond Meat",cat:"ספקולטיבי",note:"חלק מאשכול short squeeze 2026; יועץ הון כינה זאת 'short squeeze קלאסי... שבוצע ע\"י כנופיה', ללא תמיכה פונדמנטלית",src:"Benzinga / StockTwits",url:"https://www.benzinga.com/trading-ideas/movers/26/04/51945874/"},
+  {t:"OPEN",name:"Opendoor Technologies",cat:"ספקולטיבי",note:"שם מרכזי בתחיית 'meme stock' 2026; היום הטוב ביותר ב-6 חודשים עם נפח כפול, מוגדר כמרדף ריטייל טכני",src:"Yahoo Finance / StockTwits",url:"https://ca.finance.yahoo.com/news/opendoor-kohls-resume-rally-meme-160314426.html"},
+  {t:"KSS",name:"Kohl's",cat:"ספקולטיבי",note:"S3 Partners: מ'מם' ל'מניית שדה קרב' (עדיין ריבית שורט גבוהה); Seeking Alpha שאלה אם מתהווה short squeeze ענק",src:"S3 Partners / Seeking Alpha",url:"https://seekingalpha.com/article/4720848-is-kohls-kss-stock-setting-up-for-a-monster-short-squeeze"},
+  {t:"GME",name:"GameStop",cat:"ספקולטיבי",note:"נשארת ב'אינדקס 2026' של WallStreetBets, אך עוצמת הבאזז היחסית נחלשה מול שמות חדשים יותר",src:"Benzinga / StockTwits",url:"https://www.benzinga.com/trading-ideas/long-ideas/26/01/50103263/"},
+  {t:"ALT",name:"Altimmune",cat:"ספקולטיבי",note:"יום שישי ברציפות של עליות מונעות ספקולציית רכישה לא מאושרת",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/alt-stock-surges-toward-sixth-straight-day-of-gains-retail-bets-a-buyout/cmyXrOnR4iW"},
+  {t:"RDW",name:"Redwire",cat:"ספקולטיבי",note:"זינוק על רקע דוחות, אך שיח ריטייל התמקד ב'איזון תמחור מחדש' ולא בתזה פונדמנטלית ברורה",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/rdw-stock-surges-overnight-on-blockbuster-earnings-retail-wants-valuation-rebalance-now/cZoJ01fRJe8"},
+  {t:"SLS",name:"Sellas Life Sciences",cat:"ספקולטיבי",note:"ביוטק small-cap, נבחרה 'הבחירה השורית ביותר' ע\"י ריטייל על פני IBRX/ONDS/PYPL — רוטציית דיי-טרייד",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/sls-retail-prefer-sellas-ibrx-onds-pypl-bullish-pick/cZmleNCR7mO"},
+  {t:"NTLA",name:"Intellia Therapeutics",cat:"ספקולטיבי",note:"זינוק 35% לפני קריאת נתוני Phase 3 בעריכת גנים — סחר קטליסט בינארי בסיכון גבוה",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/ntla-stock-rallies-ahead-of-first-phase-3-gene-editing-readout/cZBNJGpRe2e"},
+  {t:"BB",name:"BlackBerry",cat:"ספקולטיבי",note:"שיח ריטייל מפוצל בין 'טירוף מם' ל'סיפור צמיחה' — סנטימנט מעורב ולא חד-משמעי",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/black-berry-stock-surges-overnight-cfo-ai-vision-retail-debates-meme-mania-growth-story/cZ0SpWqReDn"},
+  {t:"MU",name:"Micron Technology",cat:"באזז + גיבוי פונדמנטלי",note:"מלאי שבבי AI ל-2026 נמכר במלואו; מלחמת יעדי מחיר בין אנליסטים ($1,000-$1,750); חוזר במספר סקירות Benzinga",src:"Benzinga",url:"https://www.benzinga.com/markets/tech/26/08/61520705/"},
+  {t:"PLTR",name:"Palantir Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"מרכיב קבוע באינדקס WSB 2026 ובסקירות באזז שבועיות של Benzinga, קשור לחוזי AI/ממשל מתמשכים",src:"Benzinga",url:"https://www.benzinga.com/markets/market-summary/26/08/61061657/"},
+  {t:"VRT",name:"Vertiv Holdings",cat:"באזז + גיבוי פונדמנטלי",note:"זינוק לפני המסחר על תחזית 2026 חזקה לביקוש AI במרכזי נתונים — מונע רווחים/הנחיה, לא מכניקת סקוויז",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/why-did-vertiv-stock-surge-pre-market-today/cZb6OJ7R4qj"},
+  {t:"BWXT",name:"BWX Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"קרנות ARK של קאתיווד רכשו כ-7.6 מיליון דולר (1 בספטמבר 2026) — הימור על ביקוש חשמל בהקשר AI",src:"Motley Fool",url:"https://www.fool.com/investing/2026/09/01/cathie-woods-ark-just-bought-76-million-of-nuclear/"}
+];
+
+const HIGHRISK = [
+  {t:"CRWV",name:"CoreWeave",price:"לא זמין הרצה זו",mcap:"~59 מיליארד $ (מיושן, 12/08/2026)",catalyst:"תשתיות AI",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"עדכוני 13F שנמצאו (AE Wealth, Q Fund HK) מתוארכים ינואר-פברואר 2026 — מחוץ לחלון, ואחזקות קטנות.",src:"Motley Fool",url:"https://www.fool.com/investing/2026/08/12/coreweave-has-104-billion-of-contracted-revenue-an/"},
+  {t:"CRCL",name:"Circle Internet Group",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"פינטק / הנפקה טרייה",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"רכישה של Capital Fund Management (מרץ 2026) ומכירת פנים (אוגוסט 2025) — שתיהן מחוץ לחלון הזמן.",src:"Motley Fool",url:"https://www.fool.com/investing/2026/07/07/how-circle-internet-group-stock-lost-45-last-month/"},
+  {t:"ALAB",name:"Astera Labs",price:"274.13",priceNote:"(-2.06% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"strong",instLabel:"כניסה מוסדית חזקה",detail:"Legal & General Group השקיעה 311.47 מיליון $ ב-Astera Labs (26/08/2026) — האיתות המהותי ביותר בקבוצה.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/26/legal-general-group-plc-invests-311-47-million-in-astera-labs-inc-alab.html"},
+  {t:"IOT",name:"Samsara",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"תשתיות AI / IoT (הנפקה טרייה)",inst:"strong",instLabel:"כניסה מוסדית",detail:"Wellington Management הגדילה פוזיציה (31/08) ו-Spyglass Capital הגדילה פוזיציה (01/09) — היקפים לא צוינו.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/31/wellington-management-group-llp-grows-position-in-samsara-inc-iot.html"},
+  {t:"LOAR",name:"Loar Holdings",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה (תעופה, הנפקה טרייה)",inst:"strong",instLabel:"כניסה מוסדית חזקה (מספר קרנות)",detail:"BNY Mellon רכשה 707,403 מניות (27/08); Janus Henderson הגדילה החזקה (04/08); Empowered Funds רכשה מניות (09/08).",src:"Daily Political / Defense World",url:"https://www.dailypolitical.com/2026/08/27/707403-shares-in-loar-holdings-inc-loar-purchased-by-bank-of-new-york-mellon-corp.html"},
+  {t:"KTOS",name:"Kratos Defense",price:"47.78",priceNote:"(-3.16% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"עדכוני 13F שנמצאו (Sequoia Financial, Harbor Capital) מתוארכים יולי/אפריל 2026 — מחוץ לחלון.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/07/12/sequoia-financial-advisors-llc-has-7-65-million-stake-in-kratos-defense-security-solutions-inc-ktos.html"},
+  {t:"MP",name:"MP Materials",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"מינרלים קריטיים",inst:"mixed",instLabel:"איתות לא ברור",detail:"דיווח על מכירת מניות מנכ\"ל (400,000 מניות) ללא תאריך מאושר בתוך 30 יום; מכירה מתוארכת קודמת (14/05) מחוץ לחלון.",src:"StockTitan",url:"https://www.stocktitan.net/sec-filings/MP/form-4-mp-materials-corp-de-insider-trading-activity-d4cfc1d11c9e.html"},
+  {t:"OKLO",name:"Oklo",price:"39.52",priceNote:"(+2.57% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"רכישת Legal & General (177,366 מניות) מתוארכת 01/06/2026 — מחוץ לחלון של 30 יום.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/06/01/legal-general-group-plc-buys-177366-shares-of-oklo-inc-oklo.html"},
+  {t:"LEU",name:"Centrus Energy",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"mixed",instLabel:"מכירה קטנה / לא מהותית",detail:"First Trust Advisors מכרה 6,306 מניות (07/08) — ככל הנראה שינוי מדדי, לא מהלך אקטיבי משמעותי.",src:"MarketBeat",url:"https://www.marketbeat.com/instant-alerts/filing-first-trust-advisors-lp-sells-6306-shares-of-centrus-energy-corp-leu-2026-08-07/"},
+  {t:"APLD",name:"Applied Digital",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"mixed",instLabel:"מכירה מוסדית (היקף לא ברור)",detail:"NewEdge Advisors מכרה מניות Applied Digital (17/08) — היקף וסכום לא צוינו בכותרת.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/17/applied-digital-corporation-apld-shares-sold-by-newedge-advisors-llc.html"}
+];
+
+const ALL_SOURCES = [
+  ["TipRanks","https://www.tipranks.com"],["Zacks Investment Research","https://www.zacks.com"],
+  ["MarketBeat","https://www.marketbeat.com"],["Finviz","https://finviz.com"],
+  ["Seeking Alpha","https://seekingalpha.com"],["StockAnalysis.com","https://stockanalysis.com"],
+  ["Simply Wall St","https://simplywall.st"],["Morningstar","https://www.morningstar.com"],
+  ["GuruFocus","https://www.gurufocus.com"],["The Motley Fool","https://www.fool.com"],
+  ["Barron's","https://www.barrons.com"],["Kiplinger","https://www.kiplinger.com"],
+  ["Forbes","https://www.forbes.com"],["StockTwits","https://stocktwits.com"],
+  ["Benzinga","https://www.benzinga.com"],["Yahoo Finance","https://finance.yahoo.com"],
+  ["Alpha Vantage","https://www.alphavantage.co"],["Bigdata.com","https://bigdata.com"],
+  ["Daily Political","https://www.dailypolitical.com"],["StockTitan","https://www.stocktitan.net"]
+];
+
+/* ============ RENDER ============ */
+function chgSpanHTML(d){
+  return `<span class="chg ${d.chgDir}">${d.chgDir==='up'?'▲':'▼'} ${d.chgPct}</span>`;
+}
+function tier1Card(d){
+  const div=document.createElement('div');
+  div.className='tier1-card'; div.dataset.ticker=d.ticker; div.dataset.company=d.company; div.dataset.sector=d.sector;
+  div.innerHTML=`
+    <div class="row1">
+      <div><span class="ticker">${d.ticker}</span><div class="company">${d.company}</div><span class="badge">שכבה 1 — שכנוע גבוה</span></div>
+      <div class="price">$${d.price}${chgSpanHTML(d)}</div>
+    </div>
+    <div class="small" style="margin-top:6px;">${d.sector} · מחיר: ${d.priceDate}</div>
+    <div class="rationale"><strong>מתודולוגיות תומכות:</strong> ${d.methods.join(' · ')}<br>${d.rationale}</div>
+    <div class="sent-line">${d.sentiment}</div>
+    <div class="flags">${d.flags.map(f=>`<span class="flag">${f}</span>`).join('')}</div>
+    <div class="sources">מקורות: ${d.sources.map(s=>`<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>`).join(' · ')}</div>
+  `;
+  return div;
+}
+function riskCard(d){
+  const div=document.createElement('div');
+  div.className='risk-card'; div.dataset.ticker=d.t; div.dataset.company=d.name;
+  const instChip = d.inst==='strong' ? `<span class="chip inst-strong">${d.instLabel}</span>`
+    : d.inst==='mixed' ? `<span class="chip inst-mixed">${d.instLabel}</span>`
+    : `<span class="chip">${d.instLabel}</span>`;
+  div.innerHTML=`
+    <div class="row1">
+      <div><span class="ticker">${d.t}</span><div class="company">${d.name}</div><span class="risk-badge">סיכון גבוה</span></div>
+      <div class="price">${d.price==='לא זמין הרצה זו' ? '<span class="small">לא זמין</span>' : '$'+d.price}${d.priceNote?`<div class="small">${d.priceNote}</div>`:''}</div>
+    </div>
+    <div class="small" style="margin-top:4px;">שווי שוק: ${d.mcap}</div>
+    <div class="chips"><span class="chip catalyst">${d.catalyst}</span>${instChip}</div>
+    <div class="finding">${d.detail}</div>
+    <div class="source-line">מקור: <a href="${d.url}" target="_blank" rel="noopener">${d.src}</a></div>
+  `;
+  return div;
+}
+
+function renderTier1(){
+  const grid=document.getElementById('tier1-grid'); grid.innerHTML='';
+  TIER1.forEach(d=>grid.appendChild(tier1Card(d)));
+  document.getElementById('kpi-tier1').textContent=TIER1.length;
+  document.getElementById('kpi-tier2').textContent='0';
+}
+function renderHighRisk(){
+  const grid=document.getElementById('highrisk-grid'); grid.innerHTML='';
+  let strong=0,mixed=0,none=0;
+  HIGHRISK.forEach(d=>{grid.appendChild(riskCard(d)); if(d.inst==='strong')strong++; else if(d.inst==='mixed')mixed++; else none++;});
+  document.getElementById('hr-strong').textContent=strong;
+  document.getElementById('hr-mixed').textContent=mixed;
+  document.getElementById('hr-none').textContent=none;
+}
+
+function tierTagHTML(tier){
+  if(tier==='t1') return '<span class="tier-tag t1">שכבה 1</span>';
+  if(tier==='t2') return '<span class="tier-tag t2">שכבה משנית</span>';
+  return '<span class="tier-tag tn">—</span>';
+}
+
+const TABLE_DEFS = {
+  tableA: {data:TABLE_A, cols:[
+    {k:'t',label:'טיקר'},{k:'c',label:'חברה'},{k:'sec',label:'סקטור'},{k:'rating',label:'דירוג'},
+    {k:'score',label:'ציון'},{k:'target',label:'יעד מחיר'},{k:'tier',label:'שכבה',render:v=>tierTagHTML(v)},
+    {k:'src',label:'מקור',render:(v,row)=>`<a href="${row.url}" target="_blank" rel="noopener">${v}</a>`}
+  ]},
+  tableB: {data:TABLE_B, cols:[
+    {k:'t',label:'טיקר'},{k:'c',label:'חברה'},{k:'sec',label:'סקטור'},{k:'roe',label:'ROE'},
+    {k:'pe',label:'P/E'},{k:'de',label:'חוב/הון'},{k:'fcf',label:'תשואת FCF'},{k:'tier',label:'שכבה',render:v=>tierTagHTML(v)},
+    {k:'src',label:'מקור',render:(v,row)=>`<a href="${row.url}" target="_blank" rel="noopener">${v}</a>`}
+  ]},
+  tableC: {data:TABLE_C, cols:[
+    {k:'t',label:'טיקר'},{k:'c',label:'חברה'},{k:'sec',label:'סקטור'},{k:'pubs',label:'פרסומים'},
+    {k:'thesis',label:'תזה'},{k:'tier',label:'שכבה',render:v=>tierTagHTML(v)},
+    {k:'src',label:'מקור',render:(v,row)=>`<a href="${row.url}" target="_blank" rel="noopener">${v}</a>`}
+  ]},
+  tableSentiment: {data:SENTIMENT_ROWS, cols:[
+    {k:'t',label:'טיקר'},{k:'name',label:'חברה'},{k:'cat',label:'קטגוריה'},{k:'note',label:'הערה'},
+    {k:'src',label:'מקור',render:(v,row)=>`<a href="${row.url}" target="_blank" rel="noopener">${v}</a>`}
+  ]}
+};
+
+function buildTable(id){
+  const def=TABLE_DEFS[id];
+  const table=document.getElementById(id);
+  let sortState={col:null,dir:1};
+  function render(){
+    let rows=def.data.slice();
+    if(sortState.col){
+      rows.sort((a,b)=>{
+        let va=a[sortState.col], vb=b[sortState.col];
+        let na=parseFloat(va), nb=parseFloat(vb);
+        if(!isNaN(na)&&!isNaN(nb)) return (na-nb)*sortState.dir;
+        return String(va).localeCompare(String(vb),'he')*sortState.dir;
+      });
+    }
+    let thead='<thead><tr>'+def.cols.map(c=>`<th data-col="${c.k}">${c.label}${sortState.col===c.k?`<span class="arrow">${sortState.dir===1?'▲':'▼'}</span>`:''}</th>`).join('')+'</tr></thead>';
+    let tbody='<tbody>'+rows.map(row=>{
+      row._el_ticker=row.t; row._el_company=row.c||row.name;
+      return '<tr data-ticker="'+(row.t||'')+'" data-company="'+(row.c||row.name||'')+'" data-sector="'+(row.sec||'')+'">'+def.cols.map(c=>{
+        let v=row[c.k];
+        let out=c.render?c.render(v,row):v;
+        return `<td>${out}</td>`;
+      }).join('')+'</tr>';
+    }).join('')+'</tbody>';
+    table.innerHTML=thead+tbody;
+    table.querySelectorAll('thead th').forEach(th=>{
+      th.addEventListener('click',()=>{
+        const col=th.dataset.col;
+        if(sortState.col===col) sortState.dir*=-1; else {sortState.col=col; sortState.dir=1;}
+        render();
+        applyFilters();
+      });
+    });
+  }
+  render();
+  return {render};
+}
+
+const tableInstances={};
+function initTables(){
+  ['tableA','tableB','tableC','tableSentiment'].forEach(id=>{tableInstances[id]=buildTable(id);});
+}
+
+/* Tabs */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* CSV export */
+document.querySelectorAll('.export-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.export;
+    const def=TABLE_DEFS[id];
+    const header=def.cols.map(c=>c.label).join(',');
+    const rows=def.data.map(row=>def.cols.map(c=>{
+      let v=row[c.k]; v=(v||'').toString().replace(/"/g,'""');
+      return `"${v}"`;
+    }).join(','));
+    const csv=[header,...rows].join('\n');
+    const blob=new Blob(["﻿"+csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=id+'.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+});
+
+/* Search & sector filter across cards + tables */
+function collectSectors(){
+  const set=new Set();
+  TIER1.forEach(d=>set.add(d.sector));
+  TABLE_A.concat(TABLE_B).concat(TABLE_C).forEach(d=>set.add(d.sec));
+  const sel=document.getElementById('sector-filter');
+  Array.from(set).sort((a,b)=>a.localeCompare(b,'he')).forEach(s=>{
+    const opt=document.createElement('option'); opt.value=s; opt.textContent=s; sel.appendChild(opt);
+  });
+}
+function applyFilters(){
+  const q=document.getElementById('global-search').value.trim().toLowerCase();
+  const sector=document.getElementById('sector-filter').value;
+  let visible=0, total=0;
+  document.querySelectorAll('.tier1-card').forEach(el=>{
+    total++;
+    const t=el.dataset.ticker.toLowerCase(), c=el.dataset.company.toLowerCase(), s=el.dataset.sector;
+    const matchQ = !q || t.includes(q) || c.includes(q);
+    const matchS = !sector || s===sector;
+    const show = matchQ && matchS;
+    el.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+  document.querySelectorAll('#tableA tbody tr, #tableB tbody tr, #tableC tbody tr').forEach(tr=>{
+    total++;
+    const t=(tr.dataset.ticker||'').toLowerCase(), c=(tr.dataset.company||'').toLowerCase(), s=tr.dataset.sector;
+    const matchQ = !q || t.includes(q) || c.includes(q);
+    const matchS = !sector || s===sector;
+    const show = matchQ && matchS;
+    tr.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+  document.getElementById('result-count').textContent = q||sector ? `${visible} תוצאות מתוך ${total}` : '';
+}
+document.getElementById('global-search').addEventListener('input',applyFilters);
+document.getElementById('sector-filter').addEventListener('change',applyFilters);
+
+/* KPI totals */
+function renderKPIs(){
+  const allSectors=new Set();
+  TIER1.forEach(d=>allSectors.add(d.sector));
+  TABLE_A.concat(TABLE_B).concat(TABLE_C).forEach(d=>allSectors.add(d.sec));
+  const uniqueTickers=new Set();
+  TABLE_A.concat(TABLE_B).concat(TABLE_C).forEach(d=>uniqueTickers.add(d.t));
+  document.getElementById('kpi-total').textContent=uniqueTickers.size;
+  document.getElementById('kpi-sectors').textContent=allSectors.size;
+}
+
+/* Sources list */
+function renderSources(){
+  const container=document.getElementById('source-list');
+  container.innerHTML = ALL_SOURCES.map(s=>`<div>• <a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></div>`).join('');
+}
+
+/* ============ SCATTER CHART ============ */
+function renderScatter(){
+  const svg=document.getElementById('scatter');
+  const tooltip=document.getElementById('tooltip');
+  const W=1000,H=420, padL=60, padR=30, padT=30, padB=60;
+  const sectors = Array.from(new Set(
+    TIER1.map(d=>d.sector).concat(TABLE_A.map(d=>d.sec)).concat(TABLE_B.map(d=>d.sec)).concat(TABLE_C.map(d=>d.sec))
+  ));
+  // build point list: ticker -> methodology count
+  const pointMap={};
+  function reg(t,sec,tier){
+    if(!pointMap[t]) pointMap[t]={t,sec,count:0,tier:'tn'};
+    pointMap[t].count++;
+    if(tier==='t1') pointMap[t].tier='t1';
+  }
+  TABLE_A.forEach(d=>reg(d.t,d.sec,d.tier));
+  TABLE_B.forEach(d=>reg(d.t,d.sec,d.tier));
+  TABLE_C.forEach(d=>reg(d.t,d.sec,d.tier));
+  const points=Object.values(pointMap);
+  const xStep=(W-padL-padR)/Math.max(sectors.length,1);
+  const yMax=3;
+  const yScale=v=>H-padB-(v/(yMax))*(H-padT-padB);
+  let svgHTML='';
+  // axes
+  svgHTML+=`<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="var(--border)" stroke-width="1.5"/>`;
+  svgHTML+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="var(--border)" stroke-width="1.5"/>`;
+  for(let y=1;y<=3;y++){
+    const yy=yScale(y);
+    svgHTML+=`<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>`;
+    svgHTML+=`<text x="${padL-10}" y="${yy+4}" text-anchor="end" font-size="12" fill="var(--ink-soft)">${y}</text>`;
+  }
+  sectors.forEach((s,i)=>{
+    const xx=padL+xStep*(i+0.5);
+    svgHTML+=`<text x="${xx}" y="${H-padB+20}" text-anchor="middle" font-size="10" fill="var(--ink-soft)" transform="rotate(15 ${xx} ${H-padB+20})">${s.length>16?s.slice(0,16)+'…':s}</text>`;
+  });
+  svgHTML+=`<text x="${padL-45}" y="${padT-10}" font-size="11" fill="var(--ink-soft)">מס' מתודולוגיות</text>`;
+  // jitter points within sector column
+  const jitterBySector={};
+  points.forEach(p=>{
+    const idx=sectors.indexOf(p.sec);
+    if(idx<0) return;
+    jitterBySector[p.sec]=(jitterBySector[p.sec]||0)+1;
+    const j=jitterBySector[p.sec];
+    const xx=padL+xStep*(idx+0.5)+((j%2===0?1:-1)*Math.ceil(j/2)*9);
+    const yy=yScale(p.count) + (Math.random()*6-3);
+    const r=p.tier==='t1'?8:5;
+    const opacity=p.tier==='t1'?0.95:0.6;
+    svgHTML+=`<circle cx="${xx}" cy="${yy}" r="${r}" fill="var(--accent)" fill-opacity="${opacity}" stroke="var(--surface)" stroke-width="1.5" class="pt" data-ticker="${p.t}" data-sector="${p.sec}" data-count="${p.count}" data-tier="${p.tier}"/>`;
+  });
+  svg.innerHTML=svgHTML;
+  svg.querySelectorAll('.pt').forEach(circle=>{
+    circle.addEventListener('mousemove',(e)=>{
+      const tierLabel = circle.dataset.tier==='t1' ? 'שכבה 1' : 'רשימה בודדת/כפולה';
+      tooltip.innerHTML=`<strong>${circle.dataset.ticker}</strong><br>${circle.dataset.sector}<br>מתודולוגיות: ${circle.dataset.count} · ${tierLabel}`;
+      tooltip.style.left=(e.clientX+14)+'px';
+      tooltip.style.top=(e.clientY+14)+'px';
+      tooltip.style.opacity=1;
+    });
+    circle.addEventListener('mouseleave',()=>{tooltip.style.opacity=0;});
+  });
+}
+
+/* ============ Theme toggle ============ */
+const root=document.documentElement;
+function applyStoredTheme(){
+  try{
+    const stored=localStorage.getItem('converge-theme');
+    if(stored==='dark'||stored==='light') root.setAttribute('data-theme',stored);
+  }catch(e){}
+}
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+  const current=root.getAttribute('data-theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const effectiveCurrent = current || (prefersDark?'dark':'light');
+  const next = effectiveCurrent==='dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme',next);
+  try{localStorage.setItem('converge-theme',next);}catch(e){}
+});
+applyStoredTheme();
+
+/* ============ Sticky quicknav height sync (preserve mechanism exactly) ============ */
+function syncQuicknavHeight(){
+  const nav=document.getElementById('quicknav');
+  if(!nav) return;
+  const h=nav.getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--quicknav-h', h+'px');
+}
+if('ResizeObserver' in window){
+  const ro=new ResizeObserver(syncQuicknavHeight);
+  ro.observe(document.getElementById('quicknav'));
+} else {
+  window.addEventListener('resize', syncQuicknavHeight);
+}
+window.addEventListener('load', syncQuicknavHeight);
+
+/* ============ INIT ============ */
+renderTier1();
+renderHighRisk();
+initTables();
+collectSectors();
+renderKPIs();
+renderSources();
+renderScatter();
+syncQuicknavHeight();
+</script>
+</body>
+</html>
