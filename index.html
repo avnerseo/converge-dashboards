@@ -236,7 +236,7 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
 
   <section id="tier1">
     <h2>שכבה 1 — שכנוע גבוה (מופיעות בשתיים מתוך שלוש רשימות עצמאיות)</h2>
-    <p class="small">קריטריון: הופעה עצמאית בשתיים לפחות מבין שלוש המתודולוגיות (קונצנזוס אנליסטים כמותי / פונדמנטלי-איכות / עריכתי לטווח ארוך). מחירים חיים מ-Alpha Vantage (סגירה 2026-09-02, אלא אם צוין אחרת). ניתוח סנטימנט מצוטט מ-<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a>.</p>
+    <p class="small">קריטריון: הופעה עצמאית בשתיים לפחות מבין שלוש המתודולוגיות (קונצנזוס אנליסטים כמותי / פונדמנטלי-איכות / עריכתי לטווח ארוך). מחירים חיים מ-Alpha Vantage (סגירה 2026-09-03, אלא אם צוין אחרת). ניתוח סנטימנט מצוטט מ-<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a>.</p>
     <div class="card-grid" id="tier1-grid"></div>
   </section>
 
@@ -245,7 +245,7 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
     <p class="small">קריטריון: מניה שהופיעה במקור מתודולוגי אחד בלבד, אך זכתה לגיבוי סנטימנט אמין (StockTwits / Reddit / אנליסטים מוכרים ב-X) עם תזה פונדמנטלית ולא ספקולטיבית.</p>
     <div class="empty-state" id="tier2-empty">
       <strong>אין מניות בשכבה זו בהרצה הנוכחית.</strong><br>
-      בבדיקה השוואתית בין רשימת הבאזז החיובי עם גיבוי פונדמנטלי (MU, PLTR, VRT, BWXT) לבין שלוש רשימות המתודולוגיה הראשיות — לא נמצאה חפיפה מאומתת בטיקר בודד. במקום לאלץ שיוך שגוי, השכבה מוצגת ריקה בשקיפות. ראו את טבלת "שכבת הסנטימנט" למטה למידע המלא על הבאזז שנמצא.
+      נבדקה חפיפה בין רשימת "באזז + גיבוי פונדמנטלי" (ASTS, APLD, NBIS, PATH, SOFI, PLTR) לבין שלוש רשימות המתודולוגיה הראשיות של הרצה זו — לא נמצאה חפיפה מאומתת בטיקר בודד. במקום לאלץ שיוך שגוי, השכבה מוצגת ריקה בשקיפות. ראו את טבלת "שכבת הסנטימנט" למטה למידע המלא על הבאזז שנמצא.
     </div>
   </section>
 
@@ -267,7 +267,7 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
 
     <div class="tab-panel" id="tabB">
       <div class="table-toolbar">
-        <span class="small">מקורות: Finviz, Seeking Alpha Quant Ratings, StockAnalysis.com, Simply Wall St, Morningstar Wide Moat / GuruFocus.</span>
+        <span class="small">מקורות: GuruFocus, Simply Wall St.</span>
         <button class="export-btn" data-export="tableB">ייצוא CSV</button>
       </div>
       <div class="table-scroll"><table id="tableB"></table></div>
@@ -275,7 +275,7 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
 
     <div class="tab-panel" id="tabC">
       <div class="table-toolbar">
-        <span class="small">מקורות: Barron's, The Motley Fool, Morningstar, Kiplinger, Forbes.</span>
+        <span class="small">מקורות: Barron's (דיווח משני ב-X), The Motley Fool.</span>
         <button class="export-btn" data-export="tableC">ייצוא CSV</button>
       </div>
       <div class="table-scroll"><table id="tableC"></table></div>
@@ -360,12 +360,12 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
     <h2>שקיפות ומגבלות נתונים</h2>
     <div class="limits-box">
       <ul>
-        <li><strong>בסיס המחקר:</strong> כל המחקר האיכותני בוצע באמצעות WebSearch בלבד — קריאת כותרות, תקצירים וקישורים ממנועי חיפוש — ולא באמצעות טעינת עמודי מקור מלאים (WebFetch). ייתכן שנתונים מסוימים (כגון ציוני Smart Score מדויקים, מספר אנליסטים, יעדי מחיר) לא היו נגישים בתקצירי החיפוש וסומנו "לא נמצא בתוצאות החיפוש" במקום להיות מומצאים.</li>
-        <li><strong>מכסת חיפוש:</strong> כלי המחקר האוטומטיים חרגו ממכסת החיפושים באמצע העבודה בחלק מהמתודולוגיות, מה שהגביל את מספר הסקטורים/המניות הקטנות שניתן היה לאמת באופן מלא.</li>
-        <li><strong>מחירים חיים:</strong> Alpha Vantage מוגבל ל-25 קריאות ליום במפתח החינמי ולקצב של בקשה בשנייה; חלק מהבקשות בהרצה זו נחסמו ב-Rate Limit ולכן לא לכל המניות יש מחיר עדכני להיום — במקרים אלה מצוין "לא זמין הרצה זו".</li>
-        <li><strong>שכבת סיכון גבוה:</strong> נתוני מחיר/שווי שוק לחלק מ-10 המניות הקבועות לא אותרו בתוצאות חיפוש עדכניות; דווח בשקיפות היכן שהמידע חסר או מיושן, כולל תאריך הנתון האחרון הידוע.</li>
-        <li><strong>איזון סקטוריאלי:</strong> נעשה מאמץ לאזן בין סקטורים, אך כיסוי הטכנולוגיה נותר גבוה יחסית בשל ריבוי הכיסוי התקשורתי לסקטור זה; אנרגיה, נדל"ן וצריכה בסיסית מיוצגים בצמצום יחסי בהרצה זו.</li>
-        <li><strong>איתותים סותרים:</strong> לא זוהו מקרים של המלצת "קנייה חזקה" מול "מכירה" מפורשת על אותה מניה בין המקורות שנסרקו בהרצה זו; ריבוי שדות "לא נמצא" מונע לעיתים השוואה מלאה בין מקורות.</li>
+        <li><strong>בסיס המחקר:</strong> כל המחקר האיכותני בוצע באמצעות WebSearch בלבד — קריאת כותרות, תקצירים וקישורים ממנועי חיפוש — ולא באמצעות טעינת עמודי מקור מלאים (WebFetch). נתונים שלא היו נגישים בתקצירי החיפוש (כגון מספר אנליסטים, יעדי מחיר, תשואת FCF לרוב המניות) סומנו "לא נמצא בתוצאות החיפוש" במקום להיות מומצאים.</li>
+        <li><strong>מכסת חיפוש:</strong> כל חמשת סוכני המחקר האוטומטיים חרגו ממכסת החיפושים (200 קריאות) באמצע העבודה, מה שהגביל את מספר הסקטורים והמניות (בעיקר בריאות, נדל"ן, שירותים ציבוריים ותקשורת) שניתן היה לאמת באופן מלא, ואת יכולת אימות מחירים/שווי שוק מדויקים מתוך תוצאות חיפוש טקסטואליות בלבד.</li>
+        <li><strong>מחירים חיים:</strong> Alpha Vantage מוגבל ל-25 קריאות ליום במפתח החינמי ולקצב של בקשה בשנייה; כל 14 הקריאות שבוצעו בהרצה זו (4 מניות שכבה 1 + 10 מניות סיכון גבוה) הצליחו בסופו של דבר, לאחר Rate Limit חלקי שדרש קריאות חוזרות. המחירים משקפים סגירת המסחר של 2026-09-03.</li>
+        <li><strong>שכבת סיכון גבוה:</strong> שווי שוק לכל 10 המניות הקבועות לא אותר בתוצאות חיפוש עדכניות בהרצה זו (מסומן "לא נמצא"); מחירים עודכנו במלואם דרך Alpha Vantage. עדכון כניסה/יציאה מוסדית מבוסס אך ורק על כותרות "instant alert" של MarketBeat / Daily Political / Defense World, לא על משיכת דוחות 13F מלאים.</li>
+        <li><strong>איזון סקטוריאלי:</strong> נעשה מאמץ לאזן בין סקטורים; שכבה 1 בהרצה זו מאוזנת היטב (צריכה בסיסית, בריאות, תקשורת, אנרגיה — ללא מניית טכנולוגיה אחת). טבלאות המתודולוגיה עדיין מוטות מעט לטכנולוגיה בשל ריבוי הכיסוי התקשורתי לסקטור זה.</li>
+        <li><strong>איתותים סותרים:</strong> במחקר הפונדמנטלי נמצאו סתירות מפורשות בין מאמרים באותו מקור (Simply Wall St) על ROE של KO (37% מול 40%) ושל NEE (8.1% מול 20%) — צוין בשקיפות בטבלה ולא נבחר מספר "נכון" באופן שרירותי. כמו כן זוהו מקרים של ROE מעוות חשבונאית (AAPL 111%, HD 98.6%, CAT 75.5%, UNH 0.04%) עקב מבנה הון/רכישות חוזרות — סומנו במפורש ⚠.</li>
         <li>אין לראות בדשבורד זה תחליף לבדיקת נתונים ישירה מול מקור (דוחות SEC, אתרי היחצ״ן של החברות, או פלטפורמת ברוקראז׳).</li>
       </ul>
     </div>
@@ -383,141 +383,144 @@ footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--border);fo
 
 <script>
 /* ============ DATA ============ */
-const TODAY = "3 בספטמבר 2026";
+const TODAY = "4 בספטמבר 2026";
 document.getElementById('updated-date').textContent = TODAY;
 
 // Tier 1 — appear in >=2 of 3 primary methodologies
 const TIER1 = [
   {
-    ticker:"AMZN", company:"Amazon.com Inc.", sector:"צריכה מחזורית / טכנולוגיה",
-    price:"254.98", chgPct:"+0.02%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
-    methods:["קונצנזוס (TipRanks Strong Buy)","עריכתי (Barron's Top 10 2026, Motley Fool)"],
-    rationale:"מופיעה הן ברשימת TipRanks Strong Buy (השוואה מול GOOGL) והן ברשימת Top 10 של Barron's ל-2026 ובמאמר Motley Fool 'no-brainer buy' לחציון השני של 2026. תזה: AWS מאיץ, פרסום ~75 מיליארד דולר, אופציונליות ב-AI.",
-    sentiment:"סנטימנט Bigdata.com: שלילי מתון (-0.20, בסיס -0.15) עקב תביעת FTC/22 מדינות בגין הטעיית מפרסמים (~20 מיליארד דולר), חקירת DOJ על תמחור בקר, ושביתות טימסטרס. מנגד: הרחבת AWS לסעודיה, capex AI מוגדל ל-220 מיליארד דולר.",
-    flags:["תביעת FTC/רגולציה","סכסוכי עבודה"],
-    sources:[["TipRanks","https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"],["Barron's (דיווח משני)","https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"],["Motley Fool","https://www.fool.com/investing/2026/08/27/3-stocks-that-are-no-brainer-buys-in-the-second-ha/"]]
+    ticker:"KO", company:"Coca-Cola Co.", sector:"צריכה בסיסית",
+    price:"88.81", chgPct:"+0.65%", chgDir:"up", priceDate:"2026-09-03 (סגירה)",
+    methods:["קונצנזוס (TipRanks Perfect 10 Smart Score, עם META ו-AVGO)","פונדמנטלי (GuruFocus — D/E 1.31, ROE מדווח בסתירה בין מאמרים)"],
+    rationale:"מופיעה ברשימת TipRanks 'Perfect 10 Smart Score' לצד META ו-AVGO — נדיר לראות מניית צריכה בסיסית ברשימה כזו. במקביל, GuruFocus מציג D/E נמוך יחסית לענף (1.31, 30% מתחת לחציון). שימו לב: שני מאמרי Simply Wall St נתנו ROE שונה (37% מול 40%) לתקופות/מתודולוגיות שונות — לא נבחר מספר יחיד באופן שרירותי.",
+    sentiment:"סנטימנט Bigdata.com: שלילי משמעותית (-0.24, בסיס -0.05, מומנטום -0.19, z-score חודשי -2.32 — חריגה סטטיסטית). מונע כמעט לחלוטין מסיקור תקיפת רחפנים רוסית על מפעל קוקה-קולה ליד קייב (3-4/9/2026, ללא נפגעים לפי החברה). מנגד: תוצאות רבעון שני חזקות עם העלאת תחזית שנתית, והעלאות יעד מחיר (Goldman ל-86$, LBBW ל-99$).",
+    flags:["חשיפה גיאופוליטית (מפעל אוקראינה)","סתירת נתוני ROE בין מקורות"],
+    sources:[["TipRanks","https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now"],["GuruFocus","https://www.gurufocus.com/term/debt-to-equity/KO"],["Bigdata.com","https://bigdata.com"]]
   },
   {
-    ticker:"LLY", company:"Eli Lilly & Co.", sector:"בריאות / תרופות",
-    price:"1160.08", chgPct:"+0.01%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
-    methods:["קונצנזוס (TipRanks Perfect 10 Smart Score)","עריכתי (Motley Fool, מסגרת השוואתית מול UNH)"],
-    rationale:"TipRanks מדרגת את LLY Smart Score מושלם (10) במאמר על מניות בריאות. Motley Fool דנה ב-LLY במאמר השוואתי ('Better Buy') מול UNH — לא המלצה חד-משמעית עצמאית, אך מצוטטת כמועמדת מובילה.",
-    sentiment:"סנטימנט Bigdata.com: חיובי מאוד (+0.45, בסיס +0.34, מומנטום +0.11, z-score רבעוני 1.54). מונע מרכישת Merida Biosciences תמורת עד 2.9 מיליארד דולר, אישור FDA להרחבת Mounjaro להפחתת סיכון קרדיווסקולרי, והכאת תחזיות ברבעון האחרון עם הגדלת תחזית ל-85-87 מיליארד דולר.",
-    flags:["תביעת Novo Nordisk (פרסום מטעה, סיכון משני)"],
-    sources:[["TipRanks","https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"],["Motley Fool (via Yahoo)","https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"]]
+    ticker:"JNJ", company:"Johnson & Johnson", sector:"בריאות / תרופות",
+    price:"278.43", chgPct:"+1.17%", chgDir:"up", priceDate:"2026-09-03 (סגירה)",
+    methods:["קונצנזוס (TipRanks — 'Wall Street Analysts Are Bullish on Top Healthcare Picks', רמת ביטחון נמוכה יותר)","פונדמנטלי (GuruFocus — ROE 26.64%, P/E Fwd 22.98)"],
+    rationale:"מופיעה הן בסקירת TipRanks/Globe and Mail על מניות בריאות מומלצות (ללא ציון 'Strong Buy' מפורש בתקציר — סומן ברמת ביטחון נמוכה יותר) והן בנתוני GuruFocus עם ROE חזק של 26.64% ו-P/E קדימה סביר של 22.98. תמיכה נוספת: מניה במחיר שיא כל הזמנים, UBS העלה לקנייה עם יעד 320$.",
+    sentiment:"סנטימנט Bigdata.com: חיובי ויציב (0.24 מול בסיס 0.27, מומנטום כמעט אפס). מונע מאישורי FDA (IMAAVY לאנמיה אוטואימונית, סקירה מועדפת ל-RYBREVANT), והעלאת UBS ליעד 320$. סיכון נגדי: תביעות טלק מתמשכות (בריטניה כ-3,000 תובעים, פסק דין בלואיזיאנה).",
+    flags:["תביעות טלק מתמשכות (בריטניה + לואיזיאנה)","לחץ תחרותי על Stelara"],
+    sources:[["TipRanks / Globe and Mail","https://www.theglobeandmail.com/investing/markets/stocks/JNJ-N/pressreleases/3347545/wall-street-analysts-are-bullish-on-top-healthcare-picks/"],["GuruFocus","https://www.gurufocus.com/term/roe/JNJ"],["Bigdata.com","https://bigdata.com"]]
   },
   {
-    ticker:"GOOGL", company:"Alphabet Inc.", sector:"טכנולוגיה / שירותי תקשורת",
-    price:"337.12", chgPct:"+0.63%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
-    methods:["קונצנזוס (TipRanks Strong Buy)","פונדמנטלי (סקר Benzinga חוב-נמוך/ROE-גבוה, ללא נתונים מספריים מאומתים)"],
-    rationale:"TipRanks מדרגת GOOGL 'Strong Buy' במאמר השוואתי מול AMZN. הוזכרה גם בסקר Benzinga למניות עם חוב נמוך ו-ROE גבוה, אך ללא נתונים מספריים ספציפיים שאומתו בתוצאות החיפוש.",
-    sentiment:"סנטימנט Bigdata.com: שלילי כרוני (-0.30, זהה לבסיס, מומנטום שטוח). דומיננטי: פסיקת בית משפט בתביעת האנטיטראסט של הפרסום הדיגיטלי (נמנעה פירוק אך נדרשו שינויי מבנה), הרשעת מהנדס לשעבר בגניבת סודות AI. מנגד: צמיחת Google Cloud של 82% שנה-על-שנה וגידול תקציב capex.",
-    flags:["לחץ רגולטורי/אנטיטראסט מתמשך"],
-    sources:[["TipRanks","https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"],["Benzinga","https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"]]
+    ticker:"VZ", company:"Verizon Communications", sector:"תקשורת",
+    price:"50.59", chgPct:"+0.74%", chgDir:"up", priceDate:"2026-09-03 (סגירה)",
+    methods:["קונצנזוס (Zacks 'Top Value Stock' — אזכור ברמת ביטחון נמוכה, ללא Zacks Rank מפורש בתקציר)","פונדמנטלי (GuruFocus — D/E 1.81, 15% מתחת לחציון הענף)"],
+    rationale:"האזכור במתודולוגיה הכמותית חלש יחסית (מאמר Zacks המתאר את VZ כ'Top Value Stock' ללא ציון Rank מפורש בתקציר החיפוש — מסומן בשקיפות), אך מגובה בנתון פונדמנטלי מוצק: יחס חוב/הון נמוך יחסית לענף. מניה עלתה 23.3% מתחילת השנה; ה-CFO מתאר את הדיבידנד כ'ברזל' עם כיסוי FCF כמעט פי 2.",
+    sentiment:"סנטימנט Bigdata.com: שלילי (-0.38 מול בסיס -0.19, מומנטום -0.19, ירידת קשב תקשורתי -39.67%). מונע ברובו מתלונות הפסקת שירות נרחבת (Downdetector, ארקנסו/אוקלהומה) וסיקור פלילי לא-עסקי (גניבת רכב שירות, הונאת רכישה). מנגד: EBITDA מתואם עלה ל-13.7 מיליארד$, יעד חיסכון 9 מיליארד$.",
+    flags:["תלונות הפסקת שירות נרחבות (Downdetector)","אזכור קונצנזוס ברמת ביטחון נמוכה"],
+    sources:[["Zacks (via easternprogress.com)","https://www.easternprogress.com/why-verizon-communications-vz-is-a-top-value-stock-for-the-long-term/article_b54d314f-7607-5102-8a4f-43599e02ebe1.html"],["GuruFocus","https://www.gurufocus.com/term/debt-to-equity/VZ"],["Bigdata.com","https://bigdata.com"]]
   },
   {
-    ticker:"CMCSA", company:"Comcast Corp.", sector:"שירותי תקשורת / מדיה",
-    price:"26.81", chgPct:"+1.94%", chgDir:"up", priceDate:"2026-09-02 (סגירה)",
-    methods:["פונדמנטלי (GuruFocus — יחסי P/E ו-D/E)","עריכתי (Barron's Top 10 2026)"],
-    rationale:"מופיעה ברשימת Top 10 של Barron's ל-2026. נתוני GuruFocus מראים P/E מגמתי (TTM) של 5.00 ו-D/E של 1.02 — ה-P/E הנמוך החריג מסומן כחשוד לעיוות חשבונאי (ככל הנראה קשור לתהליך פיצול NBCUniversal) ולא כאיתות ערך אמיתי.",
-    sentiment:"סנטימנט Bigdata.com: ניטרלי-שלילי משתפר (-0.12, בסיס -0.20, מומנטום +0.08). חיובי: הרחבת רשת, השקת אפליקציות וידאו מבוססות AI. סיכון: תביעת Main Street Sports על דמי רישוי, אי-ודאות סביב פיצול המדיה/טכנולוגיה.",
-    flags:["עיוות חשבונאי אפשרי ב-P/E","אי-ודאות פיצול חברה"],
-    sources:[["GuruFocus","https://www.gurufocus.com/term/pettm/CMCSA"],["Barron's (דיווח משני)","https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"]]
+    ticker:"XOM", company:"Exxon Mobil Corp.", sector:"אנרגיה",
+    price:"162.21", chgPct:"-1.18%", chgDir:"down", priceDate:"2026-09-03 (סגירה)",
+    methods:["עריכתי (⭐ Barron's Top 10 2026 + Motley Fool 'No-Brainer Dividend Buy')","פונדמנטלי (GuruFocus — D/E 0.16, ROE 6.51%, P/E 25.57)"],
+    rationale:"מופיעה הן ברשימת Top 10 של Barron's ל-2026 והן במאמר נפרד של Motley Fool על מניות דיבידנד 'no-brainer' למחצית השנייה של 2026 — חפיפה עצמאית בין שני פרסומים עריכתיים. בנוסף, נתוני GuruFocus מראים חוב/הון נמוך מאוד (0.16), אם כי ROE (6.51%) ו-P/E (25.57) חלשים יחסית לחציון הענף — תמונה פונדמנטלית מעורבת.",
+    sentiment:"סנטימנט Bigdata.com: שלילי מובהק (-0.54 מול בסיס -0.29, מומנטום -0.25, z-score רבעוני -2.84 — חריגה סטטיסטית משמעותית). מונע מסיקור גיאופוליטי סביב עסקת הנפט עם ונצואלה וטרמפ. מנגד: רצף העלאת דיבידנד בן 43 שנה, FCF עולה על הדיבידנד בכ-13 מיליארד$, Piper Sandler העלה יעד ל-185$ (אך השאיר דירוג Neutral).",
+    flags:["חשיפה גיאופוליטית (ונצואלה)","תנודתיות מחירי נפט"],
+    sources:[["Barron's (X, דיווח משני)","https://x.com/SpecialSitsNews/status/2006873292687491203"],["The Motley Fool","https://www.fool.com/investing/2026/08/02/3-dividend-stocks-that-are-no-brainer-buys-for-the/"],["GuruFocus","https://www.gurufocus.com/term/roe/XOM"],["Bigdata.com","https://bigdata.com"]]
   }
 ];
 
 // Methodology tables — each row: ticker, company, sector, metrics object, sourceLabel, sourceUrl, tier
 const TABLE_A = [ // Quant consensus
-  {t:"OUST",c:"Ouster, Inc.",sec:"טכנולוגיה (LiDAR)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/article/tipranks-perfect-10s-unveiling-3-high-scoring-stocks-for-2026"},
-  {t:"QBTS",c:"D-Wave Quantum Inc.",sec:"טכנולוגיה (מחשוב קוונטי)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks (Yahoo)",url:"https://finance.yahoo.com/news/tipranks-perfect-10s-unveiling-3-080000767.html"},
-  {t:"DY",c:"Dycom Industries",sec:"תעשייה (תשתיות תקשורת)",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes"},
-  {t:"RTX",c:"RTX Corporation",sec:"תעשייה (הגנה/תעופה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/3-aerospace-defense-stocks-buy-130500348.html"},
-  {t:"TXT",c:"Textron Inc.",sec:"תעשייה (הגנה/תעופה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/TXT/pressreleases/1320911/"},
-  {t:"GS",c:"Goldman Sachs Group",sec:"פיננסים (בנקאות השקעות)",rating:"Strong Buy (שדרוג Zacks)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/know-goldman-gs-rating-upgrade-160002513.html"},
-  {t:"THG",c:"Hanover Insurance Group",sec:"פיננסים (ביטוח, small/mid-cap)",rating:"Strong Buy (שדרוג Zacks)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/markets/stocks/articles/know-hanover-insurance-thg-rating-160001263.html"},
-  {t:"LLY",c:"Eli Lilly & Co.",sec:"בריאות / תרופות",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"},
-  {t:"VRTX",c:"Vertex Pharmaceuticals",sec:"בריאות / ביוטכנולוגיה",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://finance.yahoo.com/news/tipranks-perfect-10-list-2-102038169.html"},
-  {t:"AVGO",c:"Broadcom Inc.",sec:"טכנולוגיה (מוליכים למחצה)",rating:"Buy (Zacks roundup)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/AVGO/pressreleases/1504612/"},
-  {t:"TER",c:"Teradyne, Inc.",sec:"טכנולוגיה (ציוד בדיקה)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/TER/pressreleases/211762/"},
-  {t:"WDC",c:"Western Digital Corp.",sec:"טכנולוגיה (אחסון נתונים)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (Globe and Mail)",url:"https://www.theglobeandmail.com/investing/markets/stocks/WDC-Q/pressreleases/249766/"},
-  {t:"SNDK",c:"SanDisk Corporation",sec:"טכנולוגיה (אחסון נתונים, small/mid-cap)",rating:"Zacks Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks (via Yahoo)",url:"https://finance.yahoo.com/news/zacks-investment-ideas-feature-highlights-085600648.html"},
-  {t:"GOOGL",c:"Alphabet Inc.",sec:"טכנולוגיה / שירותי תקשורת",rating:"Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"},
-  {t:"AMZN",c:"Amazon.com Inc.",sec:"צריכה מחזורית / טכנולוגיה",rating:"Strong Buy",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://www.tipranks.com/news/googl-or-amzn-which-strong-buy-tech-stock-offers-higher-upside-in-2026"}
+  {t:"META",c:"Meta Platforms",sec:"שירותי תקשורת",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now"},
+  {t:"AVGO",c:"Broadcom Inc.",sec:"טכנולוגיה",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now"},
+  {t:"KO",c:"Coca-Cola Co.",sec:"צריכה בסיסית",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"t1",src:"TipRanks",url:"https://www.tipranks.com/news/meta-avgo-ko-3-top-rated-stocks-with-a-perfect-10-smart-score-to-buy-now"},
+  {t:"NVDA",c:"Nvidia Corp.",sec:"טכנולוגיה",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now"},
+  {t:"MSFT",c:"Microsoft Corp.",sec:"טכנולוגיה",rating:"Strong Buy",score:"TipRanks Perfect 10",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/meta-msft-nvda-3-perfect-10-stocks-analysts-say-to-buy-now"},
+  {t:"DY",c:"Dycom Industries",sec:"תעשייה (תשתיות תקשורת)",rating:"TipRanks Perfect 10 list",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/tipranks-perfect-10-list-2-top-scoring-stocks-that-hit-the-right-boxes"},
+  {t:"OUST",c:"Ouster, Inc.",sec:"טכנולוגיה (LiDAR, small-cap)",rating:"TipRanks Perfect 10",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"TipRanks",url:"https://www.tipranks.com/news/article/tipranks-perfect-10s-unveiling-3-high-scoring-stocks-for-2026"},
+  {t:"VLO",c:"Valero Energy",sec:"אנרגיה",rating:"Zacks Strong Buy (שדרוג 6/8)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Yahoo Finance / The Cerbat Gem",url:"https://finance.yahoo.com/markets/stocks/articles/know-valero-energy-vlo-rating-160003618.html"},
+  {t:"CENX",c:"Century Aluminum",sec:"חומרי גלם / תעשייה",rating:"Zacks Strong Buy (שדרוג)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Yahoo Finance",url:"https://finance.yahoo.com/markets/stocks/articles/know-century-cenx-rating-upgrade-160003846.html"},
+  {t:"KALU",c:"Kaiser Aluminum",sec:"חומרי גלם (small/mid-cap)",rating:"Zacks Strong-Buy (שדרוג 31/7)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"MarketBeat",url:"https://www.marketbeat.com/instant-alerts/kaiser-aluminum-nasdaqkalu-upgraded-by-zacks-research-to-strong-buy-rating-2026-07-31/"},
+  {t:"EQBK",c:"Equity Bancshares",sec:"פיננסים (בנק אזורי, small/mid-cap)",rating:"Strong-Buy at Benchmark (26/6)",score:"לא נמצא",target:"54.17$ (קונצנזוס, 14/8)",tier:"tn",src:"Daily Political / MarketBeat",url:"https://www.dailypolitical.com/2026/06/26/equity-bancshares-nyseeqbk-upgraded-to-strong-buy-at-benchmark.html"},
+  {t:"EL",c:"Estee Lauder",sec:"צריכה בסיסית/מחזורית",rating:"Zacks 'Top Pick' (רמת ביטחון נמוכה)",score:"לא נמצא",target:"לא נמצא",tier:"tn",src:"Zacks / Yahoo Finance",url:"https://finance.yahoo.com/markets/stocks/articles/consumer-staples-sector-regains-momentum-114200178.html"},
+  {t:"JNJ",c:"Johnson & Johnson",sec:"בריאות / תרופות",rating:"'Bullish' (TipRanks, רמת ביטחון נמוכה)",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"TipRanks / Globe and Mail",url:"https://www.theglobeandmail.com/investing/markets/stocks/JNJ-N/pressreleases/3347545/wall-street-analysts-are-bullish-on-top-healthcare-picks/"},
+  {t:"VZ",c:"Verizon Communications",sec:"תקשורת",rating:"'Top Value Stock' (Zacks, רמת ביטחון נמוכה)",score:"לא נמצא",target:"לא נמצא",tier:"t1",src:"Zacks (via easternprogress.com)",url:"https://www.easternprogress.com/why-verizon-communications-vz-is-a-top-value-stock-for-the-long-term/article_b54d314f-7607-5102-8a4f-43599e02ebe1.html"}
 ];
 
 const TABLE_B = [ // Fundamental quality/value
-  {t:"JNJ",c:"Johnson & Johnson",sec:"בריאות / תרופות",roe:"26.64%",pe:"22.98 (Fwd)",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/JNJ"},
-  {t:"TXN",c:"Texas Instruments",sec:"טכנולוגיה (מוליכים למחצה)",roe:"לא נמצא",pe:"52.18 (TTM)",de:"0.84",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/TXN"},
-  {t:"HON",c:"Honeywell International",sec:"תעשייה",roe:"23.89%",pe:"8.62 (TTM, ⚠ חריג)",de:"2.70",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/deb2equity/NYSE:HON/"},
-  {t:"TGT",c:"Target Corp.",sec:"צריכה מחזורית (קמעונאות)",roe:"26.40%",pe:"16.76 (TTM)",de:"1.05",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/ROE/NYSE:TGT/"},
-  {t:"MRK",c:"Merck & Co.",sec:"בריאות / תרופות",roe:"-12.16% (⚠ חריג)",pe:"123.13 (TTM, ⚠ חריג)",de:"1.29",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/MRK"},
-  {t:"JPM",c:"JPMorgan Chase",sec:"פיננסים (בנקאות)",roe:"18.16%",pe:"15.57 (TTM)",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/JPM"},
-  {t:"CVX",c:"Chevron Corp.",sec:"אנרגיה",roe:"לא נמצא",pe:"19.73 (TTM)",de:"0.25",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/CVX"},
-  {t:"CMCSA",c:"Comcast Corp.",sec:"שירותי תקשורת / מדיה",roe:"לא נמצא",pe:"5.00 (TTM, ⚠ חריג)",de:"1.02",fcf:"לא נמצא",tier:"t1",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/CMCSA"},
-  {t:"PFE",c:"Pfizer Inc.",sec:"בריאות / תרופות",roe:"לא נמצא",pe:"37.38 (TTM) / 8.45 (Fwd)",de:"0.71",fcf:"~6.9% (נגזר מ-P/FCF 14.56)",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/PFE"},
-  {t:"PG",c:"Procter & Gamble",sec:"צריכה בסיסית",roe:"לא נמצא",pe:"לא נמצא",de:"0.68",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/PG"},
-  {t:"GOOGL",c:"Alphabet Inc. (GOOG)",sec:"טכנולוגיה",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"t1",src:"Benzinga (ללא נתונים מספריים)",url:"https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"},
-  {t:"AAPL",c:"Apple Inc.",sec:"טכנולוגיה",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"Benzinga (ללא נתונים מספריים)",url:"https://www.benzinga.com/news/earnings/12/12/3136356/inexpensive-low-debt-high-roe-stocks"}
+  {t:"AAPL",c:"Apple Inc.",sec:"טכנולוגיה",roe:"111.36% ⚠ (מעוות, בסיס הון נמוך)",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/AAPL"},
+  {t:"JPM",c:"JPMorgan Chase",sec:"פיננסים (בנקאות)",roe:"18.16%",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/JPM"},
+  {t:"BAC",c:"Bank of America",sec:"פיננסים (בנקאות)",roe:"11.37%",pe:"לא נמצא",de:"1.28",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/BAC"},
+  {t:"UNH",c:"UnitedHealth Group",sec:"בריאות (ביטוח מנוהל)",roe:"0.04% ⚠ (חריג קיצוני)",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/ROE/UNH/ROE-Percentage/UNH"},
+  {t:"JNJ",c:"Johnson & Johnson",sec:"בריאות / תרופות",roe:"26.64%",pe:"31.56",de:"0.68",fcf:"לא נמצא",tier:"t1",src:"GuruFocus",url:"https://www.gurufocus.com/term/pettm/JNJ"},
+  {t:"HON",c:"Honeywell International",sec:"תעשייה",roe:"~9.5% (Simply Wall St)",pe:"לא נמצא",de:"2.70 ⚠ (גבוה, פיצול Aerospace)",fcf:"לא נמצא",tier:"tn",src:"GuruFocus / Simply Wall St",url:"https://www.gurufocus.com/term/deb2equity/NAS:HON"},
+  {t:"CAT",c:"Caterpillar Inc.",sec:"תעשייה",roe:"75.53% ⚠ (מעוות, בסיס הון נמוך)",pe:"לא נמצא",de:"2.33",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/ROE/CAT/ROE-Percentage"},
+  {t:"AVAV",c:"AeroVironment (small/mid-cap)",sec:"תעשייה (הגנה/תעופה)",roe:"לא נמצא",pe:"46.86 (Fwd)",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/forward-pe-ratio/AVAV"},
+  {t:"XOM",c:"Exxon Mobil Corp.",sec:"אנרגיה",roe:"6.51%",pe:"25.57",de:"0.16",fcf:"לא נמצא",tier:"t1",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/XOM"},
+  {t:"PG",c:"Procter & Gamble",sec:"צריכה בסיסית",roe:"~20% (Simply Wall St)",pe:"לא נמצא",de:"0.68",fcf:"לא נמצא",tier:"tn",src:"GuruFocus / Simply Wall St",url:"https://www.gurufocus.com/term/debt-to-equity/PG"},
+  {t:"KO",c:"Coca-Cola Co.",sec:"צריכה בסיסית",roe:"37%-40% ⚠ (סתירה בין מאמרים)",pe:"לא נמצא",de:"1.31",fcf:"לא נמצא",tier:"t1",src:"GuruFocus / Simply Wall St",url:"https://www.gurufocus.com/term/debt-to-equity/KO"},
+  {t:"WMT",c:"Walmart Inc.",sec:"צריכה בסיסית/מחזורית",roe:"לא נמצא",pe:"לא נמצא",de:"0.79",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/WMT"},
+  {t:"HD",c:"Home Depot",sec:"צריכה מחזורית",roe:"98.59% ⚠ (מעוות, הון עצמי נמוך/שלילי)",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/HD"},
+  {t:"BLMN",c:"Bloomin' Brands (small-cap)",sec:"צריכה מחזורית (מסעדות)",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא (GF Value: 42.3% מתחת לשווי)",tier:"tn",src:"GuruFocus / Simply Wall St",url:"https://www.gurufocus.com/news/9005858/blmn-looks-423-undervalued-on-gf-value-amid-dividend-concerns"},
+  {t:"O",c:"Realty Income Corp.",sec:"נדל\"ן (REIT)",roe:"לא נמצא",pe:"לא נמצא",de:"0.74",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/O"},
+  {t:"NEE",c:"NextEra Energy",sec:"שירותים ציבוריים",roe:"8.1%-22.39% ⚠ (סתירה בין מאמרים)",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא",tier:"tn",src:"GuruFocus / Simply Wall St",url:"https://www.gurufocus.com/term/ROE/NYSE:NEE/ROE-/NextEra-Energy-Inc"},
+  {t:"LIN",c:"Linde PLC",sec:"חומרי גלם",roe:"15.92%",pe:"לא נמצא",de:"0.72",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/roe/LIN"},
+  {t:"VZ",c:"Verizon Communications",sec:"תקשורת",roe:"לא נמצא",pe:"לא נמצא",de:"1.81",fcf:"לא נמצא",tier:"t1",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/VZ"},
+  {t:"GOOGL",c:"Alphabet Inc.",sec:"שירותי תקשורת",roe:"לא נמצא",pe:"לא נמצא",de:"0.18",fcf:"לא נמצא",tier:"tn",src:"GuruFocus",url:"https://www.gurufocus.com/term/debt-to-equity/GOOGL"},
+  {t:"FBNC",c:"First Bancorp NC (small-cap)",sec:"פיננסים (בנקאות)",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא (מתומחר מתחת לשווי פנימי)",tier:"tn",src:"Simply Wall St",url:"https://simplywall.st/stocks/us/banks/nasdaq-fbnc/first-bancorp/news/3-stocks-estimated-to-be-priced-below-intrinsic-value-in-sep"},
+  {t:"HFWA",c:"Heritage Financial Corp (small-cap)",sec:"פיננסים (בנקאות)",roe:"לא נמצא",pe:"לא נמצא",de:"לא נמצא",fcf:"לא נמצא (הזדמנות ערך)",tier:"tn",src:"Simply Wall St",url:"https://simplywall.st/stocks/us/banks/nasdaq-hfwa/heritage-financial/news/undervalued-stock-opportunities-based-on-market-estimates-in/amp"}
 ];
 
 const TABLE_C = [ // Editorial
-  {t:"AMZN",c:"Amazon.com Inc.",sec:"צריכה מחזורית / טכנולוגיה",pubs:"Barron's + Motley Fool (⭐ חפיפה)",thesis:"AWS מאיץ, פרסום, אופציונליות AI",tier:"t1",src:"Barron's / Motley Fool",url:"https://www.fool.com/investing/2026/08/27/3-stocks-that-are-no-brainer-buys-in-the-second-ha/"},
-  {t:"DIS",c:"Walt Disney Co.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"אימפריית מדיה ותיקה, איפוס סטרימינג, מכונת מזומנים פארקים",tier:"tn",src:"Barron's (דיווח משני)",url:"https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"},
-  {t:"XOM",c:"Exxon Mobil Corp.",sec:"אנרגיה",pubs:"Barron's",thesis:"צבירת ערך מובילה בסקטור האנרגיה",tier:"tn",src:"Barron's (דיווח משני)",url:"https://www.dividendology.com/p/barrons-top-10-stocks-for-2026"},
-  {t:"BMY",c:"Bristol Myers Squibb",sec:"בריאות / תרופות",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"CMCSA",c:"Comcast Corp.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"t1",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"FRFHF",c:"Fairfax Financial Holdings",sec:"פיננסים / ביטוח",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"FLUT",c:"Flutter Entertainment",sec:"צריכה מחזורית / הימורים מקוונים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"MSGS",c:"Madison Square Garden Sports",sec:"שירותי תקשורת / ספורט (small/mid-cap)",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"SLG",c:"SL Green Realty",sec:"נדל\"ן (משרדים, NYC)",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"V",c:"Visa Inc.",sec:"פיננסים / תשלומים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
-  {t:"CPB",c:"Campbell's",sec:"צריכה בסיסית",pubs:"Morningstar",thesis:"חברת איכות גבוהה, מתומחרת בחסר",tier:"tn",src:"Morningstar (X)",url:"https://x.com/MorningstarInc/status/2007240493525069976"},
-  {t:"CLPBY",c:"Coloplast",sec:"בריאות / ציוד רפואי",pubs:"Morningstar",thesis:"חברת איכות גבוהה, מתומחרת בחסר",tier:"tn",src:"Morningstar (X)",url:"https://x.com/MorningstarInc/status/2007240493525069976"},
-  {t:"NVDA",c:"Nvidia Corp.",sec:"טכנולוגיה / מוליכים למחצה",pubs:"Motley Fool",thesis:"'מניה בלתי ניתנת לעצירה' להחזקה ל-2026 ואילך",tier:"tn",src:"Motley Fool",url:"https://www.fool.com/investing/2026/01/31/2-unstoppable-stocks-to-buy-in-2026-and-hold-nvda/"},
-  {t:"UNH",c:"UnitedHealth Group",sec:"בריאות / ביטוח מנוהל",pubs:"Motley Fool (מסגרת השוואתית)",thesis:"לא המלצת קנייה חד-משמעית — מאמר השוואתי מול LLY",tier:"tn",src:"Motley Fool (via Yahoo)",url:"https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"},
-  {t:"LLY",c:"Eli Lilly & Co.",sec:"בריאות / תרופות",pubs:"Motley Fool (מסגרת השוואתית)",thesis:"לא המלצת קנייה חד-משמעית — מאמר השוואתי מול UNH",tier:"t1",src:"Motley Fool (via Yahoo)",url:"https://finance.yahoo.com/news/better-buy-2026-unitedhealth-group-233900367.html"}
+  {t:"AMZN",c:"Amazon.com Inc.",sec:"צריכה מחזורית / טכנולוגיה",pubs:"Barron's (Top 10 2026) + Motley Fool (2 מאמרים נפרדים)",thesis:"בונה אימפריה בזמן שהמניה 'לא זזה'; מובילה ברשימות ספטמבר 2026 של Fool",tier:"tn",src:"Barron's (X) / The Motley Fool",url:"https://www.fool.com/investing/2026/09/03/here-are-my-top-5-stocks-for-september/"},
+  {t:"DIS",c:"Walt Disney Co.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"'נכתבה מחוץ למשחק', אך בונה מחדש תזרים מזומנים בשקט",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"XOM",c:"Exxon Mobil Corp.",sec:"אנרגיה",pubs:"⭐ Barron's (Top 10 2026) + Motley Fool",thesis:"רצף העלאת דיבידנד; מניית דיבידנד 'no-brainer' למחצית ב' 2026",tier:"t1",src:"Barron's (X) / The Motley Fool",url:"https://www.fool.com/investing/2026/08/02/3-dividend-stocks-that-are-no-brainer-buys-for-the/"},
+  {t:"V",c:"Visa Inc.",sec:"פיננסים / תשלומים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"BMY",c:"Bristol-Myers Squibb",sec:"בריאות / תרופות",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"CMCSA",c:"Comcast Corp.",sec:"שירותי תקשורת / מדיה",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"FRFHF",c:"Fairfax Financial Holdings",sec:"פיננסים / ביטוח",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"FLUT",c:"Flutter Entertainment",sec:"צריכה מחזורית / הימורים מקוונים",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"MSGS",c:"Madison Square Garden Sports (small/mid-cap)",sec:"שירותי תקשורת / ספורט",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"},
+  {t:"SLG",c:"SL Green Realty (mid-cap)",sec:"נדל\"ן (משרדים, NYC)",pubs:"Barron's",thesis:"לא נמצא בתקציר",tier:"tn",src:"Barron's (X, דיווח משני)",url:"https://x.com/SpecialSitsNews/status/2006873292687491203"}
 ];
 
 const SENTIMENT_ROWS = [
-  {t:"BYND",name:"Beyond Meat",cat:"ספקולטיבי",note:"חלק מאשכול short squeeze 2026; יועץ הון כינה זאת 'short squeeze קלאסי... שבוצע ע\"י כנופיה', ללא תמיכה פונדמנטלית",src:"Benzinga / StockTwits",url:"https://www.benzinga.com/trading-ideas/movers/26/04/51945874/"},
-  {t:"OPEN",name:"Opendoor Technologies",cat:"ספקולטיבי",note:"שם מרכזי בתחיית 'meme stock' 2026; היום הטוב ביותר ב-6 חודשים עם נפח כפול, מוגדר כמרדף ריטייל טכני",src:"Yahoo Finance / StockTwits",url:"https://ca.finance.yahoo.com/news/opendoor-kohls-resume-rally-meme-160314426.html"},
-  {t:"KSS",name:"Kohl's",cat:"ספקולטיבי",note:"S3 Partners: מ'מם' ל'מניית שדה קרב' (עדיין ריבית שורט גבוהה); Seeking Alpha שאלה אם מתהווה short squeeze ענק",src:"S3 Partners / Seeking Alpha",url:"https://seekingalpha.com/article/4720848-is-kohls-kss-stock-setting-up-for-a-monster-short-squeeze"},
-  {t:"GME",name:"GameStop",cat:"ספקולטיבי",note:"נשארת ב'אינדקס 2026' של WallStreetBets, אך עוצמת הבאזז היחסית נחלשה מול שמות חדשים יותר",src:"Benzinga / StockTwits",url:"https://www.benzinga.com/trading-ideas/long-ideas/26/01/50103263/"},
-  {t:"ALT",name:"Altimmune",cat:"ספקולטיבי",note:"יום שישי ברציפות של עליות מונעות ספקולציית רכישה לא מאושרת",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/alt-stock-surges-toward-sixth-straight-day-of-gains-retail-bets-a-buyout/cmyXrOnR4iW"},
-  {t:"RDW",name:"Redwire",cat:"ספקולטיבי",note:"זינוק על רקע דוחות, אך שיח ריטייל התמקד ב'איזון תמחור מחדש' ולא בתזה פונדמנטלית ברורה",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/rdw-stock-surges-overnight-on-blockbuster-earnings-retail-wants-valuation-rebalance-now/cZoJ01fRJe8"},
-  {t:"SLS",name:"Sellas Life Sciences",cat:"ספקולטיבי",note:"ביוטק small-cap, נבחרה 'הבחירה השורית ביותר' ע\"י ריטייל על פני IBRX/ONDS/PYPL — רוטציית דיי-טרייד",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/sls-retail-prefer-sellas-ibrx-onds-pypl-bullish-pick/cZmleNCR7mO"},
-  {t:"NTLA",name:"Intellia Therapeutics",cat:"ספקולטיבי",note:"זינוק 35% לפני קריאת נתוני Phase 3 בעריכת גנים — סחר קטליסט בינארי בסיכון גבוה",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/ntla-stock-rallies-ahead-of-first-phase-3-gene-editing-readout/cZBNJGpRe2e"},
-  {t:"BB",name:"BlackBerry",cat:"ספקולטיבי",note:"שיח ריטייל מפוצל בין 'טירוף מם' ל'סיפור צמיחה' — סנטימנט מעורב ולא חד-משמעי",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/black-berry-stock-surges-overnight-cfo-ai-vision-retail-debates-meme-mania-growth-story/cZ0SpWqReDn"},
-  {t:"MU",name:"Micron Technology",cat:"באזז + גיבוי פונדמנטלי",note:"מלאי שבבי AI ל-2026 נמכר במלואו; מלחמת יעדי מחיר בין אנליסטים ($1,000-$1,750); חוזר במספר סקירות Benzinga",src:"Benzinga",url:"https://www.benzinga.com/markets/tech/26/08/61520705/"},
-  {t:"PLTR",name:"Palantir Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"מרכיב קבוע באינדקס WSB 2026 ובסקירות באזז שבועיות של Benzinga, קשור לחוזי AI/ממשל מתמשכים",src:"Benzinga",url:"https://www.benzinga.com/markets/market-summary/26/08/61061657/"},
-  {t:"VRT",name:"Vertiv Holdings",cat:"באזז + גיבוי פונדמנטלי",note:"זינוק לפני המסחר על תחזית 2026 חזקה לביקוש AI במרכזי נתונים — מונע רווחים/הנחיה, לא מכניקת סקוויז",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/why-did-vertiv-stock-surge-pre-market-today/cZb6OJ7R4qj"},
-  {t:"BWXT",name:"BWX Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"קרנות ARK של קאתיווד רכשו כ-7.6 מיליון דולר (1 בספטמבר 2026) — הימור על ביקוש חשמל בהקשר AI",src:"Motley Fool",url:"https://www.fool.com/investing/2026/09/01/cathie-woods-ark-just-bought-76-million-of-nuclear/"}
+  {t:"GPRO",name:"GoPro, Inc.",cat:"ספקולטיבי",note:"זינוק ~140% על רקע קנייה ריטייל/מם ('Markiplier Money') שהתלכדה עם short squeeze — ללא קטליסט פונדמנטלי",src:"Benzinga",url:"https://www.benzinga.com/trading-ideas/movers/26/09/61550830/gopro-stock-rockets-140-as-markiplier-money-meets-a-short-squeeze"},
+  {t:"OPEN",name:"Opendoor Technologies",cat:"ספקולטיבי",note:"היום הטוב ביותר ב-6 חודשים בנפח כפול; ריטייל 'מחפש פריצה', ללא קטליסט עסקי",src:"StockTwits (via Yahoo Finance)",url:"https://finance.yahoo.com/markets/stocks/articles/open-stock-posts-best-day-042824256.html"},
+  {t:"KSS",name:"Kohl's Corporation",cat:"ספקולטיבי",note:"short squeeze מונע-Reddit מתואר כ'מניע ראלי מסיבי' — דינמיקת סקוויז טהורה ולא תפנית עסקית",src:"Investing.com / Yahoo Finance",url:"https://www.investing.com/news/stock-market-news/kohls-stock-soars-as-redditfueled-short-squeeze-drives-massive-rally-4146200"},
+  {t:"RGTI",name:"Rigetti Computing",cat:"ספקולטיבי",note:"באזז ריטייל גבוה ב-StockTwits גם כשלוח הזמנים הקוונטי נדחה ומכירת פנים דווחה",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/rigetti-computing-stock-draws-retail-buzz-after-quantum-timeline-slips/cmxV0xIR4GO"},
+  {t:"GME",name:"GameStop Corp.",cat:"ספקולטיבי",note:"שם קבוע ב-WSB/מם סטוקס; סיקור מתאר 'התפצלות מניות מם' ללא קטליסט פונדמנטלי",src:"24/7 Wall St.",url:"https://247wallst.com/investing/2026/08/03/gamestop-drops-6-amc-rallies-6-in-meme-stock-divergence/"},
+  {t:"AMC",name:"AMC Entertainment",cat:"ספקולטיבי",note:"עלתה יחד עם GME על עניין ריטייל/WSB בלבד, ללא קטליסט מדווח",src:"24/7 Wall St.",url:"https://247wallst.com/investing/2026/08/03/gamestop-drops-6-amc-rallies-6-in-meme-stock-divergence/"},
+  {t:"POET",name:"POET Technologies",cat:"ספקולטיבי",note:"מדורגת בין 10 המניות המדורגות ביותר ב-WallStreetBets לקראת 2026, ללא קטליסט פונדמנטלי בפוסט",src:"X (@amitisinvesting)",url:"https://x.com/amitisinvesting/status/2005686494938415170"},
+  {t:"ASTS",name:"AST SpaceMobile",cat:"באזז + גיבוי פונדמנטלי",note:"באזז ריטייל לקראת שיגור לוויין BlueBird 6, לצד תחזית, עסקת יפן, ועניין ספקטרום SpaceX/AST",src:"StocksToTrade",url:"https://stockstotrade.com/news/ast-spacemobile-inc-asts-news-2026_09_02/"},
+  {t:"APLD",name:"Applied Digital Corporation",cat:"באזז + גיבוי פונדמנטלי",note:"סנטימנט השתפר ב-StockTwits לאחר חוזה שכירות מרכז נתונים ~7.5 מיליארד$ עם hyperscaler, מימון SMBC 375 מיליון$ ופוזיציית Robinhood",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/apld-stock-rallies-after-hours-on-massive-7.5-billion-hyperscaler-lease/cZXxQg3RenY"},
+  {t:"NBIS",name:"Nebius Group N.V.",cat:"באזז + גיבוי פונדמנטלי",note:"שיח ריטייל לצד קטליסט אמיתי — הכללה צפויה ב-Nasdaq-100, רכישת Eigen AI ועדכון חוזה מיקרוסופט",src:"StockTwits (via Yahoo Finance)",url:"https://finance.yahoo.com/markets/stocks/articles/nbis-stock-rally-rolls-record-022523906.html"},
+  {t:"PATH",name:"UiPath Inc.",cat:"באזז + גיבוי פונדמנטלי",note:"תגובה ריטייל חיובית לחדשות הכללה במדד S&P 400 — קטליסט מבני קונקרטי",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/uipath-set-for-index-inclusion-retail-buzz/cmxNzBMRE6Q"},
+  {t:"SOFI",name:"SoFi Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"באזז בעקבות הכאת תחזיות רבעונית אמיתית — הכנסות +42% והעלאת תחזית שנתית",src:"StockTwits / X (@Stocktwits)",url:"https://x.com/Stocktwits/status/2082440885103460530"},
+  {t:"PLTR",name:"Palantir Technologies",cat:"באזז + גיבוי פונדמנטלי",note:"ריטייל 'מהמר על הכאת תחזיות' לקראת רבעון רביעי, בהתבסס על רצף הכאות תחזיות קודם",src:"StockTwits",url:"https://stocktwits.com/news-articles/markets/equity/palantir-heads-into-make-or-break-q4-retail-bets-on-earnings-beat/cZbgJ7VR4jm"}
 ];
 
 const HIGHRISK = [
-  {t:"CRWV",name:"CoreWeave",price:"לא זמין הרצה זו",mcap:"~59 מיליארד $ (מיושן, 12/08/2026)",catalyst:"תשתיות AI",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"עדכוני 13F שנמצאו (AE Wealth, Q Fund HK) מתוארכים ינואר-פברואר 2026 — מחוץ לחלון, ואחזקות קטנות.",src:"Motley Fool",url:"https://www.fool.com/investing/2026/08/12/coreweave-has-104-billion-of-contracted-revenue-an/"},
-  {t:"CRCL",name:"Circle Internet Group",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"פינטק / הנפקה טרייה",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"רכישה של Capital Fund Management (מרץ 2026) ומכירת פנים (אוגוסט 2025) — שתיהן מחוץ לחלון הזמן.",src:"Motley Fool",url:"https://www.fool.com/investing/2026/07/07/how-circle-internet-group-stock-lost-45-last-month/"},
-  {t:"ALAB",name:"Astera Labs",price:"274.13",priceNote:"(-2.06% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"strong",instLabel:"כניסה מוסדית חזקה",detail:"Legal & General Group השקיעה 311.47 מיליון $ ב-Astera Labs (26/08/2026) — האיתות המהותי ביותר בקבוצה.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/26/legal-general-group-plc-invests-311-47-million-in-astera-labs-inc-alab.html"},
-  {t:"IOT",name:"Samsara",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"תשתיות AI / IoT (הנפקה טרייה)",inst:"strong",instLabel:"כניסה מוסדית",detail:"Wellington Management הגדילה פוזיציה (31/08) ו-Spyglass Capital הגדילה פוזיציה (01/09) — היקפים לא צוינו.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/31/wellington-management-group-llp-grows-position-in-samsara-inc-iot.html"},
-  {t:"LOAR",name:"Loar Holdings",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה (תעופה, הנפקה טרייה)",inst:"strong",instLabel:"כניסה מוסדית חזקה (מספר קרנות)",detail:"BNY Mellon רכשה 707,403 מניות (27/08); Janus Henderson הגדילה החזקה (04/08); Empowered Funds רכשה מניות (09/08).",src:"Daily Political / Defense World",url:"https://www.dailypolitical.com/2026/08/27/707403-shares-in-loar-holdings-inc-loar-purchased-by-bank-of-new-york-mellon-corp.html"},
-  {t:"KTOS",name:"Kratos Defense",price:"47.78",priceNote:"(-3.16% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"עדכוני 13F שנמצאו (Sequoia Financial, Harbor Capital) מתוארכים יולי/אפריל 2026 — מחוץ לחלון.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/07/12/sequoia-financial-advisors-llc-has-7-65-million-stake-in-kratos-defense-security-solutions-inc-ktos.html"},
-  {t:"MP",name:"MP Materials",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"מינרלים קריטיים",inst:"mixed",instLabel:"איתות לא ברור",detail:"דיווח על מכירת מניות מנכ\"ל (400,000 מניות) ללא תאריך מאושר בתוך 30 יום; מכירה מתוארכת קודמת (14/05) מחוץ לחלון.",src:"StockTitan",url:"https://www.stocktitan.net/sec-filings/MP/form-4-mp-materials-corp-de-insider-trading-activity-d4cfc1d11c9e.html"},
-  {t:"OKLO",name:"Oklo",price:"39.52",priceNote:"(+2.57% מהסגירה הקודמת, 2026-09-02)",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"רכישת Legal & General (177,366 מניות) מתוארכת 01/06/2026 — מחוץ לחלון של 30 יום.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/06/01/legal-general-group-plc-buys-177366-shares-of-oklo-inc-oklo.html"},
-  {t:"LEU",name:"Centrus Energy",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"mixed",instLabel:"מכירה קטנה / לא מהותית",detail:"First Trust Advisors מכרה 6,306 מניות (07/08) — ככל הנראה שינוי מדדי, לא מהלך אקטיבי משמעותי.",src:"MarketBeat",url:"https://www.marketbeat.com/instant-alerts/filing-first-trust-advisors-lp-sells-6306-shares-of-centrus-energy-corp-leu-2026-08-07/"},
-  {t:"APLD",name:"Applied Digital",price:"לא זמין הרצה זו",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"mixed",instLabel:"מכירה מוסדית (היקף לא ברור)",detail:"NewEdge Advisors מכרה מניות Applied Digital (17/08) — היקף וסכום לא צוינו בכותרת.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/17/applied-digital-corporation-apld-shares-sold-by-newedge-advisors-llc.html"}
+  {t:"CRWV",name:"CoreWeave",price:"84.56",priceNote:"(+4.49% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"mixed",instLabel:"איתות מעורב",detail:"Hedgeweek דיווח על כניסת Appaloosa לפוזיציה חדשה (תאריך מדויק לא צוין בתקציר); Magnetar עדיין מחזיקה ורשמה רווח 56% — אך זו לא הגדלת פוזיציה חדשה. לא אותר דיווח 13F/13G חדש עם תאריך מאושר בתוך 30 הימים האחרונים.",src:"Hedgeweek / Motley Fool",url:"https://www.hedgeweek.com/appaloosa-takes-stake-in-coreweave-as-hedge-funds-target-ai-infrastructure/"},
+  {t:"CRCL",name:"Circle Internet Group",price:"103.23",priceNote:"(+16.46% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"פינטק / הנפקה טרייה",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"קפיצת מחיר חדה (ראלי כ-44% לקראת ספטמבר לפי CryptoTimes), אך דיווחי המוסדיים היחידים שאותרו (Capital International Investors הפחיתה, Meridiem Capital הגדילה) מתוארכים ל-13/03/2026 — מחוץ לחלון של 30 יום.",src:"Daily Political / MarketBeat",url:"https://www.dailypolitical.com/2026/09/02/circle-internet-group-nysecrcl-shares-up-4-4-still-a-buy.html"},
+  {t:"ALAB",name:"Astera Labs",price:"282.82",priceNote:"(+3.17% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"strong",instLabel:"כניסה מוסדית חזקה",detail:"Legal & General Group השקיעה 311.47 מיליון$ ב-Astera Labs (26/08/2026) — האיתות המהותי ביותר בקבוצה, בתוך חלון 30 הימים.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/26/legal-general-group-plc-invests-311-47-million-in-astera-labs-inc-alab.html"},
+  {t:"IOT",name:"Samsara",price:"38.75",priceNote:"(+5.33% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"תשתיות AI / IoT (הנפקה טרייה)",inst:"strong",instLabel:"כניסה מוסדית חזקה (מספר קרנות)",detail:"Wellington Management הגדילה פוזיציה (31/08) ו-Spyglass Capital הגדילה פוזיציה (01/09) — שתי כניסות בתוך חלון 30 הימים.",src:"Daily Political",url:"https://www.dailypolitical.com/2026/08/31/wellington-management-group-llp-grows-position-in-samsara-inc-iot.html"},
+  {t:"LOAR",name:"Loar Holdings",price:"69.74",priceNote:"(+2.95% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה (תעופה, הנפקה טרייה)",inst:"mixed",instLabel:"איתות מעורב — כניסות מרובות מול יציאה",detail:"בתוך החלון: Dimensional Fund Advisors, Janus Henderson ו-BNY Mellon (707,403 מניות, 27/08) הגדילו/רכשו; Empowered Funds רכשה (09/08) — אך Glenmede Trust מכרה מניות באותו יום (09/08), יציאה אמיתית לצד הכניסות.",src:"Daily Political / MarketBeat",url:"https://www.dailypolitical.com/2026/08/27/707403-shares-in-loar-holdings-inc-loar-purchased-by-bank-of-new-york-mellon-corp.html"},
+  {t:"KTOS",name:"Kratos Defense",price:"48.10",priceNote:"(+0.67% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"ביטחון וגיאופוליטיקה",inst:"strong",instLabel:"כניסה מוסדית חזקה",detail:"Bamco Inc. NY רכשה 1,077,941 מניות של Kratos Defense (27/08/2026) — פוזיציה חדשה/מוגדלת משמעותית בתוך חלון 30 הימים.",src:"MarketBeat",url:"https://www.marketbeat.com/instant-alerts/filing-1077941-shares-in-kratos-defense-security-solutions-inc-ktos-purchased-by-bamco-inc-ny-2026-08-27/"},
+  {t:"MP",name:"MP Materials",price:"53.78",priceNote:"(-1.68% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"מינרלים קריטיים",inst:"strong",instLabel:"כניסה מוסדית חזקה",detail:"Harbor Investment Advisory הגדילה פוזיציה (06/08) ו-Bank of New York Mellon ביצעה השקעה חדשה (27/08) — שתי כניסות בתוך חלון 30 הימים, ללא יציאות שנמצאו.",src:"MarketBeat / Defense World",url:"https://www.marketbeat.com/instant-alerts/filing-harbor-investment-advisory-llc-boosts-stake-in-mp-materials-corp-mp-2026-08-06/"},
+  {t:"OKLO",name:"Oklo",price:"39.84",priceNote:"(+0.81% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"none",instLabel:"ללא עדות מהותית חדשה (30 יום)",detail:"הדיווח הקרוב ביותר לחלון (Optiver Holding, השקעה של 2.41 מיליון$, 02/08) הוא ממש לפני תחילת החלון וממקור market-making ולא איתות כיווני חזק. לא נמצאה עדות מהותית נוספת בתוך 30 הימים.",src:"MarketBeat",url:"https://www.marketbeat.com/instant-alerts/filing-optiver-holding-bv-invests-241-million-in-oklo-inc-oklo-2026-08-02/"},
+  {t:"LEU",name:"Centrus Energy",price:"170.46",priceNote:"(-0.60% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"אנרגיה גרעינית",inst:"mixed",instLabel:"נטייה למכירה קטנה",detail:"First Trust Advisors מכרה 6,306 מניות (07/08) — מכירה קטנה בתוך החלון; המניה עלתה 8.9% סביב 25/08 על רקע מומנטום עסקי, אך לא נמצאה רכישה מוסדית מקזזת בתוך החלון.",src:"MarketBeat / Stock Observer",url:"https://www.marketbeat.com/instant-alerts/filing-first-trust-advisors-lp-sells-6306-shares-of-centrus-energy-corp-leu-2026-08-07/"},
+  {t:"APLD",name:"Applied Digital",price:"25.91",priceNote:"(+4.01% מהסגירה הקודמת, 2026-09-03)",mcap:"לא נמצא",catalyst:"תשתיות AI",inst:"mixed",instLabel:"איתות מעורב — כניסה ויציאה",detail:"NewEdge Advisors מכרה מניות (17/08) — יציאה אמיתית — בעוד Whitaker Myers Wealth Managers ביצעה השקעה חדשה (09/08) — כניסה. שתיהן בתוך חלון 30 הימים, ללא כיוון ברור.",src:"Daily Political / MarketBeat",url:"https://www.dailypolitical.com/2026/08/17/applied-digital-corporation-apld-shares-sold-by-newedge-advisors-llc.html"}
 ];
 
 const ALL_SOURCES = [
   ["TipRanks","https://www.tipranks.com"],["Zacks Investment Research","https://www.zacks.com"],
-  ["MarketBeat","https://www.marketbeat.com"],["Finviz","https://finviz.com"],
-  ["Seeking Alpha","https://seekingalpha.com"],["StockAnalysis.com","https://stockanalysis.com"],
-  ["Simply Wall St","https://simplywall.st"],["Morningstar","https://www.morningstar.com"],
-  ["GuruFocus","https://www.gurufocus.com"],["The Motley Fool","https://www.fool.com"],
-  ["Barron's","https://www.barrons.com"],["Kiplinger","https://www.kiplinger.com"],
-  ["Forbes","https://www.forbes.com"],["StockTwits","https://stocktwits.com"],
+  ["MarketBeat","https://www.marketbeat.com"],["GuruFocus","https://www.gurufocus.com"],
+  ["Simply Wall St","https://simplywall.st"],["The Motley Fool","https://www.fool.com"],
+  ["Barron's","https://www.barrons.com"],["StockTwits","https://stocktwits.com"],
   ["Benzinga","https://www.benzinga.com"],["Yahoo Finance","https://finance.yahoo.com"],
   ["Alpha Vantage","https://www.alphavantage.co"],["Bigdata.com","https://bigdata.com"],
-  ["Daily Political","https://www.dailypolitical.com"],["StockTitan","https://www.stocktitan.net"]
+  ["Daily Political","https://www.dailypolitical.com"],["Defense World","https://www.defenseworld.net"],
+  ["Hedgeweek","https://www.hedgeweek.com"],["Investing.com","https://www.investing.com"],
+  ["24/7 Wall St.","https://247wallst.com"],["StocksToTrade","https://stockstotrade.com"],
+  ["Kalkine Media","https://kalkinemedia.com"],["The Globe and Mail","https://www.theglobeandmail.com"]
 ];
 
 /* ============ RENDER ============ */
