@@ -2476,3 +2476,70 @@ is nothing for a shopping algorithm to optimise against. **Finishing the native
 Shopify app connection is worth doing** — it is free, it installs the tag by
 itself, and it clears the Event Quality Score failure — but it buys measurement we
 have nothing to measure yet.
+
+## 4 Sep 2026 — Google lifted the suspension. Pinterest is still dark.
+
+Two days on. Checked both open items.
+
+### The suspension is gone
+
+`googlebase-noreply@google.com`, **2 Sep 16:16 UTC**, subject *"Review of
+Misrepresentation for Peluma is complete"*:
+
+> "The requested review of Misrepresentation has been completed and **the issue no
+> longer appears in your Merchant Center account**."
+
+Submitted **13:40**, cleared **16:16** — **2 hours 36 minutes**, on the first of the
+three review requests. Blocker 0 is closed.
+
+Worth recording what the fix actually consisted of, because it was not one thing:
+publishing a business address and country, replacing the personal free-mail address
+across the policy pages, deleting the false "Free Worldwide Shipping on all orders"
+claim, and — most likely the automated trigger — pulling the cup, which had been
+advertising itself as in stock while the supplier had none.
+
+### Pinterest, day 7: unchanged
+
+Re-read the same pins measured on 2 Sep, plus the two posted since:
+
+| pin | live since | impressions |
+|-----|-----------|-------------|
+| "For cats who hate being brushed" | 29 Aug | **0** |
+| "A gift for the dog lover on your list" | 30 Aug | **0** |
+| "No batteries, just a USB cable" | 31 Aug | **0** |
+| "Short, medium or long coats" | 2 Sep | **0** |
+
+Day 7 of a 4–8 week window. Still not evidence of failure, still not something we
+can accelerate. **14 pins live.**
+
+### Pin 10 shipped with corrected copy, and why
+
+The scheduled routine's text carried two errors from before 2 Sep, and posting it
+verbatim would have undone that day's work:
+
+1. **"Free worldwide shipping on every order."** That exact claim was removed from
+   the shipping policy on 2 Sep because it is false — the cup sat in a US-only
+   profile — and it was one of the storefront findings in the Misrepresentation
+   audit. Publishing it on a Pin two days after Google cleared us would have
+   recreated the problem in public.
+2. **"Both Peluma sets…"** — after the variant rename there are three $39.90
+   options, and "Two brushes - white + milk brown" contains no lint roller.
+
+Posted instead: *"Choose the Peluma mist grooming brush on its own, or paired with a
+rolling lint remover. Free US shipping."* Pin `916552961685558135`.
+
+**Standing note for future scheduled Pins: routines carry copy frozen at the time
+they were written. Check it against the live store before posting, every time.**
+
+### What being un-suspended actually changes
+
+Free Google Shopping listings return. That is not the sales channel it sounds like —
+this project established on 2 Sep that our $29.90 brush will appear in a grid beside
+six verified listings of the same product at $6.99–$11.99, and that a 3× price dies
+in exactly that setting.
+
+But it is now **the fastest source of real market feedback we have.** Merchant Center
+reports impressions and clicks, and it reports them in days rather than the 4–8 weeks
+Pinterest needs. **If the pricing thesis is right, we will see impressions with
+almost no clicks, and we will see it within a week.** That converts an argument this
+project has been having all week into a measurement.

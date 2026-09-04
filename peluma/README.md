@@ -130,7 +130,7 @@ at Home `916553030354941638` · Paw & Nail Care `916553030354941962` · Gifts fo
 
 | # | blocker | owner | state |
 |---|---|---|---|
-| 0 | **Google Merchant Center suspended — `Misrepresentation`**, found by automated checks, blocking all products in both Israel and the US. | merchant | **Review requested 2 Sep.** Identity verified by selfie. Storefront audit passes 10/10. Awaiting Google, a few days. **2 of 3 review requests remain.** |
+| 0 | ~~Google Merchant Center suspended — `Misrepresentation`~~ | — | **RESOLVED 2 Sep, 16:16 UTC.** Google: *"The requested review of Misrepresentation has been completed and the issue no longer appears in your Merchant Center account."* Submitted 13:40, cleared 16:16 — **2h 36m**, on the first of three review requests. |
 | 1 | **No card field at checkout.** PayPal only. PayPlus is activated; quote #31219 awaits signature. | merchant — sign | Unchanged. Still the hardest blocker: a US visitor who reaches checkout and sees only PayPal leaves. |
 | 2 | **Paw cup out of stock at supplier.** | Zendrop — "Notify Me" | Product now DRAFT, so it no longer harms the store. |
 | 3 | ~~Sold-out cup 7× on the homepage~~ | — | **Solved** by the DRAFT, without a theme edit. |
