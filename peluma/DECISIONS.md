@@ -2543,3 +2543,64 @@ reports impressions and clicks, and it reports them in days rather than the 4–
 Pinterest needs. **If the pricing thesis is right, we will see impressions with
 almost no clicks, and we will see it within a week.** That converts an argument this
 project has been having all week into a measurement.
+
+## 9 Sep 2026 — five-day status check
+
+| | |
+|---|---|
+| Orders | **1**, still `#1001`, still the merchant's own |
+| Pinterest | **0 impressions**, day 12 of the 4–8 week window, 14 pins |
+| Google Merchant Center | **healthy** — August report: 10 approved, 0 not approved, 0 limited, 0 under review |
+| Brush shipment | **finally moving** |
+| PayPlus | no email — **still not signed** |
+
+### The parcel is moving
+
+Order `#1001` sat at "parcel information received" for days. It now reads:
+
+```
+1 Sep  17:27  Parcel information received
+2 Sep  21:03  Shipment picked up          Hangzhou
+2 Sep  21:03  Arrived at facility, measured  Hangzhou
+4 Sep  06:53  Depart to service provider  Nancheng
+9 Sep  03:24  Hand over to airline
+```
+
+Handed to the airline **this morning**. Arrival in Israel realistically **15–20 Sep**,
+which holds the timeline given on 4 Sep. The standing gate on video production —
+real footage of the real product — unlocks then.
+
+### Google's August report carries no traffic figures
+
+All ten items approved and nothing rejected, so the feed is in good standing after
+the suspension was lifted. But the report contains **no impressions and no clicks**.
+It is a product-status report, not a performance one. The pricing thesis — that our
+$29.90 gets impressions and no clicks beside $9.68 listings — is **still untested**,
+because there is nothing yet to measure.
+
+Google's own two recommendations are both free and worth doing:
+1. **Add the return policy in Merchant Center**, not only on the storefront.
+2. **Validate the customer service channels** in the account.
+
+### Phishing is now a pattern, not an incident
+
+Two more arrived since the five marked as spam on 4 Sep:
+
+| date | from | subject |
+|---|---|---|
+| 6 Sep | `imperialhelpteam.ja@gmail.com` | "Your Account Limited — Only 1 Day Left" |
+| 8 Sep | `shopifymailingunit.ff@gmail.com` | "Account Notice: Store Review and Verification Required" |
+
+The 8 Sep one repeats the **exact wording** of the 3 Sep fake — *"Your store requires
+attention following a review of certain account, store, or selling configurations.
+Restrictions can occur when required account information is incomplete…"* — from a
+different gmail address. Same kit, rotating senders.
+
+The 6 Sep one invents authority-sounding terms: *"Commercial Operating Clearance"*
+and *"Invalid Selling Authority File"*. **Neither exists.** Combined with a
+one-day deadline, that is pure pressure engineering.
+
+Both marked as spam. **Seven in seven days.** A new Shopify store on a public domain
+is on these lists permanently; this will not stop, and the defence is the rule
+rather than case-by-case judgement: **no platform ever asks you to reply to an
+email with a keyword, and every real notice names your account ID.**
