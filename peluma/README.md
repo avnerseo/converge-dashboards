@@ -109,6 +109,58 @@ Zendrop wrote back after `#1001`. Use the table above, not the raw field.
 
 ---
 
+## 3a. Mailboxes, and one hard boundary
+
+*Added 12 Sep 2026 after a third mailbox surfaced that nobody had recorded.*
+
+| mailbox | what lives there |
+|---------|------------------|
+| `avnerseo@gmail.com` | **Everything operational for Peluma** — Merchant Center, Shopify, Zendrop, Pinterest, the real order mail. This is the one to scan. |
+| `pelumapets@gmail.com` | The brand address. Customer-facing, on the policy pages and the contact page. Almost empty. |
+| `avnerseller@gmail.com` | **Not Peluma.** A separate set of ventures — see below. |
+
+**Verified 12 Sep: not one Peluma operational email has ever landed in
+`avnerseller`.** Every Google, Shopify, Zendrop and Pinterest notice for this store
+goes to `avnerseo`. Past scans were reading the right mailbox.
+
+### HARD RULE — the Etsy shop is not ours to touch
+
+`avnerseller` holds an Etsy shop, **`WarmHeartInkCo`**. **It is run by a different
+agent.** Merchant's instruction, 12 Sep: *"אל תיגע בה… אל תשנה שם כלום."*
+
+**Do not change anything on that shop or its mail.** Read-only, and only to flag
+something worth the merchant's attention. Nothing else.
+
+Checked once, 12 Sep, and there was nothing to flag: 14 messages, all of them
+either the 13 Aug account-opening cluster or Etsy marketing. **No orders, no
+reviews, no buyer messages, no policy issues.** A ₪56 set-up fee on 13 Aug and
+₪0.60 on 1 Sep, so at least one listing is live and renewing on a card.
+
+### What else sits in that mailbox, and the open money question
+
+A Zendrop-generated Shopify store, `zd-store-01m0z373qxtmpm7k958rk3d7rt`:
+
+```
+26 Aug   store created, payment settings changed, two Shopify codes
+26 Aug   "Recurring charge approved for Zendrop"   $79.00
+26 Aug   Payoneer password changed
+27 Aug   "You closed zd-store-01m0z373qxtmpm7k958rk3d7rt"
+```
+
+**A $79/month recurring charge was approved, and the store it hung on was closed
+the next day.**
+
+Checked our own Zendrop account: it holds **one store (Peluma) on UBB at $29**,
+trial used. **The $79 is not there** — it belongs to a separate Zendrop account
+tied to `avnerseller`, which this session has no access to.
+
+Closing a Shopify store normally cancels app subscriptions billed through it, so
+it has probably stopped. **"Probably" is not good enough at $79 a month — the
+merchant needs to check the card statement for a September charge.** Open item.
+
+Also present: a Payoneer account, and two Amazon "Seller Identity Verification"
+cases from Oct–Nov 2025 that were never completed.
+
 ## 3b. Accounts and credits
 
 *Added 10 Sep 2026 — this was never recorded anywhere and had to be rediscovered by
