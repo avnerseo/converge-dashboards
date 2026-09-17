@@ -2676,3 +2676,41 @@ what a US customer actually receives, and it is not good.
 
 No change applied. Variant names and product status are gated on merchant
 approval. Recorded pending the checkbox reading.
+
+### Same day, correction — the checkbox test does not exist
+
+The merchant photographed the panel. **Neither box is ticked.** `Cream color` and
+`White` are both blank.
+
+So the box is a **shared blank carton used for both colours**, and the factory
+does not mark which one is inside. My previous paragraph called the ticked box
+"the one fact that settles this." There is no ticked box. That test returns
+nothing, and no colour conclusion can be drawn from the packaging at all —
+which is itself the finding: **there is no packaging-level colour QC on this SKU.**
+
+A second label on the carton reads `WLZ10772.02` / `JIANGNAN` above a QR code.
+That is a factory batch code, not a Zendrop SKU. The `.02` suffix may be a
+colour index, but that is a guess and is not evidence.
+
+### And a check against our own listing image
+
+Pulled the two images we actually display:
+
+- `33e6eede…jpg`, the "porcelain white, front view" variant image
+- `combo-brush-roller.png`, the `White brush + lint roller` variant image
+
+Both show a **white body with beige bristles and a beige power button.** The
+beige is genuine and intentional on the product we advertise.
+
+That materially weakens the original read. A phone photo taken indoors under
+warm light, of a white object that legitimately carries beige accents, is not
+sufficient evidence that the body is cream. The mismatch is **unproven, not
+confirmed**, and nothing should change on the listing on this basis.
+
+The `combo-brush-roller.png` image is confirmed accurate in every other respect:
+the pink/rose-gold roller in that image is the same object that arrived.
+
+**Replacement test, no cost:** photograph the brush lying on a sheet of plain
+white A4 paper, in daylight, no flash. A4 is a reliable white reference. If the
+body matches the paper the question closes; if it reads clearly warmer, it is
+the Cream variant and the names get corrected.
