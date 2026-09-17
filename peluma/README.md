@@ -173,18 +173,30 @@ querying the account directly. Recording it so nobody hunts for it again.*
 
 | service | account | plan | balance |
 |---------|---------|------|---------|
-| **OpenArt** (AI image and video) | `avnerseo@gmail.com` | **Plus** | **10,000 credits** |
+| **OpenArt** (AI image and video) | `avnerseo@gmail.com` | **Plus** | **5,890 credits** (17 Sep) |
+
+**The balance moved. 10,000 on 10 Sep, 5,890 on 17 Sep — 4,110 credits gone in a
+week, and nothing in this project spent them.** Either the merchant generated
+something outside this work, or the Plus allowance resets to a lower figure than
+the 10,000 recorded. Unresolved; it does not block anything, but 5,890 is the
+number to plan against, not 10,000.
+
+**The dollar value of a credit is not established.** Searched the mailbox for an
+OpenArt receipt — only marketing mail is there, no invoice. Until the plan price
+is known, quotes are in credits with the dollar figure marked unknown rather
+than guessed.
 
 Verified default per-job video costs (settings change the price — these are the
 defaults the pricing endpoint returns):
 
-| model | config | credits | jobs from 10,000 |
+| model | config | credits | jobs from 5,890 |
 |-------|--------|---------|------------------|
-| PixVerse V6 | 540p, 5s | 50 | 200 |
-| MiniMax H3 Turbo | 480p, 5s | 100 | 100 |
-| **Veo 3.1** | **1080p, 4s, audio** | **120** | **83** |
-| Kling 3 Omni | std, 5s, sound | 175 | 57 |
-| Seedance 2.0 | 720p, 5s, audio | 400 | 25 |
+| PixVerse V6 | 540p, 5s | 50 | 117 |
+| MiniMax H3 Turbo | 480p, 5s | 100 | 58 |
+| **Veo 3.1** | **1080p, 4s, audio** | **120** | **49** |
+| Kling 3 Omni | std, 5s, sound | 175 | 33 |
+| Seedance 2.0 | 720p, 5s, audio | 400 | 14 |
+| Grok Imagine 1.5 | 720p, 5s | 405 | 14 |
 
 Veo 3.1 is the best value in the list — 1080p with audio at 120 credits.
 
