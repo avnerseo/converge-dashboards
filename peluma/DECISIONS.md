@@ -2604,3 +2604,75 @@ Both marked as spam. **Seven in seven days.** A new Shopify store on a public do
 is on these lists permanently; this will not stop, and the defence is the rule
 rather than case-by-case judgement: **no platform ever asks you to reply to an
 email with a keyword, and every real notice names your account ID.**
+
+---
+
+## 2026-09-17 — The physical product arrived. First check: colour accuracy.
+
+Sixteen photographs of the unit from order `#1001`, which shipped
+SKU `PE17TFL2V` on 28 Aug. This is the first time anyone on this project has
+seen the product rather than a supplier render.
+
+### The chain, verified end to end
+
+| layer | name for this SKU |
+|---|---|
+| Zendrop catalog variant `22399836` | **Porcelain White Set** |
+| Shopify order `#1001` line item | **Porcelain White Set** |
+| Shopify variant today | **White brush + lint roller** |
+| Image alt `45762740879673` | "in **porcelain white**, front view" |
+| Image alt `45803804721465` | "The **white** Peluma mist grooming brush…" |
+| **The unit in hand** | **cream / beige** |
+
+The retail box is the decisive artefact: it carries **two printed checkboxes,
+`Cream color` and `White`**. The factory itself treats them as different colours.
+Which box is ticked is the one fact that settles this, and it is not legible
+in the photographs — the merchant must read it off the physical box.
+
+This is not a lighting artifact question that can be waved away: if the ticked
+box says `Cream color`, then the SKU Zendrop sells as "Porcelain White" ships
+cream, and every "White" on our product page is a product-data mismatch.
+
+### Why this matters more than it looks
+
+`Misrepresentation` is the exact ground Google suspended the account on, and
+the exact remedy text was *"match your product data with your online store."*
+We cleared that suspension on 2 Sep. Advertising White and shipping cream is
+the same category of defect, now on the product itself rather than the policies.
+
+### The one thing the supplier got wrong and we did not
+
+Zendrop lists this product as **"Cat / Pet Steam Brush"** and its description
+claims *"uses the power of steam to clean"*, *"controlled steam to loosen dirt"*
+and *"safety mechanisms to ensure optimal temperature"*.
+
+**There is no steam.** The physical box reads `ELECTRIC SPRAY HANDLE MASSAGE
+BRUSH` / `ONE CLICK SPRAY`. It is a cold water mist. There is no heating element.
+
+Our listing says "mist" and "fine mist" throughout and never says steam or heat.
+**Our copy is accurate and the supplier's is not.** Had we copied Zendrop's
+description at import — which is the default behaviour — we would be carrying a
+false heating claim on a device sold for use on animals.
+
+### Everything else in the box matches the listing
+
+- `In the box: the Peluma mist grooming brush and a USB charging cable` — a
+  USB-A to USB-C cable is present. Correct.
+- Retractable handle, central mist nozzle, silicone bristle head. Correct.
+- The `+ lint roller` second item is present: a pink/rose-gold rolling lint
+  remover, box printed `TRAVEL GLUER`. Matches alt `45762745925945`.
+- No charge-time claim on our page, so the box's "half an hour" creates no conflict.
+- Box says `CAN ADD PET FREE ESSENCE`; our page instructs distilled or filtered
+  water only. Ours is the more conservative instruction. No conflict.
+
+### Separate finding — packaging condition
+
+Both retail boxes arrived **visibly crushed and stained**. For a $39.90 item
+whose entire proposition is a gift-quality grooming tool, the box is part of what
+the customer buys. One sample is not a pattern, but it is the first evidence of
+what a US customer actually receives, and it is not good.
+
+### Status
+
+No change applied. Variant names and product status are gated on merchant
+approval. Recorded pending the checkbox reading.
