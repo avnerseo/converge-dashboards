@@ -181,24 +181,47 @@ something outside this work, or the Plus allowance resets to a lower figure than
 the 10,000 recorded. Unresolved; it does not block anything, but 5,890 is the
 number to plan against, not 10,000.
 
-**The dollar value of a credit is not established.** Searched the mailbox for an
-OpenArt receipt — only marketing mail is there, no invoice. Until the plan price
-is known, quotes are in credits with the dollar figure marked unknown rather
-than guessed.
+### What a credit costs, in money
+
+The mailbox holds no OpenArt invoice, and `openart.ai` is blocked by the network
+egress proxy from this container, so the price came from published pricing pages
+instead. Two independent passes agree:
+
+| | |
+|---|---|
+| Plus plan | **$34 / month for ~12,000 credits** |
+| Extra-credit add-on | **$15 / month for 5,000 credits** (Plus tier or above) |
+| → plan rate | **$0.00283 per credit** |
+| → top-up rate | **$0.0030 per credit** |
+
+The two rates converge at **≈ $0.003 per credit**, and that is the figure to
+quote with. The 10,000 recorded on 10 Sep was a *balance*, not the allowance —
+consistent with a 12,000 monthly grant already partly spent.
+
+**Credit counts below are exact, read from the OpenArt API. Dollar figures are
+derived from published plan pricing and carry that source's uncertainty.** One
+look at the billing page settles it exactly.
 
 Verified default per-job video costs (settings change the price — these are the
 defaults the pricing endpoint returns):
 
-| model | config | credits | jobs from 5,890 |
-|-------|--------|---------|------------------|
-| PixVerse V6 | 540p, 5s | 50 | 117 |
-| MiniMax H3 Turbo | 480p, 5s | 100 | 58 |
-| **Veo 3.1** | **1080p, 4s, audio** | **120** | **49** |
-| Kling 3 Omni | std, 5s, sound | 175 | 33 |
-| Seedance 2.0 | 720p, 5s, audio | 400 | 14 |
-| Grok Imagine 1.5 | 720p, 5s | 405 | 14 |
+| model | config | credits | ≈ USD per clip | clips from 5,890 |
+|-------|--------|---------|----------------|------------------|
+| PixVerse V6 | 540p, 5s | 50 | **$0.14** | 117 |
+| MiniMax H3 Turbo | 480p, 5s | 100 | **$0.28** | 58 |
+| **Veo 3.1** | **1080p, 4s, audio** | **120** | **$0.34** | **49** |
+| Kling 3 Omni | std, 5s, sound | 175 | **$0.50** | 33 |
+| Seedance 2.0 | 720p, 5s, audio | 400 | **$1.13** | 14 |
+| Grok Imagine 1.5 | 720p, 5s | 405 | **$1.15** | 14 |
 
-Veo 3.1 is the best value in the list — 1080p with audio at 120 credits.
+**The remaining 5,890 credits are worth about $16.70.**
+
+And the number that matters for planning: a finished product video is five or
+six clips. At Veo 3.1 that is **600–720 credits, about $1.70–$2.05 for the whole
+video.** Credits were never the constraint on video, and now that is true in
+money and not just in credits.
+
+Veo 3.1 is the best value in the list — 1080p with audio at 120 credits, about $0.34 a clip.
 
 **Credits are not the constraint on video, and never were.** The standing gate is
 footage of the real product in a real hand. These credits become useful when that
