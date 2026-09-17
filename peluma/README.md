@@ -36,6 +36,11 @@ Last verified end to end: **2 September 2026.**
   reviews, testimonials or founder story.
 - **Never fabricate a barcode.**
 - **Never touch the refund policy.**
+- **Never spend credits without a written quote and explicit approval.** Before any
+  paid generation — video, image, anything metered — state **how many credits** and
+  **what that is in dollars**, then stop and wait. Set 2026-09-17 by the merchant:
+  *"לפני שאתה משתמש בקרדיטים תמיד תכתוב לי כמה קרדיט, כמה זה בכסף, ותחכה לאישור."*
+- **Never change a price or a product's status without the merchant's approval.**
 - **Never write to the live theme, and never publish a theme.** Ask whether the editor is
   closed before any theme write; read the file back after.
 - When something needs the merchant, write it as **numbered steps**, and **first check

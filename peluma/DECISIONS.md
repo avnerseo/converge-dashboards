@@ -2749,3 +2749,42 @@ in this category uses the same supplier renders, and our own media is supplier
 renders and AI edits. **Nobody in the category is showing the real object, and
 in particular nobody is showing the mist actually firing.** That is the one
 frame that cannot be faked with a render, and we can now shoot it.
+
+## 2026-09-17 — Upload audit, and a new standing rule on credits
+
+### What actually arrived
+
+Merchant asked whether everything he sent came through. Counted the session's
+upload directory rather than guessing:
+
+| when | what | count |
+|---|---|---|
+| today 06:17 | product photographs | **16** |
+| today 06:25 | box panel + factory label | **2** |
+| **today, video** | — | **0** |
+
+Four `.mp4` files sit in the directory, but all four are dated **29 August** and
+belong to an earlier session. **None of today's three videos arrived.**
+
+Two separate limits, and they compound:
+
+1. The videos did not reach the session at all.
+2. `ffmpeg` and `ffprobe` are **not installed** in this container, so even a
+   successful upload could not be turned into frames here.
+
+So re-sending them to me is not the fix. The fix is a **still** — screenshot the
+frame from the video and send that as a photo, which is the format that works.
+
+### No animal available
+
+Merchant has no access to a dog or cat at present. Shots 1–7 of the list need no
+animal, so photography is not blocked. The in-use shot waits.
+
+### NEW STANDING RULE — credits are quoted before they are spent
+
+> *"לפני שאתה משתמש בקרדיטים תמיד תכתוב לי כמה קרדיט, כמה זה בכסף, ותחכה לאישור."*
+
+Before **any** metered generation — OpenArt video, image, anything that draws on
+a balance — state the credit count and the dollar equivalent, then stop and wait
+for approval. Added to the hard rules in `README.md`. This is now in the same
+class as "never publish a theme" and "no price or status change without approval."
