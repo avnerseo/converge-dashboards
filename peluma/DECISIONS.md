@@ -2714,3 +2714,38 @@ the pink/rose-gold roller in that image is the same object that arrived.
 white A4 paper, in daylight, no flash. A4 is a reliable white reference. If the
 body matches the paper the question closes; if it reads clearly warmer, it is
 the Cream variant and the names get corrected.
+
+### Resolved — the listing is accurate. There is no colour mismatch.
+
+Merchant, on inspection of the unit itself:
+
+> **הגוף של המברשת לבן, כל הפלסטיק. אבל הקוצים גומי עצמם הם בז'.**
+
+White plastic body, beige rubber bristles. That is **exactly** what
+`33e6eede…jpg` and `combo-brush-roller.png` show, and exactly what the variant
+name `White brush` and the alt text `porcelain white` describe.
+
+**No action. Nothing on the listing changes.**
+
+The whole thread came from me reading the beige bristles in a warm-light phone
+photo as the body colour of the product. It was a misread of a photograph, not
+a defect in the store. Recorded in full rather than deleted, because the
+intermediate steps produced two things worth keeping:
+
+1. **There is no packaging-level colour QC on this SKU.** The carton is shared
+   between `Cream color` and `White` and the factory ticks neither. If a wrong
+   colour is ever picked, nothing in the chain catches it.
+2. **Zendrop's own listing for this product is factually wrong** — it sells it
+   as a *steam* brush with *"optimal temperature"* safety. It is a cold water
+   mist with no heating element. Our copy never repeated that claim.
+
+### The video gate is open
+
+The standing rule was: **no video production until there is footage of the real
+product in a real hand.** The product is in a real hand. The rule is satisfied.
+
+The material advantage is specific and narrow: every competitor listing and pin
+in this category uses the same supplier renders, and our own media is supplier
+renders and AI edits. **Nobody in the category is showing the real object, and
+in particular nobody is showing the mist actually firing.** That is the one
+frame that cannot be faked with a render, and we can now shoot it.
