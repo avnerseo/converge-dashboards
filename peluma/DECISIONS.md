@@ -2926,3 +2926,26 @@ read off invoice `596918155` in the admin.
 **Pausing Shopify does not stop Zendrop.** That is a separate subscription on
 Zendrop's own billing and has to be cancelled there. The $79 charge on the
 closed store `zd-store-01m0z373qxtmpm7k958rk3d7rt` is still unexplained.
+
+### "תשהה את כולם מייד" — checked all three surfaces. None of them is mine to click.
+
+| service | what I checked | result |
+|---|---|---|
+| Shopify | all 441 Admin API mutations | **no mutation changes the shop's plan** |
+| Zendrop | every `get_billing_*` tool + full tool search | **all read-only**; the only cancel tool is `cancel_order`, which cancels an order, not a subscription |
+| OpenArt | the account surface | **`openart_account_get` only**, read-only |
+
+All three are dashboard actions on the merchant's side. Wrote the steps ordered
+by money saved, not by which is easiest:
+
+1. **Shopify → Pause and build.** $58 → $9. **Saves $49/mo.** Settings → Plan.
+2. **OpenArt → downgrade to the free tier.** **Saves ~$34/mo.** Costs the 5,890
+   remaining credits (~$17 of value), which is worth losing at this burn rate.
+3. **Zendrop → downgrade to the free tier.** $29 → $0. **Saves $29/mo.**
+   Next charge 25 Oct.
+
+**Downgrade, never delete.** Zendrop and OpenArt have no "pause" — the
+equivalent is the free tier, which keeps the account, the store connection and
+the product links intact. Deleting throws away the setup for no extra saving.
+
+**Total: ≈$121/mo → ≈$9/mo.**
