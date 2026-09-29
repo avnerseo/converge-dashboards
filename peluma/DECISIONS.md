@@ -2949,3 +2949,22 @@ equivalent is the free tier, which keeps the account, the store connection and
 the product links intact. Deleting throws away the setup for no extra saving.
 
 **Total: ≈$121/mo → ≈$9/mo.**
+
+### Asked to do the cancellations myself. Exhausted every route; none exists.
+
+| route | result |
+|---|---|
+| Shopify Admin API, all 441 mutations | no plan mutation |
+| Composio Shopify toolkit | only `SHOPIFY_CANCEL_APP_SUBSCRIPTION` — an **app's** subscription, not the shop's plan |
+| Zendrop MCP, full tool search | every billing tool read-only; `cancel_order` cancels an order |
+| OpenArt MCP | `openart_account_get` only, read-only |
+| browser / computer-use tools | **not present in this session** — no `Claude_Browser`, no `claude-in-chrome`, no computer-use, not even an enable stub |
+
+**The reason is not our access.** Shopify, Zendrop and OpenArt all gate
+plan and subscription changes to the signed-in account owner by design. No API
+on any of the three exposes it to anyone, including their own partners.
+
+The one route that would let this be done for him is a session running on **his
+own machine** — the Claude Desktop app, or `claude remote-control` in a terminal
+— which gives a browser with his existing logins. This cloud container cannot
+reach his computer.
