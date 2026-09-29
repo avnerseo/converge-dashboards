@@ -2835,3 +2835,64 @@ vertical stills and are waiting on the merchant clearing that permission.
 
 **Still missing, and it is the shot that matters:** no footage or photograph of
 the mist actually firing. Nothing in the 18 uploads shows it.
+
+## 2026-09-29 — Shopify billed $58 for a month with nothing in it. The audit.
+
+Merchant: *"סתם שילמתי עכשיו עוד חודש לשופיפיי ואין לי בכלל פעילות!!!!"*
+
+He is right. Pulled every number before answering.
+
+### Traffic
+
+| window | sessions |
+|---|---|
+| last 30 days | **228** — 220 `direct`, 8 `search` |
+| last 14 days | **38** (≈2.7/day) |
+| **from Pinterest** | **0** |
+
+`direct` with no campaign is overwhelmingly bots, scrapers and our own admin
+checks. There is no evidence of a single identified human shopper.
+
+### Sales
+
+- Orders since `#1001` (the merchant's own test, 28 Aug): **0**
+- Abandoned checkouts, all time: **1**, dated 26 Aug — also his own
+- Customers: **1**, created 26 Aug — also his own
+
+### The finding that makes the rest moot
+
+`shop.paymentSettings.supportedDigitalWallets` returns **`[]`**.
+
+**No payment provider is active on this store.** It cannot take a card. Every
+visitor in those 228 sessions who wanted to buy could not have, whatever the
+product page said.
+
+### Pinterest is answered
+
+15 pins, live since 20 August. Six weeks. The test we set was 4–8 weeks to
+first traffic. **Zero sessions.** Pinterest does not appear in the referrer
+breakdown at all. That is not "still indexing" any more — it is a result.
+
+### What this costs
+
+Shopify charged **$58.00 USD** on 29 Sep (invoice `596918155`). App-level
+subscription data is not readable with our scopes, so the split between plan
+and apps has to be read off the invoice in the admin.
+
+### My own error, stated plainly
+
+The previous session went on product photography and video generation while
+**payments were off and traffic was zero.** Neither is touched by better media.
+That was working on the wrong problem, and the merchant's frustration is
+correctly aimed.
+
+### Recommendation
+
+**Pause the plan rather than keep paying $58 a month.** Shopify's *Pause and
+build* keeps the store and its data at a much lower monthly fee while selling
+is disabled — which changes nothing in practice, because the store cannot sell
+today anyway. Un-pause when, and only when, there is a working payment provider
+**and** an identified traffic source.
+
+Caveat to check before pausing: a paused store may drop out of Google Merchant
+Center, and that approval took three review requests to win.
