@@ -2896,3 +2896,33 @@ today anyway. Un-pause when, and only when, there is a working payment provider
 
 Caveat to check before pausing: a paused store may drop out of Google Merchant
 Center, and that approval took three review requests to win.
+
+### The pause — what I can and cannot do, and the real monthly burn
+
+Merchant said cancel, then corrected to **pause**.
+
+**I cannot do it.** Checked before saying so: the Shopify Admin API exposes 441
+mutations and **not one changes the shop's own plan.** Every name that matches
+`plan`/`subscription`/`billing` is either app billing (`appSubscriptionCancel`)
+or customer subscription contracts (`subscriptionContractPause`). Plan changes
+are admin-UI only, so this is the merchant's click.
+
+**Pause and build costs $9/month.** Admin stays editable, the storefront cannot
+take orders — which changes nothing today, since no payment provider is active.
+
+### The full burn, verified from the accounts
+
+| service | amount | evidence |
+|---|---|---|
+| Shopify | **$58.00** | charged 29 Sep, invoice `596918155` |
+| Zendrop | **$29.00** | charged 25 Sep, invoice `1094490`, covers 25 Sep–25 Oct |
+| OpenArt Plus | **~$34** | published plan price, no invoice in the mailbox |
+| | **≈ $121 / month** | against **$0** revenue |
+
+Installed Shopify apps are only Zendrop, Shopify Messaging and the Claude
+connector, so the $58 is not app subscriptions — the plan/domain split has to be
+read off invoice `596918155` in the admin.
+
+**Pausing Shopify does not stop Zendrop.** That is a separate subscription on
+Zendrop's own billing and has to be cancelled there. The $79 charge on the
+closed store `zd-store-01m0z373qxtmpm7k958rk3d7rt` is still unexplained.
